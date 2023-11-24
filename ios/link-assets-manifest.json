@@ -1,0 +1,49 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Gilroy-Bold.ttf",
+      "sha1": "9ee3b9154afcd608ef76c584dd82ac48b0feded5"
+    },
+    {
+      "path": "assets/fonts/Gilroy-ExtraBold.ttf",
+      "sha1": "a84043c73bbb0bc83dbfc74d7bed59bf51e48a33"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Light.ttf",
+      "sha1": "bcbd3e1c8e7f80705f68732bedc66a0567018ec6"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Medium.ttf",
+      "sha1": "d7f893124bd4fff78805e69df31385ae113368be"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Regular.ttf",
+      "sha1": "8017fa012735b7328e737c58373e264b76323c60"
+    },
+    {
+      "path": "assets/fonts/Gilroy-SemiBold.ttf",
+      "sha1": "c6a7771fa8c42ba06d6a7a2a93bb233a26a6a62b"
+    },
+    {
+      "path": "assets/fonts/SamsungSans-Bold.ttf",
+      "sha1": "bf2efc9fb1a0533d9910a0b0cfeb52290bb7a88a"
+    },
+    {
+      "path": "assets/fonts/SamsungSans-Light.ttf",
+      "sha1": "3630256d3d3f8afc7f6dc6f096cd877c0ed78ca7"
+    },
+    {
+      "path": "assets/fonts/SamsungSans-Medium.ttf",
+      "sha1": "a76cd06f374251f66698831a6a744b0b017c553c"
+    },
+    {
+      "path": "assets/fonts/SamsungSans-Regular.ttf",
+      "sha1": "4d912a5f84d3cc776c0f8e99a7f1153a1a4859e8"
+    },
+    {
+      "path": "assets/fonts/SamsungSans-Thin.ttf",
+      "sha1": "b8f5282c8dc627535dfda8262a2f33a3a2b7c676"
+    }
+  ]
+}
