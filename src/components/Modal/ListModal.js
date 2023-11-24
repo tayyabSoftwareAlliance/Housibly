@@ -24,13 +24,13 @@ export const ListModal = ({
   multiselect = false
 }) => {
 
-  const [value, setValue] = useState(selected || (multiselect ? [] : {}))
-
+  const [value, setValue] = useState(selected || (multiselect ? [] : ''))
+  
   const onSelect = (item) => {
     if (multiselect) {
       setValue(prev => {
-        if (prev.findIndex(it => it.id == item.id) > -1)
-          return prev.filter(it => it.id != item.id)
+        if (prev.findIndex(it => it == item) > -1)
+          return prev.filter(it => it != item)
         else
           return [...prev, item]
       })
@@ -41,9 +41,9 @@ export const ListModal = ({
 
   const isSelected = useCallback((item) => {
     if (multiselect) {
-      return (value.findIndex(it => item?.id == it?.id) > -1)
+      return (value.findIndex(it => item == it) > -1)
     } else {
-      return item?.id == value?.id
+      return item == value
     }
   }, [value, selected])
 
@@ -85,14 +85,14 @@ export const ListModal = ({
                   styles.buttonContainer,
                   {
                     backgroundColor:
-                      isSelected(item) ? colors.g20 : colors.white,
+                      isSelected(item[0]) ? colors.g20 : colors.white,
                   },
                 ]}
-                onPress={() => onSelect(item)}>
+                onPress={() => onSelect(item[0])}>
                 {multiselect &&
                   <CheckBox
-                    checked={isSelected(item)}
-                    onPress={() => onSelect(item)}
+                    checked={isSelected(item[0])}
+                    onPress={() => onSelect(item[0])}
                     style={{ width: 20, marginRight: 10 }}
                   />
                 }
@@ -102,7 +102,7 @@ export const ListModal = ({
                     styles.textStyle,
                     { fontFamily: family.Gilroy_Medium },
                   ]}>
-                  {item?.title}
+                  {item[1]}
                 </Text>
               </TouchableOpacity>
             );

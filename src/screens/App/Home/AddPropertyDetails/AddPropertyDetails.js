@@ -63,37 +63,36 @@ const INITIAL_DATA = {
   property_tax: 0,
   locker: false,
   condo_corporation: '',
-  house_type: {},
-  house_style: {},
-  condo_type: {},
-  condo_style: {},
+  house_type: '',
+  house_style: '',
+  condo_type: '',
+  condo_style: '',
   min_lot_frontage: 0,
   parking_spot_req: false,
   garage_spot_req: false,
   max_age: 0,
   exterior: [],
-  balcony: {},
-  exposure: {},
-  security: {},
-  pets_allowed: {},
+  balcony: '',
+  exposure: '',
+  security: '',
+  pets_allowed: '',
   included_utilities: [],
   bed_rooms: 0,
   bath_rooms: 0,
   num_of_rooms: 0,
   basement: [],
   total_parking_spaces: 0,
-  garage: false,
   garage_spaces: 0,
-  driveway: {},
-  water: {},
-  sewer: {},
+  driveway: '',
+  water: '',
+  sewer: '',
   heat_source: [],
   heat_type: [],
   air_conditioner: [],
   laundary: false,
   fireplace: [],
   central_vacuum: false,
-  pool: {},
+  pool: '',
   condo_fees: 0,
   desc: '',
   other_desc: '',
@@ -120,14 +119,14 @@ const AddPropertyDetails = ({ navigation }) => {
       Alert.alert('Error', 'Title is Required');
     } else if (!(data.price > 0)) {
       Alert.alert('Error', 'Price is Required');
-    } else if (data.property_type?.title != 'Condo' && !data.lot_frontage) {
+    } else if (data.property_type != 'Condo' && !data.lot_frontage) {
       Alert.alert('Error', 'Lot frontage is Required');
-    } else if (data.property_type?.title != 'Condo' && !data.lot_depth) {
+    } else if (data.property_type != 'Condo' && !data.lot_depth) {
       Alert.alert('Error', 'Lot Depth is Required');
     } else if (data.images.length == 0) {
       Alert.alert('Error', 'At least one image Required');
     } else {
-      if (data.property_type?.title == 'Vacant Land') {
+      if (data.property_type == 'Vacant Land') {
         navigation?.navigate('AddPropertyDesc', data);
       } else {
         navigation?.navigate('AddMorePropertyDetails', data);
@@ -194,7 +193,7 @@ const AddPropertyDetails = ({ navigation }) => {
               value={data.price}
               onChangeText={text => setValue('price', text)}
             />
-            {data.property_type?.title != 'Vacant Land' && (
+            {data.property_type != 'Vacant Land' && (
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
@@ -221,7 +220,7 @@ const AddPropertyDetails = ({ navigation }) => {
                 value={data.address}
               />
             </TouchableOpacity>
-            {data.property_type?.title != 'Vacant Land' && (
+            {data.property_type != 'Vacant Land' && (
               <>
                 <Divider color={colors.g18} />
                 <HomeInput
@@ -232,7 +231,7 @@ const AddPropertyDetails = ({ navigation }) => {
                 />
               </>
             )}
-            {data.property_type?.title != 'Condo' && (
+            {data.property_type != 'Condo' && (
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
@@ -296,11 +295,11 @@ const AddPropertyDetails = ({ navigation }) => {
                   value={data.property_tax}
                   simpleInputPlaceHolder={'00.00'}
                   title={'Property Taxes '}
-                  subtitle={data.currency_type?.title}
+                  subtitle={data.currency_type}
                 />
               </>
             )}
-            {data.property_type?.title == 'Condo' && (
+            {data.property_type == 'Condo' && (
               <>
                 <Divider color={colors.g18} />
                 <CheckBoxInput
@@ -317,7 +316,7 @@ const AddPropertyDetails = ({ navigation }) => {
                 />
               </>
             )}
-            {data.property_type?.title != 'Condo' &&
+            {data.property_type != 'Condo' &&
               <>
                 <Divider color={colors.g18} />
                 <Textarea

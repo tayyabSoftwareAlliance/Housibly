@@ -12,9 +12,6 @@ export function* getSublistsRequest() {
   yield takeLatest(types.GET_SUBLISTS, getSublists);
 }
 function* getSublists() {
-  for (let key in sublists) {
-    sublists[key] = Object.entries(sublists[key]).map(([id, title]) => ({ id, title }))
-  }
   yield put({
     type: types.GET_SUBLISTS_SUCCESS,
     payload: sublists,

@@ -76,7 +76,7 @@ export const PriceInput = ({
               return (
                 <View>
                   <Text style={styles.rowTextStyle}>
-                    ({defaultValue?.title})
+                    ({defaultValue})
                   </Text>
                 </View>
               );
@@ -89,7 +89,7 @@ export const PriceInput = ({
                 <View style={styles.btnCon}>
                   <Text
                     style={[styles.rowTextStyle, { textDecorationLine: 'none' }]}>
-                    {item?.title}
+                    {item}
                   </Text>
                 </View>
               );

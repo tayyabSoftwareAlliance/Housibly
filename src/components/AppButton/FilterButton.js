@@ -6,7 +6,7 @@ import { ListModal } from '../Modal/ListModal';
 
 export const FilterButton = ({
   title,
-  list,
+  list={},
   onPressTick,
   source,
   marginRight,
@@ -24,9 +24,9 @@ export const FilterButton = ({
   const renderSubtitle = useMemo(() => {
     let subtitle = ''
     if (multiselect)
-      subtitle = selected?.map?.(item => item?.title).join(', ')
+      subtitle = selected?.map?.(item => list[item]).join(', ')
     else
-      subtitle = selected?.title
+      subtitle = list[selected]
     return subtitle && (
       <Text numberOfLines={1} style={[styles.subtitle, { color: textColor || colors.g19 }]}>
         {subtitle}
@@ -64,7 +64,7 @@ export const FilterButton = ({
       </TouchableOpacity>
       <ListModal
         listRef={ref}
-        list={list}
+        list={Object.entries(list)}
         onPressCross={() => {
           ref.current?.close()
         }}

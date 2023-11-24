@@ -12,7 +12,7 @@ const RoomsBox = ({ data, onRemoveRoom }) => {
       {data.map((item, index) => (
         <View key={index} style={styles.roomRow} >
           <Text style={styles.text} >{item?.name || 'N/A'}</Text>
-          <Text style={styles.text} >{item?.level?.title || 'N/A'}</Text>
+          <Text style={styles.text} >{item?.level || 'N/A'}</Text>
           <Text style={styles.text} >{`${item?.length_ft}'${item?.length_in}" x ${item?.width_ft}'${item?.width_in}"`}</Text>
           <View style={{ width: WP(23), justifyContent: 'center', alignItems: 'center' }} >
             {onRemoveRoom &&

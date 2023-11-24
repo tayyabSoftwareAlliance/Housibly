@@ -103,10 +103,10 @@ const sublists = {
     "wood": "Wood",
     "other": "Other"
   },
-  "driveway":{
-    "private":"Private",
-    "mutual":"Mutual",
-    "none":"None",
+  "driveway": {
+    "private": "Private",
+    "mutual": "Mutual",
+    "none": "None",
   },
   "balcony": {
     "yes": "Yes",
@@ -187,78 +187,33 @@ const sublists = {
 }
 
 const lot_unit_list = [
-  {
-    id: 1,
-    title: 'meter'
-  },
-  {
-    id: 2,
-    title: 'feet'
-  }
+  'meter',
+  'feet',
 ];
 const lot_area_unit_list = [
-  {
-    id: 1,
-    title: 'sqm'
-  },
-  {
-    id: 2,
-    title: 'sqft'
-  }
+  'sqm',
+  'sqft',
 ];
 
 const currency_list = [
-  {
-    id: 1,
-    title: '$USD'
-  },
-  {
-    id: 2,
-    title: '$CDN'
-  },
+  '$USD',
+  '$CDN',
 ];
 
-const property_type_list = [
-  {
-    id: 1,
-    title: 'House',
-  },
-  {
-    id: 2,
-    title: 'Condo',
-  },
-  {
-    id: 3,
-    title: 'Vacant Land',
-  },
-];
+const property_type_list = {
+  'House': 'House',
+  'Condo': 'Condo',
+  'Vacant Land': 'Vacant Land',
+};
 
-const level_list = [
-  {
-    id: 1,
-    title: 'Basement'
-  },
-  {
-    id: 2,
-    title: 'Ground Floor'
-  },
-  {
-    id: 3,
-    title: 'First Floor'
-  },
-  {
-    id: 4,
-    title: 'Second Floor'
-  },
-  {
-    id: 5,
-    title: 'Third Floor'
-  },
-  {
-    id: 6,
-    title: 'Fourth Floor'
-  }
-]
+const level_list = {
+  'Basement': 'Basement',
+  'Ground Floor': 'Ground Floor',
+  'First Floor': 'First Floor',
+  'Second Floor': 'Second Floor',
+  'Third Floor': 'Third Floor',
+  'Fourth Floor': 'Fourth Floor'
+}
 
 const beds_list = [
   {

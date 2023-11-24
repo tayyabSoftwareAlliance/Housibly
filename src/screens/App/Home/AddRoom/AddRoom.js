@@ -100,7 +100,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
       Alert.alert('Error', 'Room Length is Required');
     } else if (!(roomDetail.width_ft > 0)) {
       Alert.alert('Error', 'Room Width is Required');
-    } else if (!roomDetail.level?.title) {
+    } else if (!roomDetail.level) {
       Alert.alert('Error', 'Room Level is Required');
     } else {
       setData(prev => {

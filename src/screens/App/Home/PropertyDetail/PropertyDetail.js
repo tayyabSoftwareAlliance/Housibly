@@ -42,12 +42,12 @@ import { setAddressRequest } from '../../../../redux/saga/app-sega/app-sega';
 import RoomsBox from '../../../../components/Box/RoomsBox';
 
 const PropertyDetail = ({ navigation, route }) => {
-  const { add_property_detail } = useSelector(state => state?.appReducer);
+  const { add_property_detail, sublists } = useSelector(state => state?.appReducer);
   const [data, setData] = useState(route.params)
   const [previewImg, setPreviewImg] = useState(data?.images?.[0]?.path);
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
-
+  console.log('dataa', JSON.stringify(data, null, 2))
   const onPost = async () => {
     const check = await checkConnected();
     if (check) {
@@ -177,8 +177,8 @@ const PropertyDetail = ({ navigation, route }) => {
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <PreviewImageCover
-            h1={data?.title}
-            h2={data?.property_type?.title}
+            h1={data.title}
+            h2={data.property_type}
             uri={previewImg}
           />
           <View>
@@ -210,15 +210,15 @@ const PropertyDetail = ({ navigation, route }) => {
               <PreviewInfoCard
                 item={{
                   h1: 'Price',
-                  h2: `${data.currency_type?.title} ${data.price || 0}`,
+                  h2: `${data.currency_type} ${data.price || 0}`,
                   icon: appIcons.priceTag,
                 }}
               />
-              {data.property_type?.title != 'Vacant Land' &&
+              {data.property_type != 'Vacant Land' &&
                 <PreviewInfoCard
                   item={{
                     h1: 'Year Built',
-                    h2: `${data?.year_built || 0}`,
+                    h2: `${data.year_built || 0}`,
                     icon: appIcons.built,
                   }}
                 />
@@ -236,18 +236,18 @@ const PropertyDetail = ({ navigation, route }) => {
               title={'Unit'}
               subtitle={data.unit || '0'}
             />
-            {data.property_type?.type != 'Condo' && (
+            {data.property_type != 'Condo' && (
               <>
                 <PreviewField
-                  title={`Lot Frontage (${data.lot_unit?.title})`}
+                  title={`Lot Frontage (${data.lot_unit})`}
                   subtitle={data.lot_frontage || '0'}
                 />
                 <PreviewField
-                  title={`Lot Depth (${data.lot_unit?.title})`}
+                  title={`Lot Depth (${data.lot_unit})`}
                   subtitle={data.lot_depth || '0'}
                 />
                 <PreviewField
-                  title={`Lot Size (${data.lot_unit?.title == 'meter' ? 'sqm' : 'sft'})`}
+                  title={`Lot Size (${data.lot_unit == 'meter' ? 'sqm' : 'sft'})`}
                   subtitle={data.lot_size || '23'}
                 />
                 <PreviewField
@@ -257,14 +257,14 @@ const PropertyDetail = ({ navigation, route }) => {
               </>
             )}
             <PreviewField
-              title={`Property Taxes (${data.currency_type?.title})`}
+              title={`Property Taxes (${data.currency_type})`}
               subtitle={data.property_tax || 0}
             />
             <PreviewField
               title={'Tax Year'}
               subtitle={data.tax_year || 'N/A'}
             />
-            {data.property_type?.title == 'Condo' && (
+            {data.property_type == 'Condo' && (
               <>
                 <PreviewField
                   title={'Locker'}
@@ -282,7 +282,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
               </>
             )}
-            {(data.property_type?.title == 'House' || data.property_type?.title == 'Condo') &&
+            {(data.property_type == 'House' || data.property_type == 'Condo') &&
               <>
                 <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
                 <PreviewField
@@ -313,104 +313,115 @@ const PropertyDetail = ({ navigation, route }) => {
 
                 <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
 
-                {data.property_type?.title == 'House' ?
+                {data.property_type == 'House' ?
                   <>
                     <PreviewField
                       title={'House Type'}
-                      subtitle={data.house_type?.title || 'N/A'}
+                      list={sublists.house_type}
+                      subtitle={data.house_type || 'N/A'}
                       source={appIcons.HouseType}
                     />
                     <PreviewField
                       title={'House Style'}
-                      subtitle={data.house_style?.title || 'N/A'}
+                      list={sublists.house_style}
+                      subtitle={data.house_style || 'N/A'}
                       source={appIcons.HouseStyle}
                     />
                   </> :
                   <>
                     <PreviewField
                       title={'Condo Type'}
-                      subtitle={data.condo_type?.title || 'N/A'}
+                      list={sublists.condo_type}
+                      subtitle={data.condo_type || 'N/A'}
                       source={appIcons.condoType}
                     />
                     <PreviewField
                       title={'Condo Style'}
-                      subtitle={data.condo_style?.title || 'N/A'}
+                      list={sublists.condo_style}
+                      subtitle={data.condo_style || 'N/A'}
                       source={appIcons.condoStyle}
                     />
                   </>
                 }
                 <PreviewField
                   title={'Exterior'}
+                  list={sublists.exterior}
                   subtitle={data.exterior || 'N/A'}
                   source={appIcons.exterior}
                   multiple
                 />
                 <PreviewField
                   title={'Basement'}
+                  list={sublists.basement}
                   subtitle={data.basement || 'N/A'}
                   source={appIcons.bassement}
                   multiple
                 />
-                {data.property_type?.title == 'Condo' &&
+                {data.property_type == 'Condo' &&
                   <>
                     <PreviewField
                       title={'Balcony'}
-                      subtitle={data.balcony?.title || 'N/A'}
+                      list={sublists.balcony}
+                      subtitle={data.balcony || 'N/A'}
                       source={appIcons.balcony}
                     />
                     <PreviewField
                       title={'Exposure'}
-                      subtitle={data.exposure?.title || 'N/A'}
+                      list={sublists.exposure}
+                      subtitle={data.exposure || 'N/A'}
                       source={appIcons.exposure}
                     />
                     <PreviewField
                       title={'Security'}
-                      subtitle={data.security?.title || 'N/A'}
+                      list={sublists.security}
+                      subtitle={data.security || 'N/A'}
                       source={appIcons.security}
                     />
                     <PreviewField
                       title={'Pets Allowed'}
-                      subtitle={data.pets_allowed?.title || 'N/A'}
+                      list={sublists.pets_allowed}
+                      subtitle={data.pets_allowed || 'N/A'}
                       source={appIcons.pets}
                     />
                     <PreviewField
                       title={'Utilities Included'}
+                      list={sublists.included_utilities}
                       subtitle={data.included_utilities || 'N/A'}
-                      source={appIcons.included_utilities}
+                      source={appIcons.utilities}
                       multiple
                     />
                   </>
                 }
-                <PreviewField
-                  title={'Garage'}
-                  subtitle={data.garage?.title || 'N/A'}
-                  source={appIcons.garage}
-                />
-                {data.property_type?.title == 'House' &&
+                {data.property_type == 'House' &&
                   <PreviewField
                     title={'Driveway'}
-                    subtitle={data.driveway?.title || 'N/A'}
+                    list={sublists.driveway}
+                    subtitle={data.driveway || 'N/A'}
                     source={appIcons.driveway}
                   />
                 }
                 <PreviewField
                   title={'Water'}
-                  subtitle={data.water?.title || 'N/A'}
+                  list={sublists.water}
+                  subtitle={data.water || 'N/A'}
                   source={appIcons.water}
                 />
                 <PreviewField
                   title={'Sewer'}
-                  subtitle={data.sewer?.title || 'N/A'}
+                  list={sublists.sewer}
+                  subtitle={data.sewer || 'N/A'}
                   source={appIcons.sware}
                 />
                 <PreviewField
                   title={'Heat Source'}
+                  list={sublists.heat_source}
                   subtitle={data.heat_source}
                   source={appIcons.source}
                   multiple
                 />
                 <PreviewField
                   title={'Heat Type'}
+                  list={sublists.heat_type}
                   subtitle={data.heat_type}
                   source={appIcons.heat}
                   multiple
@@ -422,6 +433,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
                 <PreviewField
                   title={'Fireplace'}
+                  list={sublists.fireplace}
                   subtitle={data.fireplace}
                   source={appIcons.fire}
                   multiple
@@ -433,7 +445,8 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
                 <PreviewField
                   title={'Pool'}
-                  subtitle={data.pool?.title || 'N/A'}
+                  list={sublists.pool}
+                  subtitle={data.pool || 'N/A'}
                   source={appIcons.pool}
                 />
               </>
@@ -442,18 +455,18 @@ const PropertyDetail = ({ navigation, route }) => {
               <SmallHeading title={'Property Description'} />
               <SmallHeading
                 textColor={colors.g22}
-                title={data?.desc || 'N/A'}
+                title={data.desc || 'N/A'}
               />
-              {data?.property_type?.title != 'Condo' && (
+              {data?.property_type != 'Condo' && (
                 <>
                   <SmallHeading title={'Lot Description'} />
                   <SmallHeading
                     textColor={colors.g22}
-                    title={data?.lot_desc || 'N/A'}
+                    title={data.lot_desc || 'N/A'}
                   />
                 </>
               )}
-              {data?.property_type?.title != 'Vacant Land' && (
+              {data?.property_type != 'Vacant Land' && (
                 <>
                   <SmallHeading title={'Appliances and other Items'} />
                   <SmallHeading
@@ -463,7 +476,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 </>
               )}
             </View>
-            {data.property_type?.title != 'Vacant Land' &&
+            {data.property_type != 'Vacant Land' &&
               <RoomsBox data={data.rooms} />
             }
           </View>
