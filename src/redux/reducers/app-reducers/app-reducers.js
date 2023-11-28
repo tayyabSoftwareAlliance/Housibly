@@ -4,7 +4,7 @@ const initialState = {
   loading: false,
   isSuccess: false,
   isFailure: false,
-  add_property_detail: null,
+  saved_create_property_data: null,
   sublists: {},
   address: '',
   recent_properties: [],
@@ -27,7 +27,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.SAVE_CREATE_PROPERTY_DATA:
       return {
         ...state,
-        add_property_detail: payload,
+        saved_create_property_data: payload,
       };
 
     //************ Get Recent Properties states*************

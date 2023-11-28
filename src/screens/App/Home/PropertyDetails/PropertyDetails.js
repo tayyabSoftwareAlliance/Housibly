@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect} from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import {
   Text,
   View,
@@ -8,11 +8,11 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {useIsFocused} from '@react-navigation/core';
-import {Spacer, BackHeader} from '../../../../components';
-import {Menu, MenuItem} from 'react-native-material-menu';
-import {appIcons, colors, family, size, WP} from '../../../../shared/exporter';
+import { Icon } from 'react-native-elements';
+import { useIsFocused } from '@react-navigation/core';
+import { Spacer, BackHeader } from '../../../../components';
+import { Menu, MenuItem } from 'react-native-material-menu';
+import { appIcons, colors, family, size, WP } from '../../../../shared/exporter';
 import {
   condoMatches,
   landMatches,
@@ -21,21 +21,22 @@ import {
 } from '../../../../shared/utilities/constant';
 import styles from './styles';
 
-const PropertyDetails = ({navigation, route}) => {
+const PropertyDetails = ({ navigation, route }) => {
+  const { item } = route.params
   const isFocus = useIsFocused();
   const [data, setData] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const [matchFilter, setMatchFilter] = useState('Match');
   const [filterType, setFilterType] = useState('Top Match');
   const [showMatchMenu, setShowMatchMenu] = useState(false);
-
+console.log('itemmmm ',JSON.stringify(item,null,2))
   useLayoutEffect(() => {
-    navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-    return () => navigation.getParent()?.setOptions({tabBarStyle: undefined});
+    navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
+    return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
   }, [isFocus]);
 
   useLayoutEffect(() => {
-    let type = route?.params?.item?.type;
+    let type = item?.type;
     if (type === 'House') {
       setData(propertyMatches);
     } else if (type === 'Condo') {
@@ -50,18 +51,18 @@ const PropertyDetails = ({navigation, route}) => {
       <TouchableOpacity
         activeOpacity={1}
         style={styles.detailsContainer}
-        onPress={() => console.log('You touched me')}>
+        onPress={() => navigation.navigate('PropertyDetail',{data:item})}>
         <Image
-          source={{uri: route?.params?.item?.image[0].url || property_image}}
+          source={{ uri: item?.image?.[0].url || property_image }}
           style={styles.imgStyle}
         />
         <View>
           <Text numberOfLines={2} style={styles.nameTxtStyle}>
-            {route?.params?.item?.title || ''}
+            {item?.title || ''}
           </Text>
           <View style={styles.simpleRow}>
             <Text style={styles.smallTxtStyle}>
-              {`$${route?.params?.item?.price}`} |{' '}
+              {`$${item?.price}`} |{' '}
             </Text>
             <Image
               resizeMode="contain"
@@ -69,11 +70,11 @@ const PropertyDetails = ({navigation, route}) => {
               style={styles.bedIconStyle}
             />
             <Text style={styles.smallTxtStyle}>
-              {route?.params?.item?.bed_rooms || 0}
+              {item?.bed_rooms || 0}
             </Text>
             <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
             <Text resizeMode="contain" style={styles.smallTxtStyle}>
-              {route?.params?.item?.bath_rooms || 0}
+              {item?.bath_rooms || 0}
             </Text>
           </View>
         </View>
@@ -91,7 +92,7 @@ const PropertyDetails = ({navigation, route}) => {
     setShowMatchMenu(false);
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
@@ -99,7 +100,7 @@ const PropertyDetails = ({navigation, route}) => {
         onPress={() =>
           navigation.navigate('PersonDetails', {
             item: item,
-            itemType: route?.params?.item?.type,
+            itemType: item?.type,
           })
         }>
         <View style={styles.innerRow}>
@@ -151,7 +152,7 @@ const PropertyDetails = ({navigation, route}) => {
               name={showMenu ? 'chevron-up' : 'chevron-down'}
               size={16}
               color={colors.g2}
-              style={{marginLeft: 5}}
+              style={{ marginLeft: 5 }}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -165,7 +166,7 @@ const PropertyDetails = ({navigation, route}) => {
               name={showMatchMenu ? 'chevron-up' : 'chevron-down'}
               size={16}
               color={colors.g2}
-              style={{marginLeft: 5}}
+              style={{ marginLeft: 5 }}
             />
           </TouchableOpacity>
         </View>

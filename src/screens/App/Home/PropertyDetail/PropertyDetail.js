@@ -26,6 +26,7 @@ import {
   colors,
   HP,
   networkText,
+  property_type_list,
   size,
   spacing,
   WP,
@@ -40,118 +41,36 @@ import {
 } from '../../../../redux/actions';
 import { setAddressRequest } from '../../../../redux/saga/app-sega/app-sega';
 import RoomsBox from '../../../../components/Box/RoomsBox';
+import { createPropertyFormData } from '../../../../shared/utilities/helper';
+import { app } from '../../../../shared/api';
 
 const PropertyDetail = ({ navigation, route }) => {
-  const { add_property_detail, sublists } = useSelector(state => state?.appReducer);
-  const [data, setData] = useState(route.params)
-  const [previewImg, setPreviewImg] = useState(data?.images?.[0]?.path);
+
+  const { data, from } = route.params
+  const { saved_create_property_data, sublists } = useSelector(state => state?.appReducer);
+  const [imgSelectedIndex, setImgSelectedIndex] = useState(0);
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
-  console.log('dataa', JSON.stringify(data, null, 2))
+
   const onPost = async () => {
     const check = await checkConnected();
     if (check) {
       try {
         setloading(true);
-        var formdata = new FormData();
-        const filterArr = add_property_detail?.option_data?.map(item => {
-          return {
-            title: item?.title,
-            value: item?.value,
-          };
-        });
-
-        add_property_detail?.images?.forEach(item => {
-          formdata.append('property[images][]', {
-            uri: item?.path,
-            type: item?.mime || 'image/jpeg',
-            name: item?.filename || 'image',
-          });
-        }),
-          formdata.append('property[title]', add_property_detail?.title || '');
-        formdata.append('property[price]', add_property_detail?.price || '');
-        formdata.append(
-          'property[currency_type]',
-          add_property_detail?.currency_type || '',
-        );
-        formdata.append(
-          'property[year_built]',
-          add_property_detail?.year_built || '',
-        );
-        formdata.append(
-          'property[address]',
-          add_property_detail?.address || '',
-        );
-        formdata.append('property[unit]', add_property_detail?.unit || '');
-        formdata.append(
-          'property[lot_frontage]',
-          add_property_detail?.lot_frontage || '',
-        );
-        formdata.append(
-          'property[lot_frontage_unit]',
-          add_property_detail?.lot_frontage_unit || 'feet',
-        );
-        formdata.append(
-          'property[lot_depth]',
-          add_property_detail?.lot_depth || '',
-        );
-        formdata.append(
-          'property[lot_depth_unit]',
-          add_property_detail?.lot_depth_unit || 'feet',
-        );
-        formdata.append(
-          'property[lot_size]',
-          add_property_detail?.lot_size || '',
-        );
-        formdata.append(
-          'property[lot_size_unit]',
-          add_property_detail?.lot_size_unit || '',
-        );
-        formdata.append(
-          'property[is_lot_irregular]',
-          add_property_detail?.is_lot_irregular || 'No',
-        );
-        formdata.append(
-          'property[lot_description]',
-          add_property_detail?.property_desc || '',
-        );
-        formdata.append(
-          'property[property_tax]',
-          add_property_detail?.property_tax || '',
-        );
-        formdata.append(
-          'property[tax_year]',
-          add_property_detail?.text_year || '',
-        );
-        formdata.append('property[locker]', add_property_detail?.locker || '');
-        formdata.append(
-          'property[condo_corporation_or_hqa]',
-          add_property_detail?.condo_corporation_or_hqa || '',
-        );
-        formdata.append(
-          'property[other_options]',
-          JSON.stringify(filterArr) || JSON.stringify([]),
-        );
-        formdata.append(
-          'property[property_type]',
-          add_property_detail?.property_type == 'Vacant Land'
-            ? 'vacant_land'
-            : add_property_detail?.property_type || 'house',
-        );
-        const res = await addProperty(formdata, setloading);
-        if (res) {
-          console.log(res);
-          const onSuccess = res => {
-            setloading(false);
-            dispatch(set_address_request('', () => { }));
-            navigation?.navigate('Home');
-          };
-          dispatch(saveCreatePropertyData(null, onSuccess));
+        const formdata = createPropertyFormData(saved_create_property_data)
+        // console.log('formm dataa', formdata)
+        const res = await app.createProperty(formdata)
+        if (res?.status == 200) {
+          navigation.navigate('Home')
+          Alert.alert('Success', 'Property Created Successfully!');
         }
-      } catch (error) {
-        setloading(false);
-
-        console.log('Error', error);
+      }
+      catch (error) {
+        let msg = responseValidator(error?.response?.status, error?.response?.data);
+        Alert.alert('Error', msg || 'Something went wrong!');
+      }
+      finally {
+        setloading(false)
       }
     } else {
       Alert.alert('Error', networkText);
@@ -159,11 +78,11 @@ const PropertyDetail = ({ navigation, route }) => {
   };
 
   const onSave = async () => {
-    add_property_detail.save_desc = true;
-    add_property_detail.save_list = true;
-    add_property_detail.save_data = true;
+    saved_create_property_data.save_desc = true;
+    saved_create_property_data.save_list = true;
+    saved_create_property_data.save_data = true;
     dispatch(
-      saveCreatePropertyData(add_property_detail, () => {
+      saveCreatePropertyData(saved_create_property_data, () => {
         Alert.alert('Success', 'Information Saved Successfully');
       }),
     );
@@ -178,22 +97,21 @@ const PropertyDetail = ({ navigation, route }) => {
         <View style={styles.contentContainer}>
           <PreviewImageCover
             h1={data.title}
-            h2={data.property_type}
-            uri={previewImg}
+            h2={property_type_list[data.property_type]}
+            uri={from == 'create' ? data?.images?.[imgSelectedIndex]?.path : data?.images?.[imgSelectedIndex]?.url}
           />
           <View>
             <FlatList
               data={data?.images}
-              renderItem={({ item }) => {
+              renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
-                      setPreviewImg(item?.path);
+                      setImgSelectedIndex(index);
                     }}>
                     <PreviewImageBox
-                      onPress={() => { }}
                       uri={
-                        item?.path ||
+                        (from == 'create' ? item?.path : item?.url) ||
                         'https://wallpaperaccess.com/full/1700222.jpg'
                       }
                     />
@@ -214,7 +132,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   icon: appIcons.priceTag,
                 }}
               />
-              {data.property_type != 'Vacant Land' &&
+              {data.property_type != 'vacant_land' &&
                 <PreviewInfoCard
                   item={{
                     h1: 'Year Built',
@@ -225,7 +143,7 @@ const PropertyDetail = ({ navigation, route }) => {
               }
             </View>
             <Text numberOfLines={6} style={styles.desc}>
-              {data.lot_desc}
+              {data.lot_description}
             </Text>
             <Divider color={colors.g13} />
             <PreviewField
@@ -236,7 +154,7 @@ const PropertyDetail = ({ navigation, route }) => {
               title={'Unit'}
               subtitle={data.unit || '0'}
             />
-            {data.property_type != 'Condo' && (
+            {data.property_type != 'condo' && (
               <>
                 <PreviewField
                   title={`Lot Frontage (${data.lot_unit})`}
@@ -264,7 +182,7 @@ const PropertyDetail = ({ navigation, route }) => {
               title={'Tax Year'}
               subtitle={data.tax_year || 'N/A'}
             />
-            {data.property_type == 'Condo' && (
+            {data.property_type == 'condo' && (
               <>
                 <PreviewField
                   title={'Locker'}
@@ -273,7 +191,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 <PreviewField
                   title={'Condo Corporation / HOA'}
                   subtitle={
-                    data.condo_corporation || 'N/A'
+                    data.condo_corporation_or_hqa || 'N/A'
                   }
                 />
                 <PreviewField
@@ -282,7 +200,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
               </>
             )}
-            {(data.property_type == 'House' || data.property_type == 'Condo') &&
+            {(data.property_type == 'house' || data.property_type == 'condo') &&
               <>
                 <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
                 <PreviewField
@@ -297,7 +215,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
                 <PreviewField
                   title={'Total Number of Rooms'}
-                  subtitle={data.num_of_rooms || 'N/A'}
+                  subtitle={data.total_number_of_rooms || 'N/A'}
                   source={appIcons.living_space}
                 />
                 <PreviewField
@@ -313,7 +231,7 @@ const PropertyDetail = ({ navigation, route }) => {
 
                 <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
 
-                {data.property_type == 'House' ?
+                {data.property_type == 'house' ?
                   <>
                     <PreviewField
                       title={'House Type'}
@@ -357,7 +275,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   source={appIcons.bassement}
                   multiple
                 />
-                {data.property_type == 'Condo' &&
+                {data.property_type == 'condo' &&
                   <>
                     <PreviewField
                       title={'Balcony'}
@@ -392,7 +310,7 @@ const PropertyDetail = ({ navigation, route }) => {
                     />
                   </>
                 }
-                {data.property_type == 'House' &&
+                {data.property_type == 'house' &&
                   <PreviewField
                     title={'Driveway'}
                     list={sublists.driveway}
@@ -428,8 +346,9 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
                 <PreviewField
                   title={'Laundary'}
-                  subtitle={data.laundary ? 'Yes' : 'No'}
-                  source={appIcons.sware}
+                  list={sublists.sewer}
+                  subtitle={data.laundry}
+                  source={appIcons.loundry}
                 />
                 <PreviewField
                   title={'Fireplace'}
@@ -457,47 +376,49 @@ const PropertyDetail = ({ navigation, route }) => {
                 textColor={colors.g22}
                 title={data.desc || 'N/A'}
               />
-              {data?.property_type != 'Condo' && (
+              {data?.property_type != 'condo' && (
                 <>
                   <SmallHeading title={'Lot Description'} />
                   <SmallHeading
                     textColor={colors.g22}
-                    title={data.lot_desc || 'N/A'}
+                    title={data.lot_description || 'N/A'}
                   />
                 </>
               )}
-              {data?.property_type != 'Vacant Land' && (
+              {data?.property_type != 'vacant_land' && (
                 <>
                   <SmallHeading title={'Appliances and other Items'} />
                   <SmallHeading
                     textColor={colors.g22}
-                    title={data?.other_desc || 'N/A'}
+                    title={data?.appliances_and_other_items || 'N/A'}
                   />
                 </>
               )}
             </View>
-            {data.property_type != 'Vacant Land' &&
+            {data.property_type != 'vacant_land' &&
               <RoomsBox data={data.rooms} />
             }
           </View>
-          <View style={[styles.spacRow, { marginVertical: HP(2) }]}>
-            <AppButton
-              width={'45%'}
-              bgColor={colors.g21}
-              title={'Save'}
-              fontSize={size.tiny}
-              borderColor={colors.g21}
-              onPress={onSave}
-              shadowColor={colors.white}
-            />
-            <AppButton
-              onPress={onPost}
-              width={'45%'}
-              bgColor={colors.p2}
-              title={'Post'}
-              fontSize={size.tiny}
-            />
-          </View>
+          {from == 'create' &&
+            <View style={[styles.spacRow, { marginVertical: HP(2) }]}>
+              <AppButton
+                width={'45%'}
+                bgColor={colors.g21}
+                title={'Save'}
+                fontSize={size.tiny}
+                borderColor={colors.g21}
+                onPress={onSave}
+                shadowColor={colors.white}
+              />
+              <AppButton
+                onPress={onPost}
+                width={'45%'}
+                bgColor={colors.p2}
+                title={'Post'}
+                fontSize={size.tiny}
+              />
+            </View>
+          }
         </View>
       </KeyboardAwareScrollView>
       <AppLoader loading={loading} />

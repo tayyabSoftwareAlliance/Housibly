@@ -33,6 +33,7 @@ export const setting = {
 }
 
 export const app = {
-    getHouseSublists: () => requests.get(ENDPOINTS.HOUSE_SUBLISTS),
-    getCondoSublists: () => requests.get(ENDPOINTS.CONDO_SUBLISTS),
+    getSublists: () => requests.get(ENDPOINTS.GET_SUBLISTS),
+    createProperty: (data) => requests.post(ENDPOINTS.CREATE_PROPERTY,data),
+    getMyProperties: () => requests.get(ENDPOINTS.GET_MY_PROPERTIES),
 }

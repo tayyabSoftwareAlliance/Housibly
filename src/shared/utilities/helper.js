@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createContext, useContext, useEffect } from 'react';
-import { appIcons, WP } from '../exporter';
+import { appIcons, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
 import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
@@ -33,8 +33,8 @@ export const useOnlineStatus = () => {
   return store;
 };
 export const capitalizeFirstLetter = string => {
-  if(typeof string == 'string')
-  return string?.charAt(0)?.toUpperCase() + string?.slice(1);
+  if (typeof string == 'string')
+    return string?.charAt(0)?.toUpperCase() + string?.slice(1);
   return string
 };
 export const responseValidator = (response, errorMsg) => {
@@ -199,4 +199,129 @@ export const handleLocationPermission = async () => {
   if (result == RESULTS.GRANTED) {
     return true
   }
+}
+
+export const createPropertyFormData = (data = {}) => {
+  const formdata = new FormData();
+  formdata.append('property[property_type]', data.property_type);
+  data.images?.forEach(item => {
+    formdata.append('property[images][]', {
+      uri: item?.path,
+      type: item?.mime || 'image/jpeg',
+      name: item?.filename || 'image',
+    });
+  })
+  formdata.append('property[title]', data.title);
+  formdata.append('property[price]', data.price);
+  formdata.append('property[currency_type]', data.currency_type);
+  formdata.append('property[address]', data.address);
+  formdata.append('property[tax_year]', data.tax_year);
+  formdata.append('property[property_tax]', data.property_tax);
+  formdata.append('property[property_description]', data.property_description);
+
+  if (data.property_type == 'vacant_land') {
+    formdata.append('property[lot_frontage]', data.lot_frontage);
+    formdata.append('property[lot_frontage_unit]', data.lot_unit);
+    formdata.append('property[lot_depth]', data.lot_depth);
+    formdata.append('property[lot_depth_unit]', data.lot_unit);
+    formdata.append('property[lot_size]', data.lot_size);
+    formdata.append('property[lot_size_unit]',
+      data.lot_unit == lot_unit_list[0] ?
+        lot_area_unit_list[0] :
+        lot_area_unit_list[1]
+    );
+    formdata.append('property[is_lot_irregular]', data.is_lot_irregular);
+    formdata.append('property[lot_description]', data.lot_description);
+  } else if (data.property_type == 'house') {
+    formdata.append('property[year_built]', data.year_built);
+    formdata.append('property[unit]', data.unit);
+    formdata.append('property[lot_frontage]', data.lot_frontage);
+    formdata.append('property[lot_frontage_unit]', data.lot_unit);
+    formdata.append('property[lot_depth]', data.lot_depth);
+    formdata.append('property[lot_depth_unit]', data.lot_unit);
+    formdata.append('property[lot_size]', data.lot_size);
+    formdata.append('property[lot_size_unit]',
+      data.lot_unit == lot_unit_list[0] ?
+        lot_area_unit_list[0] :
+        lot_area_unit_list[1]
+    );
+    formdata.append('property[is_lot_irregular]', data.is_lot_irregular);
+    formdata.append('property[lot_description]', data.lot_description);
+    formdata.append('property[house_type]', data.house_type);
+    formdata.append('property[house_style]', data.house_style);
+    formdata.append('property[bed_rooms]', data.bed_rooms);
+    formdata.append('property[bath_rooms]', data.bath_rooms);
+    formdata.append('property[total_number_of_rooms]', data.total_number_of_rooms);
+    formdata.append('property[basement]', data.basement);
+    formdata.append('property[total_parking_spaces]', data.total_parking_spaces);
+    formdata.append('property[garage_spaces]', data.garage_spaces);
+    formdata.append('property[driveway]', data.driveway);
+    formdata.append('property[water]', data.water);
+    formdata.append('property[sewer]', data.sewer);
+    formdata.append('property[laundry]', data.laundry);
+    formdata.append('property[fireplace]', data.fireplace);
+    formdata.append('property[central_vacuum]', data.central_vacuum);
+    formdata.append('property[pool]', data.pool);
+    formdata.append('property[appliances_and_other_items]', data.appliances_and_other_items);
+    data.heat_source?.forEach((item) => {
+      formdata.append('property[heat_source]', item);
+    })
+    data.heat_type?.forEach((item) => {
+      formdata.append('property[heat_type]', item);
+    })
+    data.air_conditioner?.forEach((item) => {
+      formdata.append('property[exterior]', item);
+    })
+    data.air_conditioner?.forEach((item) => {
+      formdata.append('property[air_conditioner][]', item);
+    })
+  } else {
+    formdata.append('property[year_built]', data.year_built);
+    formdata.append('property[locker]', data.locker);
+    formdata.append('property[condo_corporation_or_hqa]', data.condo_corporation_or_hqa);
+    formdata.append('property[condo_type]', data.condo_type);
+    formdata.append('property[condo_style]', data.condo_style);
+    formdata.append('property[exterior]', data.exterior);
+    formdata.append('property[bed_rooms]', data.bed_rooms);
+    formdata.append('property[bath_rooms]', data.bath_rooms);
+    formdata.append('property[total_number_of_rooms]', data.total_number_of_rooms);
+    formdata.append('property[basement]', data.basement);
+    formdata.append('property[total_parking_spaces]', data.total_parking_spaces);
+    formdata.append('property[garage_spaces]', data.garage_spaces);
+    formdata.append('property[balcony]', data.balcony);
+    formdata.append('property[exposure]', data.exposure);
+    formdata.append('property[security]', data.security);
+    formdata.append('property[pets_allowed]', data.pets_allowed);
+    formdata.append('property[water]', data.water);
+    formdata.append('property[sewer]', data.sewer);
+    formdata.append('property[laundry]', data.laundry);
+    formdata.append('property[fireplace]', data.fireplace);
+    formdata.append('property[central_vacuum]', data.central_vacuum);
+    formdata.append('property[pool]', data.pool);
+    data.included_utilities?.forEach((item) => {
+      formdata.append('property[included_utilities]', item);
+    })
+    data.heat_source?.forEach((item) => {
+      formdata.append('property[heat_source]', item);
+    })
+    data.heat_type?.forEach((item) => {
+      formdata.append('property[heat_type]', item);
+    })
+    data.air_conditioner?.forEach((item) => {
+      formdata.append('property[exterior]', item);
+    })
+    data.air_conditioner?.forEach((item) => {
+      formdata.append('property[air_conditioner][]', item);
+    })
+  }
+
+  data.rooms?.forEach((item, index) => {
+    formdata.append(`property[rooms_attributes][${index}][name]`, item?.name)
+    formdata.append(`property[rooms_attributes][${index}][length_in_feet]`, item?.length_in_feet)
+    formdata.append(`property[rooms_attributes][${index}][length_in_inch]`, item?.length_in_inch)
+    formdata.append(`property[rooms_attributes][${index}][width_in_feet]`, item?.width_in_feet)
+    formdata.append(`property[rooms_attributes][${index}][width_in_inch]`, item?.width_in_inch)
+    formdata.append(`property[rooms_attributes][${index}][level]`, item?.level)
+  })
+  return formdata
 }

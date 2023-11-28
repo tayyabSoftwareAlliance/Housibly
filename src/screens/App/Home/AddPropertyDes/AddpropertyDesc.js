@@ -12,23 +12,23 @@ import { useIsFocused } from '@react-navigation/native'
 
 const AddpropertyDesc = ({ navigation, route }) => {
 
-  const { add_property_detail } = useSelector(state => state?.appReducer)
+  const { saved_create_property_data } = useSelector(state => state?.appReducer)
   const [data, setData] = useState(JSON.parse(JSON.stringify(route.params)))
   const isFocused = useIsFocused()
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isFocused && add_property_detail) {
-      setData(JSON.parse(JSON.stringify(add_property_detail)))
+    if (!isFocused && saved_create_property_data) {
+      setData(JSON.parse(JSON.stringify(saved_create_property_data)))
     }
-  }, [add_property_detail])
+  }, [saved_create_property_data])
 
   const onNext = async () => {
-    if (!data.desc) {
+    if (!data.property_description) {
       Alert.alert('Error', 'Description is Required');
     } else {
-      if (data.property_type?.title == 'Vacant Land') {
-        navigation.navigate('PropertyDetail', data);
+      if (data.property_type == 'vacant_land') {
+        navigation.navigate('PropertyDetail', { data, from: 'create' });
       } else {
         navigation.navigate('AddRoom', data);
       }
@@ -65,10 +65,10 @@ const AddpropertyDesc = ({ navigation, route }) => {
             placeholder={'Property description'}
             placeholderTextColor={colors.g19}
             underlineColorAndroid={'transparent'}
-            value={data.desc}
-            onChangeText={text => setValue('desc', text)}
+            value={data.property_description}
+            onChangeText={text => setValue('property_description', text)}
           />
-          {data.property_type?.title != 'Vacant Land' && (
+          {data.property_type?.title != 'vacant_land' && (
             <>
               <Divider color={colors.g18} />
               <Textarea
@@ -77,8 +77,8 @@ const AddpropertyDesc = ({ navigation, route }) => {
                 placeholder={'Appliances & Other Items'}
                 placeholderTextColor={colors.g19}
                 underlineColorAndroid={'transparent'}
-                value={data.other_desc}
-                onChangeText={text => setValue('other_desc', text)}
+                value={data.appliances_and_other_items}
+                onChangeText={text => setValue('appliances_and_other_items', text)}
               />
             </>
           )}

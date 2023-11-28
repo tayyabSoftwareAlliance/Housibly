@@ -47,6 +47,7 @@ export {
   ANDROID,
   IOS,
   emailRegex,
+  GOOGLE_MAP_KEY,
   web_client_id,
   profile_uri,
   stripe_publishableKey,

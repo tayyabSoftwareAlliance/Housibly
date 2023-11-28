@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: WP('2.5'),
     paddingHorizontal: WP('3.85'),
   },
   mainRowContainer: {

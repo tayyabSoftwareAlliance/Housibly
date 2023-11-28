@@ -36,30 +36,30 @@ import { useIsFocused } from '@react-navigation/native'
 const AddMorePropertyDetails = ({ navigation, route }) => {
 
   const dispatch = useDispatch(null);
-  const { add_property_detail,sublists } = useSelector(state => state?.appReducer)
+  const { saved_create_property_data, sublists } = useSelector(state => state?.appReducer)
   const [data, setData] = useState(JSON.parse(JSON.stringify(route.params)))
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    if (!isFocused && add_property_detail) {
-      setData(JSON.parse(JSON.stringify(add_property_detail)))
+    if (!isFocused && saved_create_property_data) {
+      setData(JSON.parse(JSON.stringify(saved_create_property_data)))
     }
-  }, [add_property_detail])
+  }, [saved_create_property_data])
 
   const onNext = () => {
-    if (data.property_type == 'House' && !data.house_type) {
+    if (data.property_type == 'house' && !data.house_type) {
       Alert.alert('Error', 'House Type is Required');
-    } else if (data.property_type == 'House' && !data.house_style) {
+    } else if (data.property_type == 'house' && !data.house_style) {
       Alert.alert('Error', 'House Style is Required');
-    } else if (data.property_type == 'Condo' && !data.condo_type) {
+    } else if (data.property_type == 'condo' && !data.condo_type) {
       Alert.alert('Error', 'Condo Type is Required');
-    } else if (data.property_type == 'Condo' && !data.condo_style) {
+    } else if (data.property_type == 'condo' && !data.condo_style) {
       Alert.alert('Error', 'Condo Style is Required');
     } else if (!(data.bed_rooms > 0)) {
       Alert.alert('Error', 'Bed Rooms Number is Required');
     } else if (!(data.bath_rooms > 0)) {
       Alert.alert('Error', 'Bath Rooms Number is Required');
-    } else if (!(data.num_of_rooms > 0)) {
+    } else if (!(data.total_number_of_rooms > 0)) {
       Alert.alert('Error', 'Number of Rooms is Required');
     } else {
       navigation?.navigate('AddPropertyDesc', data);
@@ -89,7 +89,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: WP('2') }}>
         <View style={styles.contentContainer}>
-          {data.property_type == 'Condo' ?
+          {data.property_type == 'condo' ?
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -147,7 +147,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             checked={data.garage_spot_req}
             onPress={() => setValue('garage_spot_req', !data.garage_spot_req)}
           />
-          {data.property_type == 'House' &&
+          {data.property_type == 'house' &&
             <>
               <Divider color={colors.g18} />
               <PriceInput
@@ -167,7 +167,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             source={appIcons.exterior}
             multiselect
           />
-          {data.property_type == 'Condo' &&
+          {data.property_type == 'condo' &&
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -232,8 +232,8 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
           <PriceInput
             title={'Total Number of Rooms'}
             simpleInputPlaceHolder={'0'}
-            value={data.num_of_rooms}
-            onChangeText={text => setValue('num_of_rooms', text)}
+            value={data.total_number_of_rooms}
+            onChangeText={text => setValue('total_number_of_rooms', text)}
             source={appIcons.living_space}
           />
           <Divider color={colors.g18} />
@@ -261,7 +261,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             onChangeText={text => setValue('garage_spaces', text)}
             source={appIcons.garage_space}
           />
-          {data.property_type == 'House' &&
+          {data.property_type == 'house' &&
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -317,10 +317,11 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             multiselect
           />
           <Divider color={colors.g18} />
-          <CheckBoxInput
+          <FilterButton
             title={'Laundary'}
-            checked={data.laundary}
-            onPress={() => setValue('laundary', !data.laundary)}
+            list={sublists.laundry}
+            selected={data.laundry}
+            onPressTick={val => setValue('laundry', val)}
             source={appIcons.loundry}
           />
           <Divider color={colors.g18} />
@@ -347,7 +348,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             onPressTick={val => setValue('pool', val)}
             source={appIcons.pool}
           />
-          {data.property_type == 'Condo' &&
+          {data.property_type == 'condo' &&
             <>
               <Divider color={colors.g18} />
               <PriceInput

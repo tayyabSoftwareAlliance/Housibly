@@ -9,7 +9,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [FIRApp configure];
-  [GMSServices provideAPIKey:@"AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA"];
+  [GMSServices provideAPIKey:@"AIzaSyBqdKhAkPI_qCHco8_vVsnGrUGYjw7HL3M"];
   self.moduleName = @"Housibly";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

@@ -43,6 +43,7 @@ import {
   set_address_request,
 } from '../../../../redux/actions';
 import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const INITIAL_DATA = {
   property_type: property_type_list[0],
@@ -52,17 +53,19 @@ const INITIAL_DATA = {
   price: 0,
   year_built: 0,
   address: '',
+  latitude: 0,
+  longitude: 0,
   unit: 0,
   lot_frontage: 0,
   lot_depth: 0,
   lot_size: 0,
   lot_unit: lot_unit_list[0],
   is_lot_irregular: false,
-  lot_desc: '',
+  lot_description: '',
   tax_year: 0,
   property_tax: 0,
   locker: false,
-  condo_corporation: '',
+  condo_corporation_or_hqa: '',
   house_type: '',
   house_style: '',
   condo_type: '',
@@ -79,7 +82,7 @@ const INITIAL_DATA = {
   included_utilities: [],
   bed_rooms: 0,
   bath_rooms: 0,
-  num_of_rooms: 0,
+  total_number_of_rooms: 0,
   basement: [],
   total_parking_spaces: 0,
   garage_spaces: 0,
@@ -89,44 +92,39 @@ const INITIAL_DATA = {
   heat_source: [],
   heat_type: [],
   air_conditioner: [],
-  laundary: false,
+  laundry: '',
   fireplace: [],
   central_vacuum: false,
   pool: '',
   condo_fees: 0,
-  desc: '',
-  other_desc: '',
-  rooms:[]
+  property_description: '',
+  appliances_and_other_items: '',
+  rooms: []
 }
 
 const AddPropertyDetails = ({ navigation }) => {
 
   const dispatch = useDispatch(null);
-  const { add_property_detail } = useSelector(
+  const { saved_create_property_data } = useSelector(
     state => state?.appReducer,
   );
 
-  const [data, setData] = useState(JSON.parse(JSON.stringify(add_property_detail)) || INITIAL_DATA)
+  const [data, setData] = useState(JSON.parse(JSON.stringify(saved_create_property_data)) || INITIAL_DATA)
   const isFocused = useIsFocused()
-
-  useEffect(() => {
-    if (!isFocused && add_property_detail)
-      setData(JSON.parse(JSON.stringify(add_property_detail)))
-  }, [add_property_detail])
 
   const onNext = async () => {
     if (!data.title) {
       Alert.alert('Error', 'Title is Required');
     } else if (!(data.price > 0)) {
       Alert.alert('Error', 'Price is Required');
-    } else if (data.property_type != 'Condo' && !data.lot_frontage) {
+    } else if (data.property_type != 'condo' && !data.lot_frontage) {
       Alert.alert('Error', 'Lot frontage is Required');
-    } else if (data.property_type != 'Condo' && !data.lot_depth) {
+    } else if (data.property_type != 'condo' && !data.lot_depth) {
       Alert.alert('Error', 'Lot Depth is Required');
     } else if (data.images.length == 0) {
       Alert.alert('Error', 'At least one image Required');
     } else {
-      if (data.property_type == 'Vacant Land') {
+      if (data.property_type == 'vacant_land') {
         navigation?.navigate('AddPropertyDesc', data);
       } else {
         navigation?.navigate('AddMorePropertyDetails', data);
@@ -147,6 +145,28 @@ const AddPropertyDetails = ({ navigation }) => {
       return { ...prev }
     })
   }
+
+  const getAddress = async () => {
+    let address = await AsyncStorage.getItem('address')
+    if (address) {
+      address = JSON.parse(address)
+      setValue('address', address?.address)
+      setValue('latitude', address?.latitude)
+      setValue('longitude', address?.longitude)
+      await AsyncStorage.removeItem('address')
+    }
+  }
+
+  useEffect(() => {
+    if (!isFocused && saved_create_property_data)
+      setData(JSON.parse(JSON.stringify(saved_create_property_data)))
+  }, [saved_create_property_data])
+
+  // for getting address from address screen
+  useEffect(() => {
+    if (isFocused)
+      getAddress()
+  }, [isFocused])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -193,7 +213,7 @@ const AddPropertyDetails = ({ navigation }) => {
               value={data.price}
               onChangeText={text => setValue('price', text)}
             />
-            {data.property_type != 'Vacant Land' && (
+            {data.property_type != 'vacant_land' && (
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
@@ -220,7 +240,7 @@ const AddPropertyDetails = ({ navigation }) => {
                 value={data.address}
               />
             </TouchableOpacity>
-            {data.property_type != 'Vacant Land' && (
+            {data.property_type != 'vacant_land' && (
               <>
                 <Divider color={colors.g18} />
                 <HomeInput
@@ -231,7 +251,7 @@ const AddPropertyDetails = ({ navigation }) => {
                 />
               </>
             )}
-            {data.property_type != 'Condo' && (
+            {data.property_type != 'condo' && (
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
@@ -266,8 +286,8 @@ const AddPropertyDetails = ({ navigation }) => {
                 />
                 <Divider color={colors.g18} />
                 <PriceInput
-                  defaultValue={data.lot_unit?.id == lot_unit_list[0]?.id ? lot_area_unit_list[0] : lot_area_unit_list[1]}
-                  onSelect={val => setValue('lot_unit', val?.id == lot_area_unit_list[0]?.id ? lot_unit_list[0] : lot_unit_list[1])}
+                  defaultValue={data.lot_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
+                  onSelect={val => setValue('lot_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
                   simpleInputPlaceHolder={'0'}
                   title={'Lot Size'}
                   value={data.lot_size}
@@ -299,7 +319,7 @@ const AddPropertyDetails = ({ navigation }) => {
                 />
               </>
             )}
-            {data.property_type == 'Condo' && (
+            {data.property_type == 'condo' && (
               <>
                 <Divider color={colors.g18} />
                 <CheckBoxInput
@@ -309,14 +329,14 @@ const AddPropertyDetails = ({ navigation }) => {
                 />
                 <Divider color={colors.g18} />
                 <FilterInput
-                  onChangeText={text => setValue('condo_corporation', text)}
+                  onChangeText={text => setValue('condo_corporation_or_hqa', text)}
                   keyboardType={'default'}
-                  value={data.condo_corporation}
+                  value={data.condo_corporation_or_hqa}
                   placeholder={'Condo Corporation / HOA'}
                 />
               </>
             )}
-            {data.property_type != 'Condo' &&
+            {data.property_type != 'condo' &&
               <>
                 <Divider color={colors.g18} />
                 <Textarea
@@ -325,8 +345,8 @@ const AddPropertyDetails = ({ navigation }) => {
                   placeholder={'Describe Your Lot'}
                   placeholderTextColor={colors.g19}
                   underlineColorAndroid={'transparent'}
-                  value={data.lot_desc}
-                  onChangeText={text => setValue('lot_desc', text)}
+                  value={data.lot_description}
+                  onChangeText={text => setValue('lot_description', text)}
                 />
               </>
             }

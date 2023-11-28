@@ -6,16 +6,24 @@ import {
   getRecentProperties,
 } from '../../../shared/service/PropertyService';
 import * as types from '../../actions/types';
+import { app } from '../../../shared/api';
 
 // add sublists
 export function* getSublistsRequest() {
   yield takeLatest(types.GET_SUBLISTS, getSublists);
 }
 function* getSublists() {
-  yield put({
-    type: types.GET_SUBLISTS_SUCCESS,
-    payload: sublists,
-  });
+  try {
+    const res = yield app.getSublists()
+    if (res?.status == 200) {
+      yield put({
+        type: types.GET_SUBLISTS_SUCCESS,
+        payload: res?.data || {},
+      });
+    }
+  } catch (error) {
+    console.log('Get Sublists Error ', error)
+  }
 }
 
 // *************Get Properties**************

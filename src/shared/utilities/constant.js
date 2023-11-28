@@ -5,6 +5,7 @@ import { colors } from '../theme/colors';
 const ANDROID = Platform.OS === 'android';
 const IOS = Platform.OS === 'ios';
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const GOOGLE_MAP_KEY = 'AIzaSyBqdKhAkPI_qCHco8_vVsnGrUGYjw7HL3M'
 const web_client_id =
   '396667718237-b5871eer19sabub7jg8qhneksq75d443.apps.googleusercontent.com';
 export const video_url =
@@ -201,9 +202,9 @@ const currency_list = [
 ];
 
 const property_type_list = {
-  'House': 'House',
-  'Condo': 'Condo',
-  'Vacant Land': 'Vacant Land',
+  'house': 'House',
+  'condo': 'Condo',
+  'vacant_land': 'Vacant Land',
 };
 
 const level_list = {
@@ -1237,6 +1238,7 @@ export {
   ANDROID,
   emailRegex,
   profile_uri,
+  GOOGLE_MAP_KEY,
   web_client_id,
   stripe_publishableKey,
   slidesData,

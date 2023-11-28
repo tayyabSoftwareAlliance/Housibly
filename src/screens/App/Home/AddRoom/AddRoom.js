@@ -47,17 +47,17 @@ import RoomsBox from '../../../../components/Box/RoomsBox';
 
 const INITIAL_VALUE = {
   name: '',
-  length_ft: 0,
-  length_in: 0,
-  width_ft: 0,
-  width_in: 0,
-  level: {}
+  length_in_feet: 0,
+  length_in_inch: 0,
+  width_in_feet: 0,
+  width_in_inch: 0,
+  level: ''
 }
 
 const AddPropertyDetails = ({ navigation, route }) => {
 
   const dispatch = useDispatch(null);
-  const { add_property_detail, address } = useSelector(
+  const { saved_create_property_data, address } = useSelector(
     state => state?.appReducer,
   );
 
@@ -66,16 +66,16 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    if (!isFocused && add_property_detail) {
-      setData(JSON.parse(JSON.stringify(add_property_detail)))
+    if (!isFocused && saved_create_property_data) {
+      setData(JSON.parse(JSON.stringify(saved_create_property_data)))
     }
-  }, [add_property_detail])
+  }, [saved_create_property_data])
 
   const onNext = async () => {
-    if (data.rooms?.length != data.num_of_rooms) {
-      Alert.alert('Error', `Please Enter All ${data.num_of_rooms} Rooms Details`)
+    if (data.rooms?.length != data.total_number_of_rooms) {
+      Alert.alert('Error', `Please Enter All ${data.total_number_of_rooms} Rooms Details`)
     } else {
-      navigation?.navigate('PropertyDetail', data)
+      navigation.navigate('PropertyDetail', {data,from:'create'})
     }
   };
 
@@ -96,9 +96,9 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const addRoom = () => {
     if (!roomDetail.name) {
       Alert.alert('Error', 'Room Name is Required');
-    } else if (!(roomDetail.length_ft > 0)) {
+    } else if (!(roomDetail.length_in_feet > 0)) {
       Alert.alert('Error', 'Room Length is Required');
-    } else if (!(roomDetail.width_ft > 0)) {
+    } else if (!(roomDetail.width_in_feet > 0)) {
       Alert.alert('Error', 'Room Width is Required');
     } else if (!roomDetail.level) {
       Alert.alert('Error', 'Room Level is Required');
@@ -140,32 +140,32 @@ const AddPropertyDetails = ({ navigation, route }) => {
               simpleInputPlaceHolder={'0'}
               title={'Length'}
               subtitle={' (ft)'}
-              value={roomDetail.length_ft}
-              onChangeText={text => setRoomValue('length_ft', text)}
+              value={roomDetail.length_in_feet}
+              onChangeText={text => setRoomValue('length_in_feet', text)}
             />
             <Divider color={colors.g18} />
             <PriceInput
               simpleInputPlaceHolder={'0'}
               title={'Length'}
               subtitle={' (in)'}
-              value={roomDetail.length_in}
-              onChangeText={text => setRoomValue('length_in', text)}
+              value={roomDetail.length_in_inch}
+              onChangeText={text => setRoomValue('length_in_inch', text)}
             />
             <Divider color={colors.g18} />
             <PriceInput
               simpleInputPlaceHolder={'0'}
               title={'Width'}
               subtitle={' (ft)'}
-              value={roomDetail.width_ft}
-              onChangeText={text => setRoomValue('width_ft', text)}
+              value={roomDetail.width_in_feet}
+              onChangeText={text => setRoomValue('width_in_feet', text)}
             />
             <Divider color={colors.g18} />
             <PriceInput
               simpleInputPlaceHolder={'0'}
               title={'Width'}
               subtitle={' (in)'}
-              value={roomDetail.width_in}
-              onChangeText={text => setRoomValue('width_in', text)}
+              value={roomDetail.width_in_inch}
+              onChangeText={text => setRoomValue('width_in_inch', text)}
             />
             <Divider color={colors.g18} />
             <FilterButton
@@ -176,7 +176,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
           </View>
-          {data.rooms?.length < data.num_of_rooms &&
+          {data.rooms?.length < data.total_number_of_rooms &&
             <TouchableOpacity onPress={addRoom} >
               <Text style={styles.addBtn} >Add</Text>
             </TouchableOpacity>

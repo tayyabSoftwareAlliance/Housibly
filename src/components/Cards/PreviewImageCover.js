@@ -1,4 +1,4 @@
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import {
   capitalizeFirstLetter,
@@ -8,31 +8,27 @@ import {
   WP,
 } from '../../shared/exporter';
 
-export const PreviewImageCover = ({uri, h1, h2}) => {
+export const PreviewImageCover = ({ uri, h1, h2 }) => {
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.imgCon}
-        imageStyle={styles.imageStyle}
-        source={{
-          uri: uri,
-        }}>
-        <Text style={styles.imgh1}>{capitalizeFirstLetter(h1) || ''} </Text>
-        <Text style={styles.imgh2}>{capitalizeFirstLetter(h2) || ''}</Text>
-      </ImageBackground>
-    </View>
+    <ImageBackground
+      style={styles.imgCon}
+      imageStyle={styles.imageStyle}
+      source={{
+        uri: uri,
+      }}>
+      <Text style={styles.imgh1}>{capitalizeFirstLetter(h1) || ''} </Text>
+      <Text style={styles.imgh2}>{capitalizeFirstLetter(h2) || ''}</Text>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 10,
-  },
   imgCon: {
     height: WP('80'),
     width: '100%',
     borderRadius: 15,
     justifyContent: 'flex-end',
+    marginVertical: 10,
   },
   imageStyle: {
     borderRadius: 15,

@@ -44,9 +44,7 @@ const styles = StyleSheet.create({
     fontSize: size.xsmall,
     color: colors.b1,
     fontFamily: family.Gilroy_Medium,
-    textTransform: 'capitalize'
   },
-
   leftCon: {
     alignItems: 'center',
     flexDirection: 'row',

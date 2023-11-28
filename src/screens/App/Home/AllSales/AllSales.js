@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {SwipeListView} from 'react-native-swipe-list-view';
-import {Spacer, BackHeader, DeleteModal} from '../../../../components';
-import {Menu, MenuItem} from 'react-native-material-menu';
+import { Icon } from 'react-native-elements';
+import { SwipeListView } from 'react-native-swipe-list-view';
+import { Spacer, BackHeader, DeleteModal } from '../../../../components';
+import { Menu, MenuItem } from 'react-native-material-menu';
 import {
   appIcons,
   appImages,
@@ -21,33 +21,34 @@ import {
   WP,
   networkText,
   property_image,
+  responseValidator,
 } from '../../../../shared/exporter';
-import {allSales} from '../../../../shared/utilities/constant';
+import { allSales } from '../../../../shared/utilities/constant';
 import styles from './styles';
-import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/core';
 import {
   get_all_properties,
   get_filtered_properties,
 } from '../../../../redux/actions';
+import { app } from '../../../../shared/api';
 
-const AllSales = ({navigation}) => {
+const AllSales = ({ navigation }) => {
   const [item, setItem] = useState('');
-  const [data, setData] = useState(allSales);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [filterType, setFilterType] = useState('All');
   const [loading, setLoading] = useState(false);
-  const isFocus = useIsFocused(null);
+  const isFocused = useIsFocused();
   const [properties, setProperties] = useState([]);
   const dispatch = useDispatch();
 
   //Get Properties
   useEffect(() => {
-    if (isFocus) {
+    if (isFocused) {
       getAllProperties();
     }
-  }, [isFocus]);
+  }, [isFocused]);
 
   //Get All Properties
   const getAllProperties = async () => {
@@ -55,20 +56,17 @@ const AllSales = ({navigation}) => {
     if (check) {
       try {
         setLoading(true);
-        const onSuccess = res => {
-          setProperties(res);
-          setLoading(false);
-          console.log('On All prop Success');
-        };
-        const onFailure = res => {
-          setLoading(false);
-          Alert.alert('Error', res);
-          console.log('On All prop Failure', res);
-        };
-        dispatch(get_all_properties(null, onSuccess, onFailure));
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
+        const res = await app.getMyProperties()
+        if (res?.status == 200) {
+          setProperties(res?.data || [])
+        }
+      }
+      catch (error) {
+        let msg = responseValidator(error?.response?.status, error?.response?.data);
+        Alert.alert('Error', msg || 'Something went wrong!');
+      }
+      finally {
+        setLoading(false)
       }
     } else {
       setLoading(false);
@@ -111,17 +109,17 @@ const AllSales = ({navigation}) => {
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
         style={styles.itemContainer}
-        onPress={() => navigation.navigate('PropertyDetails', {item: item})}>
+        onPress={() => navigation.navigate('PropertyDetails', { item: item })}>
         <Image
-          source={{uri: item?.image[0]?.url || property_image}}
+          source={{ uri: item?.images?.[0]?.url || property_image }}
           style={styles.imgStyle}
         />
-        <View style={{paddingVertical: 5}}>
+        <View style={{ paddingVertical: 5 }}>
           <View style={styles.innerRow}>
             <Text numberOfLines={1} style={styles.nameTxtStyle}>
               {item?.title}
@@ -132,7 +130,7 @@ const AllSales = ({navigation}) => {
           </View>
           <View style={styles.simpleRow}>
             <Text style={styles.smallTxtStyle}>
-              {`$${item?.price || 0}`} |{' '}
+              {`${item?.currency_type} ${item?.price || 0}`} |{' '}
             </Text>
             <Image
               resizeMode="contain"
@@ -145,7 +143,7 @@ const AllSales = ({navigation}) => {
               {item?.bath_rooms || 0}
             </Text>
           </View>
-          <View style={[styles.simpleRow, {paddingTop: 2}]}>
+          <View style={[styles.simpleRow, { paddingTop: 2 }]}>
             {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
               return (
                 index < 4 && (
@@ -245,7 +243,6 @@ const AllSales = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
-      <Spacer androidVal={WP('5')} iOSVal={WP('0')} />
       <BackHeader
         title="My Property Lists"
         txtCenter
@@ -264,7 +261,7 @@ const AllSales = ({navigation}) => {
           name={showMenu ? 'chevron-up' : 'chevron-down'}
           size={16}
           color={colors.g2}
-          style={{marginLeft: 5}}
+          style={{ marginLeft: 5 }}
         />
       </TouchableOpacity>
       <View style={styles.menuContainer}>
@@ -319,8 +316,9 @@ const AllSales = ({navigation}) => {
         <SwipeListView
           useFlatList
           data={properties}
-          disableLeftSwipe={true}
-          disableRightSwipe={true}
+          // data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
+          // disableLeftSwipe={true}
+          // disableRightSwipe={true}
           renderItem={renderItem}
           renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap)}
           leftOpenValue={180}

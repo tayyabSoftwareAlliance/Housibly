@@ -26,8 +26,9 @@ const ENDPOINTS = {
   DEFAULT_CARD_CONST: 'default_card',
 
   //app
-  HOUSE_SUBLISTS: 'HOUSE_SUBLISTS',
-  CONDO_SUBLISTS: 'CONDO_SUBLISTS',
+  GET_SUBLISTS: 'properties/detail_options',
+  CREATE_PROPERTY: 'properties',
+  GET_MY_PROPERTIES: 'properties'
 
 };
 
