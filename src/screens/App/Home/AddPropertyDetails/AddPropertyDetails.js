@@ -102,32 +102,41 @@ const INITIAL_DATA = {
   rooms: []
 }
 
-const AddPropertyDetails = ({ navigation }) => {
+const AddPropertyDetails = ({ navigation, route }) => {
 
+  const { propertyData, from } = route.params
   const dispatch = useDispatch(null);
   const { saved_create_property_data } = useSelector(
     state => state?.appReducer,
   );
 
-  const [data, setData] = useState(JSON.parse(JSON.stringify(saved_create_property_data)) || INITIAL_DATA)
+  const [data, setData] = useState(
+    JSON.parse(JSON.stringify(
+      from == 'edit' ?
+        propertyData :
+        saved_create_property_data
+    )) || INITIAL_DATA
+  )
   const isFocused = useIsFocused()
 
   const onNext = async () => {
-    if (!data.title) {
+    if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
+      Alert.alert('Error', 'At least one image Required');
+    } else if (!data.title) {
       Alert.alert('Error', 'Title is Required');
     } else if (!(data.price > 0)) {
       Alert.alert('Error', 'Price is Required');
-    } else if (data.property_type != 'condo' && !data.lot_frontage) {
-      Alert.alert('Error', 'Lot frontage is Required');
-    } else if (data.property_type != 'condo' && !data.lot_depth) {
-      Alert.alert('Error', 'Lot Depth is Required');
-    } else if (data.images.length == 0) {
-      Alert.alert('Error', 'At least one image Required');
+    // } else if (data.property_type != 'condo' && !data.lot_unit) {
+    //   Alert.alert('Error', 'Please select Lot frontage Unit');
+    // } else if (data.property_type != 'condo' && !data.lot_frontage) {
+    //   Alert.alert('Error', 'Lot frontage is Required');
+    // } else if (data.property_type != 'condo' && !data.lot_depth) {
+    //   Alert.alert('Error', 'Lot Depth is Required');
     } else {
       if (data.property_type == 'vacant_land') {
-        navigation?.navigate('AddPropertyDesc', data);
+        navigation?.navigate('AddPropertyDesc', { propertyData: data, from });
       } else {
-        navigation?.navigate('AddMorePropertyDetails', data);
+        navigation?.navigate('AddMorePropertyDetails', { propertyData: data, from });
       }
     }
   };
@@ -158,7 +167,7 @@ const AddPropertyDetails = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if (!isFocused && saved_create_property_data)
+    if (!isFocused && saved_create_property_data && from != 'edit')
       setData(JSON.parse(JSON.stringify(saved_create_property_data)))
   }, [saved_create_property_data])
 
@@ -267,9 +276,7 @@ const AddPropertyDetails = ({ navigation }) => {
                     setValue('lot_size', text * data.lot_depth);
                   }}
                 />
-
                 <Divider color={colors.g18} />
-
                 <PriceInput
                   defaultValue={data.lot_unit}
                   onSelect={val => setValue('lot_unit', val)}
@@ -352,16 +359,18 @@ const AddPropertyDetails = ({ navigation }) => {
             }
             <Divider color={colors.g18} />
           </View>
-          <View style={styles.spacRow}>
-            <AppButton
-              width={'45%'}
-              bgColor={colors.g21}
-              title={'Save'}
-              fontSize={size.tiny}
-              borderColor={colors.g21}
-              onPress={onSave}
-              shadowColor={colors.white}
-            />
+          <View style={[styles.spacRow, from == 'edit' && { justifyContent: 'flex-end' }]}>
+            {from != 'edit' &&
+              <AppButton
+                width={'45%'}
+                bgColor={colors.g21}
+                title={'Save'}
+                fontSize={size.tiny}
+                borderColor={colors.g21}
+                onPress={onSave}
+                shadowColor={colors.white}
+              />
+            }
             <AppButton
               onPress={onNext}
               width={'45%'}

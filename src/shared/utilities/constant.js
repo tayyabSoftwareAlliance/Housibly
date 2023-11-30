@@ -188,12 +188,12 @@ const sublists = {
 }
 
 const lot_unit_list = [
-  'meter',
   'feet',
+  'meter',
 ];
 const lot_area_unit_list = [
-  'sqm',
   'sqft',
+  'sqm',
 ];
 
 const currency_list = [
@@ -206,6 +206,29 @@ const property_type_list = {
   'condo': 'Condo',
   'vacant_land': 'Vacant Land',
 };
+
+const filter_property_type_list = [
+  {
+    key:'all',
+    value:'All',
+    source:appIcons.all
+  },
+  {
+    key:'house',
+    value:'House',
+    source:appIcons.modelHome
+  },
+  {
+    key:'condo',
+    value:'Condo',
+    source:appIcons.condoStyle
+  },
+  {
+    key:'vacant_land',
+    value:'Vacant Land',
+    source:appIcons.vacant
+  }
+]
 
 const level_list = {
   'Basement': 'Basement',
@@ -1255,6 +1278,7 @@ export {
   lot_area_unit_list,
   currency_list,
   property_type_list,
+  filter_property_type_list,
   level_list,
   beds_list,
   bath_list,

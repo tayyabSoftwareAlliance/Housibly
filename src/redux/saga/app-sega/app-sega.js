@@ -7,6 +7,7 @@ import {
 } from '../../../shared/service/PropertyService';
 import * as types from '../../actions/types';
 import { app } from '../../../shared/api';
+import { Alert } from 'react-native';
 
 // add sublists
 export function* getSublistsRequest() {
@@ -26,69 +27,98 @@ function* getSublists() {
   }
 }
 
-// *************Get Properties**************
-export function* getRecentPropertiesRequest() {
-  yield takeLatest(types.GET_RECENT_PROPERTIES_REQUEST, getRecentProp);
+//Create my property
+export function* createMyPropertyRequest() {
+  yield takeLatest(types.CREATE_MY_PROPERTY_REQUEST, createMyProp);
 }
-function* getRecentProp(params) {
+function* createMyProp(action) {
   try {
-    const res = yield getRecentProperties();
-    yield put({
-      type: types.GET_RECENT_PROPERTIES_SUCCESS,
-      payload: res,
-    });
-    params?.cbSuccess(res);
+    const res = yield app.createProperty(action.payload)
+    if (res?.status == 200) {
+      yield put({
+        type: types.CREATE_MY_PROPERTY_SUCCESS,
+        payload: res?.data || {},
+      });
+      action.onSuccess()
+    }
   } catch (error) {
-    yield put({
-      type: types.GET_RECENT_PROPERTIES_FAILURE,
-      payload: null,
-    });
     let msg = responseValidator(error?.response?.status, error?.response?.data);
-    params?.cbFailure(msg);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.CREATE_MY_PROPERTY_FINALLY
+    });
   }
 }
 
-//Get all
-export function* getAllPropertiesRequest() {
-  yield takeLatest(types.GET_ALL_PROPERTIES_REQUEST, getAllProp);
+//Get my properties
+export function* getMyPropertiesRequest() {
+  yield takeLatest(types.GET_MY_PROPERTIES_REQUEST, getMyProp);
 }
-function* getAllProp(params) {
+function* getMyProp() {
   try {
-    const res = yield getAllProperties();
-    yield put({
-      type: types.GET_ALL_PROPERTIES_SUCCESS,
-      payload: res,
-    });
-    params?.cbSuccess(res);
+    const res = yield app.getMyProperties()
+    if (res?.status == 200) {
+      yield put({
+        type: types.GET_MY_PROPERTIES_SUCCESS,
+        payload: res?.data || [],
+      });
+    }
   } catch (error) {
-    yield put({
-      type: types.GET_ALL_PROPERTIES_FAILURE,
-      payload: null,
-    });
     let msg = responseValidator(error?.response?.status, error?.response?.data);
-    params?.cbFailure(msg);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.GET_MY_PROPERTIES_FINALLY
+    });
   }
 }
 
-//Get filtered all
-export function* getFilteredPropertiesRequest() {
-  yield takeLatest(types.GET_FILTERED_PROPERTIES_REQUEST, getFilteredProp);
+//Update my property
+export function* updateMyPropertyRequest() {
+  yield takeLatest(types.UPDATE_MY_PROPERTY_REQUEST, updateMyProp);
 }
-function* getFilteredProp(params) {
+function* updateMyProp(action) {
   try {
-    const res = yield getFilteredProperties(params?.params);
-    yield put({
-      type: types.GET_FILTERED_PROPERTIES_SUCCESS,
-      payload: res,
-    });
-    params?.cbSuccess(res);
+    const res = yield app.updateProperty(action.payload.data, action.payload.id)
+    if (res?.status == 200) {
+      yield put({
+        type: types.UPDATE_MY_PROPERTY_SUCCESS,
+        payload: { id: action.payload.id, data: res?.data || {} },
+      });
+      action.onSuccess()
+    }
   } catch (error) {
-    yield put({
-      type: types.GET_FILTERED_PROPERTIES_FAILURE,
-      payload: null,
-    });
     let msg = responseValidator(error?.response?.status, error?.response?.data);
-    params?.cbFailure(msg);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.UPDATE_MY_PROPERTY_FINALLY
+    });
+  }
+}
+
+//Delete my property
+export function* deleteMyPropertyRequest() {
+  yield takeLatest(types.DELETE_MY_PROPERTY_REQUEST, deleteMyProp);
+}
+function* deleteMyProp(action) {
+  try {
+    const res = yield app.deleteProperty(action.payload)
+    if (res?.status == 200) {
+      yield put({
+        type: types.DELETE_MY_PROPERTY_SUCCESS,
+        payload: action.payload,
+      });
+      action.onSuccess()
+    }
+  } catch (error) {
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.DELETE_MY_PROPERTY_FINALLY
+    });
   }
 }
 

@@ -7,9 +7,7 @@ const initialState = {
   saved_create_property_data: null,
   sublists: {},
   address: '',
-  recent_properties: [],
   all_properties: [],
-  filtered_properties: [],
 };
 
 const appReducers = (state = initialState, actions) => {
@@ -23,74 +21,77 @@ const appReducers = (state = initialState, actions) => {
         sublists: payload || {},
       };
 
-    //************Add Property*************
-    case TYPES.SAVE_CREATE_PROPERTY_DATA:
+    //************ Create My Property states*************
+    case TYPES.CREATE_MY_PROPERTY_REQUEST:
       return {
         ...state,
-        saved_create_property_data: payload,
+        loading: true,
+      };
+    case TYPES.CREATE_MY_PROPERTY_SUCCESS:
+      return {
+        ...state,
+        all_properties: [{ ...payload }, ...state.all_properties],
+      };
+    case TYPES.CREATE_MY_PROPERTY_FINALLY:
+      return {
+        ...state,
+        loading: false,
       };
 
-    //************ Get Recent Properties states*************
-    case TYPES.GET_RECENT_PROPERTIES_SUCCESS:
+    //************ Get My Properties states*************
+    case TYPES.GET_MY_PROPERTIES_REQUEST:
       return {
         ...state,
-        loading: false,
-        isSuccess: true,
-        isFailure: false,
-        recent_properties: payload,
+        loading: true,
       };
-    case TYPES.GET_RECENT_PROPERTIES_FAILURE:
+    case TYPES.GET_MY_PROPERTIES_SUCCESS:
       return {
         ...state,
-        loading: false,
-        isSuccess: false,
-        isFailure: true,
-        recent_properties: null,
-      };
-
-    //************ Get All Properties states*************
-    case TYPES.GET_ALL_PROPERTIES_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        isSuccess: true,
-        isFailure: false,
         all_properties: payload,
       };
-    case TYPES.GET_ALL_PROPERTIES_FAILURE:
+    case TYPES.GET_MY_PROPERTIES_FINALLY:
       return {
         ...state,
         loading: false,
-        isSuccess: false,
-        isFailure: true,
-        all_properties: null,
       };
 
-    //************ Get Filtered Properties states*************
-    case TYPES.GET_FILTERED_PROPERTIES_SUCCESS:
+    //************ Update My Property states*************
+    case TYPES.UPDATE_MY_PROPERTY_REQUEST:
       return {
         ...state,
-        loading: false,
-        isSuccess: true,
-        isFailure: false,
-        filtered_properties: payload,
+        loading: true,
       };
-    case TYPES.GET_FILTERED_PROPERTIES_FAILURE:
+    case TYPES.UPDATE_MY_PROPERTY_SUCCESS:
+      return {
+        ...state,
+        all_properties: state.all_properties.map(item => {
+          if (item.id == payload.id)
+            return { ...payload.data }
+          else
+            return item
+        }),
+      };
+    case TYPES.UPDATE_MY_PROPERTY_FINALLY:
       return {
         ...state,
         loading: false,
-        isSuccess: false,
-        isFailure: true,
-        filtered_properties: null,
       };
 
-    case TYPES.SET_ADDRESS_SUCCESS:
+    //************ Get My Properties states*************
+    case TYPES.DELETE_MY_PROPERTY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.DELETE_MY_PROPERTY_SUCCESS:
+      return {
+        ...state,
+        all_properties: state.all_properties.filter(item => item.id != payload),
+      };
+    case TYPES.DELETE_MY_PROPERTY_FINALLY:
       return {
         ...state,
         loading: false,
-        isSuccess: true,
-        isFailure: false,
-        address: payload,
       };
 
     default:

@@ -12,7 +12,8 @@ export const setAuthToken = (token) => {
 const requests = {
     get: (endpoint) => axios.get(endpoint),
     post: (endpoint, data) => axios.post(endpoint, data),
-    put: (endpoint, data) => axios.put(endpoint, data)
+    put: (endpoint, data) => axios.put(endpoint, data),
+    delete: (endpoint) => axios.delete(endpoint),
 }
 
 export const auth = {
@@ -34,6 +35,8 @@ export const setting = {
 
 export const app = {
     getSublists: () => requests.get(ENDPOINTS.GET_SUBLISTS),
-    createProperty: (data) => requests.post(ENDPOINTS.CREATE_PROPERTY,data),
-    getMyProperties: () => requests.get(ENDPOINTS.GET_MY_PROPERTIES),
+    createProperty: (data) => requests.post(ENDPOINTS.PROPERTY,data),
+    getMyProperties: () => requests.get(ENDPOINTS.PROPERTY),
+    updateProperty: (data,id) => requests.put(`${ENDPOINTS.PROPERTY}/${id}`,data),
+    deleteProperty: (id) => requests.delete(`${ENDPOINTS.PROPERTY}/${id}`),
 }

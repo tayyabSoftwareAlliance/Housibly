@@ -56,26 +56,27 @@ const INITIAL_VALUE = {
 
 const AddPropertyDetails = ({ navigation, route }) => {
 
+  const { propertyData, from } = route.params
   const dispatch = useDispatch(null);
   const { saved_create_property_data, address } = useSelector(
     state => state?.appReducer,
   );
 
-  const [roomDetail, setRoomDetail] = useState(JSON.parse(JSON.stringify(INITIAL_VALUE)))
-  const [data, setData] = useState(JSON.parse(JSON.stringify(route.params)))
+  const [roomDetail, setRoomDetail] = useState({ ...INITIAL_VALUE })
+  const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)))
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    if (!isFocused && saved_create_property_data) {
+    if (!isFocused && saved_create_property_data && from != 'edit') {
       setData(JSON.parse(JSON.stringify(saved_create_property_data)))
     }
   }, [saved_create_property_data])
 
   const onNext = async () => {
-    if (data.rooms?.length != data.total_number_of_rooms) {
-      Alert.alert('Error', `Please Enter All ${data.total_number_of_rooms} Rooms Details`)
+    if (data.rooms?.filter(item => !item?.deleted)?.length != data.total_number_of_rooms) {
+      Alert.alert('Error', `Rooms Details should be equal to Number of Rooms: ${data.total_number_of_rooms} as you entered in previous screen`)
     } else {
-      navigation.navigate('PropertyDetail', {data,from:'create'})
+      navigation.navigate('PropertyDetail', { propertyData: data, from })
     }
   };
 
@@ -93,7 +94,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
     })
   }
 
-  const addRoom = () => {
+  const addOrEditRoom = () => {
     if (!roomDetail.name) {
       Alert.alert('Error', 'Room Name is Required');
     } else if (!(roomDetail.length_in_feet > 0)) {
@@ -103,21 +104,38 @@ const AddPropertyDetails = ({ navigation, route }) => {
     } else if (!roomDetail.level) {
       Alert.alert('Error', 'Room Level is Required');
     } else {
-      setData(prev => {
-        prev['rooms'] = [{ ...roomDetail }, ...prev['rooms']]
-        return { ...prev }
-      })
-      setRoomDetail(JSON.parse(JSON.stringify(INITIAL_VALUE)))
+      if (typeof roomDetail?.index == 'number') {
+        // for edit
+        const { index, ...room } = roomDetail
+        setData(prev => {
+          prev['rooms'][index] = { ...room }
+          return { ...prev, rooms: [...prev.rooms] }
+        })
+      } else {
+        // for add
+        setData(prev => {
+          prev['rooms'] = [{ ...roomDetail }, ...prev['rooms']]
+          return { ...prev }
+        })
+      }
+      setRoomDetail({ ...INITIAL_VALUE })
     }
   }
 
-  const removeRoom = (index) => {
+  const removeRoom = (item, index) => {
     setData(prev => {
-      prev['rooms'] = prev['rooms'].filter((_, ind) => ind != index)
+      if (item?.id) {
+        prev['rooms'][index] = { id: prev['rooms'][index]?.id, deleted: true }
+        prev['rooms'] = [...prev['rooms']]
+      } else {
+        prev['rooms'] = prev['rooms'].filter((_, ind) => ind != index)
+      }
       return { ...prev }
     })
   }
-
+  const onEditRoom = (item, index) => {
+    setRoomDetail({ ...item, index })
+  }
   return (
     <SafeAreaView style={styles.rootContainer}>
       <View style={spacing.my2}>
@@ -176,22 +194,25 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
           </View>
-          {data.rooms?.length < data.total_number_of_rooms &&
-            <TouchableOpacity onPress={addRoom} >
-              <Text style={styles.addBtn} >Add</Text>
+          {(data.rooms?.filter(item => !item?.deleted)?.length < data.total_number_of_rooms ||
+            typeof roomDetail?.index == 'number') &&
+            <TouchableOpacity onPress={addOrEditRoom} >
+              <Text style={styles.addBtn} >{typeof roomDetail?.index == 'number' ? 'Update' : 'Add'}</Text>
             </TouchableOpacity>
           }
-          <RoomsBox data={data.rooms} onRemoveRoom={removeRoom} />
-          <View style={styles.spacRow}>
-            <AppButton
-              width={'45%'}
-              bgColor={colors.g21}
-              title={'Save'}
-              fontSize={size.tiny}
-              borderColor={colors.g21}
-              onPress={onSave}
-              shadowColor={colors.white}
-            />
+          <RoomsBox data={data.rooms} onRemoveRoom={removeRoom} onEditRoom={onEditRoom} />
+          <View style={[styles.spacRow, from == 'edit' && { justifyContent: 'flex-end' }]}>
+            {from != 'edit' &&
+              <AppButton
+                width={'45%'}
+                bgColor={colors.g21}
+                title={'Save'}
+                fontSize={size.tiny}
+                borderColor={colors.g21}
+                onPress={onSave}
+                shadowColor={colors.white}
+              />
+            }
             <AppButton
               onPress={onNext}
               width={'45%'}

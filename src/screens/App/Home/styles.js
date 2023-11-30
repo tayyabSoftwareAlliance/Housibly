@@ -6,6 +6,8 @@ import {
   family,
   scrWidth,
   platformOrientedCode,
+  PADDING_BOTTOM_FOR_TAB_BAR_SCREENS,
+  BOTTOM_TAB_HEIGHT,
 } from '../../../shared/exporter';
 import DeviceInfo from 'react-native-device-info';
 
@@ -13,11 +15,11 @@ const isNotch = DeviceInfo.hasNotch();
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.white,
   },
   scrollViewStyle: {
-    paddingBottom: platformOrientedCode(WP('20'), isNotch ? 15 : WP('20')),
+    flexGrow:1,
   },
   innerViewStyle: {
     paddingTop: WP('5'),
@@ -249,7 +251,7 @@ const styles = StyleSheet.create({
     height: 8,
   },
   bottomView: {
-    bottom: -10,
+    bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS,
     width: '100%',
     alignSelf: 'center',
     alignItems: 'center',

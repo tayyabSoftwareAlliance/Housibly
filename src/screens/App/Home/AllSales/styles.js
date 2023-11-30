@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingTop: platformOrientedCode(WP('6'), 0),
   },
   titleTxtStyle: {
     color: colors.b1,
@@ -41,43 +40,6 @@ const styles = StyleSheet.create({
     color: colors.g2,
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_Medium,
-  },
-  menuContainer: {
-    width: '100%',
-    top: WP('-3'),
-    paddingLeft: WP('5.2'),
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
-  menuStyle: {
-    marginTop: 5,
-    marginLeft: -5,
-    borderRadius: 8,
-    height: platformOrientedCode(WP('33'), WP('31')),
-    width: scrWidth / 2.2,
-  },
-  menuItemStyle: {
-    height: WP('10'),
-  },
-  menuItemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-
-    paddingHorizontal: platformOrientedCode(WP('2'), WP('4.5')),
-  },
-  modelIconStyle: {
-    width: 15,
-    height: 14,
-    marginRight: WP('3'),
-    marginTop: WP('2'),
-  },
-  menuTxtStyle: {
-    color: colors.b1,
-    fontSize: size.xsmall,
-    fontFamily: family.Gilroy_Regular,
-    marginTop: WP('2'),
   },
   dividerView: {
     top: 5,
@@ -113,6 +75,7 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.large,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
   },
   txtContainer: {
     width: 14,
@@ -174,12 +137,6 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.tiny,
     fontFamily: family.Gilroy_Medium,
-  },
-  // swipeable list
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingBottom: platformOrientedCode(WP('16'), hasNotch ? 0 : WP('16')),
   },
   backTextWhite: {
     color: '#FFF',

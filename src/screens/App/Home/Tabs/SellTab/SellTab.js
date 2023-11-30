@@ -1,39 +1,39 @@
 import React from 'react';
-import {Text, View, Image, FlatList, TouchableOpacity} from 'react-native';
-import {AppButton} from '../../../../../components';
+import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import {
   appIcons,
   appImages,
-  colors,
+  PADDING_BOTTOM_FOR_TAB_BAR_SCREENS,
   property_image,
   WP,
 } from '../../../../../shared/exporter';
 import styles from './styles';
-import DeviceInfo from 'react-native-device-info';
-import {BlankField} from '../../../../../components';
+import { AppLoader, BlankField } from '../../../../../components';
+import { useSelector } from 'react-redux';
 
-const SellTab = ({navigation, properties}) => {
-  let hasNotch = DeviceInfo.hasNotch();
+const SellTab = ({ navigation }) => {
 
-  const renderItem = ({item, index}) => {
+  const { all_properties, loading } = useSelector(state => state?.appReducer);
+
+  const RenderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          navigation?.navigate('PropertyDetails', {item: item});
+          navigation?.navigate('PropertyDetails', { item: item });
         }}
         style={styles.itemContainer}>
         <Image
-          source={{uri: item?.image[0].url, property_image}}
+          source={{ uri: item?.images?.[0]?.url, property_image }}
           style={styles.imgStyle}
         />
-        <View style={{paddingVertical: 5}}>
+        <View style={{ paddingVertical: 5 }}>
           <View style={styles.innerRow}>
             <Text numberOfLines={1} style={styles.nameTxtStyle}>
               {item?.title}
             </Text>
             <View style={styles.txtContainer}>
-              <Text style={styles.newTxtStyle}>{properties.length}</Text>
+              <Text style={styles.newTxtStyle}>{2}</Text>
             </View>
           </View>
           <View style={styles.simpleRow}>
@@ -51,7 +51,7 @@ const SellTab = ({navigation, properties}) => {
               {item?.bath_rooms || 0}
             </Text>
           </View>
-          <View style={[styles.simpleRow, {paddingTop: 2}]}>
+          <View style={[styles.simpleRow, { paddingTop: 2 }]}>
             {[1, 2, 3, 4, 5, 6, 7]?.map((item, index) => {
               return (
                 index < 4 && (
@@ -84,18 +84,20 @@ const SellTab = ({navigation, properties}) => {
           View All
         </Text>
       </View>
-      {properties != '' ? (
-        <View style={{height: '95%'}}>
-          <FlatList
-            data={properties}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-          />
+      {all_properties?.length > 0 ? (
+        <View>
+          {
+            all_properties.slice(0, 5).map((item, index) => {
+              return (
+                <RenderItem key={item?.id} item={item} index={index} />
+              )
+            })
+          }
         </View>
       ) : (
         <BlankField title={'No Property Available'} />
       )}
+      <AppLoader loading={!(all_properties?.length > 0) && loading} />
     </View>
   );
 };

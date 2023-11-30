@@ -27,10 +27,10 @@ export {
 } from './settings-actions/settings-actions';
 
 export {
-  addSublists,
+  getSublists,
   saveCreatePropertyData,
   set_address_request,
-  get_all_properties,
+  get_my_properties,
   get_recent_properties,
   get_filtered_properties,
 } from './app-actions/app-actions';

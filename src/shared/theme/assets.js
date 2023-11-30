@@ -61,6 +61,7 @@ export const appIcons = {
   blueHome: require('../../assets/icons/blue_home.png'),
   modelHome: require('../../assets/icons/model_home.png'),
   vacant: require('../../assets/icons/vacant.png'),
+  all: require('../../assets/icons/all.png'),
   editIcon: require('../../assets/icons/edit_icon.png'),
   delIcon: require('../../assets/icons/del_icon.png'),
   markedIcon: require('../../assets/icons/marked_icon.png'),

@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: colors.g5,
-    paddingTop: platformOrientedCode(WP('6'), 0),
   },
   titleTxtStyle: {
     color: colors.b1,
@@ -119,6 +118,7 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.h5,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
   },
   simpleRow: {
     paddingVertical: 8,

@@ -7,6 +7,8 @@ import { Icon } from 'react-native-elements';
 export const PriceInput = ({
   onSelect,
   value,
+  valueFrom,
+  valueTo,
   onFocus,
   onBlur,
   placeholder1,
@@ -25,6 +27,8 @@ export const PriceInput = ({
   source,
   onSubmitEditing,
   onChangeText,
+  onChangeTextFrom,
+  onChangeTextTo,
   editable,
   keyboardType,
   returnKeyType,
@@ -36,7 +40,7 @@ export const PriceInput = ({
 
   return (
     <View
-      style={[styles.container, { justifyContent: !inputs && 'space-between' }]}>
+      style={[styles.container, !inputs && { justifyContent: 'space-between' }]}>
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
@@ -76,7 +80,7 @@ export const PriceInput = ({
               return (
                 <View>
                   <Text style={styles.rowTextStyle}>
-                    ({defaultValue})
+                    {defaultValue && `(${defaultValue})`}
                   </Text>
                 </View>
               );
@@ -116,6 +120,8 @@ export const PriceInput = ({
             placeholderTextColor={colors.g19}
             style={styles.inputStyle}
             keyboardType={'numeric'}
+            value={valueFrom && `${valueFrom}`}
+            onChangeText={onChangeTextFrom}
           />
           <Text style={styles.to}>to</Text>
           <TextInput
@@ -123,6 +129,8 @@ export const PriceInput = ({
             placeholderTextColor={colors.g19}
             placeholder={placeholder2 || '1,500,000'}
             keyboardType={'numeric'}
+            value={valueTo && `${valueTo}`}
+            onChangeText={onChangeTextTo}
           />
         </View>
       ) : (

@@ -1,10 +1,11 @@
 import {fork} from 'redux-saga/effects';
 import {
-  getAllPropertiesRequest,
-  getFilteredPropertiesRequest,
-  getRecentPropertiesRequest,
+  getMyPropertiesRequest,
   getSublistsRequest,
   setAddressRequest,
+  updateMyPropertyRequest,
+  deleteMyPropertyRequest,
+  createMyPropertyRequest,
 } from './app-sega/app-sega';
 
 import {
@@ -60,7 +61,8 @@ export function* rootSaga() {
 
   //Properties
   yield fork(getSublistsRequest);
-  yield fork(getRecentPropertiesRequest);
-  yield fork(getFilteredPropertiesRequest);
-  yield fork(getAllPropertiesRequest);
+  yield fork(createMyPropertyRequest);
+  yield fork(getMyPropertiesRequest);
+  yield fork(updateMyPropertyRequest);
+  yield fork(deleteMyPropertyRequest);
 }

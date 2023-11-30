@@ -1,16 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Text,
   View,
   Image,
   SafeAreaView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Carousel from 'react-native-snap-carousel';
-import {Menu, MenuItem} from 'react-native-material-menu';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Menu, MenuItem } from 'react-native-material-menu';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   AppButton,
   AppHeader,
@@ -24,29 +23,27 @@ import {
   appIcons,
   appImages,
   scrHeight,
-  networkText,
-  checkConnected,
+  PADDING_BOTTOM_FOR_TAB_BAR_SCREENS,
+  HP,
 } from '../../../shared/exporter';
 import styles from './styles';
 // Tabs
 import BuyTab from './Tabs/BuyTab/BuyTab';
 import MatchesTab from './Tabs/MatchesTab/MatchesTab';
 import SellTab from './Tabs/SellTab/SellTab';
-import {useIsFocused} from '@react-navigation/core';
-import {useDispatch, useSelector} from 'react-redux';
-import {get_recent_properties} from '../../../redux/actions';
-const Home = ({navigation}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { get_my_properties } from '../../../redux/actions';
+
+const Home = ({ navigation }) => {
+
+  const dispatch = useDispatch()
   const carouselRef = useRef(null);
   const [hideAds, setHideAds] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [selected, setSelected] = useState('buy');
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const isFocus = useIsFocused(null);
-  const dispatch = useDispatch();
-  const {recent_properties} = useSelector(state => state?.appReducer);
-  const {userInfo} = useSelector(state => state?.auth);
-  const {userProfile} = useSelector(state => state?.settings);
+  const { userInfo } = useSelector(state => state?.auth);
+  const { userProfile } = useSelector(state => state?.settings);
 
   const hideItemClick = () => {
     setShowMenu(false);
@@ -60,7 +57,7 @@ const Home = ({navigation}) => {
     }, 500);
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View style={styles.itemContainer}>
         <View style={styles.itemInnerRow}>
@@ -87,44 +84,11 @@ const Home = ({navigation}) => {
       </View>
     );
   };
-  //Get Properties
-  useEffect(() => {
-    if (isFocus) {
-      getProperties();
-    }
-  }, [isFocus]);
 
   //Get Properties
-  const getProperties = () => {
-    if (selected == 'sell') {
-      getRecentProperties();
-    }
-  };
-  //Get Recent Properties
-  const getRecentProperties = async () => {
-    const check = await checkConnected();
-    if (check) {
-      try {
-        setLoading(true);
-        const onSuccess = res => {
-          setLoading(false);
-          console.log('On Recent prop Success');
-        };
-        const onFailure = res => {
-          setLoading(false);
-          Alert.alert('Error', res);
-          console.log('On Recent prop Failure', res);
-        };
-        dispatch(get_recent_properties(null, onSuccess, onFailure));
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    } else {
-      setLoading(false);
-      Alert.alert('Error', networkText);
-    }
-  };
+  useEffect(() => {
+    dispatch(get_my_properties())
+  }, [])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -151,8 +115,8 @@ const Home = ({navigation}) => {
                   name={'chevron-down'}
                   size={16}
                   color={colors.g2}
-                  onPress={() => {}}
-                  style={{marginLeft: 5}}
+                  onPress={() => { }}
+                  style={{ marginLeft: 5 }}
                 />
               </View>
             </View>
@@ -209,7 +173,6 @@ const Home = ({navigation}) => {
                 activeOpacity={0.7}
                 onPress={() => {
                   setSelected('sell');
-                  getRecentProperties();
                 }}
                 style={styles.tabStyle(selected === 'sell')}>
                 <Text style={styles.tabTxtStyle(selected === 'sell')}>
@@ -221,38 +184,39 @@ const Home = ({navigation}) => {
           {selected === 'buy' && <BuyTab navigation={navigation} />}
           {selected === 'matches' && <MatchesTab navigation={navigation} />}
           {selected === 'sell' && (
-            <View style={{height: scrWidth / 1.1}}>
-              <SellTab properties={recent_properties} navigation={navigation} />
-
-              <View style={styles.bottomView}>
-                <AppButton
-                  width="38.5%"
-                  height={WP('10.3')}
-                  title="Enter Address"
-                  borderColor={colors.p2}
-                  shadowColor={colors.white}
-                  textStyle={styles.btnTxtStyle}
-                />
-                <View style={{width: WP('3')}} />
-                <AppButton
-                  onPress={() => {
-                    navigation?.navigate('AddPropertyDetails');
-                  }}
-                  width="38.5%"
-                  height={WP('10.3')}
-                  borderColor={colors.p2}
-                  title="List A New Property"
-                  textStyle={styles.btnTxtStyle}
-                />
-              </View>
-            </View>
+            <SellTab navigation={navigation} />
           )}
         </View>
-        <PersonDetailsModal
-          show={showModal}
-          onPressHide={() => setShowModal(false)}
-        />
+        <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS+HP(5) }} />
       </KeyboardAwareScrollView>
+      {
+        selected === 'sell' &&
+        <View style={styles.bottomView}>
+          <AppButton
+            width="38.5%"
+            height={WP('10.3')}
+            title="Enter Address"
+            borderColor={colors.p2}
+            shadowColor={colors.white}
+            textStyle={styles.btnTxtStyle}
+          />
+          <View style={{ width: WP('3') }} />
+          <AppButton
+            onPress={() => {
+              navigation?.navigate('AddPropertyDetails', { from: 'create' });
+            }}
+            width="38.5%"
+            height={WP('10.3')}
+            borderColor={colors.p2}
+            title="List A New Property"
+            textStyle={styles.btnTxtStyle}
+          />
+        </View>
+      }
+      <PersonDetailsModal
+        show={showModal}
+        onPressHide={() => setShowModal(false)}
+      />
     </SafeAreaView>
   );
 };

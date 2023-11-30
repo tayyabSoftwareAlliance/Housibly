@@ -201,15 +201,18 @@ export const handleLocationPermission = async () => {
   }
 }
 
-export const createPropertyFormData = (data = {}) => {
+export const propertyFormData = (data = {}) => {
   const formdata = new FormData();
   formdata.append('property[property_type]', data.property_type);
   data.images?.forEach(item => {
-    formdata.append('property[images][]', {
-      uri: item?.path,
-      type: item?.mime || 'image/jpeg',
-      name: item?.filename || 'image',
-    });
+    if (item?.id)
+      formdata.append('property[images][]', item?.id)
+    else
+      formdata.append('property[images][]', {
+        uri: item?.path,
+        type: item?.mime || 'image/jpeg',
+        name: item?.filename || 'image',
+      })
   })
   formdata.append('property[title]', data.title);
   formdata.append('property[price]', data.price);
@@ -252,7 +255,6 @@ export const createPropertyFormData = (data = {}) => {
     formdata.append('property[bed_rooms]', data.bed_rooms);
     formdata.append('property[bath_rooms]', data.bath_rooms);
     formdata.append('property[total_number_of_rooms]', data.total_number_of_rooms);
-    formdata.append('property[basement]', data.basement);
     formdata.append('property[total_parking_spaces]', data.total_parking_spaces);
     formdata.append('property[garage_spaces]', data.garage_spaces);
     formdata.append('property[driveway]', data.driveway);
@@ -263,14 +265,17 @@ export const createPropertyFormData = (data = {}) => {
     formdata.append('property[central_vacuum]', data.central_vacuum);
     formdata.append('property[pool]', data.pool);
     formdata.append('property[appliances_and_other_items]', data.appliances_and_other_items);
+    data.basement?.forEach((item) => {
+      formdata.append('property[basement][]', item);
+    })
     data.heat_source?.forEach((item) => {
-      formdata.append('property[heat_source]', item);
+      formdata.append('property[heat_source][]', item);
     })
     data.heat_type?.forEach((item) => {
-      formdata.append('property[heat_type]', item);
+      formdata.append('property[heat_type][]', item);
     })
-    data.air_conditioner?.forEach((item) => {
-      formdata.append('property[exterior]', item);
+    data.exterior?.forEach((item) => {
+      formdata.append('property[exterior][]', item);
     })
     data.air_conditioner?.forEach((item) => {
       formdata.append('property[air_conditioner][]', item);
@@ -285,7 +290,6 @@ export const createPropertyFormData = (data = {}) => {
     formdata.append('property[bed_rooms]', data.bed_rooms);
     formdata.append('property[bath_rooms]', data.bath_rooms);
     formdata.append('property[total_number_of_rooms]', data.total_number_of_rooms);
-    formdata.append('property[basement]', data.basement);
     formdata.append('property[total_parking_spaces]', data.total_parking_spaces);
     formdata.append('property[garage_spaces]', data.garage_spaces);
     formdata.append('property[balcony]', data.balcony);
@@ -298,17 +302,20 @@ export const createPropertyFormData = (data = {}) => {
     formdata.append('property[fireplace]', data.fireplace);
     formdata.append('property[central_vacuum]', data.central_vacuum);
     formdata.append('property[pool]', data.pool);
+    data.basement?.forEach((item) => {
+      formdata.append('property[basement][]', item);
+    })
     data.included_utilities?.forEach((item) => {
-      formdata.append('property[included_utilities]', item);
+      formdata.append('property[included_utilities][]', item);
     })
     data.heat_source?.forEach((item) => {
-      formdata.append('property[heat_source]', item);
+      formdata.append('property[heat_source][]', item);
     })
     data.heat_type?.forEach((item) => {
-      formdata.append('property[heat_type]', item);
+      formdata.append('property[heat_type][]', item);
     })
-    data.air_conditioner?.forEach((item) => {
-      formdata.append('property[exterior]', item);
+    data.exterior?.forEach((item) => {
+      formdata.append('property[exterior][]', item);
     })
     data.air_conditioner?.forEach((item) => {
       formdata.append('property[air_conditioner][]', item);
@@ -316,12 +323,18 @@ export const createPropertyFormData = (data = {}) => {
   }
 
   data.rooms?.forEach((item, index) => {
-    formdata.append(`property[rooms_attributes][${index}][name]`, item?.name)
-    formdata.append(`property[rooms_attributes][${index}][length_in_feet]`, item?.length_in_feet)
-    formdata.append(`property[rooms_attributes][${index}][length_in_inch]`, item?.length_in_inch)
-    formdata.append(`property[rooms_attributes][${index}][width_in_feet]`, item?.width_in_feet)
-    formdata.append(`property[rooms_attributes][${index}][width_in_inch]`, item?.width_in_inch)
-    formdata.append(`property[rooms_attributes][${index}][level]`, item?.level)
+    if (item?.id && item?.deleted) {
+      formdata.append(`property[rooms_attributes][${index}][id]`, item.id)
+      formdata.append(`property[rooms_attributes][${index}][_destroy]`, true)
+    } else {
+      item?.id && formdata.append(`property[rooms_attributes][${index}][id]`, item.id)
+      formdata.append(`property[rooms_attributes][${index}][name]`, item?.name)
+      formdata.append(`property[rooms_attributes][${index}][length_in_feet]`, item?.length_in_feet)
+      formdata.append(`property[rooms_attributes][${index}][length_in_inch]`, item?.length_in_inch)
+      formdata.append(`property[rooms_attributes][${index}][width_in_feet]`, item?.width_in_feet)
+      formdata.append(`property[rooms_attributes][${index}][width_in_inch]`, item?.width_in_inch)
+      formdata.append(`property[rooms_attributes][${index}][level]`, item?.level)
+    }
   })
   return formdata
 }

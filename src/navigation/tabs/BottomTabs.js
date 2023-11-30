@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { View, Image, Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { appIcons, colors, WP } from '../../shared/exporter';
+import { appIcons, BOTTOM_TAB_HEIGHT, colors, WP } from '../../shared/exporter';
 
 import HomeStack from '../stacks/HomeStack';
 import SearchStack from '../stacks/SearchStack';
 import BookMarksStack from '../stacks/BookMarksStack';
 import ChatStack from '../stacks/ChatStack';
 import { useDispatch } from 'react-redux'
-import { getSublists } from '../../redux/actions/app-actions/app-actions';
+import { getSublists } from '../../redux/actions';
 
 const Tab = createBottomTabNavigator();
 
@@ -120,7 +120,7 @@ export default BottomTabs = ({ }) => {
 
 const styles = StyleSheet.create({
   barStyle: {
-    height: WP('17'),
+    height: BOTTOM_TAB_HEIGHT,
     borderTopWidth: 0,
     position: 'absolute',
     paddingHorizontal: 5,

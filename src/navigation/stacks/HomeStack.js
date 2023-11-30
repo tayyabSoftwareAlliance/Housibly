@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../../screens/App/Home';
 import AllMatches from '../../screens/App/Home/AllMatches';
 import AllSales from '../../screens/App/Home/AllSales';
-import PropertyDetails from '../../screens/App/Home/PropertyDetails';
+import PotentialBuyers from '../../screens/App/Home/PotentialBuyers';
 import PersonDetails from '../../screens/App/Home/PersonDetails';
 import PersonChat from '../../screens/App/Home/PersonChat';
 
@@ -18,7 +18,7 @@ function HomeStack(props) {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="AllMatches" component={AllMatches} />
       <Stack.Screen name="AllSales" component={AllSales} />
-      <Stack.Screen name="PropertyDetails" component={PropertyDetails} />
+      <Stack.Screen name="PotentialBuyers" component={PotentialBuyers} />
       <Stack.Screen name="PersonDetails" component={PersonDetails} />
       <Stack.Screen name="PersonChat" component={PersonChat} />
     </Stack.Navigator>

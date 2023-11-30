@@ -10,6 +10,8 @@ export {
   scrWidth,
   scrHeight,
   platformOrientedCode,
+  BOTTOM_TAB_HEIGHT,
+  PADDING_BOTTOM_FOR_TAB_BAR_SCREENS
 } from './theme/responsive';
 
 export {
@@ -56,6 +58,7 @@ export {
   lot_unit_list,
   lot_area_unit_list,
   property_type_list,
+  filter_property_type_list,
   level_list,
   currency_list,
   beds_list,

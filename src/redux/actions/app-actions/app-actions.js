@@ -22,32 +22,37 @@ export const set_address_request = (params, cbSuccess) => {
     cbSuccess,
   };
 };
-//Get Recent Properties
-export const get_recent_properties = (params, cbSuccess, cbFailure) => {
+
+//Get My Properties
+export const create_my_property = (payload,onSuccess) => {
   return {
-    type: TYPES.GET_RECENT_PROPERTIES_REQUEST,
-    params,
-    cbSuccess,
-    cbFailure,
+    type: TYPES.CREATE_MY_PROPERTY_REQUEST,
+    payload,
+    onSuccess
   };
 };
 
-//Get Filtered Properties
-export const get_filtered_properties = (params, cbSuccess, cbFailure) => {
+//Get My Properties
+export const get_my_properties = () => {
   return {
-    type: TYPES.GET_FILTERED_PROPERTIES_REQUEST,
-    params,
-    cbSuccess,
-    cbFailure,
+    type: TYPES.GET_MY_PROPERTIES_REQUEST,
   };
 };
 
-//Get All Properties
-export const get_all_properties = (params, cbSuccess, cbFailure) => {
+//Get My Properties
+export const update_my_property = (payload,onSuccess) => {
   return {
-    type: TYPES.GET_ALL_PROPERTIES_REQUEST,
-    params,
-    cbSuccess,
-    cbFailure,
+    type: TYPES.UPDATE_MY_PROPERTY_REQUEST,
+    payload,
+    onSuccess
+  };
+};
+
+//Get My Properties
+export const delete_my_property = (payload,onSuccess) => {
+  return {
+    type: TYPES.DELETE_MY_PROPERTY_REQUEST,
+    payload,
+    onSuccess
   };
 };

@@ -21,7 +21,8 @@ import {
 } from '../../../../shared/utilities/constant';
 import styles from './styles';
 
-const PropertyDetails = ({ navigation, route }) => {
+const PotentialBuyers = ({ navigation, route }) => {
+
   const { item } = route.params
   const isFocus = useIsFocused();
   const [data, setData] = useState([]);
@@ -29,7 +30,7 @@ const PropertyDetails = ({ navigation, route }) => {
   const [matchFilter, setMatchFilter] = useState('Match');
   const [filterType, setFilterType] = useState('Top Match');
   const [showMatchMenu, setShowMatchMenu] = useState(false);
-console.log('itemmmm ',JSON.stringify(item,null,2))
+
   useLayoutEffect(() => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
@@ -51,9 +52,9 @@ console.log('itemmmm ',JSON.stringify(item,null,2))
       <TouchableOpacity
         activeOpacity={1}
         style={styles.detailsContainer}
-        onPress={() => navigation.navigate('PropertyDetail',{data:item})}>
+        onPress={() => navigation.navigate('PropertyDetail', { propertyData: item })}>
         <Image
-          source={{ uri: item?.image?.[0].url || property_image }}
+          source={{ uri: item?.images?.[0]?.url || property_image }}
           style={styles.imgStyle}
         />
         <View>
@@ -130,7 +131,6 @@ console.log('itemmmm ',JSON.stringify(item,null,2))
   return (
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar backgroundColor={colors.g5} />
-      <Spacer androidVal={WP('5')} iOSVal={WP('0')} />
       <BackHeader
         title="Potential Buyers"
         txtCenter
@@ -225,4 +225,4 @@ console.log('itemmmm ',JSON.stringify(item,null,2))
   );
 };
 
-export default PropertyDetails;
+export default PotentialBuyers;

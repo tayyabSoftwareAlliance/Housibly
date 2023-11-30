@@ -104,13 +104,3 @@ export const getFilteredProperties = async params => {
   });
   return res.data;
 };
-
-export const getAllProperties = async () => {
-  const res = await axios.get(`${BASE_URL}properties`, {
-    headers: {
-      auth_token: await GetToken(),
-      Accept: 'application/json',
-    },
-  });
-  return res.data;
-};

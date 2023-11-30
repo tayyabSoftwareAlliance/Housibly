@@ -4,30 +4,42 @@ import { HP, WP, colors, family, size } from '../../shared/exporter'
 import { SmallHeading } from '../Headings/SmallHeading'
 import { Icon } from 'react-native-elements';
 
-const RoomsBox = ({ data, onRemoveRoom }) => {
+const RoomsBox = ({ data, onEditRoom, onRemoveRoom }) => {
   return (
     data?.length > 0 &&
     <View style={styles.descBox}>
       <SmallHeading title={'Rooms'} />
-      {data.map((item, index) => (
-        <View key={index} style={styles.roomRow} >
-          <Text style={styles.text} >{item?.name || 'N/A'}</Text>
-          <Text style={styles.text} >{item?.level || 'N/A'}</Text>
-          <Text style={styles.text} >{`${item?.length_in_feet}'${item?.length_in_inch}" x ${item?.width_in_feet}'${item?.width_in_inch}"`}</Text>
-          <View style={{ width: WP(23), justifyContent: 'center', alignItems: 'center' }} >
-            {onRemoveRoom &&
-              <Icon
-                type={'material'}
-                name={'close'}
-                color={colors.red}
-                size={WP(2)}
-                reverse
-                onPress={() => onRemoveRoom(index)}
-              />
-            }
+      {data.map((item, index) => {
+        return !item?.deleted && (
+          <View key={index} style={styles.roomRow} >
+            <Text style={styles.text} >{item?.name || 'N/A'}</Text>
+            <Text style={styles.text} >{item?.level || 'N/A'}</Text>
+            <Text style={styles.text} >{`${item?.length_in_feet}'${item?.length_in_inch}" x ${item?.width_in_feet}'${item?.width_in_inch}"`}</Text>
+            <View style={{ width: WP(23), flexDirection: "row", justifyContent: 'center', alignItems: 'center' }} >
+              {onEditRoom &&
+                <Icon
+                  type={'material'}
+                  name={'edit'}
+                  color={colors.gr1}
+                  size={WP(2)}
+                  reverse
+                  onPress={() => onEditRoom(item, index)}
+                />
+              }
+              {onRemoveRoom &&
+                <Icon
+                  type={'material'}
+                  name={'close'}
+                  color={colors.red}
+                  size={WP(2)}
+                  reverse
+                  onPress={() => onRemoveRoom(item, index)}
+                />
+              }
+            </View>
           </View>
-        </View>
-      ))
+        )
+      })
       }
     </View>
   )

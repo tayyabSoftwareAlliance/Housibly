@@ -37,6 +37,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  showAdvanceContainer:{
+    height:60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignSelf:'flex-start',
+  }
 });
 
 export default styles;

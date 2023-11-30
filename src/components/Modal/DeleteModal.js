@@ -1,9 +1,19 @@
 import React from 'react';
-import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
-import {colors, WP, family, size, appIcons} from '../../shared/exporter';
+import { colors, WP, family, size, appIcons } from '../../shared/exporter';
+import { useDispatch, useSelector } from 'react-redux';
+import { delete_my_property } from '../../redux/actions/app-actions/app-actions';
 
-export const DeleteModal = ({item, show, onPressHide}) => {
+export const DeleteModal = ({ item, show, onPressHide }) => {
+
+  const dispatch = useDispatch()
+  const { loading } = useSelector(state => state.appReducer)
+
+  const deleteProperty = () => {
+    dispatch(delete_my_property(item?.id,onPressHide))
+  }
+
   return (
     <Modal onBackdropPress={onPressHide} isVisible={show}>
       <View style={styles.modalContainer}>
@@ -17,27 +27,28 @@ export const DeleteModal = ({item, show, onPressHide}) => {
             style={styles.crossIconStyle}
           />
         </TouchableOpacity>
-        <Image source={item?.img} style={styles.imgStyle} />
-        <Text style={styles.nameTxtStyle}>{item?.name}</Text>
+        <Image source={{ uri: item?.images?.[0]?.url }} style={styles.imgStyle} />
+        <Text style={styles.nameTxtStyle}>{item?.title}</Text>
         <View style={styles.rowContainer}>
-          <Text style={styles.smallTxtStyle}>$25,000 | </Text>
+          <Text style={styles.smallTxtStyle}>{`${item?.currency_type} ${item?.price} | `}</Text>
           <Image
             resizeMode="contain"
             source={appIcons.bedIcon}
             style={styles.bedIconStyle}
           />
-          <Text style={styles.smallTxtStyle}>4</Text>
+          <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
           <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
-          <Text resizeMode="contain" style={styles.smallTxtStyle}>
-            3.5
-          </Text>
+          <Text resizeMode="contain" style={styles.smallTxtStyle}>{item?.bath_rooms || 0}</Text>
         </View>
         <Text style={styles.removeTxtStyle}>Remove From Property List?</Text>
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.buttonStyle}
-          onPress={() => onPressHide()}>
+          onPress={deleteProperty}>
+            {loading ? 
+            <ActivityIndicator color={colors.white} /> :
           <Text style={styles.btnTxtStyle}>Remove</Text>
+          }
         </TouchableOpacity>
       </View>
     </Modal>

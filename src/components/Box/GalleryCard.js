@@ -23,7 +23,7 @@ export const GalleryCard = ({
   title,
   subtitle,
   imageArray,
-  onSelect
+  onSelect,
 }) => {
 
   const [show, setShow] = useState(false)
@@ -33,10 +33,11 @@ export const GalleryCard = ({
     setTimeout(() => {
       ImagePicker.openPicker(image_options).then(image => {
         var array3 = imageArray.concat(image);
-        const distinctItems = [
-          ...new Map(array3.map(item => [item['size'], item])).values(),
-        ];
-        onSelect(distinctItems);
+        // this line filters out the same size images that are more than one
+        // const distinctItems = [
+        //   ...new Map(array3.map(item => [item['size'], item])).values(),
+        // ];
+        onSelect(array3);
         setShow(false);
       });
     }, 400);
@@ -47,10 +48,11 @@ export const GalleryCard = ({
     setTimeout(() => {
       ImagePicker.openCamera(image_options).then(image => {
         var array3 = imageArray.concat(image);
-        const distinctItems = [
-          ...new Map(array3.map(item => [item['size'], item])).values(),
-        ];
-        onSelect(distinctItems);
+        // this line filters out the same size images that are more than one
+        // const distinctItems = [
+        //   ...new Map(array3.map(item => [item['size'], item])).values(),
+        // ];
+        onSelect(array3);
         setShow(false);
       });
     }, 400);
@@ -75,21 +77,19 @@ export const GalleryCard = ({
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={imageArray}
-          renderItem={({item, index}) => {
-            return (
-              <ImageBackground
-                imageStyle={{borderRadius: 13}}
-                style={styles.imgCon}
-                source={{uri: item?.path}}>
-                <TouchableOpacity
-                  style={styles.iconCon}
-                  onPress={() => onRemove(index)}>
-                  <Image style={styles.iconStyle} source={appIcons.cross} />
-                </TouchableOpacity>
-              </ImageBackground>
-            );
-          }}
-          horizontal={true}
+          horizontal
+          renderItem={({ item, index }) => (
+            <ImageBackground
+              imageStyle={{ borderRadius: 13 }}
+              style={styles.imgCon}
+              source={{ uri: item?.id ? item?.url : item?.path }}>
+              <TouchableOpacity
+                style={styles.iconCon}
+                onPress={() => onRemove(index)}>
+                <Image style={styles.iconStyle} source={appIcons.cross} />
+              </TouchableOpacity>
+            </ImageBackground>
+          )}
         />
       </View>
       {show && (

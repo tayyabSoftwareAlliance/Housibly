@@ -35,15 +35,15 @@ import { useIsFocused } from '@react-navigation/native'
 
 const AddMorePropertyDetails = ({ navigation, route }) => {
 
+  const { propertyData, from } = route.params
   const dispatch = useDispatch(null);
   const { saved_create_property_data, sublists } = useSelector(state => state?.appReducer)
-  const [data, setData] = useState(JSON.parse(JSON.stringify(route.params)))
+  const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)))
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    if (!isFocused && saved_create_property_data) {
+    if (!isFocused && saved_create_property_data && from != 'edit')
       setData(JSON.parse(JSON.stringify(saved_create_property_data)))
-    }
   }, [saved_create_property_data])
 
   const onNext = () => {
@@ -62,7 +62,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
     } else if (!(data.total_number_of_rooms > 0)) {
       Alert.alert('Error', 'Number of Rooms is Required');
     } else {
-      navigation?.navigate('AddPropertyDesc', data);
+      navigation?.navigate('AddPropertyDesc', {propertyData:data,from});
     }
   };
 
@@ -207,7 +207,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 list={sublists.included_utilities}
                 selected={data.included_utilities}
                 onPressTick={val => setValue('included_utilities', val)}
-                source={appIcons.included_utilities}
+                source={appIcons.utilities}
                 multiselect
               />
             </>
@@ -361,17 +361,18 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
           }
           <Divider color={colors.g18} />
           {/*Buttons */}
-          <View style={styles.spacRow}>
-            <AppButton
-              width={'45%'}
-              bgColor={colors.g21}
-              title={'Save'}
-              fontSize={size.tiny}
-              borderColor={colors.g21}
-              onPress={onSave}
-              shadowColor={colors.white}
-            />
-
+          <View style={[styles.spacRow,from == 'edit' && {justifyContent:'flex-end'}]}>
+            {from != 'edit' &&
+              <AppButton
+                width={'45%'}
+                bgColor={colors.g21}
+                title={'Save'}
+                fontSize={size.tiny}
+                borderColor={colors.g21}
+                onPress={onSave}
+                shadowColor={colors.white}
+              />
+            }
             <AppButton
               onPress={onNext}
               width={'45%'}

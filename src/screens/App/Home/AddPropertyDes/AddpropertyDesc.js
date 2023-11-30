@@ -12,15 +12,15 @@ import { useIsFocused } from '@react-navigation/native'
 
 const AddpropertyDesc = ({ navigation, route }) => {
 
+  const { propertyData, from } = route.params
   const { saved_create_property_data } = useSelector(state => state?.appReducer)
-  const [data, setData] = useState(JSON.parse(JSON.stringify(route.params)))
+  const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)))
   const isFocused = useIsFocused()
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isFocused && saved_create_property_data) {
+    if (!isFocused && saved_create_property_data && from != 'edit')
       setData(JSON.parse(JSON.stringify(saved_create_property_data)))
-    }
   }, [saved_create_property_data])
 
   const onNext = async () => {
@@ -28,9 +28,9 @@ const AddpropertyDesc = ({ navigation, route }) => {
       Alert.alert('Error', 'Description is Required');
     } else {
       if (data.property_type == 'vacant_land') {
-        navigation.navigate('PropertyDetail', { data, from: 'create' });
+        navigation.navigate('PropertyDetail', { propertyData: data, from });
       } else {
-        navigation.navigate('AddRoom', data);
+        navigation.navigate('AddRoom', { propertyData: data, from });
       }
     }
   }
@@ -68,7 +68,7 @@ const AddpropertyDesc = ({ navigation, route }) => {
             value={data.property_description}
             onChangeText={text => setValue('property_description', text)}
           />
-          {data.property_type?.title != 'vacant_land' && (
+          {data.property_type != 'vacant_land' && (
             <>
               <Divider color={colors.g18} />
               <Textarea
@@ -83,16 +83,18 @@ const AddpropertyDesc = ({ navigation, route }) => {
             </>
           )}
         </View>
-        <View style={styles.spacRow}>
-          <AppButton
-            width={'45%'}
-            bgColor={colors.g21}
-            title={'Save'}
-            fontSize={size.tiny}
-            borderColor={colors.g21}
-            onPress={onSave}
-            shadowColor={colors.white}
-          />
+        <View style={[styles.spacRow, from == 'edit' && { justifyContent: 'flex-end' }]}>
+          {from != 'edit' &&
+            <AppButton
+              width={'45%'}
+              bgColor={colors.g21}
+              title={'Save'}
+              fontSize={size.tiny}
+              borderColor={colors.g21}
+              onPress={onSave}
+              shadowColor={colors.white}
+            />
+          }
           <AppButton
             onPress={onNext}
             width={'45%'}
