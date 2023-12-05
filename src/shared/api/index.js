@@ -23,8 +23,8 @@ export const auth = {
     forgotPassword: (data) => requests.post(ENDPOINTS.FORGOT_PASS, data),
     OTPVerify: (data) => requests.post(ENDPOINTS.VERIFY_OTP, data),
     resendOTP: (data) => requests.post(ENDPOINTS.RESEND_OTP, data),
-    addInfo: (data) => requests.post(ENDPOINTS.RESET_PASS, data),
-    resetPassword: (data) => requests.post(ENDPOINTS.INFO_CONST, data),
+    addInfo: (data) => requests.post(ENDPOINTS.INFO_CONST, data),
+    resetPassword: (data) => requests.post(ENDPOINTS.RESET_PASS, data),
     logoutUser: () => requests.post(ENDPOINTS.LOGOUT),
 }
 
