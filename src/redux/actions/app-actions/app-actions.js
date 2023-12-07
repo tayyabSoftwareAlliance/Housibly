@@ -15,6 +15,13 @@ export const saveCreatePropertyData = (payload) => {
   };
 };
 
+// remove create property data
+export const removeCreatePropertyData = () => {
+  return {
+    type: TYPES.REMOVE_CREATE_PROPERTY_DATA,
+  };
+};
+
 export const set_address_request = (params, cbSuccess) => {
   return {
     type: TYPES.SET_ADDRESS_REQUEST,

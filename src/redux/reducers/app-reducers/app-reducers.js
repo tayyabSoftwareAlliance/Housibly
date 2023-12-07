@@ -11,8 +11,18 @@ const initialState = {
 };
 
 const appReducers = (state = initialState, actions) => {
-  const { type, payload } = actions;
+  const {type, payload} = actions;
   switch (type) {
+    case TYPES.SAVE_CREATE_PROPERTY_DATA:
+      return {
+        ...state,
+        saved_create_property_data: payload,
+      };
+    case TYPES.REMOVE_CREATE_PROPERTY_DATA:
+      return {
+        ...state,
+        saved_create_property_data: null,
+      };
 
     //************Get Sublists*************
     case TYPES.GET_SUBLISTS_SUCCESS:
@@ -30,7 +40,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.CREATE_MY_PROPERTY_SUCCESS:
       return {
         ...state,
-        all_properties: [{ ...payload }, ...state.all_properties],
+        all_properties: [{...payload}, ...state.all_properties],
       };
     case TYPES.CREATE_MY_PROPERTY_FINALLY:
       return {
@@ -65,10 +75,8 @@ const appReducers = (state = initialState, actions) => {
       return {
         ...state,
         all_properties: state.all_properties.map(item => {
-          if (item.id == payload.id)
-            return { ...payload.data }
-          else
-            return item
+          if (item.id == payload.id) return {...payload.data};
+          else return item;
         }),
       };
     case TYPES.UPDATE_MY_PROPERTY_FINALLY:

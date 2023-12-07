@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Alert, SafeAreaView, Text, View } from 'react-native';
+import React, {useState} from 'react';
+import {Alert, SafeAreaView, StatusBar, Text, View} from 'react-native';
 import styles from './styles';
 import {
   checkConnected,
@@ -19,13 +19,13 @@ import {
   AuthFooter,
   BackHeader,
 } from '../../../components';
-import { Formik } from 'formik';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useDispatch } from 'react-redux';
-import { signUpRequest } from '../../../redux/actions';
+import {Formik} from 'formik';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useDispatch} from 'react-redux';
+import {signUpRequest} from '../../../redux/actions';
 import CountryPicker from 'react-native-country-picker-modal';
 
-const Signup = ({ navigation, route }) => {
+const Signup = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [country, setcountry] = useState({
     name: 'United States',
@@ -33,7 +33,6 @@ const Signup = ({ navigation, route }) => {
   });
   const [cca2, setcca2] = useState('US');
   const dispatch = useDispatch(null);
-  console.log('itemmmm', route?.params?.item)
 
   //Handle Signup
   const handleSignUp = async values => {
@@ -45,7 +44,6 @@ const Signup = ({ navigation, route }) => {
       } else {
         phone = values.contact;
       }
-
       try {
         setIsLoading(true);
         let item = route?.params?.item;
@@ -76,7 +74,6 @@ const Signup = ({ navigation, route }) => {
           Alert.alert('Error', res);
           setIsLoading(false);
         };
-        console.log('signup data', data)
         dispatch(signUpRequest(data, signUpSuccess, signUpFailure));
       } catch (error) {
         console.log(error);
@@ -93,6 +90,11 @@ const Signup = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
       <AppHeader />
       <BackHeader title={'Create Account'} />
       <View style={styles.contentContainer}>
@@ -112,7 +114,12 @@ const Signup = ({ navigation, route }) => {
             handleSubmit,
             handleReset,
           }) => (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                flex: 1,
+                justifyContent: 'space-between',
+              }}>
               <View style={styles.inputCon}>
                 <AppInput
                   onChangeText={handleChange('fullname')}
@@ -167,7 +174,6 @@ const Signup = ({ navigation, route }) => {
                     />
                   }
                 />
-
                 <AppInput
                   onChangeText={handleChange('password')}
                   renderErrorMessage={true}

@@ -221,7 +221,7 @@ const VerifyOTP = ({navigation, route}) => {
                     </View>
                   ) : (
                     <Text style={styles.footText}>
-                      Didn’t recived a code?{' '}
+                      Didn’t received a code?{' '}
                       <Text
                         style={[
                           styles.footText,

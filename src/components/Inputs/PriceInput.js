@@ -1,8 +1,8 @@
-import { Platform, StyleSheet, Text, TextInput, View, Image } from 'react-native';
-import React, { useState } from 'react';
+import {Platform, StyleSheet, Text, TextInput, View, Image} from 'react-native';
+import React, {useState} from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
-import { WP, colors, family, size } from '../../shared/exporter';
-import { Icon } from 'react-native-elements';
+import {WP, colors, family, size} from '../../shared/exporter';
+import {Icon} from 'react-native-elements';
 
 export const PriceInput = ({
   onSelect,
@@ -33,20 +33,19 @@ export const PriceInput = ({
   keyboardType,
   returnKeyType,
   tintColor,
-  simpleInputPlaceHolder
+  simpleInputPlaceHolder,
 }) => {
-
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <View
-      style={[styles.container, !inputs && { justifyContent: 'space-between' }]}>
+      style={[styles.container, !inputs && {justifyContent: 'space-between'}]}>
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
             <Image
               source={source}
-              resizeMode='contain'
+              resizeMode="contain"
               style={{
                 height: 30,
                 width: 30,
@@ -69,19 +68,25 @@ export const PriceInput = ({
             dropdownOverlayColor={'transparent'}
             rowStyle={styles.rowStyle}
             onFocus={() => {
-              setOpen(true)
-              onFocus?.()
+              setOpen(true);
+              onFocus?.();
             }}
             onBlur={() => {
-              setOpen(false)
-              onBlur?.()
+              setOpen(false);
+              onBlur?.();
             }}
             renderCustomizedButtonChild={item => {
               return (
-                <View>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.rowTextStyle}>
                     {defaultValue && `(${defaultValue})`}
                   </Text>
+                  <Icon
+                    name={open ? 'caretup' : 'caretdown'}
+                    type={'antdesign'}
+                    size={10}
+                    color={colors.b3}
+                  />
                 </View>
               );
             }}
@@ -92,7 +97,7 @@ export const PriceInput = ({
               return (
                 <View style={styles.btnCon}>
                   <Text
-                    style={[styles.rowTextStyle, { textDecorationLine: 'none' }]}>
+                    style={[styles.rowTextStyle, {textDecorationLine: 'none'}]}>
                     {item}
                   </Text>
                 </View>
@@ -100,16 +105,16 @@ export const PriceInput = ({
             }}
             // buttonTextAfterSelection={selectedItem => selectedItem?.title}
             // rowTextForSelection={item => item?.title}
-            renderDropdownIcon={() => {
-              return (
-                <Icon
-                  name={open ? 'caretup' : 'caretdown'}
-                  type={'antdesign'}
-                  size={10}
-                  color={colors.b3}
-                />
-              );
-            }}
+            // renderDropdownIcon={() => {
+            //   return (
+            //     <Icon
+            //       name={open ? 'caretup' : 'caretdown'}
+            //       type={'antdesign'}
+            //       size={10}
+            //       color={colors.b3}
+            //     />
+            //   );
+            // }}
           />
         )}
       </View>
@@ -134,7 +139,7 @@ export const PriceInput = ({
           />
         </View>
       ) : (
-        <View style={{ marginRight: marginRight }}>
+        <View style={{marginRight: marginRight}}>
           <TextInput
             onSubmitEditing={onSubmitEditing}
             onChangeText={onChangeText}
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   dropdownStyle: {
     marginVertical: -15,

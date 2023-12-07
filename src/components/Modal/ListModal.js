@@ -86,6 +86,7 @@ export const ListModal = ({
                   {
                     backgroundColor:
                       isSelected(item[0]) ? colors.g20 : colors.white,
+                      justifyContent:multiselect ? 'flex-start' : 'center'
                   },
                 ]}
                 onPress={() => onSelect(item[0])}>
@@ -121,15 +122,14 @@ const styles = StyleSheet.create({
   },
   gradientStyle: {
     width: '100%',
-
     flex: 1,
     paddingHorizontal: WP('4'),
     paddingVertical: 20,
+    alignItems:'center'
   },
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 15,
     marginVertical: 5,
     borderRadius: 10,

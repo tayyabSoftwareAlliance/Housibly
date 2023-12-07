@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, Alert, Platform } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 import {
   AppButton,
   AppInput,
@@ -24,13 +33,13 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import styles from './styles';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Formik } from 'formik';
-import { useDispatch } from 'react-redux';
-import { loginRequest, socialLoginRequest } from '../../../redux/actions';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Formik} from 'formik';
+import {useDispatch} from 'react-redux';
+import {loginRequest, socialLoginRequest} from '../../../redux/actions';
 import appleAuth from '@invertase/react-native-apple-authentication';
 
-const Login = ({ navigation }) => {
+const Login = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch(null);
 
@@ -41,7 +50,7 @@ const Login = ({ navigation }) => {
   const handleGoogleLogin = async () => {
     try {
       // Get the users ID token
-      const { idToken } = await GoogleSignin.signIn();
+      const {idToken} = await GoogleSignin.signIn();
       if (idToken) {
         setIsLoading(true);
         handleSocialLogin('google', idToken);
@@ -68,17 +77,19 @@ const Login = ({ navigation }) => {
       requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
     });
 
-    console.log('appleAuthRequestResponse',appleAuthRequestResponse)
+    console.log('appleAuthRequestResponse', appleAuthRequestResponse);
 
     // get current authentication state for user
     // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user,
+    );
 
     // use credentialState response to ensure the user is authenticated
     if (credentialState === appleAuth.State.AUTHORIZED) {
       // user is authenticated
     }
-  }
+  };
 
   const handleSocialLogin = (provider, token) => {
     const socialLoginSuccess = async res => {
@@ -137,148 +148,151 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <>
-      <View style={styles.rootContainer}>
-        <View style={styles.contentContainer}>
-          <Formik
-            initialValues={loginFormFields}
-            onSubmit={values => {
-              onSubmit(values);
-            }}
-            validationSchema={LoginVS}>
-            {({
-              values,
-              handleChange,
-              errors,
-              setFieldTouched,
-              touched,
-              isValid,
-              handleSubmit,
-              handleReset,
-            }) => (
-              <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.imageCon}>
-                  <Image source={appLogos.appLogo} style={styles.imgStyle} />
-                  <Text style={styles.textStyle}>Housibly</Text>
-                </View>
-                <View>
+    <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
+      <View style={styles.contentContainer}>
+        <Formik
+          initialValues={loginFormFields}
+          onSubmit={values => {
+            onSubmit(values);
+          }}
+          validationSchema={LoginVS}>
+          {({
+            values,
+            handleChange,
+            errors,
+            setFieldTouched,
+            touched,
+            isValid,
+            handleSubmit,
+            handleReset,
+          }) => (
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.imageCon}>
+                <Image source={appLogos.appLogo} style={styles.imgStyle} />
+                <Text style={styles.textStyle}>Housibly</Text>
+              </View>
+              <View>
+                <AppButton
+                  icon={appIcons.google}
+                  style={styles.googleStyle}
+                  title={'Sign up with Google'}
+                  textStyle={styles.btnTextStyle}
+                  bgColor={colors.white}
+                  borderColor={colors.g3}
+                  shadowColor={colors.white}
+                  onPress={handleGoogleLogin}
+                />
+                {Platform.OS == 'ios' && (
                   <AppButton
-                    icon={appIcons.google}
-                    style={styles.googleStyle}
-                    title={'Sign up with Google'}
+                    onPress={handleAppleLogin}
+                    title={'Sign up with Apple'}
+                    icon={appIcons.apple}
+                    style={styles.appleStyle}
                     textStyle={styles.btnTextStyle}
                     bgColor={colors.white}
                     borderColor={colors.g3}
                     shadowColor={colors.white}
-                    onPress={handleGoogleLogin}
                   />
-                  {Platform.OS == 'ios' &&
+                )}
+                <DividerBox />
+              </View>
+              <View>
+                <AppInput
+                  onChangeText={handleChange('email')}
+                  renderErrorMessage={true}
+                  placeholder="Email"
+                  value={values.email}
+                  onBlur={() => setFieldTouched('email')}
+                  blurOnSubmit={false}
+                  disableFullscreenUI={true}
+                  autoCapitalize="none"
+                  touched={touched.email}
+                  errorMessage={errors.email}
+                  title={'Email Address'}
+                />
+                <AppInput
+                  onChangeText={handleChange('password')}
+                  renderErrorMessage={true}
+                  placeholder="Password"
+                  value={values.password}
+                  onBlur={() => setFieldTouched('password')}
+                  blurOnSubmit={false}
+                  disableFullscreenUI={true}
+                  autoCapitalize="none"
+                  touched={touched.password}
+                  errorMessage={errors.password}
+                  onSubmitEditing={handleSubmit}
+                  secureTextEntry
+                  title={'Password'}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation?.navigate('ForgotPassword');
+                  }}
+                  style={commonStyles.aiEnd}>
+                  <Text style={styles.forgotText}>Forgot Password?</Text>
+                </TouchableOpacity>
+                <View style={commonStyles.aiCenter}>
+                  <Text style={styles.footerText}>
+                    By creating account, you agree to our{' '}
+                    <Text
+                      onPress={() => {
+                        navigation.navigate('TermsConditions');
+                      }}
+                      style={[
+                        styles.footerText,
+                        {
+                          color: colors.p1,
+                          fontFamily: family.Gilroy_SemiBold,
+                          textDecorationLine: 'underline',
+                        },
+                      ]}>
+                      Terms & Conditions
+                    </Text>{' '}
+                    &{' '}
+                    <Text
+                      onPress={() => {
+                        navigation.navigate('PrivacyPolicy');
+                      }}
+                      style={[
+                        styles.footerText,
+                        {
+                          color: colors.p1,
+                          fontFamily: family.Gilroy_SemiBold,
+                          textDecorationLine: 'underline',
+                        },
+                      ]}>
+                      Privacy Policy
+                    </Text>{' '}
+                  </Text>
+                  <View style={styles.btnCon}>
                     <AppButton
-                      onPress={handleAppleLogin}
-                      title={'Sign up with Apple'}
-                      icon={appIcons.apple}
-                      style={styles.appleStyle}
-                      textStyle={styles.btnTextStyle}
-                      bgColor={colors.white}
-                      borderColor={colors.g3}
-                      shadowColor={colors.white}
+                      onPress={handleSubmit}
+                      title={'Login'}
+                      shadowColor={colors.btn_shadow}
+                      bgColor={colors.p2}
                     />
-                  }
-                  <DividerBox />
-                </View>
-                <View>
-                  <AppInput
-                    onChangeText={handleChange('email')}
-                    renderErrorMessage={true}
-                    placeholder="Email"
-                    value={values.email}
-                    onBlur={() => setFieldTouched('email')}
-                    blurOnSubmit={false}
-                    disableFullscreenUI={true}
-                    autoCapitalize="none"
-                    touched={touched.email}
-                    errorMessage={errors.email}
-                    title={'Email Address'}
-                  />
-                  <AppInput
-                    onChangeText={handleChange('password')}
-                    renderErrorMessage={true}
-                    placeholder="Password"
-                    value={values.password}
-                    onBlur={() => setFieldTouched('password')}
-                    blurOnSubmit={false}
-                    disableFullscreenUI={true}
-                    autoCapitalize="none"
-                    touched={touched.password}
-                    errorMessage={errors.password}
-                    onSubmitEditing={handleSubmit}
-                    secureTextEntry
-                    title={'Password'}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation?.navigate('ForgotPassword');
-                    }}
-                    style={commonStyles.aiEnd}>
-                    <Text style={styles.forgotText}>Forgot Password?</Text>
-                  </TouchableOpacity>
-                  <View style={commonStyles.aiCenter}>
-                    <Text style={styles.footerText}>
-                      By creating account, you agree to our{' '}
-                      <Text
-                        onPress={() => {
-                          navigation.navigate('TermsConditions');
-                        }}
-                        style={[
-                          styles.footerText,
-                          {
-                            color: colors.p1,
-                            fontFamily: family.Gilroy_SemiBold,
-                            textDecorationLine: 'underline',
-                          },
-                        ]}>
-                        Terms & Conditions
-                      </Text>{' '}
-                      &{' '}
-                      <Text
-                        onPress={() => {
-                          navigation.navigate('PrivacyPolicy');
-                        }}
-                        style={[
-                          styles.footerText,
-                          {
-                            color: colors.p1,
-                            fontFamily: family.Gilroy_SemiBold,
-                            textDecorationLine: 'underline',
-                          },
-                        ]}>
-                        Privacy Policy
-                      </Text>{' '}
-                    </Text>
-                    <View style={styles.btnCon}>
-                      <AppButton
-                        onPress={handleSubmit}
-                        title={'Login'}
-                        shadowColor={colors.btn_shadow}
-                        bgColor={colors.p2}
-                      />
-                      <AuthFooter
-                        title={'Don’t have an account?'}
-                        subtitle={'Create One'}
-                        onPress={() => {
-                          navigation?.navigate('SignUpPurpose');
-                        }}
-                      />
-                    </View>
+                    <AuthFooter
+                      title={'Don’t have an account?'}
+                      subtitle={'Create One'}
+                      onPress={() => {
+                        navigation?.navigate('SignUpPurpose');
+                      }}
+                    />
                   </View>
                 </View>
-              </KeyboardAwareScrollView>
-            )}
-          </Formik>
-        </View>
+              </View>
+            </KeyboardAwareScrollView>
+          )}
+        </Formik>
       </View>
       <AppLoader loading={isLoading} />
-    </>
+    </SafeAreaView>
   );
 };
 

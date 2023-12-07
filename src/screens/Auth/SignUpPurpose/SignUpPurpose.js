@@ -6,8 +6,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {AppButton, BackHeader, SignUpModal, Spacer} from '../../../components';
 import {appIcons, appImages, colors, WP} from '../../../shared/exporter';
 import styles from './styles';
@@ -38,7 +38,6 @@ const SignUpPurpose = ({navigation, route}) => {
   return (
     <View style={styles.rootContainer}>
       <StatusBar backgroundColor={'transparent'} translucent={true} />
-
       <ImageBackground source={appImages.homeImg} style={styles.bgImgStyle}>
         <TouchableOpacity
           onPress={() => {
@@ -56,7 +55,7 @@ const SignUpPurpose = ({navigation, route}) => {
           Choose, What do you want to do?{' '}
         </Text>
       </ImageBackground>
-      <KeyboardAwareScrollView
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1}}>
         <View style={styles.btnsContainer}>
@@ -117,7 +116,7 @@ const SignUpPurpose = ({navigation, route}) => {
             }}
           />
         </View>
-      </KeyboardAwareScrollView>
+      </ScrollView>
       <SignUpModal
         show={show}
         activeIndex={showSlide}

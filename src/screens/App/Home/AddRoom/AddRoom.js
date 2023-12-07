@@ -11,36 +11,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   AppButton,
   BackHeader,
-  CheckBoxInput,
   FilterButton,
   FilterInput,
-  GalleryCard,
-  HomeInput,
-  ImagePickerModal,
-  ListModal,
-  LivingSpaceInput,
   PriceInput,
-  TextBox,
 } from '../../../../components';
 import styles from './styles';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
 import {
   colors,
-  currency_list,
   HP,
-  image_options,
   level_list,
-  property_type_list,
   size,
   spacing,
   WP,
 } from '../../../../shared/exporter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Textarea from 'react-native-textarea';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   saveCreatePropertyData,
-  set_address_request,
 } from '../../../../redux/actions';
 import { useIsFocused } from '@react-navigation/native'
 import RoomsBox from '../../../../components/Box/RoomsBox';
@@ -81,10 +69,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
   };
 
   const onSave = async () => {
-    const onSuccess = res => {
-      Alert.alert('Success', 'Information Saved Successfully')
-    };
-    dispatch(saveCreatePropertyData(data, onSuccess))
+    dispatch(saveCreatePropertyData(data))
   };
 
   const setRoomValue = (type, value) => {

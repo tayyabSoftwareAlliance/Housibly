@@ -142,10 +142,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
   };
 
   const onSave = async () => {
-    const onSuccess = res => {
-      Alert.alert('Success', 'Information Saved Successfully');
-    };
-    dispatch(saveCreatePropertyData(data, onSuccess));
+    dispatch(saveCreatePropertyData(data));
   };
 
   const setValue = (type, value) => {
@@ -322,7 +319,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
                   value={data.property_tax}
                   simpleInputPlaceHolder={'00.00'}
                   title={'Property Taxes '}
-                  subtitle={data.currency_type}
+                  subtitle={`(${data.currency_type})`}
                 />
               </>
             )}

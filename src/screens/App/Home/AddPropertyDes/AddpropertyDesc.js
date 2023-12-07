@@ -36,10 +36,7 @@ const AddpropertyDesc = ({ navigation, route }) => {
   }
 
   const onSave = async () => {
-    const onSuccess = res => {
-      Alert.alert('Success', 'Information Saved Successfully');
-    };
-    dispatch(saveCreatePropertyData(data, onSuccess));
+    dispatch(saveCreatePropertyData(data));
   }
 
   const setValue = (type, value) => {

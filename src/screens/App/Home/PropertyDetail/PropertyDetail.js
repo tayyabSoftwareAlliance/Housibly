@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AppButton,
   AppLoader,
@@ -19,7 +19,7 @@ import {
   PriceInput,
   SmallHeading,
 } from '../../../../components';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   appIcons,
   checkConnected,
@@ -32,35 +32,48 @@ import {
   WP,
 } from '../../../../shared/exporter';
 import styles from './styles';
-import { Divider } from 'react-native-elements/dist/divider/Divider';
-import { useDispatch, useSelector } from 'react-redux';
+import {Divider} from 'react-native-elements/dist/divider/Divider';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   saveCreatePropertyData,
   set_address_request,
 } from '../../../../redux/actions';
 import RoomsBox from '../../../../components/Box/RoomsBox';
-import { propertyFormData, responseValidator } from '../../../../shared/utilities/helper';
-import { create_my_property, update_my_property } from '../../../../redux/actions/app-actions/app-actions';
+import {
+  propertyFormData,
+  responseValidator,
+} from '../../../../shared/utilities/helper';
+import {
+  create_my_property,
+  removeCreatePropertyData,
+  update_my_property,
+} from '../../../../redux/actions/app-actions/app-actions';
 
-const PropertyDetail = ({ navigation, route }) => {
-
-  const { propertyData, from } = route.params
-  const { saved_create_property_data, sublists, loading } = useSelector(state => state?.appReducer);
+const PropertyDetail = ({navigation, route}) => {
+  const {propertyData, from} = route.params;
+  const {saved_create_property_data, sublists, loading} = useSelector(
+    state => state?.appReducer,
+  );
   const [imgSelectedIndex, setImgSelectedIndex] = useState(0);
   const dispatch = useDispatch();
 
   const onPost = async () => {
     const onSuccess = () => {
-      navigation.navigate('Home')
-      Alert.alert('Success', 'Property Updated Successfully!');
-    }
+      if (from != 'edit') dispatch(removeCreatePropertyData(null));
+      navigation.navigate('Home');
+      if (from == 'edit')
+        Alert.alert('Success', 'Property Updated Successfully!');
+      else Alert.alert('Success', 'Property Created Successfully!');
+    };
     const check = await checkConnected();
     if (check) {
-      const formdata = propertyFormData(propertyData)
+      const formdata = propertyFormData(propertyData);
       if (from == 'edit') {
-        dispatch(update_my_property({ data: formdata, id: propertyData?.id }, onSuccess))
+        dispatch(
+          update_my_property({data: formdata, id: propertyData?.id}, onSuccess),
+        );
       } else {
-        dispatch(create_my_property(formdata, onSuccess))
+        dispatch(create_my_property(formdata, onSuccess));
       }
     } else {
       Alert.alert('Error', networkText);
@@ -68,14 +81,7 @@ const PropertyDetail = ({ navigation, route }) => {
   };
 
   const onSave = async () => {
-    saved_create_property_data.save_desc = true;
-    saved_create_property_data.save_list = true;
-    saved_create_property_data.save_data = true;
-    dispatch(
-      saveCreatePropertyData(saved_create_property_data, () => {
-        Alert.alert('Success', 'Information Saved Successfully');
-      }),
-    );
+    dispatch(saveCreatePropertyData(propertyData));
   };
 
   return (
@@ -88,14 +94,18 @@ const PropertyDetail = ({ navigation, route }) => {
           <PreviewImageCover
             h1={propertyData.title}
             h2={property_type_list[propertyData.property_type]}
-            uri={propertyData?.images?.[imgSelectedIndex]?.id ? propertyData?.images?.[imgSelectedIndex]?.url : propertyData?.images?.[imgSelectedIndex]?.path}
+            uri={
+              propertyData?.images?.[imgSelectedIndex]?.id
+                ? propertyData?.images?.[imgSelectedIndex]?.url
+                : propertyData?.images?.[imgSelectedIndex]?.path
+            }
           />
           <View>
             <FlatList
               data={propertyData?.images}
               showsHorizontalScrollIndicator={false}
               horizontal
-              renderItem={({ item, index }) => {
+              renderItem={({item, index}) => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
@@ -118,11 +128,13 @@ const PropertyDetail = ({ navigation, route }) => {
               <PreviewInfoCard
                 item={{
                   h1: 'Price',
-                  h2: `${propertyData.currency_type} ${propertyData.price || 0}`,
+                  h2: `${propertyData.currency_type} ${
+                    propertyData.price || 0
+                  }`,
                   icon: appIcons.priceTag,
                 }}
               />
-              {propertyData.property_type != 'vacant_land' &&
+              {propertyData.property_type != 'vacant_land' && (
                 <PreviewInfoCard
                   item={{
                     h1: 'Year Built',
@@ -130,7 +142,7 @@ const PropertyDetail = ({ navigation, route }) => {
                     icon: appIcons.built,
                   }}
                 />
-              }
+              )}
             </View>
             <Text numberOfLines={6} style={styles.desc}>
               {propertyData.lot_description}
@@ -140,10 +152,7 @@ const PropertyDetail = ({ navigation, route }) => {
               title={'Street Address'}
               subtitle={propertyData.address || 'N/A'}
             />
-            <PreviewField
-              title={'Unit'}
-              subtitle={propertyData.unit || '0'}
-            />
+            <PreviewField title={'Unit'} subtitle={propertyData.unit || '0'} />
             {propertyData.property_type != 'condo' && (
               <>
                 <PreviewField
@@ -155,7 +164,9 @@ const PropertyDetail = ({ navigation, route }) => {
                   subtitle={propertyData.lot_depth || '0'}
                 />
                 <PreviewField
-                  title={`Lot Size (${propertyData.lot_unit == 'meter' ? 'sqm' : 'sft'})`}
+                  title={`Lot Size (${
+                    propertyData.lot_unit == 'meter' ? 'sqm' : 'sft'
+                  })`}
                   subtitle={propertyData.lot_size || '23'}
                 />
                 <PreviewField
@@ -180,9 +191,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
                 <PreviewField
                   title={'Condo Corporation / HOA'}
-                  subtitle={
-                    propertyData.condo_corporation_or_hqa || 'N/A'
-                  }
+                  subtitle={propertyData.condo_corporation_or_hqa || 'N/A'}
                 />
                 <PreviewField
                   title={'Condo/HOA fees (per month)'}
@@ -190,9 +199,10 @@ const PropertyDetail = ({ navigation, route }) => {
                 />
               </>
             )}
-            {(propertyData.property_type == 'house' || propertyData.property_type == 'condo') &&
+            {(propertyData.property_type == 'house' ||
+              propertyData.property_type == 'condo') && (
               <>
-                <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
+                <Divider style={{marginVertical: HP(2)}} color={colors.g13} />
                 <PreviewField
                   title={'Bed Rooms'}
                   subtitle={propertyData.bed_rooms || 'N/A'}
@@ -219,9 +229,9 @@ const PropertyDetail = ({ navigation, route }) => {
                   source={appIcons.garage_space}
                 />
 
-                <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
+                <Divider style={{marginVertical: HP(2)}} color={colors.g13} />
 
-                {propertyData.property_type == 'house' ?
+                {propertyData.property_type == 'house' ? (
                   <>
                     <PreviewField
                       title={'House Type'}
@@ -235,7 +245,8 @@ const PropertyDetail = ({ navigation, route }) => {
                       subtitle={propertyData.house_style || 'N/A'}
                       source={appIcons.HouseStyle}
                     />
-                  </> :
+                  </>
+                ) : (
                   <>
                     <PreviewField
                       title={'Condo Type'}
@@ -250,7 +261,7 @@ const PropertyDetail = ({ navigation, route }) => {
                       source={appIcons.condoStyle}
                     />
                   </>
-                }
+                )}
                 <PreviewField
                   title={'Exterior'}
                   list={sublists.exterior}
@@ -265,7 +276,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   source={appIcons.bassement}
                   multiple
                 />
-                {propertyData.property_type == 'condo' &&
+                {propertyData.property_type == 'condo' && (
                   <>
                     <PreviewField
                       title={'Balcony'}
@@ -299,15 +310,15 @@ const PropertyDetail = ({ navigation, route }) => {
                       multiple
                     />
                   </>
-                }
-                {propertyData.property_type == 'house' &&
+                )}
+                {propertyData.property_type == 'house' && (
                   <PreviewField
                     title={'Driveway'}
                     list={sublists.driveway}
                     subtitle={propertyData.driveway || 'N/A'}
                     source={appIcons.driveway}
                   />
-                }
+                )}
                 <PreviewField
                   title={'Water'}
                   list={sublists.water}
@@ -359,7 +370,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   source={appIcons.pool}
                 />
               </>
-            }
+            )}
             <View style={styles.descBox}>
               <SmallHeading title={'Property Description'} />
               <SmallHeading
@@ -385,13 +396,18 @@ const PropertyDetail = ({ navigation, route }) => {
                 </>
               )}
             </View>
-            {propertyData.property_type != 'vacant_land' &&
+            {propertyData.property_type != 'vacant_land' && (
               <RoomsBox data={propertyData.rooms} />
-            }
+            )}
           </View>
-          {(from == 'create' || from == 'edit') &&
-            <View style={[styles.spacRow, { marginVertical: HP(2) }, from == 'edit' && { justifyContent: 'flex-end' }]}>
-              {from != 'edit' &&
+          {(from == 'create' || from == 'edit') && (
+            <View
+              style={[
+                styles.spacRow,
+                {marginVertical: HP(2)},
+                from == 'edit' && {justifyContent: 'flex-end'},
+              ]}>
+              {from != 'edit' && (
                 <AppButton
                   width={'45%'}
                   bgColor={colors.g21}
@@ -401,7 +417,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   onPress={onSave}
                   shadowColor={colors.white}
                 />
-              }
+              )}
               <AppButton
                 onPress={onPost}
                 width={'45%'}
@@ -410,7 +426,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 fontSize={size.tiny}
               />
             </View>
-          }
+          )}
         </View>
       </KeyboardAwareScrollView>
       <AppLoader loading={loading} />

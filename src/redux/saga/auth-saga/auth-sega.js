@@ -148,6 +148,8 @@ function* resetPass(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
+    console.log('error',error)
+    console.log('error',error?.response?.data)
     yield put({
       type: types.RESET_PASSWORD_FAILURE,
       payload: null,

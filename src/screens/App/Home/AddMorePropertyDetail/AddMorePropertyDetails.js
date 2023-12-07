@@ -7,7 +7,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AppButton,
   BackHeader,
@@ -27,24 +27,25 @@ import {
   spacing,
   WP,
 } from '../../../../shared/exporter';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Divider } from 'react-native-elements/dist/divider/Divider';
-import { saveCreatePropertyData } from '../../../../redux/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Divider} from 'react-native-elements/dist/divider/Divider';
+import {saveCreatePropertyData} from '../../../../redux/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
-const AddMorePropertyDetails = ({ navigation, route }) => {
-
-  const { propertyData, from } = route.params
+const AddMorePropertyDetails = ({navigation, route}) => {
+  const {propertyData, from} = route.params;
   const dispatch = useDispatch(null);
-  const { saved_create_property_data, sublists } = useSelector(state => state?.appReducer)
-  const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)))
-  const isFocused = useIsFocused()
+  const {saved_create_property_data, sublists} = useSelector(
+    state => state?.appReducer,
+  );
+  const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)));
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (!isFocused && saved_create_property_data && from != 'edit')
-      setData(JSON.parse(JSON.stringify(saved_create_property_data)))
-  }, [saved_create_property_data])
+      setData(JSON.parse(JSON.stringify(saved_create_property_data)));
+  }, [saved_create_property_data]);
 
   const onNext = () => {
     if (data.property_type == 'house' && !data.house_type) {
@@ -61,24 +62,23 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
       Alert.alert('Error', 'Bath Rooms Number is Required');
     } else if (!(data.total_number_of_rooms > 0)) {
       Alert.alert('Error', 'Number of Rooms is Required');
+    } else if (!(data.air_conditioner?.length > 0)) {
+      Alert.alert('Error', 'Please Select Air Conditioner Type');
     } else {
-      navigation?.navigate('AddPropertyDesc', {propertyData:data,from});
+      navigation?.navigate('AddPropertyDesc', {propertyData: data, from});
     }
   };
 
   const onSave = () => {
-    const onSuccess = res => {
-      Alert.alert('Success', 'Information Saved Successfully');
-    };
-    dispatch(saveCreatePropertyData(data, onSuccess));
+    dispatch(saveCreatePropertyData(data));
   };
 
   const setValue = (type, value) => {
     setData(prev => {
-      prev[type] = value
-      return { ...prev }
-    })
-  }
+      prev[type] = value;
+      return {...prev};
+    });
+  };
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -87,9 +87,9 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
       </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: WP('2') }}>
+        contentContainerStyle={{paddingBottom: WP('2')}}>
         <View style={styles.contentContainer}>
-          {data.property_type == 'condo' ?
+          {data.property_type == 'condo' ? (
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -107,7 +107,8 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onPressTick={val => setValue('condo_style', val)}
                 source={appIcons.condoStyle}
               />
-            </> :
+            </>
+          ) : (
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -133,7 +134,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onChangeText={text => setValue('min_lot_frontage', text)}
               />
             </>
-          }
+          )}
 
           <Divider color={colors.g18} />
           <CheckBoxInput
@@ -147,7 +148,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             checked={data.garage_spot_req}
             onPress={() => setValue('garage_spot_req', !data.garage_spot_req)}
           />
-          {data.property_type == 'house' &&
+          {data.property_type == 'house' && (
             <>
               <Divider color={colors.g18} />
               <PriceInput
@@ -157,7 +158,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onChangeText={text => setValue('max_age', text)}
               />
             </>
-          }
+          )}
           <Divider color={colors.g18} />
           <FilterButton
             title={'Exterior'}
@@ -167,7 +168,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             source={appIcons.exterior}
             multiselect
           />
-          {data.property_type == 'condo' &&
+          {data.property_type == 'condo' && (
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -211,7 +212,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 multiselect
               />
             </>
-          }
+          )}
           <Divider color={colors.g18} />
           <PriceInput
             title={'Bed Rooms'}
@@ -261,7 +262,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             onChangeText={text => setValue('garage_spaces', text)}
             source={appIcons.garage_space}
           />
-          {data.property_type == 'house' &&
+          {data.property_type == 'house' && (
             <>
               <Divider color={colors.g18} />
               <FilterButton
@@ -272,7 +273,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 source={appIcons.driveway}
               />
             </>
-          }
+          )}
           <Divider color={colors.g18} />
           <FilterButton
             title={'Water'}
@@ -348,7 +349,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             onPressTick={val => setValue('pool', val)}
             source={appIcons.pool}
           />
-          {data.property_type == 'condo' &&
+          {data.property_type == 'condo' && (
             <>
               <Divider color={colors.g18} />
               <PriceInput
@@ -358,11 +359,15 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onChangeText={text => setValue('condo_fees', text)}
               />
             </>
-          }
+          )}
           <Divider color={colors.g18} />
           {/*Buttons */}
-          <View style={[styles.spacRow,from == 'edit' && {justifyContent:'flex-end'}]}>
-            {from != 'edit' &&
+          <View
+            style={[
+              styles.spacRow,
+              from == 'edit' && {justifyContent: 'flex-end'},
+            ]}>
+            {from != 'edit' && (
               <AppButton
                 width={'45%'}
                 bgColor={colors.g21}
@@ -372,7 +377,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onPress={onSave}
                 shadowColor={colors.white}
               />
-            }
+            )}
             <AppButton
               onPress={onNext}
               width={'45%'}
@@ -383,7 +388,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
           </View>
         </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 };
 
