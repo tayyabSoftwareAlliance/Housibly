@@ -261,10 +261,12 @@ export const propertyFormData = (data = {}) => {
     formdata.append('property[water]', data.water);
     formdata.append('property[sewer]', data.sewer);
     formdata.append('property[laundry]', data.laundry);
-    formdata.append('property[fireplace]', data.fireplace);
     formdata.append('property[central_vacuum]', data.central_vacuum);
     formdata.append('property[pool]', data.pool);
     formdata.append('property[appliances_and_other_items]', data.appliances_and_other_items);
+    data.fireplace?.forEach((item) => {
+      formdata.append('property[fireplace][]', item);
+    })
     data.basement?.forEach((item) => {
       formdata.append('property[basement][]', item);
     })
@@ -286,7 +288,6 @@ export const propertyFormData = (data = {}) => {
     formdata.append('property[condo_corporation_or_hqa]', data.condo_corporation_or_hqa);
     formdata.append('property[condo_type]', data.condo_type);
     formdata.append('property[condo_style]', data.condo_style);
-    formdata.append('property[exterior]', data.exterior);
     formdata.append('property[bed_rooms]', data.bed_rooms);
     formdata.append('property[bath_rooms]', data.bath_rooms);
     formdata.append('property[total_number_of_rooms]', data.total_number_of_rooms);
@@ -299,9 +300,12 @@ export const propertyFormData = (data = {}) => {
     formdata.append('property[water]', data.water);
     formdata.append('property[sewer]', data.sewer);
     formdata.append('property[laundry]', data.laundry);
-    formdata.append('property[fireplace]', data.fireplace);
     formdata.append('property[central_vacuum]', data.central_vacuum);
     formdata.append('property[pool]', data.pool);
+    formdata.append('property[appliances_and_other_items]', data.appliances_and_other_items);
+    data.fireplace?.forEach((item) => {
+      formdata.append('property[fireplace][]', item);
+    })
     data.basement?.forEach((item) => {
       formdata.append('property[basement][]', item);
     })
@@ -343,5 +347,5 @@ export const handleCameraPermission = async () => {
   const result = Platform.OS == IOS ?
     await request(PERMISSIONS.IOS.CAMERA) :
     await request(PERMISSIONS.ANDROID.CAMERA)
-    return result == RESULTS.GRANTED
+  return result == RESULTS.GRANTED
 }
