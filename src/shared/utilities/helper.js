@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createContext, useContext, useEffect } from 'react';
-import { appIcons, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
+import { appIcons, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
 import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
@@ -224,12 +224,12 @@ export const propertyFormData = (data = {}) => {
 
   if (data.property_type == 'vacant_land') {
     formdata.append('property[lot_frontage]', data.lot_frontage);
-    formdata.append('property[lot_frontage_unit]', data.lot_unit);
+    formdata.append('property[lot_frontage_unit]', data.lot_frontage_unit);
     formdata.append('property[lot_depth]', data.lot_depth);
-    formdata.append('property[lot_depth_unit]', data.lot_unit);
+    formdata.append('property[lot_depth_unit]', data.lot_frontage_unit);
     formdata.append('property[lot_size]', data.lot_size);
     formdata.append('property[lot_size_unit]',
-      data.lot_unit == lot_unit_list[0] ?
+      data.lot_frontage_unit == lot_unit_list[0] ?
         lot_area_unit_list[0] :
         lot_area_unit_list[1]
     );
@@ -239,12 +239,12 @@ export const propertyFormData = (data = {}) => {
     formdata.append('property[year_built]', data.year_built);
     formdata.append('property[unit]', data.unit);
     formdata.append('property[lot_frontage]', data.lot_frontage);
-    formdata.append('property[lot_frontage_unit]', data.lot_unit);
+    formdata.append('property[lot_frontage_unit]', data.lot_frontage_unit);
     formdata.append('property[lot_depth]', data.lot_depth);
-    formdata.append('property[lot_depth_unit]', data.lot_unit);
+    formdata.append('property[lot_depth_unit]', data.lot_frontage_unit);
     formdata.append('property[lot_size]', data.lot_size);
     formdata.append('property[lot_size_unit]',
-      data.lot_unit == lot_unit_list[0] ?
+      data.lot_frontage_unit == lot_unit_list[0] ?
         lot_area_unit_list[0] :
         lot_area_unit_list[1]
     );
@@ -337,4 +337,11 @@ export const propertyFormData = (data = {}) => {
     }
   })
   return formdata
+}
+
+export const handleCameraPermission = async () => {
+  const result = Platform.OS == IOS ?
+    await request(PERMISSIONS.IOS.CAMERA) :
+    await request(PERMISSIONS.ANDROID.CAMERA)
+    return result == RESULTS.GRANTED
 }

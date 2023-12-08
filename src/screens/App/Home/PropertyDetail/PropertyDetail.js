@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppButton,
   AppLoader,
@@ -19,7 +19,7 @@ import {
   PriceInput,
   SmallHeading,
 } from '../../../../components';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   appIcons,
   checkConnected,
@@ -30,28 +30,24 @@ import {
   size,
   spacing,
   WP,
+  propertyFormData
 } from '../../../../shared/exporter';
 import styles from './styles';
-import {Divider} from 'react-native-elements/dist/divider/Divider';
-import {useDispatch, useSelector} from 'react-redux';
+import { Divider } from 'react-native-elements/dist/divider/Divider';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   saveCreatePropertyData,
-  set_address_request,
 } from '../../../../redux/actions';
 import RoomsBox from '../../../../components/Box/RoomsBox';
-import {
-  propertyFormData,
-  responseValidator,
-} from '../../../../shared/utilities/helper';
 import {
   create_my_property,
   removeCreatePropertyData,
   update_my_property,
 } from '../../../../redux/actions/app-actions/app-actions';
 
-const PropertyDetail = ({navigation, route}) => {
-  const {propertyData, from} = route.params;
-  const {saved_create_property_data, sublists, loading} = useSelector(
+const PropertyDetail = ({ navigation, route }) => {
+  const { propertyData, from } = route.params;
+  const { saved_create_property_data, sublists, loading } = useSelector(
     state => state?.appReducer,
   );
   const [imgSelectedIndex, setImgSelectedIndex] = useState(0);
@@ -70,7 +66,7 @@ const PropertyDetail = ({navigation, route}) => {
       const formdata = propertyFormData(propertyData);
       if (from == 'edit') {
         dispatch(
-          update_my_property({data: formdata, id: propertyData?.id}, onSuccess),
+          update_my_property({ data: formdata, id: propertyData?.id }, onSuccess),
         );
       } else {
         dispatch(create_my_property(formdata, onSuccess));
@@ -105,7 +101,7 @@ const PropertyDetail = ({navigation, route}) => {
               data={propertyData?.images}
               showsHorizontalScrollIndicator={false}
               horizontal
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
@@ -128,9 +124,8 @@ const PropertyDetail = ({navigation, route}) => {
               <PreviewInfoCard
                 item={{
                   h1: 'Price',
-                  h2: `${propertyData.currency_type} ${
-                    propertyData.price || 0
-                  }`,
+                  h2: `${propertyData.currency_type} ${propertyData.price || 0
+                    }`,
                   icon: appIcons.priceTag,
                 }}
               />
@@ -144,10 +139,12 @@ const PropertyDetail = ({navigation, route}) => {
                 />
               )}
             </View>
-            <Text numberOfLines={6} style={styles.desc}>
-              {propertyData.lot_description}
-            </Text>
-            <Divider color={colors.g13} />
+            {propertyData?.property_type != 'condo' &&
+              <Text numberOfLines={6} style={styles.desc}>
+                {propertyData.lot_description}
+              </Text>
+            }
+            <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
             <PreviewField
               title={'Street Address'}
               subtitle={propertyData.address || 'N/A'}
@@ -156,17 +153,16 @@ const PropertyDetail = ({navigation, route}) => {
             {propertyData.property_type != 'condo' && (
               <>
                 <PreviewField
-                  title={`Lot Frontage (${propertyData.lot_unit})`}
+                  title={`Lot Frontage (${propertyData.lot_frontage_unit})`}
                   subtitle={propertyData.lot_frontage || '0'}
                 />
                 <PreviewField
-                  title={`Lot Depth (${propertyData.lot_unit})`}
+                  title={`Lot Depth (${propertyData.lot_frontage_unit})`}
                   subtitle={propertyData.lot_depth || '0'}
                 />
                 <PreviewField
-                  title={`Lot Size (${
-                    propertyData.lot_unit == 'meter' ? 'sqm' : 'sft'
-                  })`}
+                  title={`Lot Size (${propertyData.lot_frontage_unit == 'meter' ? 'sqm' : 'sft'
+                    })`}
                   subtitle={propertyData.lot_size || '23'}
                 />
                 <PreviewField
@@ -201,191 +197,182 @@ const PropertyDetail = ({navigation, route}) => {
             )}
             {(propertyData.property_type == 'house' ||
               propertyData.property_type == 'condo') && (
-              <>
-                <Divider style={{marginVertical: HP(2)}} color={colors.g13} />
-                <PreviewField
-                  title={'Bed Rooms'}
-                  subtitle={propertyData.bed_rooms || 'N/A'}
-                  source={appIcons.bed}
-                />
-                <PreviewField
-                  title={'Bath Rooms'}
-                  subtitle={propertyData.bath_rooms || 'N/A'}
-                  source={appIcons.bath}
-                />
-                <PreviewField
-                  title={'Total Number of Rooms'}
-                  subtitle={propertyData.total_number_of_rooms || 'N/A'}
-                  source={appIcons.living_space}
-                />
-                <PreviewField
-                  title={'Total Parking Spaces'}
-                  subtitle={propertyData.total_parking_spaces || 'N/A'}
-                  source={appIcons.parking}
-                />
-                <PreviewField
-                  title={'Garage Spaces'}
-                  subtitle={propertyData.garage_spaces || 'N/A'}
-                  source={appIcons.garage_space}
-                />
-
-                <Divider style={{marginVertical: HP(2)}} color={colors.g13} />
-
-                {propertyData.property_type == 'house' ? (
-                  <>
-                    <PreviewField
-                      title={'House Type'}
-                      list={sublists.house_type}
-                      subtitle={propertyData.house_type || 'N/A'}
-                      source={appIcons.HouseType}
-                    />
-                    <PreviewField
-                      title={'House Style'}
-                      list={sublists.house_style}
-                      subtitle={propertyData.house_style || 'N/A'}
-                      source={appIcons.HouseStyle}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <PreviewField
-                      title={'Condo Type'}
-                      list={sublists.condo_type}
-                      subtitle={propertyData.condo_type || 'N/A'}
-                      source={appIcons.condoType}
-                    />
-                    <PreviewField
-                      title={'Condo Style'}
-                      list={sublists.condo_style}
-                      subtitle={propertyData.condo_style || 'N/A'}
-                      source={appIcons.condoStyle}
-                    />
-                  </>
-                )}
-                <PreviewField
-                  title={'Exterior'}
-                  list={sublists.exterior}
-                  subtitle={propertyData.exterior || 'N/A'}
-                  source={appIcons.exterior}
-                  multiple
-                />
-                <PreviewField
-                  title={'Basement'}
-                  list={sublists.basement}
-                  subtitle={propertyData.basement || 'N/A'}
-                  source={appIcons.bassement}
-                  multiple
-                />
-                {propertyData.property_type == 'condo' && (
-                  <>
-                    <PreviewField
-                      title={'Balcony'}
-                      list={sublists.balcony}
-                      subtitle={propertyData.balcony || 'N/A'}
-                      source={appIcons.balcony}
-                    />
-                    <PreviewField
-                      title={'Exposure'}
-                      list={sublists.exposure}
-                      subtitle={propertyData.exposure || 'N/A'}
-                      source={appIcons.exposure}
-                    />
-                    <PreviewField
-                      title={'Security'}
-                      list={sublists.security}
-                      subtitle={propertyData.security || 'N/A'}
-                      source={appIcons.security}
-                    />
-                    <PreviewField
-                      title={'Pets Allowed'}
-                      list={sublists.pets_allowed}
-                      subtitle={propertyData.pets_allowed || 'N/A'}
-                      source={appIcons.pets}
-                    />
-                    <PreviewField
-                      title={'Utilities Included'}
-                      list={sublists.included_utilities}
-                      subtitle={propertyData.included_utilities || 'N/A'}
-                      source={appIcons.utilities}
-                      multiple
-                    />
-                  </>
-                )}
-                {propertyData.property_type == 'house' && (
+                <>
+                  <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
                   <PreviewField
-                    title={'Driveway'}
-                    list={sublists.driveway}
-                    subtitle={propertyData.driveway || 'N/A'}
-                    source={appIcons.driveway}
+                    title={'Bed Rooms'}
+                    subtitle={propertyData.bed_rooms || 'N/A'}
+                    source={appIcons.bed}
                   />
-                )}
-                <PreviewField
-                  title={'Water'}
-                  list={sublists.water}
-                  subtitle={propertyData.water || 'N/A'}
-                  source={appIcons.water}
-                />
-                <PreviewField
-                  title={'Sewer'}
-                  list={sublists.sewer}
-                  subtitle={propertyData.sewer || 'N/A'}
-                  source={appIcons.sware}
-                />
-                <PreviewField
-                  title={'Heat Source'}
-                  list={sublists.heat_source}
-                  subtitle={propertyData.heat_source}
-                  source={appIcons.source}
-                  multiple
-                />
-                <PreviewField
-                  title={'Heat Type'}
-                  list={sublists.heat_type}
-                  subtitle={propertyData.heat_type}
-                  source={appIcons.heat}
-                  multiple
-                />
-                <PreviewField
-                  title={'Laundary'}
-                  list={sublists.sewer}
-                  subtitle={propertyData.laundry}
-                  source={appIcons.loundry}
-                />
-                <PreviewField
-                  title={'Fireplace'}
-                  list={sublists.fireplace}
-                  subtitle={propertyData.fireplace}
-                  source={appIcons.fire}
-                  multiple
-                />
-                <PreviewField
-                  title={'Central Vacuum'}
-                  subtitle={propertyData.central_vacuum ? 'Yes' : 'No'}
-                  source={appIcons.vacume}
-                />
-                <PreviewField
-                  title={'Pool'}
-                  list={sublists.pool}
-                  subtitle={propertyData.pool || 'N/A'}
-                  source={appIcons.pool}
-                />
-              </>
-            )}
+                  <PreviewField
+                    title={'Bath Rooms'}
+                    subtitle={propertyData.bath_rooms || 'N/A'}
+                    source={appIcons.bath}
+                  />
+                  <PreviewField
+                    title={'Total Number of Rooms'}
+                    subtitle={propertyData.total_number_of_rooms || 'N/A'}
+                    source={appIcons.living_space}
+                  />
+                  <PreviewField
+                    title={'Total Parking Spaces'}
+                    subtitle={propertyData.total_parking_spaces || 'N/A'}
+                    source={appIcons.parking}
+                  />
+                  <PreviewField
+                    title={'Garage Spaces'}
+                    subtitle={propertyData.garage_spaces || 'N/A'}
+                    source={appIcons.garage_space}
+                  />
+
+                  <Divider style={{ marginVertical: HP(2) }} color={colors.g13} />
+
+                  {propertyData.property_type == 'house' ? (
+                    <>
+                      <PreviewField
+                        title={'House Type'}
+                        list={sublists.house_type}
+                        subtitle={propertyData.house_type || 'N/A'}
+                        source={appIcons.HouseType}
+                      />
+                      <PreviewField
+                        title={'House Style'}
+                        list={sublists.house_style}
+                        subtitle={propertyData.house_style || 'N/A'}
+                        source={appIcons.HouseStyle}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <PreviewField
+                        title={'Condo Type'}
+                        list={sublists.condo_type}
+                        subtitle={propertyData.condo_type || 'N/A'}
+                        source={appIcons.condoType}
+                      />
+                      <PreviewField
+                        title={'Condo Style'}
+                        list={sublists.condo_style}
+                        subtitle={propertyData.condo_style || 'N/A'}
+                        source={appIcons.condoStyle}
+                      />
+                    </>
+                  )}
+                  <PreviewField
+                    title={'Exterior'}
+                    list={sublists.exterior}
+                    subtitle={propertyData.exterior || 'N/A'}
+                    source={appIcons.exterior}
+                    multiple
+                  />
+                  <PreviewField
+                    title={'Basement'}
+                    list={sublists.basement}
+                    subtitle={propertyData.basement || 'N/A'}
+                    source={appIcons.bassement}
+                    multiple
+                  />
+                  {propertyData.property_type == 'condo' && (
+                    <>
+                      <PreviewField
+                        title={'Balcony'}
+                        list={sublists.balcony}
+                        subtitle={propertyData.balcony || 'N/A'}
+                        source={appIcons.balcony}
+                      />
+                      <PreviewField
+                        title={'Exposure'}
+                        list={sublists.exposure}
+                        subtitle={propertyData.exposure || 'N/A'}
+                        source={appIcons.exposure}
+                      />
+                      <PreviewField
+                        title={'Security'}
+                        list={sublists.security}
+                        subtitle={propertyData.security || 'N/A'}
+                        source={appIcons.security}
+                      />
+                      <PreviewField
+                        title={'Pets Allowed'}
+                        list={sublists.pets_allowed}
+                        subtitle={propertyData.pets_allowed || 'N/A'}
+                        source={appIcons.pets}
+                      />
+                      <PreviewField
+                        title={'Utilities Included'}
+                        list={sublists.included_utilities}
+                        subtitle={propertyData.included_utilities || 'N/A'}
+                        source={appIcons.utilities}
+                        multiple
+                      />
+                    </>
+                  )}
+                  {propertyData.property_type == 'house' && (
+                    <PreviewField
+                      title={'Driveway'}
+                      list={sublists.driveway}
+                      subtitle={propertyData.driveway || 'N/A'}
+                      source={appIcons.driveway}
+                    />
+                  )}
+                  <PreviewField
+                    title={'Water'}
+                    list={sublists.water}
+                    subtitle={propertyData.water || 'N/A'}
+                    source={appIcons.water}
+                  />
+                  <PreviewField
+                    title={'Sewer'}
+                    list={sublists.sewer}
+                    subtitle={propertyData.sewer || 'N/A'}
+                    source={appIcons.sware}
+                  />
+                  <PreviewField
+                    title={'Heat Source'}
+                    list={sublists.heat_source}
+                    subtitle={propertyData.heat_source}
+                    source={appIcons.source}
+                    multiple
+                  />
+                  <PreviewField
+                    title={'Heat Type'}
+                    list={sublists.heat_type}
+                    subtitle={propertyData.heat_type}
+                    source={appIcons.heat}
+                    multiple
+                  />
+                  <PreviewField
+                    title={'Laundary'}
+                    list={sublists.sewer}
+                    subtitle={propertyData.laundry}
+                    source={appIcons.loundry}
+                  />
+                  <PreviewField
+                    title={'Fireplace'}
+                    list={sublists.fireplace}
+                    subtitle={propertyData.fireplace}
+                    source={appIcons.fire}
+                    multiple
+                  />
+                  <PreviewField
+                    title={'Central Vacuum'}
+                    subtitle={propertyData.central_vacuum ? 'Yes' : 'No'}
+                    source={appIcons.vacume}
+                  />
+                  <PreviewField
+                    title={'Pool'}
+                    list={sublists.pool}
+                    subtitle={propertyData.pool || 'N/A'}
+                    source={appIcons.pool}
+                  />
+                </>
+              )}
             <View style={styles.descBox}>
               <SmallHeading title={'Property Description'} />
               <SmallHeading
                 textColor={colors.g22}
                 title={propertyData.property_description || 'N/A'}
               />
-              {propertyData?.property_type != 'condo' && (
-                <>
-                  <SmallHeading title={'Lot Description'} />
-                  <SmallHeading
-                    textColor={colors.g22}
-                    title={propertyData.lot_description || 'N/A'}
-                  />
-                </>
-              )}
               {propertyData?.property_type != 'vacant_land' && (
                 <>
                   <SmallHeading title={'Appliances and other Items'} />
@@ -404,8 +391,8 @@ const PropertyDetail = ({navigation, route}) => {
             <View
               style={[
                 styles.spacRow,
-                {marginVertical: HP(2)},
-                from == 'edit' && {justifyContent: 'flex-end'},
+                { marginVertical: HP(2) },
+                from == 'edit' && { justifyContent: 'flex-end' },
               ]}>
               {from != 'edit' && (
                 <AppButton

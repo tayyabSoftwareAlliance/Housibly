@@ -46,7 +46,7 @@ import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const INITIAL_DATA = {
-  property_type: property_type_list[0],
+  property_type: 'house',
   title: '',
   currency_type: currency_list[0],
   images: [],
@@ -59,7 +59,7 @@ const INITIAL_DATA = {
   lot_frontage: 0,
   lot_depth: 0,
   lot_size: 0,
-  lot_unit: lot_unit_list[0],
+  lot_frontage_unit: lot_unit_list[0],  //this unit is for all type frontage,depth and according to this type area unit is showing
   is_lot_irregular: false,
   lot_description: '',
   tax_year: 0,
@@ -120,18 +120,20 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const isFocused = useIsFocused()
 
   const onNext = async () => {
-    if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
-      Alert.alert('Error', 'At least one image Required');
+    if (!data.property_type) {
+      Alert.alert('Error', 'Property Type is Required');
+    } else if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
+      Alert.alert('Error', 'At Least One Image is Required');
     } else if (!data.title) {
       Alert.alert('Error', 'Title is Required');
     } else if (!(data.price > 0)) {
       Alert.alert('Error', 'Price is Required');
-    // } else if (data.property_type != 'condo' && !data.lot_unit) {
-    //   Alert.alert('Error', 'Please select Lot frontage Unit');
-    // } else if (data.property_type != 'condo' && !data.lot_frontage) {
-    //   Alert.alert('Error', 'Lot frontage is Required');
-    // } else if (data.property_type != 'condo' && !data.lot_depth) {
-    //   Alert.alert('Error', 'Lot Depth is Required');
+    } else if (data.property_type != 'condo' && !data.lot_frontage_unit) {
+      Alert.alert('Error', 'Please select Lot frontage Unit');
+    } else if (data.property_type != 'condo' && !data.lot_frontage) {
+      Alert.alert('Error', 'Lot frontage is Required');
+    } else if (data.property_type != 'condo' && !data.lot_depth) {
+      Alert.alert('Error', 'Lot Depth is Required');
     } else {
       if (data.property_type == 'vacant_land') {
         navigation?.navigate('AddPropertyDesc', { propertyData: data, from });
@@ -261,8 +263,8 @@ const AddPropertyDetails = ({ navigation, route }) => {
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
-                  onSelect={val => setValue('lot_unit', val)}
-                  defaultValue={data.lot_unit}
+                  onSelect={val => setValue('lot_frontage_unit', val)}
+                  defaultValue={data.lot_frontage_unit}
                   simpleInputPlaceHolder={'0'}
                   title={'Lot Frontage'}
                   list={lot_unit_list}
@@ -275,8 +277,8 @@ const AddPropertyDetails = ({ navigation, route }) => {
                 />
                 <Divider color={colors.g18} />
                 <PriceInput
-                  defaultValue={data.lot_unit}
-                  onSelect={val => setValue('lot_unit', val)}
+                  defaultValue={data.lot_frontage_unit}
+                  onSelect={val => setValue('lot_frontage_unit', val)}
                   simpleInputPlaceHolder={'0'}
                   title={'Lot Depth'}
                   list={lot_unit_list}
@@ -290,8 +292,8 @@ const AddPropertyDetails = ({ navigation, route }) => {
                 />
                 <Divider color={colors.g18} />
                 <PriceInput
-                  defaultValue={data.lot_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
-                  onSelect={val => setValue('lot_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
+                  defaultValue={data.lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
+                  onSelect={val => setValue('lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
                   simpleInputPlaceHolder={'0'}
                   title={'Lot Size'}
                   value={data.lot_size}
@@ -305,24 +307,24 @@ const AddPropertyDetails = ({ navigation, route }) => {
                   checked={data.is_lot_irregular}
                   onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
                 />
-                <Divider color={colors.g18} />
-                <PriceInput
-                  onChangeText={text => setValue('tax_year', text)}
-                  value={data.tax_year}
-                  simpleInputPlaceHolder={'2006'}
-                  title={'Tax Year '}
-                  subtitle={'(e.g 2006)'}
-                />
-                <Divider color={colors.g18} />
-                <PriceInput
-                  onChangeText={text => setValue('property_tax', text)}
-                  value={data.property_tax}
-                  simpleInputPlaceHolder={'00.00'}
-                  title={'Property Taxes '}
-                  subtitle={`(${data.currency_type})`}
-                />
               </>
             )}
+            <Divider color={colors.g18} />
+            <PriceInput
+              onChangeText={text => setValue('tax_year', text)}
+              value={data.tax_year}
+              simpleInputPlaceHolder={'2006'}
+              title={'Tax Year '}
+              subtitle={'(e.g 2006)'}
+            />
+            <Divider color={colors.g18} />
+            <PriceInput
+              onChangeText={text => setValue('property_tax', text)}
+              value={data.property_tax}
+              simpleInputPlaceHolder={'00.00'}
+              title={'Property Taxes '}
+              subtitle={`(${data.currency_type})`}
+            />
             {data.property_type == 'condo' && (
               <>
                 <Divider color={colors.g18} />

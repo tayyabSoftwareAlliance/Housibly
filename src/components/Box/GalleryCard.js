@@ -13,6 +13,7 @@ import {
   colors,
   commonStyles,
   family,
+  handleCameraPermission,
   image_options,
   size,
 } from '../../shared/exporter';
@@ -42,20 +43,24 @@ export const GalleryCard = ({
       });
     }, 400);
   };
+
   //Camra Handlers
-  const openCamera = () => {
-    setShow(false);
-    setTimeout(() => {
-      ImagePicker.openCamera(image_options).then(image => {
-        var array3 = imageArray.concat(image);
-        // this line filters out the same size images that are more than one
-        // const distinctItems = [
-        //   ...new Map(array3.map(item => [item['size'], item])).values(),
-        // ];
-        onSelect(array3);
-        setShow(false);
-      });
-    }, 400);
+  const openCamera = async () => {
+    if (await handleCameraPermission()) {
+      setShow(false);
+      setTimeout(() => {
+        ImagePicker.openCamera(image_options).then(image => {
+          console.log('imageeee', image)
+          var array3 = imageArray.concat(image);
+          // this line filters out the same size images that are more than one
+          // const distinctItems = [
+          //   ...new Map(array3.map(item => [item['size'], item])).values(),
+          // ];
+          onSelect(array3);
+          setShow(false);
+        }).catch(error => console.log('error ', error))
+      }, 400);
+    }
   };
 
   const onRemove = (index) => {

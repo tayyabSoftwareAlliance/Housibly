@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Text, View} from 'react-native';
+import {Alert, SafeAreaView, Text, View} from 'react-native';
 import {
   AppButton,
   AppHeader,
@@ -60,7 +60,7 @@ const ResetPassword = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.rootContainer}>
+    <SafeAreaView style={styles.rootContainer}>
       <AppHeader />
       <BackHeader title={'Create New Password'} />
       <View style={styles.contentContainer}>
@@ -130,7 +130,7 @@ const ResetPassword = ({navigation, route}) => {
         </Formik>
       </View>
       <AppLoader loading={loading} />
-    </View>
+    </SafeAreaView>
   );
 };
 

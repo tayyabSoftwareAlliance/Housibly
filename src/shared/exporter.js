@@ -85,5 +85,8 @@ export {
   calculateCurrentDateDiff,
   best_set,
   setDigitSize,
+  propertyFormData,
+  handleLocationPermission,
+  handleCameraPermission
 } from './utilities/helper';
 export {commonStyles} from './theme/commonStyles';

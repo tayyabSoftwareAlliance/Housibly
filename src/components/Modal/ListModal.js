@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
+    padding: 15,
     marginVertical: 5,
     borderRadius: 10,
   },

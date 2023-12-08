@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TouchableOpacity, Alert, SafeAreaView, StatusBar} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {AppButton, AppHeader, AppLoader, BackHeader} from '../../../components';
 import {
@@ -108,7 +108,12 @@ const VerifyOTP = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.rootContainer}>
+    <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
       <AppHeader />
       <BackHeader title={'Verify Verification Code'} />
       <View style={styles.contentContainer}>
@@ -241,7 +246,7 @@ const VerifyOTP = ({navigation, route}) => {
         </Formik>
         <AppLoader loading={loading} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -8,9 +8,8 @@ import {
 } from 'react-native';
 import React, { useCallback, useRef, useState } from 'react';
 import MapView, { Circle, Marker, Polygon } from 'react-native-maps';
-import { WP, appIcons, colors } from '../../shared/exporter';
+import { WP, appIcons, colors, handleLocationPermission } from '../../shared/exporter';
 import Geolocation from '@react-native-community/geolocation';
-import { handleLocationPermission } from '../../shared/utilities/helper';
 import { AddressModal } from '../Modal/AddressModal';
 import MapGuideModal from '../Modal/MapGuideModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';

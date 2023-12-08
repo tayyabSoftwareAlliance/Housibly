@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {AppButton, BackHeader, SignUpModal, Spacer} from '../../../components';
 import {appIcons, appImages, colors, WP} from '../../../shared/exporter';
@@ -36,7 +37,7 @@ const SignUpPurpose = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.rootContainer}>
+    <SafeAreaView style={styles.rootContainer}>
       <StatusBar backgroundColor={'transparent'} translucent={true} />
       <ImageBackground source={appImages.homeImg} style={styles.bgImgStyle}>
         <TouchableOpacity
@@ -124,7 +125,7 @@ const SignUpPurpose = ({navigation, route}) => {
         buttonClick={() => setShowSlide(showSlide + 1)}
         valueCallBack={handleNavigation}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

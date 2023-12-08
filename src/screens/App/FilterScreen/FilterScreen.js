@@ -49,7 +49,7 @@ const INITIAL_DATA = {
   lot_frontage: 0,
   lot_depth: 0,
   lot_size: 0,
-  lot_unit: lot_unit_list[0],
+  lot_frontage_unit: lot_unit_list[0],
   is_lot_irregular: false,
   lot_description: '',
   tax_year: 0,
@@ -159,8 +159,8 @@ const FilterScreen = ({ navigation, route }) => {
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
-                  defaultValue={data.lot_unit}
-                  onSelect={val => setValue('lot_unit', val)}
+                  defaultValue={data.lot_frontage_unit}
+                  onSelect={val => setValue('lot_frontage_unit', val)}
                   simpleInputPlaceHolder={'0'}
                   title={'Lot Size'}
                   value={data.lot_size}

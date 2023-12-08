@@ -1,8 +1,8 @@
-import {Platform, StyleSheet, Text, TextInput, View, Image} from 'react-native';
-import React, {useState} from 'react';
+import { Platform, StyleSheet, Text, TextInput, View, Image } from 'react-native';
+import React, { useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
-import {WP, colors, family, size} from '../../shared/exporter';
-import {Icon} from 'react-native-elements';
+import { WP, colors, family, size } from '../../shared/exporter';
+import { Icon } from 'react-native-elements';
 
 export const PriceInput = ({
   onSelect,
@@ -39,7 +39,7 @@ export const PriceInput = ({
 
   return (
     <View
-      style={[styles.container, !inputs && {justifyContent: 'space-between'}]}>
+      style={[styles.container, !inputs && { justifyContent: 'space-between' }]}>
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
@@ -77,7 +77,7 @@ export const PriceInput = ({
             }}
             renderCustomizedButtonChild={item => {
               return (
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={styles.rowTextStyle}>
                     {defaultValue && `(${defaultValue})`}
                   </Text>
@@ -97,24 +97,24 @@ export const PriceInput = ({
               return (
                 <View style={styles.btnCon}>
                   <Text
-                    style={[styles.rowTextStyle, {textDecorationLine: 'none'}]}>
+                    style={[styles.rowTextStyle, { textDecorationLine: 'none' }]}>
                     {item}
                   </Text>
                 </View>
               );
             }}
-            // buttonTextAfterSelection={selectedItem => selectedItem?.title}
-            // rowTextForSelection={item => item?.title}
-            // renderDropdownIcon={() => {
-            //   return (
-            //     <Icon
-            //       name={open ? 'caretup' : 'caretdown'}
-            //       type={'antdesign'}
-            //       size={10}
-            //       color={colors.b3}
-            //     />
-            //   );
-            // }}
+          // buttonTextAfterSelection={selectedItem => selectedItem?.title}
+          // rowTextForSelection={item => item?.title}
+          // renderDropdownIcon={() => {
+          //   return (
+          //     <Icon
+          //       name={open ? 'caretup' : 'caretdown'}
+          //       type={'antdesign'}
+          //       size={10}
+          //       color={colors.b3}
+          //     />
+          //   );
+          // }}
           />
         )}
       </View>
@@ -139,7 +139,7 @@ export const PriceInput = ({
           />
         </View>
       ) : (
-        <View style={{marginRight: marginRight}}>
+        <View style={{ marginRight: marginRight }}>
           <TextInput
             onSubmitEditing={onSubmitEditing}
             onChangeText={onChangeText}
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   btnStyle: {
-    width: '40%',
+    width: '50%',
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
