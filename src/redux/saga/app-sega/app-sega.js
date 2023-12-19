@@ -123,6 +123,32 @@ function* deleteMyProp(action) {
   }
 }
 
+//Update my preference
+export function* updateMyPreferenceRequest() {
+  yield takeLatest(types.UPDATE_MY_PREFERENCE_REQUEST, updateMyPreference);
+}
+function* updateMyPreference(action) {
+  try {
+    const res = yield app.updatePreference(action.payload)
+    if (res?.status == 200) {
+    console.log('ressss',res?.data)
+      yield put({
+        type: types.UPDATE_MY_PREFERENCE_SUCCESS,
+        payload: res?.data || {},
+      });
+      action.onSuccess()
+    }
+  } catch (error) {
+    console.log('error',error?.response?.data)
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.UPDATE_MY_PREFERENCE_FINALLY
+    });
+  }
+}
+
 // *************SET ADDRESS Info**************
 export function* setAddressRequest() {
   yield takeLatest(types.SET_ADDRESS_REQUEST, setAddress);

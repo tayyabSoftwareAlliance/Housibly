@@ -343,6 +343,156 @@ export const propertyFormData = (data = {}) => {
   return formdata
 }
 
+export const filterFormData = (data = {}) => {
+  const formdata = new FormData();
+  formdata.append('preference[property_type]', data.property_type);
+  formdata.append('preference[currency_type]', data.currency_type);
+  formdata.append('preference[price][min]', data.min_price);
+  formdata.append('preference[price][max]', data.max_price);
+
+  if (data.property_type == 'vacant_land') {
+    formdata.append('preference[lot_frontage][min]', data.min_lot_frontage);
+    formdata.append('preference[lot_frontage_unit]', data.min_lot_frontage_unit);
+    formdata.append('preference[lot_size][min]', data.min_lot_size);
+    formdata.append('preference[lot_size_unit]',
+      data.min_lot_frontage_unit == lot_unit_list[0] ?
+        lot_area_unit_list[0] :
+        lot_area_unit_list[1]
+    );
+    formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
+  } else if (data.property_type == 'house') {
+    formdata.append('preference[lot_frontage][min]', data.min_lot_frontage);
+    formdata.append('preference[lot_frontage_unit]', data.min_lot_frontage_unit);
+    formdata.append('preference[lot_size][min]', data.min_lot_size);
+    formdata.append('preference[lot_size_unit]',
+      data.min_lot_frontage_unit == lot_unit_list[0] ?
+        lot_area_unit_list[0] :
+        lot_area_unit_list[1]
+    );
+    formdata.append('preference[bed_rooms][min]', data.min_bed_rooms);
+    formdata.append('preference[bath_rooms][min]', data.min_bath_rooms);
+    formdata.append('preference[total_number_of_rooms][min]', data.min_total_number_of_rooms);
+    formdata.append('preference[total_parking_spaces][min]', data.min_total_parking_spaces);
+    formdata.append('preference[garage_spaces][min]', data.min_garage_spaces);
+    formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
+    formdata.append('preference[central_vacuum]', data.central_vacuum);
+    data.house_type?.forEach((item) => {
+      formdata.append('preference[house_type][]', item);
+    })
+    data.house_style?.forEach((item) => {
+      formdata.append('preference[house_style][]', item);
+    })
+    data.driveway?.forEach((item) => {
+      formdata.append('preference[driveway][]', item);
+    })
+    data.water?.forEach((item) => {
+      formdata.append('preference[water][]', item);
+    })
+    data.sewer?.forEach((item) => {
+      formdata.append('preference[sewer][]', item);
+    })
+    data.laundry?.forEach((item) => {
+      formdata.append('preference[laundry][]', item);
+    })
+    data.pool?.forEach((item) => {
+      formdata.append('preference[pool][]', item);
+    })
+    data.fireplace?.forEach((item) => {
+      formdata.append('preference[fireplace][]', item);
+    })
+    data.basement?.forEach((item) => {
+      formdata.append('preference[basement][]', item);
+    })
+    data.heat_source?.forEach((item) => {
+      formdata.append('preference[heat_source][]', item);
+    })
+    data.heat_type?.forEach((item) => {
+      formdata.append('preference[heat_type][]', item);
+    })
+    data.exterior?.forEach((item) => {
+      formdata.append('preference[exterior][]', item);
+    })
+    data.air_conditioner?.forEach((item) => {
+      formdata.append('preference[air_conditioner][]', item);
+    })
+  } else {
+    formdata.append('preference[bed_rooms][min]', data.min_bed_rooms);
+    formdata.append('preference[bath_rooms][min]', data.min_bath_rooms);
+    formdata.append('preference[total_number_of_rooms][min]', data.min_total_number_of_rooms);
+    formdata.append('preference[total_parking_spaces][min]', data.min_total_parking_spaces);
+    formdata.append('preference[garage_spaces][min]', data.min_garage_spaces);
+    formdata.append('preference[central_vacuum]', data.central_vacuum);
+    data.condo_type?.forEach((item) => {
+      formdata.append('preference[condo_type][]', item);
+    })
+    data.condo_style?.forEach((item) => {
+      formdata.append('preference[condo_style][]', item);
+    })
+    data.balcony?.forEach((item) => {
+      formdata.append('preference[balcony][]', item);
+    })
+    data.exposure?.forEach((item) => {
+      formdata.append('preference[exposure][]', item);
+    })
+    data.security?.forEach((item) => {
+      formdata.append('preference[security][]', item);
+    })
+    data.pets_allowed?.forEach((item) => {
+      formdata.append('preference[pets_allowed][]', item);
+    })
+    data.water?.forEach((item) => {
+      formdata.append('preference[water][]', item);
+    })
+    data.sewer?.forEach((item) => {
+      formdata.append('preference[sewer][]', item);
+    })
+    data.laundry?.forEach((item) => {
+      formdata.append('preference[laundry][]', item);
+    })
+    data.pool?.forEach((item) => {
+      formdata.append('preference[pool][]', item);
+    })
+    data.fireplace?.forEach((item) => {
+      formdata.append('preference[fireplace][]', item);
+    })
+    data.basement?.forEach((item) => {
+      formdata.append('preference[basement][]', item);
+    })
+    data.included_utilities?.forEach((item) => {
+      formdata.append('preference[included_utilities][]', item);
+    })
+    data.heat_source?.forEach((item) => {
+      formdata.append('preference[heat_source][]', item);
+    })
+    data.heat_type?.forEach((item) => {
+      formdata.append('preference[heat_type][]', item);
+    })
+    data.exterior?.forEach((item) => {
+      formdata.append('preference[exterior][]', item);
+    })
+    data.air_conditioner?.forEach((item) => {
+      formdata.append('preference[air_conditioner][]', item);
+    })
+  }
+
+  return formdata
+}
+
+export const formatPreferenceData = (data) => {
+  return {
+    ...data,
+    min_price: data?.price?.min || 0,
+    max_price: data?.price?.max || 1000000,
+    min_lot_size: data?.lot_size?.min || 0,
+    min_lot_frontage: data?.lot_frontage?.min || 0,
+    min_bed_rooms: data?.bed_rooms?.min || 0,
+    min_bath_rooms: data?.bath_rooms?.min || 0,
+    min_total_number_of_rooms: data?.total_number_of_rooms?.min || 0,
+    min_garage_spaces: data?.garage_spaces?.min || 0,
+    min_total_parking_spaces: data?.total_parking_spaces?.min || 0,
+  }
+}
+
 export const handleCameraPermission = async () => {
   const result = Platform.OS == IOS ?
     await request(PERMISSIONS.IOS.CAMERA) :

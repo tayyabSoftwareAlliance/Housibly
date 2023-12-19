@@ -1,3 +1,4 @@
+import { currency_list } from '../../../shared/exporter';
 import * as TYPES from '../../actions/types';
 
 const initialState = {
@@ -8,10 +9,11 @@ const initialState = {
   sublists: {},
   address: '',
   all_properties: [],
+  my_preference: { property_type: 'house', currency_type: currency_list[0], min_price: 0, max_price: 1000000 }
 };
 
 const appReducers = (state = initialState, actions) => {
-  const {type, payload} = actions;
+  const { type, payload } = actions;
   switch (type) {
     case TYPES.SAVE_CREATE_PROPERTY_DATA:
       return {
@@ -40,7 +42,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.CREATE_MY_PROPERTY_SUCCESS:
       return {
         ...state,
-        all_properties: [{...payload}, ...state.all_properties],
+        all_properties: [{ ...payload }, ...state.all_properties],
       };
     case TYPES.CREATE_MY_PROPERTY_FINALLY:
       return {
@@ -75,7 +77,7 @@ const appReducers = (state = initialState, actions) => {
       return {
         ...state,
         all_properties: state.all_properties.map(item => {
-          if (item.id == payload.id) return {...payload.data};
+          if (item.id == payload.id) return { ...payload.data };
           else return item;
         }),
       };
@@ -97,6 +99,23 @@ const appReducers = (state = initialState, actions) => {
         all_properties: state.all_properties.filter(item => item.id != payload),
       };
     case TYPES.DELETE_MY_PROPERTY_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    //************ Update My Preference states*************
+    case TYPES.UPDATE_MY_PREFERENCE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.UPDATE_MY_PREFERENCE_SUCCESS:
+      return {
+        ...state,
+        my_preference: { ...payload }
+      };
+    case TYPES.UPDATE_MY_PREFERENCE_FINALLY:
       return {
         ...state,
         loading: false,

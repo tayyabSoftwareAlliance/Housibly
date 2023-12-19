@@ -30,7 +30,7 @@ export const set_address_request = (params, cbSuccess) => {
   };
 };
 
-//Get My Properties
+//Create My Property
 export const create_my_property = (payload,onSuccess) => {
   return {
     type: TYPES.CREATE_MY_PROPERTY_REQUEST,
@@ -46,7 +46,7 @@ export const get_my_properties = () => {
   };
 };
 
-//Get My Properties
+//Update My Property
 export const update_my_property = (payload,onSuccess) => {
   return {
     type: TYPES.UPDATE_MY_PROPERTY_REQUEST,
@@ -55,10 +55,19 @@ export const update_my_property = (payload,onSuccess) => {
   };
 };
 
-//Get My Properties
+//Delete My Property
 export const delete_my_property = (payload,onSuccess) => {
   return {
     type: TYPES.DELETE_MY_PROPERTY_REQUEST,
+    payload,
+    onSuccess
+  };
+};
+
+//Update My Preference
+export const update_my_preference = (payload,onSuccess) => {
+  return {
+    type: TYPES.UPDATE_MY_PREFERENCE_REQUEST,
     payload,
     onSuccess
   };

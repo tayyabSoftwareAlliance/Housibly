@@ -1,4 +1,5 @@
 import {
+  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
 import React, { useRef, useState } from 'react';
 import {
   AppButton,
+  AppLoader,
   BackHeader,
   CheckBoxInput,
   FilterButton,
@@ -34,74 +36,74 @@ import {
 import { Icon } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkConnected, filterFormData, formatPreferenceData } from '../../../shared/utilities/helper';
+import { update_my_preference } from '../../../redux/actions/app-actions/app-actions';
 
 const INITIAL_DATA = {
-  property_type: property_type_list[0],
-  title: '',
+  property_type: 'house',
   currency_type: currency_list[0],
-  images: [],
-  price: 0,
-  year_built: 0,
-  address: '',
-  latitude: 0,
-  longitude: 0,
-  unit: 0,
-  lot_frontage: 0,
-  lot_depth: 0,
-  lot_size: 0,
-  lot_frontage_unit: lot_unit_list[0],
-  is_lot_irregular: false,
-  lot_description: '',
-  tax_year: 0,
-  property_tax: 0,
-  locker: false,
-  condo_corporation_or_hqa: '',
-  house_type: '',
-  house_style: '',
-  condo_type: '',
-  condo_style: '',
+  min_price: 0,
+  max_price: 1000000,
   min_lot_frontage: 0,
-  parking_spot_req: false,
-  garage_spot_req: false,
-  max_age: 0,
+  min_lot_size: 0,
+  min_lot_frontage_unit: lot_unit_list[0],
+  is_lot_irregular: false,
+  min_bed_rooms: 0,
+  min_bath_rooms: 0,
+  min_total_number_of_rooms: 0,
+  min_total_parking_spaces: 0,
+  min_garage_spaces: 0,
+  house_type: [],
+  house_style: [],
+  max_age: 20,
+  condo_type: [],
+  condo_style: [],
   exterior: [],
-  balcony: '',
-  exposure: '',
-  security: '',
-  pets_allowed: '',
+  balcony: [],
+  exposure: [],
+  security: [],
+  pets_allowed: [],
   included_utilities: [],
-  bed_rooms: 0,
-  bath_rooms: 0,
-  total_number_of_rooms: 0,
   basement: [],
-  total_parking_spaces: 0,
-  garage_spaces: 0,
-  driveway: '',
-  water: '',
-  sewer: '',
+  driveway: [],
+  water: [],
+  sewer: [],
   heat_source: [],
   heat_type: [],
   air_conditioner: [],
-  laundry: '',
+  laundry: [],
   fireplace: [],
   central_vacuum: false,
-  pool: '',
-  condo_fees: 0,
-  property_description: '',
-  appliances_and_other_items: '',
-  rooms: []
+  pool: [],
 }
+
 const FilterScreen = ({ navigation, route }) => {
 
-  const [data, setData] = useState({})
+  const { my_preference, sublists, loading } = useSelector(state => state?.appReducer)
+  const [data, setData] = useState({ ...INITIAL_DATA, ...formatPreferenceData(my_preference) })
   const [showAdvance, setShowAdvance] = useState(false)
-  const { sublists } = useSelector(state => state?.appReducer)
-
+  const dispatch = useDispatch()
+  console.log('thisss', my_preference)
   const setValue = (type, value) => {
     setData(prev => {
       prev[type] = value
       return { ...prev }
     })
+  }
+
+  const onSubmit = async () => {
+    const onSuccess = () => {
+      navigation.navigate('Home');
+      Alert.alert('Success', 'Preference Updated Successfully!');
+    };
+    const check = await checkConnected();
+    if (check) {
+      const formdata = filterFormData(data);
+      console.log('form data ', formdata)
+      dispatch(update_my_preference(formdata, onSuccess));
+    } else {
+      Alert.alert('Error', networkText);
+    }
   }
 
   return (
@@ -130,28 +132,35 @@ const FilterScreen = ({ navigation, route }) => {
               list={currency_list}
               dropDown={true}
               inputs
-              valueFrom={data.price_from}
-              onChangeTextFrom={text => setValue('price_from', text)}
-              valueTo={data.price_to}
-              onChangeTextTo={text => setValue('price_to', text)}
+              valueFrom={data.min_price}
+              onChangeTextFrom={text => setValue('min_price', text)}
+              valueTo={data.max_price}
+              onChangeTextTo={text => setValue('max_price', text)}
             />
             {data.property_type != 'vacant_land' &&
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
-                  title={'No. of Bedrooms'}
+                  title={'Min No. of Bedrooms'}
                   simpleInputPlaceHolder={'0'}
-                  value={data.bed_rooms}
-                  onChangeText={text => setValue('bed_rooms', text)}
+                  value={data.min_bed_rooms}
+                  onChangeText={text => setValue('min_bed_rooms', text)}
                   source={appIcons.bed}
                 />
                 <Divider color={colors.g18} />
                 <PriceInput
-                  title={'No. of Bathrooms'}
+                  title={'Min No. of Bathrooms'}
                   simpleInputPlaceHolder={'0'}
-                  value={data.bath_rooms}
-                  onChangeText={text => setValue('bath_rooms', text)}
+                  value={data.min_bath_rooms}
+                  onChangeText={text => setValue('min_bath_rooms', text)}
                   source={appIcons.bath}
+                />
+                <Divider color={colors.g18} />
+                <PriceInput
+                  title={'Min No. of Rooms'}
+                  simpleInputPlaceHolder={'0'}
+                  value={data.min_total_number_of_rooms}
+                  onChangeText={text => setValue('min_total_number_of_rooms', text)}
                 />
               </>
             }
@@ -159,13 +168,25 @@ const FilterScreen = ({ navigation, route }) => {
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
-                  defaultValue={data.lot_frontage_unit}
-                  onSelect={val => setValue('lot_frontage_unit', val)}
+                  defaultValue={data.min_lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
+                  onSelect={val => setValue('min_lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
                   simpleInputPlaceHolder={'0'}
-                  title={'Lot Size'}
-                  value={data.lot_size}
+                  title={'Min Lot Size'}
+                  value={data.min_lot_size}
+                  onChangeText={text => setValue('min_lot_size', text)}
                   list={lot_area_unit_list}
                   dropDown={true}
+                />
+                <Divider color={colors.g18} />
+                <PriceInput
+                  onSelect={val => setValue('min_lot_frontage_unit', val)}
+                  defaultValue={data.min_lot_frontage_unit}
+                  simpleInputPlaceHolder={'0'}
+                  title={'Min Lot Frontage'}
+                  list={lot_unit_list}
+                  dropDown={true}
+                  value={data.min_lot_frontage}
+                  onChangeText={text => setValue('min_lot_frontage', text)}
                 />
               </>
             }
@@ -193,6 +214,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.condo_type}
                           onPressTick={val => setValue('condo_type', val)}
                           source={appIcons.condoType}
+                          multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -201,6 +223,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.condo_style}
                           onPressTick={val => setValue('condo_style', val)}
                           source={appIcons.condoStyle}
+                          multiselect
                         />
                       </> :
                       <>
@@ -211,6 +234,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.house_type}
                           onPressTick={val => setValue('house_type', val)}
                           source={appIcons.HouseType}
+                          multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -219,21 +243,10 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.house_style}
                           onPressTick={val => setValue('house_style', val)}
                           source={appIcons.HouseStyle}
+                          multiselect
                         />
                       </>
                     }
-                    <Divider color={colors.g18} />
-                    <CheckBoxInput
-                      title={'Parking Spot Required'}
-                      checked={data.parking_spot_req}
-                      onPress={() => setValue('parking_spot_req', !data.parking_spot_req)}
-                    />
-                    <Divider color={colors.g18} />
-                    <CheckBoxInput
-                      title={'Garage Spot Required'}
-                      checked={data.garage_spot_req}
-                      onPress={() => setValue('garage_spot_req', !data.garage_spot_req)}
-                    />
                     <Divider color={colors.g18} />
                     <PriceInput
                       title={'Max Age'}
@@ -243,22 +256,6 @@ const FilterScreen = ({ navigation, route }) => {
                     />
                   </>
                 }
-                <Divider color={colors.g18} />
-                <PriceInput
-                  onChangeText={text => setValue('tax_year', text)}
-                  value={data.tax_year}
-                  simpleInputPlaceHolder={'2006'}
-                  title={'Tax Year '}
-                  subtitle={'(e.g 2006)'}
-                />
-                <Divider color={colors.g18} />
-                <PriceInput
-                  onChangeText={text => setValue('property_tax', text)}
-                  value={data.property_tax}
-                  simpleInputPlaceHolder={'00.00'}
-                  title={'Property Taxes '}
-                  subtitle={data.currency_type}
-                />
                 {(data.property_type == 'condo' || data.property_type == 'house') &&
                   <>
                     <Divider color={colors.g18} />
@@ -279,6 +276,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.balcony}
                           onPressTick={val => setValue('balcony', val)}
                           source={appIcons.balcony}
+                          multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -287,6 +285,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.exposure}
                           onPressTick={val => setValue('exposure', val)}
                           source={appIcons.exposure}
+                          multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -295,6 +294,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.security}
                           onPressTick={val => setValue('security', val)}
                           source={appIcons.security}
+                          multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -303,6 +303,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.pets_allowed}
                           onPressTick={val => setValue('pets_allowed', val)}
                           source={appIcons.pets}
+                          multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -326,18 +327,18 @@ const FilterScreen = ({ navigation, route }) => {
                     />
                     <Divider color={colors.g18} />
                     <PriceInput
-                      title={'Total Parking Spaces'}
+                      title={'Min Total Parking Spaces'}
                       simpleInputPlaceHolder={'0'}
-                      value={data.total_parking_spaces}
-                      onChangeText={text => setValue('total_parking_spaces', text)}
+                      value={data.min_total_parking_spaces}
+                      onChangeText={text => setValue('min_total_parking_spaces', text)}
                       source={appIcons.parking}
                     />
                     <Divider color={colors.g18} />
                     <PriceInput
-                      title={'Garage Spaces'}
+                      title={'Min Garage Spaces'}
                       simpleInputPlaceHolder={'0'}
-                      value={data.garage_spaces}
-                      onChangeText={text => setValue('garage_spaces', text)}
+                      value={data.min_garage_spaces}
+                      onChangeText={text => setValue('min_garage_spaces', text)}
                       source={appIcons.garage_space}
                     />
                     {data.property_type == 'house' &&
@@ -349,6 +350,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.driveway}
                           onPressTick={val => setValue('driveway', val)}
                           source={appIcons.driveway}
+                          multiselect
                         />
                       </>
                     }
@@ -359,6 +361,7 @@ const FilterScreen = ({ navigation, route }) => {
                       selected={data.water}
                       onPressTick={val => setValue('water', val)}
                       source={appIcons.water}
+                      multiselect
                     />
                     <Divider color={colors.g18} />
                     <FilterButton
@@ -367,6 +370,7 @@ const FilterScreen = ({ navigation, route }) => {
                       selected={data.sewer}
                       onPressTick={val => setValue('sewer', val)}
                       source={appIcons.sware}
+                      multiselect
                     />
                     <Divider color={colors.g18} />
                     <FilterButton
@@ -402,6 +406,7 @@ const FilterScreen = ({ navigation, route }) => {
                       selected={data.laundry}
                       onPressTick={val => setValue('laundry', val)}
                       source={appIcons.loundry}
+                      multiselect
                     />
                     <Divider color={colors.g18} />
                     <FilterButton
@@ -418,6 +423,7 @@ const FilterScreen = ({ navigation, route }) => {
                       checked={data.central_vacuum}
                       onPress={() => setValue('central_vacuum', !data.central_vacuum)}
                       source={appIcons.vacume}
+                      multiselect
                     />
                     <Divider color={colors.g18} />
                     <FilterButton
@@ -426,14 +432,25 @@ const FilterScreen = ({ navigation, route }) => {
                       selected={data.pool}
                       onPressTick={val => setValue('pool', val)}
                       source={appIcons.pool}
+                      multiselect
                     />
                   </>
                 }
               </>
             }
           </View>
+          <View style={[styles.spacRow, { justifyContent: 'center' }]}>
+            <AppButton
+              onPress={onSubmit}
+              width={'90%'}
+              bgColor={colors.p2}
+              title={'Done'}
+              fontSize={size.tiny}
+            />
+          </View>
         </View>
       </KeyboardAwareScrollView>
+      <AppLoader loading={loading} />
     </SafeAreaView>
   );
 };

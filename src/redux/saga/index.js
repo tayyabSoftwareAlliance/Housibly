@@ -6,6 +6,7 @@ import {
   updateMyPropertyRequest,
   deleteMyPropertyRequest,
   createMyPropertyRequest,
+  updateMyPreferenceRequest,
 } from './app-sega/app-sega';
 
 import {
@@ -65,4 +66,8 @@ export function* rootSaga() {
   yield fork(getMyPropertiesRequest);
   yield fork(updateMyPropertyRequest);
   yield fork(deleteMyPropertyRequest);
+
+  //Preference
+  yield fork(updateMyPreferenceRequest);
+
 }

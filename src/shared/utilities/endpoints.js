@@ -28,6 +28,7 @@ const ENDPOINTS = {
   //app
   GET_SUBLISTS: 'properties/detail_options',
   PROPERTY: 'properties',
+  USER_PREFERENCE: 'user_preferences'
 };
 
 export { BASE_URL, ENDPOINTS };

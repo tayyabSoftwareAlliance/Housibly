@@ -198,7 +198,7 @@ const lot_area_unit_list = [
 
 const currency_list = [
   '$USD',
-  '$CDN',
+  // '$CDN',
 ];
 
 const property_type_list = {

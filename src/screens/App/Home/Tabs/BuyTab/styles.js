@@ -128,26 +128,25 @@ const styles = StyleSheet.create({
       color: isSelected ? colors.white : colors.g15,
     };
   },
-  itemRow: index => {
-    return {
+  itemRow: {
       borderRadius: 5,
       paddingHorizontal: 8,
       flexDirection: 'row',
-      paddingVertical: index % 2 == 0 ? 4 : 6,
-      backgroundColor: index % 2 == 0 ? colors.g5 : colors.white,
-    };
+      paddingVertical: 6,
   },
   titleTxtStyle: {
     flex: 0.4,
     color: colors.g16,
     fontSize: size.tiny,
     fontFamily: family.Gilroy_Medium,
+    textTransform:'capitalize'
   },
   valTxtStyle: {
     flex: 0.6,
     color: colors.b1,
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
   },
   iconRow: {
     flexDirection: 'row',
