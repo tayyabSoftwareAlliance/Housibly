@@ -33,6 +33,7 @@ import MatchesTab from './Tabs/MatchesTab/MatchesTab';
 import SellTab from './Tabs/SellTab/SellTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_my_properties } from '../../../redux/actions';
+import { get_matched_properties } from '../../../redux/actions/app-actions/app-actions';
 
 const Home = ({ navigation }) => {
 
@@ -44,6 +45,7 @@ const Home = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const { userInfo } = useSelector(state => state?.auth);
   const { userProfile } = useSelector(state => state?.settings);
+  const { my_preference } = useSelector(state => state?.appReducer)
 
   const hideItemClick = () => {
     setShowMenu(false);
@@ -85,10 +87,13 @@ const Home = ({ navigation }) => {
     );
   };
 
-  //Get Properties
   useEffect(() => {
     dispatch(get_my_properties())
   }, [])
+
+  useEffect(() => {
+    dispatch(get_matched_properties(1))
+  }, [my_preference])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -187,7 +192,7 @@ const Home = ({ navigation }) => {
             <SellTab navigation={navigation} />
           )}
         </View>
-        <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS+HP(5) }} />
+        <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + HP(5) }} />
       </KeyboardAwareScrollView>
       {
         selected === 'sell' &&

@@ -21,6 +21,8 @@ const ScheduleDay = ({navigation}) => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
+  console.log('support_info',support_info)
+
   const dispatch = useDispatch(null);
 
   //On Submit

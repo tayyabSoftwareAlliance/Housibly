@@ -39,7 +39,9 @@ export const app = {
   getSublists: () => requests.get(ENDPOINTS.GET_SUBLISTS),
   createProperty: data => requests.post(ENDPOINTS.PROPERTY, data),
   getMyProperties: () => requests.get(ENDPOINTS.PROPERTY),
+  getMatchedProperties: (page) => requests.get(`${ENDPOINTS.MATCHED_PROPERTY}?page=${page}`),
   updateProperty: (data, id) => requests.put(`${ENDPOINTS.PROPERTY}/${id}`, data),
   deleteProperty: id => requests.delete(`${ENDPOINTS.PROPERTY}/${id}`),
+  getPreference: () => requests.get(ENDPOINTS.USER_PREFERENCE),
   updatePreference: data => requests.post(ENDPOINTS.USER_PREFERENCE, data),
 };

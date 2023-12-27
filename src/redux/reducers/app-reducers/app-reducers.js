@@ -9,7 +9,8 @@ const initialState = {
   sublists: {},
   address: '',
   all_properties: [],
-  my_preference: { property_type: 'house', currency_type: currency_list[0], min_price: 0, max_price: 1000000 }
+  my_preference: { property_type: 'house', currency_type: currency_list[0] },
+  matched_properties: { lastPage: 0, data: [] }
 };
 
 const appReducers = (state = initialState, actions) => {
@@ -87,7 +88,7 @@ const appReducers = (state = initialState, actions) => {
         loading: false,
       };
 
-    //************ Get My Properties states*************
+    //************ Delete My Properties states*************
     case TYPES.DELETE_MY_PROPERTY_REQUEST:
       return {
         ...state,
@@ -99,6 +100,23 @@ const appReducers = (state = initialState, actions) => {
         all_properties: state.all_properties.filter(item => item.id != payload),
       };
     case TYPES.DELETE_MY_PROPERTY_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    //************ Get My Preference states*************
+    case TYPES.GET_MY_PREFERENCE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.GET_MY_PREFERENCE_SUCCESS:
+      return {
+        ...state,
+        my_preference: { ...payload }
+      };
+    case TYPES.GET_MY_PREFERENCE_FINALLY:
       return {
         ...state,
         loading: false,
@@ -116,6 +134,29 @@ const appReducers = (state = initialState, actions) => {
         my_preference: { ...payload }
       };
     case TYPES.UPDATE_MY_PREFERENCE_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    //************ Get Matched Properties states*************
+    case TYPES.GET_MATCHED_PROPERTIES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.GET_MATCHED_PROPERTIES_SUCCESS:
+      return {
+        ...state,
+        matched_properties: {
+          lastPage: payload.data.length > 0 ? payload.page : state.matched_properties.lastPage,
+          data:
+            payload.page == 1 ?
+              payload.data :
+              [...state.matched_properties.data, ...payload.data]
+        }
+      };
+    case TYPES.GET_MATCHED_PROPERTIES_FINALLY:
       return {
         ...state,
         loading: false,

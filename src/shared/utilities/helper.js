@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createContext, useContext, useEffect } from 'react';
-import { appIcons, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
+import { appIcons, currency_list, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
 import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
@@ -347,8 +347,8 @@ export const filterFormData = (data = {}) => {
   const formdata = new FormData();
   formdata.append('preference[property_type]', data.property_type);
   formdata.append('preference[currency_type]', data.currency_type);
-  formdata.append('preference[price][min]', data.min_price);
-  formdata.append('preference[price][max]', data.max_price);
+  data.min_price && formdata.append('preference[price][min]', data.min_price);
+  data.max_price && formdata.append('preference[price][max]', data.max_price);
 
   if (data.property_type == 'vacant_land') {
     formdata.append('preference[lot_frontage][min]', data.min_lot_frontage);
@@ -376,6 +376,7 @@ export const filterFormData = (data = {}) => {
     formdata.append('preference[garage_spaces][min]', data.min_garage_spaces);
     formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
     formdata.append('preference[central_vacuum]', data.central_vacuum);
+    data.max_age && formdata.append('preference[max_age]', data.max_age);
     data.house_type?.forEach((item) => {
       formdata.append('preference[house_type][]', item);
     })
@@ -422,6 +423,7 @@ export const filterFormData = (data = {}) => {
     formdata.append('preference[total_parking_spaces][min]', data.min_total_parking_spaces);
     formdata.append('preference[garage_spaces][min]', data.min_garage_spaces);
     formdata.append('preference[central_vacuum]', data.central_vacuum);
+    data.max_age && formdata.append('preference[max_age]', data.max_age);
     data.condo_type?.forEach((item) => {
       formdata.append('preference[condo_type][]', item);
     })
@@ -481,8 +483,9 @@ export const filterFormData = (data = {}) => {
 export const formatPreferenceData = (data) => {
   return {
     ...data,
+    currency_type: data?.currency_type || currency_list[0],
     min_price: data?.price?.min || 0,
-    max_price: data?.price?.max || 1000000,
+    max_price: data?.price?.max || 0,
     min_lot_size: data?.lot_size?.min || 0,
     min_lot_frontage: data?.lot_frontage?.min || 0,
     min_bed_rooms: data?.bed_rooms?.min || 0,

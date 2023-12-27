@@ -1242,6 +1242,7 @@ const inputItems = [
   },
 ];
 const property_image = 'https://wallpaperaccess.com/full/1700222.jpg';
+const property_image2 = require('../../assets/images/property_image.jpeg');
 
 const weekDays = [
   {
@@ -1301,5 +1302,6 @@ export {
   condo_items,
   image_options,
   property_image,
+  property_image2,
   weekDays,
 };

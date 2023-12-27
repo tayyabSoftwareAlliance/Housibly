@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,59 +7,69 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {AppButton, BackHeader} from '../../../../components';
-import {Menu, MenuItem} from 'react-native-material-menu';
-import {appIcons, colors, family, size, WP} from '../../../../shared/exporter';
-import {allMatches} from '../../../../shared/utilities/constant';
+import { Icon } from 'react-native-elements';
+import { AppButton, AppLoader, BackHeader } from '../../../../components';
+import { Menu, MenuItem } from 'react-native-material-menu';
+import { appIcons, colors, family, size, WP } from '../../../../shared/exporter';
+import { allMatches, property_image } from '../../../../shared/utilities/constant';
 import styles from './styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_matched_properties } from '../../../../redux/actions/app-actions/app-actions';
+import { ActivityIndicator } from 'react-native';
 
-const AllMatches = () => {
-  const [showMenu, setShowMenu] = useState(false);
-  const [filterType, setFilterType] = useState('All');
-
-  const renderItem = ({item, index}) => {
-    return (
-      <View key={index} style={styles.itemContainer}>
-        <Image source={item?.img} style={styles.imgStyle} />
-        <View style={{paddingVertical: 5}}>
-          <View style={styles.innerRow}>
-            <Text numberOfLines={1} style={styles.nameTxtStyle}>
-              {item?.name}
-            </Text>
-            {item?.isNew && (
-              <View style={styles.txtContainer}>
-                <Text style={styles.newTxtStyle}>New</Text>
-              </View>
-            )}
+const renderItem = (item, index, navigation) => {
+  return (
+    <TouchableOpacity
+      activeOpacity={1}
+      style={styles.itemContainer}
+      onPress={() => navigation.navigate('PropertyDetail', { propertyData: item })}>
+      <Image source={{ uri: item?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
+      <View style={{ paddingVertical: 5 }}>
+        <View style={styles.innerRow}>
+          <Text numberOfLines={1} style={styles.nameTxtStyle}>
+            {item?.title}
+          </Text>
+          <View style={styles.txtContainer}>
+            <Text style={styles.newTxtStyle}>New</Text>
           </View>
-          <View style={styles.simpleRow}>
-            <Text style={styles.smallTxtStyle}>$25,000 | </Text>
-            <Image
-              resizeMode="contain"
-              source={appIcons.bedIcon}
-              style={styles.bedIconStyle}
-            />
-            <Text style={styles.smallTxtStyle}>4</Text>
-            <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
-            <Text resizeMode="contain" style={styles.smallTxtStyle}>
-              3.5
-            </Text>
-          </View>
-          <View style={[styles.simpleRow, {paddingTop: 0}]}>
-            <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />
-            <Text style={styles.heartTxtStyle}>90% match</Text>
-          </View>
-          <Text style={styles.timeTxtStyle}>Last active: 1 day ago</Text>
         </View>
+        <View style={styles.simpleRow}>
+          <Text style={styles.smallTxtStyle}>
+            {`${item?.currency_type} ${item?.price || 0} | `}
+          </Text>
+          <Image
+            resizeMode="contain"
+            source={appIcons.bedIcon}
+            style={styles.bedIconStyle}
+          />
+          <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
+          <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
+          <Text resizeMode="contain" style={styles.smallTxtStyle}>
+            {item?.bath_rooms || 0}
+          </Text>
+        </View>
+        <View style={[styles.simpleRow, { paddingTop: 0 }]}>
+          <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />
+          <Text style={styles.heartTxtStyle}>100% match</Text>
+        </View>
+        <Text style={styles.timeTxtStyle}>Last active: 1 day ago</Text>
       </View>
-    );
-  };
+    </TouchableOpacity>
+  );
+};
 
-  const hideItemClick = type => {
-    setFilterType(type);
-    setShowMenu(false);
-  };
+const AllMatches = ({ navigation }) => {
+
+  const dispatch = useDispatch()
+  const { matched_properties, loading } = useSelector(state => state?.appReducer)
+  const [refreshLoader, setRefreshLoader] = useState(false)
+  // const [showMenu, setShowMenu] = useState(false);
+  // const [filterType, setFilterType] = useState('All');
+
+  // const hideItemClick = type => {
+  //   setFilterType(type);
+  //   setShowMenu(false);
+  // };
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -70,7 +80,7 @@ const AllMatches = () => {
         txtFamily={family.Gilroy_SemiBold}
       />
       <Text style={styles.titleTxtStyle}>Recent</Text>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         activeOpacity={0.7}
         style={styles.typeRow}
         onPress={() => setShowMenu(true)}>
@@ -131,14 +141,35 @@ const AllMatches = () => {
             </View>
           </MenuItem>
         </Menu>
-      </View>
-      <FlatList
-        data={allMatches}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.flStyle}
-      />
+      </View> */}
+      {matched_properties.data.length > 0 &&
+        <FlatList
+          data={matched_properties.data}
+          renderItem={({ item, index }) => renderItem(item, index, navigation)}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flStyle}
+          refreshing={refreshLoader}
+          onRefresh={() => {
+            if (!loading) {
+              const onFinally = () => setRefreshLoader(false)
+              setRefreshLoader(true)
+              dispatch(get_matched_properties(1, onFinally))
+            }
+          }}
+          onEndReached={() => {
+            console.log('thissss', matched_properties.lastPage + 1)
+            if (!loading)
+              dispatch(get_matched_properties(matched_properties.lastPage + 1))
+          }}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            <View style={styles.footerComponent} >
+              {!refreshLoader && loading && <ActivityIndicator size={WP(6)} color={colors.bl1} />}
+            </View>
+          }
+        />
+      }
       <View style={styles.bottomView}>
         <AppButton
           width="34.5%"
@@ -148,6 +179,7 @@ const AllMatches = () => {
           textStyle={styles.tabTxtStyle}
         />
       </View>
+      <AppLoader loading={!(matched_properties.data.length > 0) && loading} />
     </SafeAreaView>
   );
 };

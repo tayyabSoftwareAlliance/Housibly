@@ -28,6 +28,7 @@ const ENDPOINTS = {
   //app
   GET_SUBLISTS: 'properties/detail_options',
   PROPERTY: 'properties',
+  MATCHED_PROPERTY: 'properties/matching_properties',
   USER_PREFERENCE: 'user_preferences'
 };
 

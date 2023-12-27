@@ -223,6 +223,7 @@ export function* addInfoRequestSega() {
 function* add_info(params) {
   try {
     const res = yield auth.addInfo(params?.params);
+    console.log('resss',res)
     if (res?.status == 200) {
       yield put({
         type: types.ADD_ADDITIONAL_INFO_SUCCESS,
@@ -231,7 +232,8 @@ function* add_info(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log(error?.response);
+    console.log('errror',error)
+    console.log('error response ',error?.response);
     yield put({
       type: types.ADD_ADDITIONAL_INFO_FAILURE,
       payload: null,

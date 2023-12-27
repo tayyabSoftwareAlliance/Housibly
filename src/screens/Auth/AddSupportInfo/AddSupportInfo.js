@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  StatusBar,
 } from 'react-native';
 import {
   AppButton,
@@ -74,6 +75,11 @@ const AddSupportInfo = ({navigation}) => {
   };
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
       <AppHeader />
       <BackHeader title={'Your Information'} />
       <Formik

@@ -122,7 +122,7 @@ export const PriceInput = ({
         <View style={styles.aiRow1}>
           <TextInput
             placeholder={placeholder1 || '1,000,000'}
-            placeholderTextColor={colors.g19}
+            placeholderTextColor={'rgba(0, 0, 0, 0.20)'}
             style={styles.inputStyle}
             keyboardType={'numeric'}
             value={valueFrom && `${valueFrom}`}
@@ -131,7 +131,7 @@ export const PriceInput = ({
           <Text style={styles.to}>to</Text>
           <TextInput
             style={styles.inputStyle}
-            placeholderTextColor={colors.g19}
+            placeholderTextColor={'rgba(0, 0, 0, 0.20)'}
             placeholder={placeholder2 || '1,500,000'}
             keyboardType={'numeric'}
             value={valueTo && `${valueTo}`}

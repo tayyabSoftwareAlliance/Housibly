@@ -83,7 +83,7 @@ const FilterScreen = ({ navigation, route }) => {
   const [data, setData] = useState({ ...INITIAL_DATA, ...formatPreferenceData(my_preference) })
   const [showAdvance, setShowAdvance] = useState(false)
   const dispatch = useDispatch()
-  console.log('thisss', my_preference)
+  console.log('thisss', data)
   const setValue = (type, value) => {
     setData(prev => {
       prev[type] = value
@@ -188,22 +188,28 @@ const FilterScreen = ({ navigation, route }) => {
                   value={data.min_lot_frontage}
                   onChangeText={text => setValue('min_lot_frontage', text)}
                 />
+                <Divider color={colors.g18} />
+                <CheckBoxInput
+                  title={'Is Lot Irregular'}
+                  checked={data.is_lot_irregular}
+                  onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
+                />
               </>
             }
             <Divider color={colors.g18} />
-            <TouchableOpacity style={styles.showAdvanceContainer} onPress={() => setShowAdvance(!showAdvance)} >
-              <Text style={styles.textStyle} >Show advanced options</Text>
-              <Icon
-                name={showAdvance ? 'caretup' : 'caretdown'}
-                type={'antdesign'}
-                size={10}
-                color={colors.p1}
-                style={{ marginLeft: 5 }}
-              />
-            </TouchableOpacity>
-            {showAdvance &&
+            {(data.property_type == 'condo' || data.property_type == 'house') &&
               <>
-                {(data.property_type == 'condo' || data.property_type == 'house') &&
+                <TouchableOpacity style={styles.showAdvanceContainer} onPress={() => setShowAdvance(!showAdvance)} >
+                  <Text style={styles.textStyle} >Show advanced options</Text>
+                  <Icon
+                    name={showAdvance ? 'caretup' : 'caretdown'}
+                    type={'antdesign'}
+                    size={10}
+                    color={colors.p1}
+                    style={{ marginLeft: 5 }}
+                  />
+                </TouchableOpacity>
+                {showAdvance &&
                   <>
                     {data.property_type == 'condo' ?
                       <>
@@ -254,10 +260,6 @@ const FilterScreen = ({ navigation, route }) => {
                       value={data.max_age}
                       onChangeText={text => setValue('max_age', text)}
                     />
-                  </>
-                }
-                {(data.property_type == 'condo' || data.property_type == 'house') &&
-                  <>
                     <Divider color={colors.g18} />
                     <FilterButton
                       title={'Exterior'}
@@ -423,7 +425,6 @@ const FilterScreen = ({ navigation, route }) => {
                       checked={data.central_vacuum}
                       onPress={() => setValue('central_vacuum', !data.central_vacuum)}
                       source={appIcons.vacume}
-                      multiselect
                     />
                     <Divider color={colors.g18} />
                     <FilterButton

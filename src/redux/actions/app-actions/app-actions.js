@@ -64,11 +64,28 @@ export const delete_my_property = (payload,onSuccess) => {
   };
 };
 
+//Get My Preference
+export const get_my_preference = (onSuccess) => {
+  return {
+    type: TYPES.GET_MY_PREFERENCE_REQUEST,
+    onSuccess
+  };
+};
+
 //Update My Preference
 export const update_my_preference = (payload,onSuccess) => {
   return {
     type: TYPES.UPDATE_MY_PREFERENCE_REQUEST,
     payload,
     onSuccess
+  };
+};
+
+//Get Matched Properties
+export const get_matched_properties = (page,onFinally) => {
+  return {
+    type: TYPES.GET_MATCHED_PROPERTIES_REQUEST,
+    payload:{page},
+    onFinally
   };
 };

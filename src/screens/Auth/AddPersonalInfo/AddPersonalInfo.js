@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  StatusBar,
 } from 'react-native';
 import {
   AppButton,
@@ -22,6 +23,7 @@ import {
   AddPersonalInfoVS,
   appIcons,
   checkConnected,
+  colors,
   networkText,
 } from '../../../shared/exporter';
 import styles from './styles';
@@ -69,6 +71,11 @@ const AddPersonalInfo = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
       <AppHeader />
       <BackHeader title={'Your Information'} />
       <Formik

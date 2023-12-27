@@ -32,11 +32,11 @@ function AuthStack(props) {
       <Stack.Screen name="VerifyOTP" component={VerifyOTP} />
       <Stack.Screen name="VerifyPhone" component={VerifyPhone} />
       <Stack.Screen name="AddPersonalInfo" component={AddPersonalInfo} />
-      <Stack.Screen name={'UploadDocuments'} component={UploadDocuments} />
-      <Stack.Screen name={'AddSupportInfo'} component={AddSupportInfo} />
-      <Stack.Screen name={'ScheduleDay'} component={ScheduleDay} />
+      <Stack.Screen name='AddSupportInfo' component={AddSupportInfo} />
+      <Stack.Screen name='UploadDocuments' component={UploadDocuments} />
+      <Stack.Screen name='ScheduleDay' component={ScheduleDay} />
     </Stack.Navigator>
   );
 }
 
-export default AuthStack;
+export default AuthStack

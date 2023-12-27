@@ -167,6 +167,12 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
+  footerComponent:{
+    height:WP(10),
+    justifyContent:'center',
+    alignItems:'center',
+    width:'100%'
+  }
 });
 
 export default styles;

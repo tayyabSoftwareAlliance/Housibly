@@ -20,7 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
 import {setSupportClosureRequest} from '../../../redux/actions';
 const UploadDocuments = ({navigation}) => {
-  const [show, setShow] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [imageArray, setimageArray] = useState([]);
   const [docArray, setDocArray] = useState([]);
@@ -28,34 +28,6 @@ const UploadDocuments = ({navigation}) => {
   const {support_info} = useSelector(state => state?.auth);
   const dispatch = useDispatch(null);
 
-  //Gallery Handlers
-  const showGallery = () => {
-    setShow(false);
-    setTimeout(() => {
-      ImagePicker.openPicker(image_options).then(image => {
-        var array3 = imageArray.concat(image);
-        const distinctItems = [
-          ...new Map(array3.map(item => [item['size'], item])).values(),
-        ];
-        setimageArray(distinctItems);
-        setShow(false);
-      });
-    }, 400);
-  };
-  //Camra Handlers
-  const showCamera = () => {
-    setShow(false);
-    setTimeout(() => {
-      ImagePicker.openCamera(image_options).then(image => {
-        var array3 = imageArray.concat(image);
-        const distinctItems = [
-          ...new Map(array3.map(item => [item['size'], item])).values(),
-        ];
-        setimageArray(distinctItems);
-        setShow(false);
-      });
-    }, 400);
-  };
   // Remove Images
   const removeImage = (index, item) => {
     imageArray.splice(index, 1);
@@ -68,7 +40,8 @@ const UploadDocuments = ({navigation}) => {
 
   //Open Docs
   const openDocumentPicker = async () => {
-    const results = await DocumentPicker.pickMultiple({
+    const results = await DocumentPicker.pick({
+      allowMultiSelection:true,
       type: [DocumentPicker.types.pdf],
       //There can me more options as well find above
     });
@@ -113,10 +86,8 @@ const UploadDocuments = ({navigation}) => {
                   removeImage(index);
                 }}
                 imageArray={imageArray}
-                onPress={() => {
-                  setShow(true);
-                }}
                 title={'Upload Photos'}
+                onSelect={(arr) => setimageArray(arr)}
                 // subtitle={'Max 30 images'}
               />
               <OutlineBox
@@ -142,21 +113,6 @@ const UploadDocuments = ({navigation}) => {
               />
             </View>
           </KeyboardAwareScrollView>
-
-          {show && (
-            <ImagePickerModal
-              show={show}
-              onPressCamera={() => {
-                showCamera();
-              }}
-              onPressGallery={() => {
-                showGallery();
-              }}
-              onPressHide={() => {
-                setShow(false);
-              }}
-            />
-          )}
         </View>
       </SafeAreaView>
       <AppLoader loading={loading} />

@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {WP, colors, size, family} from '../../../shared/exporter';
+import { StyleSheet } from 'react-native';
+import { WP, colors, size, family } from '../../../shared/exporter';
 
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.over1,
   },
   txtStyle: {
     color: colors.b1,
