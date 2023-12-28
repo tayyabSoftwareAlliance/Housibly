@@ -25,6 +25,7 @@ export const appImages = {
   person2: require('../../assets/images/person2.png'),
   person3: require('../../assets/images/person3.png'),
   cardBg: require('../../assets/images/card_bg.png'),
+  avatar: require('../../assets/images/avatar.png'),
 };
 
 export const appIcons = {
@@ -52,6 +53,7 @@ export const appIcons = {
   mapIcon: require('../../assets/icons/map_icon.png'),
   crossIcon: require('../../assets/icons/cross_icon.png'),
   starIcon: require('../../assets/icons/star_icon.png'),
+  starWithLinesIcon: require('../../assets/icons/star_with_lines.png'),
   addressIcon: require('../../assets/icons/address_icon.png'),
   infoIcon: require('../../assets/icons/info_icon.png'),
   cross: require('../../assets/icons/cross.png'),

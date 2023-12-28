@@ -10,6 +10,7 @@ import BookMarksStack from '../stacks/BookMarksStack';
 import ChatStack from '../stacks/ChatStack';
 import { useDispatch } from 'react-redux'
 import { getSublists } from '../../redux/actions';
+import HomeSupportCloserStack from '../stacks/HomeSupportCloserStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,15 +45,15 @@ export default BottomTabs = ({ }) => {
         ]
 
       }}
-      
+
       // tabBarOptions={{
       //   showLabel: false,
       // }}
 
       initialRouteName={'Home'}>
-      <Tab.Screen
+      {true ? <Tab.Screen
         name="Home"
-        component={HomeStack}
+        component={HomeSupportCloserStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <>
@@ -65,55 +66,74 @@ export default BottomTabs = ({ }) => {
             </>
           ),
         }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={SearchStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <>
-              <Image
-                resizeMode="contain"
-                source={appIcons.searchIcon}
-                style={styles.iconStyle(focused)}
-              />
-              <View style={styles.barViewStyle(focused)} />
-            </>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="BookMarks"
-        component={BookMarksStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <>
-              <Image
-                resizeMode="contain"
-                source={appIcons.bookmarksIcon}
-                style={styles.bookmarksIconStyle(focused)}
-              />
-              <View style={styles.barViewStyle(focused)} />
-            </>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Chat"
-        component={ChatStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <>
-              <Image
-                resizeMode="contain"
-                source={appIcons.messageIcon}
-                style={styles.iconStyle(focused)}
-              />
-              <View style={styles.barViewStyle(focused)} />
-            </>
-          ),
-        }}
-      />
+      /> :
+        <>
+          <Tab.Screen
+            name="Home"
+            component={HomeStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.homeIcon}
+                    style={styles.iconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Search"
+            component={SearchStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.searchIcon}
+                    style={styles.iconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="BookMarks"
+            component={BookMarksStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.bookmarksIcon}
+                    style={styles.bookmarksIconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Chat"
+            component={ChatStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.messageIcon}
+                    style={styles.iconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+        </>
+      }
     </Tab.Navigator>
   );
 };

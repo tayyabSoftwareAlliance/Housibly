@@ -2,9 +2,9 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {colors, family, size} from '../../shared/exporter';
 
-export const ProfileField = ({title, subtitle}) => {
+export const ProfileField = ({title, subtitle,containerStyle}) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,containerStyle]}>
       <View style={styles.leftCon}>
         <Text style={styles.h1}>{title}</Text>
       </View>

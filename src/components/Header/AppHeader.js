@@ -7,10 +7,11 @@ import {
   family,
   appLogos,
 } from '../../shared/exporter';
+import { Icon } from 'react-native-elements';
 
-export const AppHeader = ({ rightIcon = false, onPressIcon, img }) => {
+export const AppHeader = ({ rightIcon = false, onPressIcon, img, from,containerStyle }) => {
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer,containerStyle]}>
       <View style={styles.rowContainer}>
         <Image
           resizeMode="contain"
@@ -19,7 +20,18 @@ export const AppHeader = ({ rightIcon = false, onPressIcon, img }) => {
         />
         <Text style={styles.logoTxtStyle}>Housibly</Text>
       </View>
-      {rightIcon && (
+      {rightIcon &&
+        from == 'SUPPORT_CLOSER_HOME' ?
+        <TouchableOpacity activeOpacity={0.7} onPress={onPressIcon}>
+          <Icon
+            type={'ionicons'}
+            name={'settings'}
+            onPress={() => {
+              navigation?.navigate('Settings');
+            }}
+          />
+        </TouchableOpacity>
+        :
         <TouchableOpacity activeOpacity={0.7} onPress={onPressIcon}>
           <Image
             resizeMode="contain"
@@ -27,7 +39,7 @@ export const AppHeader = ({ rightIcon = false, onPressIcon, img }) => {
             style={styles.personImgStyle}
           />
         </TouchableOpacity>
-      )}
+      }
     </View>
   );
 };
