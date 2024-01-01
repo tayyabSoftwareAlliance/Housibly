@@ -35,18 +35,22 @@ const renderItem = (item, index, navigation) => {
         </View>
         <View style={styles.simpleRow}>
           <Text style={styles.smallTxtStyle}>
-            {`${item?.currency_type} ${item?.price || 0} | `}
+            {`${item?.currency_type} ${item?.price || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
           </Text>
-          <Image
-            resizeMode="contain"
-            source={appIcons.bedIcon}
-            style={styles.bedIconStyle}
-          />
-          <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
-          <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
-          <Text resizeMode="contain" style={styles.smallTxtStyle}>
-            {item?.bath_rooms || 0}
-          </Text>
+          {item?.property_type != 'vacant_land' &&
+            <>
+              <Image
+                resizeMode="contain"
+                source={appIcons.bedIcon}
+                style={styles.bedIconStyle}
+              />
+              <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
+              <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
+              <Text resizeMode="contain" style={styles.smallTxtStyle}>
+                {item?.bath_rooms || 0}
+              </Text>
+            </>
+          }
         </View>
         <View style={[styles.simpleRow, { paddingTop: 0 }]}>
           <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />

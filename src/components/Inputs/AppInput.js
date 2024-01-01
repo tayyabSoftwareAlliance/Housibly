@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: WP('3'),
     marginBottom: 10,
     color: colors.b1,
-    fontFamily: family.Gilroy_Medium,
+    fontFamily: family.Gilroy_SemiBold,
   },
 });

@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 22,
     height: 22,
-    resizeMode: 'contain',
   },
   startIconCon: {
     backgroundColor: '#FFC107',
@@ -146,10 +145,6 @@ const styles = StyleSheet.create({
     fontSize: size.large,
     color: colors.b1,
     fontFamily: family.Gilroy_Medium,
-    marginBottom: 24,
-  },
-  peoplesImagesContainer:{
-    flexDirection:'row'
   },
   peoplesImage:{
     width:WP(20),

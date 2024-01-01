@@ -9,9 +9,9 @@ import {
 } from '../../shared/exporter';
 import { Icon } from 'react-native-elements';
 
-export const AppHeader = ({ rightIcon = false, onPressIcon, img, from,containerStyle }) => {
+export const AppHeader = ({ rightIcon = false, onPressIcon, img, from, containerStyle }) => {
   return (
-    <View style={[styles.mainContainer,containerStyle]}>
+    <View style={[styles.mainContainer, containerStyle]}>
       <View style={styles.rowContainer}>
         <Image
           resizeMode="contain"
@@ -30,15 +30,16 @@ export const AppHeader = ({ rightIcon = false, onPressIcon, img, from,containerS
               navigation?.navigate('Settings');
             }}
           />
-        </TouchableOpacity>
-        :
-        <TouchableOpacity activeOpacity={0.7} onPress={onPressIcon}>
-          <Image
-            resizeMode="contain"
-            source={{ uri: img }}
-            style={styles.personImgStyle}
-          />
-        </TouchableOpacity>
+        </TouchableOpacity> :
+        img ?
+          <TouchableOpacity activeOpacity={0.7} onPress={onPressIcon}>
+            <Image
+              resizeMode="contain"
+              source={{ uri: img }}
+              style={styles.personImgStyle}
+            />
+          </TouchableOpacity> :
+          <View style={{ height: 44 }} />
       }
     </View>
   );

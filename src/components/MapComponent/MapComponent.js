@@ -6,7 +6,7 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { Circle, Marker, Polygon } from 'react-native-maps';
 import { WP, appIcons, colors, handleLocationPermission } from '../../shared/exporter';
 import Geolocation from '@react-native-community/geolocation';
@@ -21,8 +21,8 @@ const DragMarker = () => (
 export const MapComponent = () => {
 
   const mapRef = useRef()
-  const [polygonGuideModal,setPolygonGuideModal] = useState(false)
-  const [circleGuideModal,setCircleGuideModal] = useState(false)
+  const [polygonGuideModal, setPolygonGuideModal] = useState(false)
+  const [circleGuideModal, setCircleGuideModal] = useState(false)
   const [region, setRegion] = useState({
     latitude: 34.28371,
     longitude: 74.458908,
@@ -50,7 +50,7 @@ export const MapComponent = () => {
     })
   }, [circleCoords])
 
-  const handlePolygon = useCallback(async() => {
+  const handlePolygon = useCallback(async () => {
     setCircleCoords([])
     if (polygonCoords.length > 0) {
       setPolygonCoords([])
@@ -65,11 +65,11 @@ export const MapComponent = () => {
     }));
     setPolygonCoords(polygon)
 
-    if(!(await AsyncStorage.getItem('IS_MAP_POLYGON_GUIDE_SHOWED')))
-    setPolygonGuideModal(true)
+    if (!(await AsyncStorage.getItem('IS_MAP_POLYGON_GUIDE_SHOWED')))
+      setPolygonGuideModal(true)
   }, [polygonCoords])
 
-  const handleCircle = useCallback(async() => {
+  const handleCircle = useCallback(async () => {
     setPolygonCoords([])
     if (circleCoords.length > 0) {
       setCircleCoords([])
@@ -87,8 +87,8 @@ export const MapComponent = () => {
         longitude: region.longitude
       }
     ])
-    if(!(await AsyncStorage.getItem('IS_MAP_CIRCLE_GUIDE_SHOWED')))
-    setCircleGuideModal(true)
+    if (!(await AsyncStorage.getItem('IS_MAP_CIRCLE_GUIDE_SHOWED')))
+      setCircleGuideModal(true)
   }, [circleCoords])
 
   //distance between two lat lng in meters
@@ -134,6 +134,12 @@ export const MapComponent = () => {
 
   const handleRefresh = useCallback(() => {
 
+  }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleNavigator()
+    }, 1000)
   }, [])
 
   return (
@@ -211,6 +217,7 @@ export const MapComponent = () => {
         onRegionChangeComplete={region => setRegion(region)}
         customMapStyle={customStyle}
         style={[styles.container]}
+        showsMyLocationButton={false}
       >
         {/* polygon markers */}
         {polygonCoords.map((item, index) => (

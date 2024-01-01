@@ -54,7 +54,18 @@ const styles = StyleSheet.create({
   textStyle: {
     paddingHorizontal: WP('3'),
     color: colors.b1,
+    fontFamily: family.Gilroy_SemiBold,
+  },
+  h1Style: {
+    color: colors.b1,
+    fontSize: size.xsmall,
+    fontFamily: family.Gilroy_SemiBold,
+  },
+  rightText: {
+    color: colors.p2,
     fontFamily: family.Gilroy_Medium,
+    fontSize: size.tiny,
+    textAlign: 'right',
   },
 });
 

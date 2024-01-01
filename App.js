@@ -1,12 +1,13 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {StatusBar, LogBox} from 'react-native';
+import { StatusBar, LogBox } from 'react-native';
 import MainNavigation from './src/navigation';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/lib/integration/react';
-import store, {persistor} from './src/redux/store';
-import {colors, stripe_publishableKey} from './src/shared/exporter';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import store, { persistor } from './src/redux/store';
+import { colors, stripe_publishableKey } from './src/shared/exporter';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import {StripeProvider} from '@stripe/stripe-react-native';
 
 // ignore warnings
@@ -29,9 +30,11 @@ const App = () => {
         barStyle={'dark-content'}
       />
       {/* <StripeProvider publishableKey={stripe_publishableKey}> */}
-        <PersistGate persistor={persistor}>
+      <PersistGate persistor={persistor}>
+        <SafeAreaProvider>
           <MainNavigation />
-        </PersistGate>
+        </SafeAreaProvider>
+      </PersistGate>
       {/* </StripeProvider> */}
     </Provider>
   );

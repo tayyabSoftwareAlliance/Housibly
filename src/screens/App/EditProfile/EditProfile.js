@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
   Alert,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   SafeAreaView,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import {
   AppButton,
@@ -16,8 +17,10 @@ import {
   TextBox,
   AppLoader,
   ImagePickerModal,
+  GalleryCard,
 } from '../../../components';
 import {
+  WP,
   appIcons,
   colors,
   editFormFields,
@@ -27,14 +30,17 @@ import {
   spacing,
 } from '../../../shared/exporter';
 import styles from './styles';
-import {useDispatch} from 'react-redux';
-import {updateProfileRequest} from '../../../redux/actions';
+import { useDispatch } from 'react-redux';
+import { updateProfileRequest } from '../../../redux/actions';
 import ImagePicker from 'react-native-image-crop-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik } from 'formik';
 import CountryPicker from 'react-native-country-picker-modal';
+import { Icon } from 'react-native-elements/dist/icons/Icon';
 
-const EditProfile = ({navigation, route}) => {
+const EditProfile = ({ navigation, route }) => {
+
+  const from = route.params?.from
   const [country, setcountry] = useState({
     name: 'United States',
     callingCode: ['1'],
@@ -97,6 +103,7 @@ const EditProfile = ({navigation, route}) => {
     } else {
       phone = values.phone;
     }
+    data.append('user[full_name]', values?.full_name);
     data.append('user[email]', values?.email);
     data.append('user[phone_number]', phone);
     data.append('user[description]', values?.bio);
@@ -111,7 +118,7 @@ const EditProfile = ({navigation, route}) => {
         uri: userImage?.path,
         type: userImage?.mime,
       };
-      console.log('imggg',imgObj)
+      console.log('imggg', imgObj)
       data.append('user[avatar]', imgObj);
     }
 
@@ -129,7 +136,7 @@ const EditProfile = ({navigation, route}) => {
       updateProfileRequest(data, updateProfileSuccess, updateProfileFailure),
     );
   };
-
+  console.log('dataa', JSON.stringify(data, null, 2))
   return (
     <SafeAreaView style={styles.rootContainer}>
       <AppHeader />
@@ -154,11 +161,12 @@ const EditProfile = ({navigation, route}) => {
             setFieldValue,
           }) => {
             useEffect(() => {
+              setFieldValue('full_name', data?.full_name);
               setFieldValue('email', data?.email);
               setFieldValue('bio', data?.description);
               setFieldValue('phone', data?.phone_number);
               setcca2(data?.country_name || 'US');
-              setcountry({callingCode: data?.country_code || '1'});
+              setcountry({ callingCode: data?.country_code || '1' });
             }, [data]);
             return (
               <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
@@ -175,13 +183,27 @@ const EditProfile = ({navigation, route}) => {
                             userImage === ''
                               ? oldImage
                               : platformOrientedCode(
-                                  userImage?.path,
-                                  userImage?.sourceURL,
-                                ),
+                                userImage?.path,
+                                userImage?.sourceURL,
+                              ),
                         }}
                       />
                     </View>
                   </TouchableOpacity>
+                  <AppInput
+                    onChangeText={handleChange('full_name')}
+                    renderErrorMessage={true}
+                    placeholder={data?.full_name}
+                    value={values.full_name}
+                    onBlur={() => setFieldTouched('full_name')}
+                    blurOnSubmit={false}
+                    disableFullscreenUI={true}
+                    autoCapitalize="none"
+                    touched={touched.full_name}
+                    errorMessage={errors.full_name}
+                    title={'Full Name'}
+                  />
+
                   <AppInput
                     onChangeText={handleChange('email')}
                     renderErrorMessage={true}
@@ -223,14 +245,103 @@ const EditProfile = ({navigation, route}) => {
                       />
                     }
                   />
-                  <Text style={styles.textStyle}>Edit Bio</Text>
+
+                  {from == 'SUPPORT_CLOSER_HOME' &&
+                    <>
+                      <Text
+                        style={[
+                          styles.h1Style,
+                          {
+                            paddingHorizontal: WP('3'),
+                          },
+                        ]}>
+                        Profession
+                      </Text>
+                      <FlatList
+                        data={[
+                          {
+                            id: 1,
+                            title: '',
+                          },
+                        ]}
+                        renderItem={({ item, index }) => {
+                          return (
+                            <AppInput
+                              placeholder="Enter Profession"
+                              // value={professionList[index].profession}
+                              onChangeText={text => {
+                                professionList[index].title = text;
+                              }}
+                            />
+                          );
+                        }}
+                        ListFooterComponent={() => {
+                          return (
+                            <>
+                              <Text
+                                onPress={() => {
+                                  // setprofessionList([
+                                  //   ...professionList,
+                                  //   {
+                                  //     id: professionList.length + 1,
+                                  //     title: '',
+                                  //   },
+                                  // ]);
+                                }}
+                                style={styles.rightText}>
+                                Add More
+                              </Text>
+                            </>
+                          );
+                        }}
+                      />
+                    </>
+                  }
+
+                  <AppInput
+                    onChangeText={handleChange('hourly_rate')}
+                    renderErrorMessage={true}
+                    placeholder="Hourly Rate"
+                    value={values.hourly_rate}
+                    onBlur={() => setFieldTouched('hourly_rate')}
+                    blurOnSubmit={false}
+                    disableFullscreenUI={true}
+                    autoCapitalize="none"
+                    touched={touched.hourly_rate}
+                    errorMessage={errors.hourly_rate}
+                    title={'Hourly Rate'}
+                    keyboardType={'numeric'}
+                    leftIcon={
+                      <Icon
+                        type={'fontisto'}
+                        name={'dollar'}
+                        size={12}
+                        color={colors.gr1}
+                      />
+                    }
+                  />
+
+                  <Text style={styles.textStyle}>Tell something about you</Text>
                   <TextBox
                     conStyle={spacing.px2}
                     onChangeText={handleChange('bio')}
                     value={values.bio}
+                    placeholder={'Add here'}
                     error={errors.bio}
                     touched={touched.bio}
                     height={190}
+                  />
+                  <GalleryCard
+                    onPressImg={index => {
+                      // removeImage(index);
+                    }}
+                    imageArray={[]}
+                    title={'Upload Photos'}
+                    titleContainerStyle={{ paddingHorizontal: WP('3') }}
+                    onSelect={(arr) => {
+                      // setimageArray(arr)
+                    }}
+                  // subtitle={'Max 30 images'}
                   />
                   <View style={styles.btnCon}>
                     <AppButton

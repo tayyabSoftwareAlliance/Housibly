@@ -25,6 +25,7 @@ export const GalleryCard = ({
   subtitle,
   imageArray,
   onSelect,
+  titleContainerStyle
 }) => {
 
   const [show, setShow] = useState(false)
@@ -69,7 +70,7 @@ export const GalleryCard = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleCon}>
+      <View style={[styles.titleCon,titleContainerStyle]}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   title: {
-    fontFamily: family.Gilroy_Medium,
+    fontFamily: family.Gilroy_SemiBold,
     fontSize: size.xsmall,
     color: colors.b1,
   },

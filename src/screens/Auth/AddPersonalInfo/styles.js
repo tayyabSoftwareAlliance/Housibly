@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: colors.b1,
     fontSize: size.xsmall,
-    fontFamily: family.Gilroy_Medium,
+    fontFamily: family.Gilroy_SemiBold,
   },
   error: {
     textAlign: 'center',

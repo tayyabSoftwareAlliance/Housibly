@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   h1Style: {
     color: colors.b1,
     fontSize: size.xsmall,
-    fontFamily: family.Gilroy_Medium,
+    fontFamily: family.Gilroy_SemiBold,
   },
   error: {
     textAlign: 'center',

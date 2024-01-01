@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   Alert,
   TouchableWithoutFeedback,
+  FlatList,
 } from 'react-native';
 import styles from './styles';
 import {
+  AppButton,
   AppHeader,
   AppLoader,
   BackHeader,
@@ -18,11 +20,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { getProfileRequest } from '../../../redux/actions';
-import { HP, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, appIcons, appImages, colors, profile_uri, spacing } from '../../../shared/exporter';
+import { HP, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, appIcons, appImages, colors, profile_uri, size, spacing } from '../../../shared/exporter';
 import { Divider, Icon } from 'react-native-elements';
 import Document from '../../../components/Custom/Document';
 import { ScrollView } from 'react-native';
-import { Rating } from 'react-native-ratings';
+import StarRating from 'react-native-star-rating';
+import Review from '../../../components/Custom/Review';
 
 const HomeSupportCloser = ({ navigation }) => {
 
@@ -59,7 +62,7 @@ const HomeSupportCloser = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} >
         <AppHeader
           onPressIcon={() => {
             navigation.navigate('Profile');
@@ -73,7 +76,7 @@ const HomeSupportCloser = ({ navigation }) => {
             <Text style={styles.heading} >Your Profile</Text>
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('EditProfile', { item: data });
+                navigation.navigate('EditProfile', { item: data,from:'SUPPORT_CLOSER_HOME' })
               }}
               style={styles.iconCon}>
               <Image style={styles.iconStyle} source={appIcons.bgPencil} />
@@ -81,11 +84,9 @@ const HomeSupportCloser = ({ navigation }) => {
           </View>
           <View style={spacing.pt4}>
             <TouchableOpacity
-              onPress={() => {
-                // navigation.navigate('EditProfile', { item: data });
-              }}
+              onPress={() => navigation.navigate('BoostProfile')}
               style={styles.startIconCon}>
-              <Image style={styles.iconStyle} source={appIcons.starWithLinesIcon} />
+              <Image style={styles.iconStyle} source={appIcons.starWithLinesIcon} resizeMode={'contain'} />
             </TouchableOpacity>
             <View style={styles.imgCon}>
               <Image
@@ -162,33 +163,61 @@ const HomeSupportCloser = ({ navigation }) => {
         <View style={styles.peoplesContainer} >
           <Text style={styles.peoplesContainerTitle} >Who Viewed Your Profile?</Text>
           <View style={styles.peoplesImagesContainer} >
-            {
-              [1, 2, 3, 4, 5, 6].map((item, index) => {
-                return (
-                  <Image style={styles.peoplesImage} source={appImages.avatar} />
-                )
-              })
-            }
+            <FlatList
+              data={[1, 2, 3, 4, 5, 6]}
+              keyExtractor={(_, index) => index}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ }) => (
+                <Image style={styles.peoplesImage} source={appImages.avatar} />
+              )}
+            />
           </View>
         </View>
         <View style={styles.peoplesContainer} >
           <View style={styles.reviewsTitleContainer} >
             <Text style={styles.peoplesContainerTitle} >Your Reviews (43)</Text>
-            <Rating
-              onFinishRating={() => {}}
+            <StarRating
+              disabled={false}
+              maxStars={5}
+              rating={3.5}
+              fullStarColor={'#FFC107'}
+              emptyStarColor={'#ccc'}
+              selectedStar={(rating) => { }}
+              starSize={20}
             />
           </View>
-          <View style={styles.peoplesImagesContainer} >
-            {
-              [1, 2, 3, 4, 5, 6].map((item, index) => {
-                return (
-                  <Image style={styles.peoplesImage} source={appImages.avatar} />
-                )
-              })
-            }
-          </View>
+          <FlatList
+            data={[
+              {
+                title: 'Hanna Torff',
+                review: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint Amet minim mollit non dest ullamco est sit aliqua dolor do amet sint Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.'
+              },
+              {
+                title: 'Hanna Torff',
+                review: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.'
+              },
+              {
+                title: 'Hanna Torff',
+                review: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.'
+              },
+            ]}
+            keyExtractor={(_, index) => index}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <Review data={item} short containerStyle={index == 0 && { marginTop: 0 }} />
+            )}
+            contentContainerStyle={{ marginTop: 24 }}
+          />
+          <AppButton
+            width={'43%'}
+            borderColor={colors.p2}
+            title="View all Reviews"
+            textStyle={{ fontSize: size.tiny }}
+            onPress={() => navigation.navigate('Reviews')}
+          />
         </View>
-        <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + HP(5) }} />
+        <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }} />
       </ScrollView>
       <AppLoader loading={isLoading} />
     </SafeAreaView>

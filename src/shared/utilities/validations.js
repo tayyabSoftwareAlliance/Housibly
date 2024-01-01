@@ -47,6 +47,7 @@ export const codeFormFields = {
 };
 
 export const editFormFields = {
+  full_name:'',
   email: '',
   phone: '',
   bio: '',
@@ -99,6 +100,7 @@ export const PhoneAuthFieldsVS = yup.object().shape({
 });
 
 export const editProfileFieldsVS = yup.object().shape({
+  full_name: yup.string().required('Full name Required'),
   phone: yup
     .number()
     .typeError('Invalid phone number')

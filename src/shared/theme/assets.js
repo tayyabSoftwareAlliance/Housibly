@@ -26,6 +26,7 @@ export const appImages = {
   person3: require('../../assets/images/person3.png'),
   cardBg: require('../../assets/images/card_bg.png'),
   avatar: require('../../assets/images/avatar.png'),
+  boost: require('../../assets/images/boost.png'),
 };
 
 export const appIcons = {

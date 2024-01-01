@@ -5,7 +5,7 @@ import { DeleteModal } from '../Modal/DeleteModal'
 import { useNavigation } from '@react-navigation/native'
 import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, colors, family, property_image, size } from '../../shared/exporter'
 
-const PropertyList = ({ data=[],scrollEnabled=true }) => {
+const PropertyList = ({ data = [], scrollEnabled = true }) => {
 
     const [item, setItem] = useState('');
     const [showModal, setShowModal] = useState(false);
@@ -51,18 +51,22 @@ const PropertyList = ({ data=[],scrollEnabled=true }) => {
                     </View>
                     <View style={styles.simpleRow}>
                         <Text style={styles.smallTxtStyle}>
-                            {`${item?.currency_type} ${item?.price || 0}`} |{' '}
+                            {`${item?.currency_type} ${item?.price || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
                         </Text>
-                        <Image
-                            resizeMode="contain"
-                            source={appIcons.bedIcon}
-                            style={styles.bedIconStyle}
-                        />
-                        <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
-                        <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
-                        <Text resizeMode="contain" style={styles.smallTxtStyle}>
-                            {item?.bath_rooms || 0}
-                        </Text>
+                        {item?.property_type != 'vacant_land' &&
+                            <>
+                                <Image
+                                    resizeMode="contain"
+                                    source={appIcons.bedIcon}
+                                    style={styles.bedIconStyle}
+                                />
+                                <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
+                                <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
+                                <Text resizeMode="contain" style={styles.smallTxtStyle}>
+                                    {item?.bath_rooms || 0}
+                                </Text>
+                            </>
+                        }
                     </View>
                     <View style={[styles.simpleRow, { paddingTop: 2 }]}>
                         {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {

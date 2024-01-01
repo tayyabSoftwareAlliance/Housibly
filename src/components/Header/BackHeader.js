@@ -14,11 +14,12 @@ export const BackHeader = ({
   txtFamily = family.Gilroy_Bold,
   tintColor = colors.b1,
   onPressRight,
+  containerStyle
 }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer,containerStyle]}>
       <View style={styles.mainRowContainer}>
         <TouchableOpacity
           activeOpacity={0.7}
