@@ -29,8 +29,10 @@ export const AddSupportInfoField = {
 };
 
 export const loginFormFields = {
-  email: 'tayaab@softwarealliance.io',
-  password: '12345678',
+  // email: 'tayaab@softwarealliance.io',
+  // password: '12345678',
+  email: '',
+  password: '',
 };
 
 export const forgotFormFields = {

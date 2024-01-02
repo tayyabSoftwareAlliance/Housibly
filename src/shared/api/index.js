@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BASE_URL, ENDPOINTS} from '../exporter';
+import { BASE_URL, ENDPOINTS } from '../exporter';
 
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
@@ -44,4 +44,6 @@ export const app = {
   deleteProperty: id => requests.delete(`${ENDPOINTS.PROPERTY}/${id}`),
   getPreference: () => requests.get(ENDPOINTS.USER_PREFERENCE),
   updatePreference: data => requests.post(ENDPOINTS.USER_PREFERENCE, data),
+  getPropertiesInsideCircle: params => requests.get(`${ENDPOINTS.CIRCLE_PROPERTY}?${params}`),
+  getPropertiesInsidePolygon: params => requests.get(`${ENDPOINTS.POLYGON_PROPERTY}?${params}`),
 };

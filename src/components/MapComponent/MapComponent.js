@@ -5,18 +5,72 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  Pressable,
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { Circle, Marker, Polygon } from 'react-native-maps';
-import { WP, appIcons, colors, handleLocationPermission } from '../../shared/exporter';
+import { BOTTOM_TAB_HEIGHT, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, colors, family, handleLocationPermission, property_image, responseValidator, size } from '../../shared/exporter';
 import Geolocation from '@react-native-community/geolocation';
 import { AddressModal } from '../Modal/AddressModal';
 import MapGuideModal from '../Modal/MapGuideModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { app } from '../../shared/api';
+import { AppLoader } from '../Loaders/AppLoader';
+import { useNavigation } from '@react-navigation/native';
+import Modal from 'react-native-modal';
+import { useIsFocused } from '@react-navigation/native';
 
 const DragMarker = () => (
   <View style={styles.dragMarker} />
 )
+
+const PropertyMarker = () => (
+  <Image source={appIcons.propertyMarker} style={styles.propertyMarker} resizeMode='contain' />
+)
+
+const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) => {
+  return (
+    <Modal
+      isVisible={isVisible}
+      style={styles.modalContainer}
+      backdropColor='transparent'
+      onBackdropPress={onBackdropPress}
+    >
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.itemContainer}
+        onPress={onPress}>
+        <Image source={{ uri: data?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
+        <View style={{ paddingVertical: 5 }}>
+          <View style={styles.innerRow}>
+            <Text numberOfLines={1} style={styles.nameTxtStyle}>
+              {data?.title}
+            </Text>
+          </View>
+          <View style={styles.simpleRow}>
+            <Text style={styles.smallTxtStyle}>
+              {`${data?.currency_type} ${data?.price || 0} ${data?.property_type != 'vacant_land' ? '| ' : ''}`}
+            </Text>
+            {data?.property_type != 'vacant_land' &&
+              <>
+                <Image
+                  resizeMode="contain"
+                  source={appIcons.bedIcon}
+                  style={styles.bedIconStyle}
+                />
+                <Text style={styles.smallTxtStyle}>{data?.bed_rooms || 0}</Text>
+                <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
+                <Text resizeMode="contain" style={styles.smallTxtStyle}>
+                  {data?.bath_rooms || 0}
+                </Text>
+              </>
+            }
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Modal>
+  )
+}
 
 export const MapComponent = () => {
 
@@ -31,6 +85,73 @@ export const MapComponent = () => {
   })
   const [polygonCoords, setPolygonCoords] = useState([])
   const [circleCoords, setCircleCoords] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [properties, setProperties] = useState([])
+  const [selectedPropertyData, setSelectedPropertyData] = useState(null)
+  const [selectedPropertyDataModal, setSelectedPropertyDataModal] = useState(false)
+  const navigation = useNavigation()
+  const isFocused = useIsFocused()
+
+  //distance between two lat lng in meters
+  const haversineDistance = useCallback((lat1, lon1, lat2, lon2) => {
+    const R = 6371000; // Earth radius in meters
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in meters
+    return distance;
+  }, [])
+
+  const getPropertiesAgainstPolygon = async () => {
+    try {
+      setIsLoading(true)
+      const polygon = encodeURIComponent(JSON.stringify(polygonCoords.map(item => ({ lat: item.latitude, lng: item.longitude }))))
+      const params = `search[polygon]=${polygon}`
+      const res = await app.getPropertiesInsidePolygon(params);
+      if (res?.status == 200) {
+        setProperties(res.data || [])
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getPropertiesAgainstCicle = async () => {
+    try {
+      setIsLoading(true)
+      const radius = haversineDistance(circleCoords[0].latitude, circleCoords[0].longitude, circleCoords[1].latitude, circleCoords[1].longitude) / 1000  // get radius in kilometers
+      const origin = encodeURIComponent(JSON.stringify({ lat: circleCoords[0].latitude, lng: circleCoords[0].longitude }))
+      const params = `search[radius]=${radius}&search[origin]=${origin}`
+      const res = await app.getPropertiesInsideCircle(params);
+      if (res?.status == 200) {
+        setProperties(res.data || [])
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    polygonCoords?.length > 0 && getPropertiesAgainstPolygon()
+  }, [polygonCoords])
+
+  useEffect(() => {
+    circleCoords?.length > 0 && getPropertiesAgainstCicle()
+  }, [circleCoords])
+
+  useEffect(() => {
+    if (isFocused && selectedPropertyData)
+      setSelectedPropertyDataModal(true)
+  }, [isFocused])
 
   const onPolygonMarkerDragEnd = useCallback((e, index) => {
     const newCoord = e.nativeEvent.coordinate
@@ -52,6 +173,7 @@ export const MapComponent = () => {
 
   const handlePolygon = useCallback(async () => {
     setCircleCoords([])
+    setProperties([])
     if (polygonCoords.length > 0) {
       setPolygonCoords([])
       return
@@ -67,10 +189,11 @@ export const MapComponent = () => {
 
     if (!(await AsyncStorage.getItem('IS_MAP_POLYGON_GUIDE_SHOWED')))
       setPolygonGuideModal(true)
-  }, [polygonCoords])
+  }, [polygonCoords, region])
 
   const handleCircle = useCallback(async () => {
     setPolygonCoords([])
+    setProperties([])
     if (circleCoords.length > 0) {
       setCircleCoords([])
       return
@@ -89,20 +212,7 @@ export const MapComponent = () => {
     ])
     if (!(await AsyncStorage.getItem('IS_MAP_CIRCLE_GUIDE_SHOWED')))
       setCircleGuideModal(true)
-  }, [circleCoords])
-
-  //distance between two lat lng in meters
-  const haversineDistance = useCallback((lat1, lon1, lat2, lon2) => {
-    const R = 6371000; // Earth radius in meters
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in meters
-    return distance;
-  }, [])
+  }, [circleCoords, region])
 
   const handleNavigator = useCallback(async () => {
     if (await handleLocationPermission()) {
@@ -134,12 +244,6 @@ export const MapComponent = () => {
 
   const handleRefresh = useCallback(() => {
 
-  }, [])
-
-  useEffect(() => {
-    setTimeout(() => {
-      handleNavigator()
-    }, 1000)
   }, [])
 
   return (
@@ -218,6 +322,11 @@ export const MapComponent = () => {
         customMapStyle={customStyle}
         style={[styles.container]}
         showsMyLocationButton={false}
+        onMapReady={() => {
+          setTimeout(() => {
+            handleNavigator()
+          }, 1000)
+        }}
       >
         {/* polygon markers */}
         {polygonCoords.map((item, index) => (
@@ -257,7 +366,35 @@ export const MapComponent = () => {
             strokeWidth={3}
           />
         }
+        {/* properties markers */}
+        {properties.map((item, index) => (
+          <Marker
+            coordinate={{ latitude: item.latitude, longitude: item.longitude }}
+            onPress={() => {
+              setSelectedPropertyData(item)
+              setSelectedPropertyDataModal(true)
+            }}
+          // anchor={{ x: 0.5, y: 0.5 }}
+          >
+            <PropertyMarker />
+          </Marker>
+        ))}
       </MapView>
+      <AppLoader loading={isLoading} />
+      <PropertyComponentModal
+        isVisible={selectedPropertyDataModal}
+        data={selectedPropertyData}
+        onBackdropPress={() => {
+          setSelectedPropertyDataModal(false)
+          setTimeout(() => setSelectedPropertyData(null), 1000)
+        }}
+        onPress={() => {
+          setSelectedPropertyDataModal(false)
+          setTimeout(() => {
+            navigation.navigate('PropertyDetail', { propertyData: selectedPropertyData })
+          }, 1000)
+        }}
+      />
     </View>
   );
 };
@@ -289,7 +426,66 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     backgroundColor: colors.g40,
     zIndex: 3
-  }
+  },
+  propertyMarker: {
+    width: WP(10),
+    height: WP(10),
+    zIndex: 3
+  },
+  modalContainer: {
+    height: '100%',
+    width: '100%',
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    paddingVertical: WP('4.2'),
+    paddingHorizontal: WP('4'),
+    backgroundColor: '#383838',
+    width: WP(90),
+    borderRadius: 15,
+    position: 'absolute',
+    bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS
+  },
+  imgStyle: {
+    borderRadius: 15,
+    width: WP('26.3'),
+    height: WP('24.1'),
+    marginRight: WP('2.5'),
+  },
+  innerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  nameTxtStyle: {
+    width: '72%',
+    color: colors.white,
+    fontSize: size.large,
+    fontFamily: family.Gilroy_SemiBold,
+  },
+  simpleRow: {
+    paddingTop: 13,
+    paddingBottom: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  smallTxtStyle: {
+    color: colors.white,
+    fontSize: size.tiny,
+    fontFamily: family.Gilroy_Medium,
+  },
+  bedIconStyle: {
+    width: 14,
+    height: 9,
+    marginRight: 3,
+    tintColor: colors.white
+  },
+  bathIconStyle: {
+    width: 11,
+    height: 11,
+    marginLeft: 8,
+    marginRight: 4,
+    tintColor: colors.white
+  },
 });
 
 const customStyle = [

@@ -2,6 +2,7 @@ import {
   Alert,
   FlatList,
   SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -82,6 +83,11 @@ const PropertyDetail = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
       <View style={spacing.my2}>
         <BackHeader subtitle={'Preview'} />
       </View>

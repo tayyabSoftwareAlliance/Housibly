@@ -137,6 +137,7 @@ export const appIcons = {
   refresh:require('../../assets/icons/refresh.png'),
   handHold:require('../../assets/icons/handHold.png'),
   handDrag:require('../../assets/icons/handDrag.png'),
+  propertyMarker:require('../../assets/icons/property-marker.png'),
 };
 
 export const appSvgs = {

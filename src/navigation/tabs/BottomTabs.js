@@ -51,7 +51,7 @@ export default BottomTabs = ({ }) => {
       // }}
 
       initialRouteName={'Home'}>
-      {true ? <Tab.Screen
+      {false ? <Tab.Screen
         name="Home"
         component={HomeSupportCloserStack}
         options={{

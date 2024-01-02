@@ -29,7 +29,9 @@ const ENDPOINTS = {
   GET_SUBLISTS: 'properties/detail_options',
   PROPERTY: 'properties',
   MATCHED_PROPERTY: 'properties/matching_properties',
-  USER_PREFERENCE: 'user_preferences'
+  CIRCLE_PROPERTY: 'properties/find_in_circle',
+  POLYGON_PROPERTY: 'properties/find_in_polygon',
+  USER_PREFERENCE: 'user_preferences',
 };
 
 export { BASE_URL, ENDPOINTS };

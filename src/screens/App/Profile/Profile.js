@@ -26,7 +26,7 @@ const Profile = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isFocus = useIsFocused(null);
-
+console.log('userImage ',userImage)
   useEffect(() => {
     getUserProfile();
   }, [isFocus, navigation]);
