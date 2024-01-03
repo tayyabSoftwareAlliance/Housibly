@@ -19,6 +19,7 @@ import { AppLoader } from '../Loaders/AppLoader';
 import { useNavigation } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import { useIsFocused } from '@react-navigation/native';
+import { AppButton } from '../AppButton/AppButton';
 
 const DragMarker = () => (
   <View style={styles.dragMarker} />
@@ -33,8 +34,9 @@ const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) =
     <Modal
       isVisible={isVisible}
       style={styles.modalContainer}
-      backdropColor='transparent'
+      backdropColor='rgba(255,255,255,0.3)'
       onBackdropPress={onBackdropPress}
+      onBackButtonPress={onBackdropPress}
     >
       <TouchableOpacity
         activeOpacity={1}
@@ -242,9 +244,9 @@ export const MapComponent = () => {
     })
   }, [region])
 
-  const handleRefresh = useCallback(() => {
+  // const handleRefresh = useCallback(() => {
 
-  }, [])
+  // }, [])
 
   return (
     <View style={styles.container}>
@@ -301,7 +303,7 @@ export const MapComponent = () => {
             resizeMode='contain'
           />
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.btnCon}
           onPress={handleRefresh}>
           <Image
@@ -309,7 +311,7 @@ export const MapComponent = () => {
             style={{ height: 20, width: 20 }}
             resizeMode='contain'
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <MapView
@@ -380,6 +382,18 @@ export const MapComponent = () => {
           </Marker>
         ))}
       </MapView>
+      {properties.length > 0 &&
+      <AppButton
+        width="38.5%"
+        height={WP('10.3')}
+        title="View All Properties"
+        borderColor={colors.p2}
+        shadowColor={colors.white}
+        textStyle={styles.btnTxtStyle}
+        buttonStyle={styles.buttonStyle}
+        onPress={() => navigation.navigate('AllProperties',{properties})}
+      />
+}
       <AppLoader loading={isLoading} />
       <PropertyComponentModal
         isVisible={selectedPropertyDataModal}
@@ -444,7 +458,7 @@ const styles = StyleSheet.create({
     width: WP(90),
     borderRadius: 15,
     position: 'absolute',
-    bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS
+    bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS * 1.3
   },
   imgStyle: {
     borderRadius: 15,
@@ -486,6 +500,16 @@ const styles = StyleSheet.create({
     marginRight: 4,
     tintColor: colors.white
   },
+  btnTxtStyle: {
+    color: colors.white,
+    fontSize: size.tiny,
+    fontFamily: family.Gilroy_SemiBold,
+  },
+  buttonStyle:{
+    position: 'absolute', 
+    bottom: 10,
+    zIndex:5
+  }
 });
 
 const customStyle = [

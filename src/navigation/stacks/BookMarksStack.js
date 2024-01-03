@@ -5,7 +5,7 @@ import Bookmarks from '../../screens/App/Bookmarks';
 
 const Stack = createNativeStackNavigator();
 
-function BookMarksStack(props) {
+function BookmarksStack(props) {
   return (
     <Stack.Navigator
       initialRouteName="Bookmarks"
@@ -15,4 +15,4 @@ function BookMarksStack(props) {
   );
 }
 
-export default BookMarksStack;
+export default BookmarksStack;

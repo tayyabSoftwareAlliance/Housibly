@@ -6,11 +6,11 @@ import { appIcons, BOTTOM_TAB_HEIGHT, colors, WP } from '../../shared/exporter';
 
 import HomeStack from '../stacks/HomeStack';
 import SearchStack from '../stacks/SearchStack';
-import BookMarksStack from '../stacks/BookMarksStack';
-import ChatStack from '../stacks/ChatStack';
 import { useDispatch } from 'react-redux'
 import { getSublists } from '../../redux/actions';
 import HomeSupportCloserStack from '../stacks/HomeSupportCloserStack';
+import MessagesAndNotificationStack from '../stacks/MessagesAndNotificationStack';
+import BookmarksStack from '../stacks/BookmarksStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -101,8 +101,8 @@ export default BottomTabs = ({ }) => {
             }}
           />
           <Tab.Screen
-            name="BookMarks"
-            component={BookMarksStack}
+            name="Bookmarks"
+            component={BookmarksStack}
             options={{
               tabBarIcon: ({ focused }) => (
                 <>
@@ -117,8 +117,8 @@ export default BottomTabs = ({ }) => {
             }}
           />
           <Tab.Screen
-            name="Chat"
-            component={ChatStack}
+            name="MessagesAndNotification"
+            component={MessagesAndNotificationStack}
             options={{
               tabBarIcon: ({ focused }) => (
                 <>

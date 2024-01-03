@@ -85,6 +85,7 @@ const FilterScreen = ({ navigation, route }) => {
   const dispatch = useDispatch()
   console.log('thisss', data)
   const setValue = (type, value) => {
+    console.log(type,(typeof value)+' thiss '+value)
     setData(prev => {
       prev[type] = value
       return { ...prev }

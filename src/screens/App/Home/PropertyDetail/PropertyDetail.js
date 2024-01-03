@@ -85,7 +85,7 @@ const PropertyDetail = ({ navigation, route }) => {
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar
         translucent={false}
-        backgroundColor={colors.white}
+        backgroundColor={colors.app_color}
         barStyle={'dark-content'}
       />
       <View style={spacing.my2}>

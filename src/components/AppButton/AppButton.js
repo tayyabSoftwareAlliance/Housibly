@@ -17,12 +17,13 @@ const AppButton = ({
   shadowColor = colors.p1,
   fontSize = size.large,
   marginVertical,
+  buttonStyle
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={onPress}
-      style={styles.buttonStyle(
+      style={[styles.buttonStyle(
         width,
         height,
         bgColor,
@@ -30,7 +31,7 @@ const AppButton = ({
         borderColor,
         shadowColor,
         marginVertical,
-      )}>
+      ),buttonStyle]}>
       {icon && <Image source={icon} style={[styles.imgStyle, style]} />}
       <Text style={[styles.buttonTextStyle(textColor, fontSize), textStyle]}>
         {title}

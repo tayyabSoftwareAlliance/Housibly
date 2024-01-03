@@ -17,7 +17,6 @@ import PropertyList from '../../../../components/Custom/PropertyList';
 const AllSales = ({ navigation }) => {
 
   const { all_properties, loading } = useSelector(state => state.appReducer)
-
   const [filterType, setFilterType] = useState(filter_property_type_list[0]);
   const [properties, setProperties] = useState(all_properties || []);
 

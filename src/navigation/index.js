@@ -30,7 +30,7 @@ import AddMorePropertyDetail from '../screens/App/Home/AddMorePropertyDetail';
 import AddPropertyDes from '../screens/App/Home/AddPropertyDes';
 import PropertyDetail from '../screens/App/Home/PropertyDetail';
 import AddAddress from '../screens/App/Home/AddAddress';
-import Chat from '../screens/App/Chat';
+import Chat from '../screens/App/MessagesAndNotification';
 import Video from '../screens/App/Video';
 import AddRoom from '../screens/App/Home/AddRoom';
 import { useSelector } from 'react-redux'
@@ -38,6 +38,7 @@ import { setAuthToken } from '../shared/api';
 import Reviews from '../screens/App/Reviews';
 import BoostProfile from '../screens/App/BoostProfile';
 import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
+import AllProperties from '../screens/App/Home/AllProperties';
 
 const AppStack = createNativeStackNavigator();
 
@@ -88,6 +89,7 @@ const MainAppNav = () => {
         <AppStack.Screen name={'Reviews'} component={Reviews} />
         <AppStack.Screen name="BoostProfile" component={BoostProfile} />
         <AppStack.Screen name="BoostProfileDetail" component={BoostProfileDetail} />
+        <AppStack.Screen name="AllProperties" component={AllProperties} />
       </AppStack.Navigator>
     </NavigationContainer>
   );

@@ -195,7 +195,7 @@ function* getMatchedProp(action) {
       });
     }
   } catch (error) {
-    console.log('error', error)
+    console.log('error', error?.response?.data)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {
