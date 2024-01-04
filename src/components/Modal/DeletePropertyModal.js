@@ -5,7 +5,7 @@ import { colors, WP, family, size, appIcons, property_image } from '../../shared
 import { useDispatch, useSelector } from 'react-redux';
 import { delete_my_property } from '../../redux/actions/app-actions/app-actions';
 
-export const DeleteModal = ({ item, show, onPressHide }) => {
+export const DeletePropertyModal = ({ item, show, onPressHide }) => {
 
   const dispatch = useDispatch()
   const { loading } = useSelector(state => state.appReducer)

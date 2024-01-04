@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages } from '../../../shared/exporter';
 import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { useNavigation } from '@react-navigation/native'
+import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 
 const AllChatsData = [
   {
@@ -71,14 +73,14 @@ const AllChatsData = [
   }
 ]
 
-const renderItem = ({ item, index }) => {
+const renderItem = (item, index, navigation) => {
   return (
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => navigation.navigate('PotentialBuyers', { item })}>
+      onPress={() => navigation.navigate('PersonChat')}>
       <Image
-        source={item?.user?.image }
+        source={item?.user?.image}
         style={styles.imgStyle}
       />
       <View>
@@ -89,16 +91,13 @@ const renderItem = ({ item, index }) => {
   );
 };
 
-const renderHiddenItem = (data, rowMap) => {
+const renderHiddenItem = (data, rowMap, onDeleteButtonPress) => {
   return (
     <View style={styles.backBtnsContainer}>
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.backRightBtn}
-        onPress={() => {
-          closeRow(rowMap, data?.index);
-          handleDelete(data);
-        }}>
+        onPress={() => onDeleteButtonPress(data, rowMap)}>
         <Image
           resizeMode="contain"
           source={appIcons.delIcon}
@@ -110,40 +109,62 @@ const renderHiddenItem = (data, rowMap) => {
   );
 };
 
-const AllMessages = () => {
+const AllChats = () => {
+
+  const navigation = useNavigation()
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [selectedChat, setSelectedChat] = useState(null)
 
   const closeRow = (map, key) => {
     map && map[key] && map[key].closeRow();
   };
 
+  const onDeleteButtonPress = (data, rowMap) => {
+    closeRow(rowMap, data?.index);
+    setDeleteModal(true)
+    setSelectedChat(data?.item)
+  }
+
   return (
-    <SwipeListView
-      useFlatList
-      data={AllChatsData}
-      disableRightSwipe={true}
-      renderItem={renderItem}
-      renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap)}
-      leftOpenValue={180}
-      rightOpenValue={-180}
-      // previewRowKey={'0'}
-      previewOpenValue={-40}
-      previewOpenDelay={3000}
-      closeOnScroll
-      onRowOpen={(rowKey, rowMap) => {
-        let key = rowKey;
-        if (key === rowKey) return;
-        setTimeout(() => {
-          rowMap[rowKey].closeRow();
-        }, 2000);
-      }}
-      // closeOnRowPress
-      keyExtractor={(item, index) => index.toString()}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{paddingTop:WP(3)}}
-      ListFooterComponent={<View />}
-      ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
-    />
+    <>
+      <SwipeListView
+        useFlatList
+        data={AllChatsData}
+        disableRightSwipe={true}
+        renderItem={({ item, index }) => renderItem(item, index, navigation)}
+        renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap, onDeleteButtonPress)}
+        leftOpenValue={180}
+        rightOpenValue={-180}
+        // previewRowKey={'0'}
+        previewOpenValue={-40}
+        previewOpenDelay={3000}
+        closeOnScroll
+        onRowOpen={(rowKey, rowMap) => {
+          let key = rowKey;
+          if (key === rowKey) return;
+          setTimeout(() => {
+            rowMap[rowKey].closeRow();
+          }, 2000);
+        }}
+        // closeOnRowPress
+        keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingTop: WP(3) }}
+        ListFooterComponent={<View />}
+        ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
+      />
+      <ChatPopupModal
+        image={selectedChat?.user?.image}
+        title={selectedChat?.user?.name}
+        subtitle={'Delete conversation?'}
+        buttontitle={'Delete'}
+        show={deleteModal}
+        onPressHide={() => setDeleteModal(false)}
+        buttonLoader={false}
+        onButtonPress={() => { }}
+      />
+    </>
   );
 };
 
-export default AllMessages
+export default AllChats

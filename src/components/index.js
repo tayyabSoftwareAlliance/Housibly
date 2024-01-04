@@ -28,7 +28,7 @@ export * from './Modal/SignUpModal';
 export * from './Modal/AddressModal';
 export * from './Modal/ImagePickerModal';
 export * from './Modal/PersonDetailsModal';
-export * from './Modal/DeleteModal';
+export * from './Modal/DeletePropertyModal';
 export * from './Modal/ListModal';
 export * from './Modal/CardOptionModal';
 export * from './Modal/DelPaymentCard';

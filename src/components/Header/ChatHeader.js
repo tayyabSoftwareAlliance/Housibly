@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: WP('3.85'),
     backgroundColor: colors.white,
     justifyContent: 'space-between',
-    paddingTop: platformOrientedCode(WP('4'), WP('2')),
   },
   rowContainer: {
     flexDirection: 'row',

@@ -5,7 +5,7 @@ import {
   size,
   family,
   platformOrientedCode,
-} from '../../../../shared/exporter';
+} from '../../../shared/exporter';
 import DeviceInfo from 'react-native-device-info';
 
 const isNotch = DeviceInfo.hasNotch();

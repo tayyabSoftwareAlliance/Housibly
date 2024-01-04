@@ -30,7 +30,6 @@ import AddMorePropertyDetail from '../screens/App/Home/AddMorePropertyDetail';
 import AddPropertyDes from '../screens/App/Home/AddPropertyDes';
 import PropertyDetail from '../screens/App/Home/PropertyDetail';
 import AddAddress from '../screens/App/Home/AddAddress';
-import Chat from '../screens/App/MessagesAndNotification';
 import Video from '../screens/App/Video';
 import AddRoom from '../screens/App/Home/AddRoom';
 import { useSelector } from 'react-redux'
@@ -39,6 +38,7 @@ import Reviews from '../screens/App/Reviews';
 import BoostProfile from '../screens/App/BoostProfile';
 import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
 import AllProperties from '../screens/App/Home/AllProperties';
+import PersonChat from '../screens/App/PersonChat';
 
 const AppStack = createNativeStackNavigator();
 
@@ -81,15 +81,15 @@ const MainAppNav = () => {
         <AppStack.Screen name={'AddRoom'} component={AddRoom} />
         <AppStack.Screen name={'PropertyDetail'} component={PropertyDetail} />
         <AppStack.Screen name={'AddAddress'} component={AddAddress} />
-        <AppStack.Screen name={'Chat'} component={Chat} />
         <AppStack.Screen name={'Video'} component={Video} />
         <AppStack.Screen name={'PayMethod'} component={PayMethod} />
         <AppStack.Screen name={'AllCards'} component={AllCards} />
         <AppStack.Screen name={'CardDetails'} component={CardDetails} />
         <AppStack.Screen name={'Reviews'} component={Reviews} />
-        <AppStack.Screen name="BoostProfile" component={BoostProfile} />
-        <AppStack.Screen name="BoostProfileDetail" component={BoostProfileDetail} />
-        <AppStack.Screen name="AllProperties" component={AllProperties} />
+        <AppStack.Screen name={"BoostProfile"} component={BoostProfile} />
+        <AppStack.Screen name={"BoostProfileDetail"} component={BoostProfileDetail} />
+        <AppStack.Screen name={"AllProperties"} component={AllProperties} />
+        <AppStack.Screen name={"PersonChat"} component={PersonChat} />
       </AppStack.Navigator>
     </NavigationContainer>
   );

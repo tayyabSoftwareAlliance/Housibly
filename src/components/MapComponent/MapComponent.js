@@ -29,6 +29,8 @@ const PropertyMarker = () => (
   <Image source={appIcons.propertyMarker} style={styles.propertyMarker} resizeMode='contain' />
 )
 
+let hideSelectedPropertyTimeout;
+
 const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) => {
   return (
     <Modal
@@ -373,6 +375,7 @@ export const MapComponent = () => {
           <Marker
             coordinate={{ latitude: item.latitude, longitude: item.longitude }}
             onPress={() => {
+              hideSelectedPropertyTimeout && clearTimeout(hideSelectedPropertyTimeout)
               setSelectedPropertyData(item)
               setSelectedPropertyDataModal(true)
             }}
@@ -400,7 +403,7 @@ export const MapComponent = () => {
         data={selectedPropertyData}
         onBackdropPress={() => {
           setSelectedPropertyDataModal(false)
-          setTimeout(() => setSelectedPropertyData(null), 1000)
+          hideSelectedPropertyTimeout = setTimeout(() => setSelectedPropertyData(null), 1000)
         }}
         onPress={() => {
           setSelectedPropertyDataModal(false)

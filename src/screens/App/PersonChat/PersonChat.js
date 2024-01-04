@@ -12,16 +12,16 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useIsFocused} from '@react-navigation/core';
-import {ChatHeader, Spacer} from '../../../../components';
+import {ChatHeader, Spacer} from '../../../components';
 import {
   appIcons,
   appImages,
   colors,
   platformOrientedCode,
   WP,
-} from '../../../../shared/exporter';
+} from '../../../shared/exporter';
 import styles from './styles';
-import {chat} from '../../../../shared/utilities/constant';
+import {chat} from '../../../shared/utilities/constant';
 
 const PersonChat = ({navigation}) => {
   const isFocus = useIsFocused();

@@ -5,7 +5,8 @@ import { WP, colors } from '../../../shared/exporter';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import AllMessages from '../AllMessages';
+import AllChats from '../AllChats';
+import Notifications from '../Notifications';
 
 const MessagesAndNotification = () => {
 
@@ -38,7 +39,8 @@ const MessagesAndNotification = () => {
         </TouchableOpacity>
         <Animated.View style={[styles.topTabLine,topTabLineAnimatedStyle]} />
       </View>
-      {selectedTab == 'messages' && <AllMessages/>}
+      {selectedTab == 'messages' && <AllChats/>}
+      {selectedTab == 'notifications' && <Notifications/>}
     </SafeAreaView>
   );
 };

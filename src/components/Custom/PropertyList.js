@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SwipeListView } from 'react-native-swipe-list-view'
-import { DeleteModal } from '../Modal/DeleteModal'
+import { DeletePropertyModal } from '../Modal/DeletePropertyModal'
 import { useNavigation } from '@react-navigation/native'
 import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, colors, family, property_image, size } from '../../shared/exporter'
 
@@ -177,7 +177,7 @@ const PropertyList = ({ data = [], scrollEnabled = true }) => {
                 ListFooterComponent={<View />}
                 ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
             />
-            <DeleteModal
+            <DeletePropertyModal
                 item={item}
                 show={showModal}
                 onPressHide={() => setShowModal(false)}
