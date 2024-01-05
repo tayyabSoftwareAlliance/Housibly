@@ -10,7 +10,7 @@ function SearchStack(props) {
     <Stack.Navigator
       initialRouteName="Search"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen name="Search" component={Search} initialParams={{ from: 'bottomTab' }} />
     </Stack.Navigator>
   );
 }

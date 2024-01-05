@@ -233,20 +233,22 @@ const AddPropertyDetails = ({ navigation, route }) => {
                 />
               </>
             )}
+            <Divider color={colors.g18} />
             <TouchableOpacity
               onPress={() => {
                 navigation?.navigate('AddAddress');
-              }}>
-              <Divider color={colors.g18} />
-              <FilterInput
-                onPressIn={() => {
-                  navigation?.navigate('AddAddress');
+              }}
+            >
+              <Text
+                numberOfLines={5}
+                style={{
+                  width: '100%',
+                  paddingVertical: 18,
+                  color: data.address ? colors.b1 : colors.g19,
                 }}
-                editable={false}
-                keyboardType={'default'}
-                placeholder={'Street Address'}
-                value={data.address}
-              />
+              >
+                {data.address || 'Street Address'}
+              </Text>
             </TouchableOpacity>
             {data.property_type != 'vacant_land' && (
               <>

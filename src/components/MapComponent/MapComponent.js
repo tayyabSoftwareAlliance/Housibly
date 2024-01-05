@@ -6,6 +6,7 @@ import {
   View,
   FlatList,
   Pressable,
+  TextInput,
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { Circle, Marker, Polygon } from 'react-native-maps';
@@ -18,8 +19,9 @@ import { app } from '../../shared/api';
 import { AppLoader } from '../Loaders/AppLoader';
 import { useNavigation } from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { AppButton } from '../AppButton/AppButton';
+import { BlurView } from "@react-native-community/blur";
 
 const DragMarker = () => (
   <View style={styles.dragMarker} />
@@ -32,17 +34,20 @@ const PropertyMarker = () => (
 let hideSelectedPropertyTimeout;
 
 const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) => {
+
+  const params = useRoute().params
+
   return (
     <Modal
       isVisible={isVisible}
       style={styles.modalContainer}
-      backdropColor='rgba(255,255,255,0.3)'
+      backdropColor='rgba(0,0,0,1)'
       onBackdropPress={onBackdropPress}
       onBackButtonPress={onBackdropPress}
     >
       <TouchableOpacity
         activeOpacity={1}
-        style={styles.itemContainer}
+        style={[styles.itemContainer, params?.from == 'bottomTab' && { bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + WP(11) }]}
         onPress={onPress}>
         <Image source={{ uri: data?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
         <View style={{ paddingVertical: 5 }}>
@@ -76,6 +81,45 @@ const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) =
   )
 }
 
+const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmitEditing }) => {
+
+  const inputRef = useRef()
+
+  useEffect(() => {
+    isVisible && setTimeout(() => inputRef.current?.focus(), 1000)
+  }, [isVisible])
+
+  return (
+    <Modal
+      isVisible={isVisible}
+      animationIn={'fadeIn'}
+      animationOut={'fadeOut'}
+      style={[styles.modalContainer, { margin: 0 }]}
+      backdropColor='rgba(0,0,0,0.1)'
+      onBackdropPress={onBackdropPress}
+      onBackButtonPress={onBackdropPress}
+    >
+      <BlurView
+        style={{ ...StyleSheet.absoluteFill }}
+        blurType="extraDark"
+        blurAmount={10}
+        blurRadius={10}
+      />
+      <Pressable style={styles.zipCodeModalContainer} onPress={onBackdropPress} >
+        <TextInput
+          ref={inputRef}
+          style={styles.zipCodeInput}
+          placeholder='Postal Code'
+          placeholderTextColor={colors.white}
+          onSubmitEditing={(e) => onSubmitEditing(e.nativeEvent.text)}
+          keyboardType='numeric'
+          maxLength={10}
+        />
+      </Pressable>
+    </Modal>
+  )
+}
+
 export const MapComponent = () => {
 
   const mapRef = useRef()
@@ -93,6 +137,8 @@ export const MapComponent = () => {
   const [properties, setProperties] = useState([])
   const [selectedPropertyData, setSelectedPropertyData] = useState(null)
   const [selectedPropertyDataModal, setSelectedPropertyDataModal] = useState(false)
+  const [zipCodeModal, setZipCodeModal] = useState(false)
+  const [zipCode, setZipCode] = useState('')
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
@@ -135,6 +181,32 @@ export const MapComponent = () => {
       const res = await app.getPropertiesInsideCircle(params);
       if (res?.status == 200) {
         setProperties(res.data || [])
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getPropertiesAgainstZipCode = async (zipCode) => {
+    try {
+      setZipCode(zipCode)
+      setZipCodeModal(false)
+      setPolygonCoords([])
+      setCircleCoords([])
+      setProperties([])
+      setIsLoading(true)
+      const params = `search[zip_code]=${zipCode}`
+      const res = await app.getPropertiesAgainstZipCode(params);
+      if (res?.status == 200) {
+        setProperties(res.data || [])
+        res.data?.length > 0 && mapRef.current?.animateToRegion({
+          ...region,
+          latitude: res.data[0]?.latitude,
+          longitude: res.data[0]?.longitude,
+        })
       }
     } catch (error) {
       console.log(error.response);
@@ -221,11 +293,13 @@ export const MapComponent = () => {
   const handleNavigator = useCallback(async () => {
     if (await handleLocationPermission()) {
       Geolocation.getCurrentPosition((pos) => {
-        mapRef.current?.animateToRegion({
+        const currentRegion = {
           ...region,
           latitude: pos?.coords?.latitude,
           longitude: pos?.coords?.longitude,
-        })
+        }
+        mapRef.current?.animateToRegion(currentRegion)
+        setRegion(currentRegion)
       })
     }
   }, [region])
@@ -329,7 +403,7 @@ export const MapComponent = () => {
         onMapReady={() => {
           setTimeout(() => {
             handleNavigator()
-          }, 1000)
+          }, 0)
         }}
       >
         {/* polygon markers */}
@@ -385,18 +459,45 @@ export const MapComponent = () => {
           </Marker>
         ))}
       </MapView>
-      {properties.length > 0 &&
-      <AppButton
-        width="38.5%"
-        height={WP('10.3')}
-        title="View All Properties"
-        borderColor={colors.p2}
-        shadowColor={colors.white}
-        textStyle={styles.btnTxtStyle}
-        buttonStyle={styles.buttonStyle}
-        onPress={() => navigation.navigate('AllProperties',{properties})}
-      />
-}
+      <View style={styles.buttonsContainerStyle} >
+        {zipCode &&
+          <View style={styles.zipCodeContainer}>
+            <Text style={styles.zipCodeTxt}>{zipCode}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setZipCode('')
+                setProperties([])
+              }}
+              style={styles.zipCodeTxtCloseBtn}
+            >
+              <Image source={appIcons.cross} style={styles.zipCodeTxtCloseBtnImg} resizeMode='contain' />
+            </TouchableOpacity>
+          </View>
+        }
+        <View style={styles.buttonsContainerStyleInner}>
+          <AppButton
+            width="38.5%"
+            height={WP('10.3')}
+            title="Enter Zip/Postal Code"
+            borderColor={colors.p2}
+            shadowColor={colors.white}
+            textStyle={styles.btnTxtStyle}
+            onPress={() => setZipCodeModal(true)}
+          />
+          {properties.length > 0 &&
+            <AppButton
+              width="38.5%"
+              height={WP('10.3')}
+              title="View All Properties"
+              borderColor={colors.p2}
+              shadowColor={colors.white}
+              textStyle={styles.btnTxtStyle}
+              buttonStyle={{ marginLeft: WP(5) }}
+              onPress={() => navigation.navigate('AllProperties', { properties })}
+            />
+          }
+        </View>
+      </View>
       <AppLoader loading={isLoading} />
       <PropertyComponentModal
         isVisible={selectedPropertyDataModal}
@@ -411,6 +512,11 @@ export const MapComponent = () => {
             navigation.navigate('PropertyDetail', { propertyData: selectedPropertyData })
           }, 1000)
         }}
+      />
+      <ZipCodeModal
+        isVisible={zipCodeModal}
+        onBackdropPress={() => setZipCodeModal(false)}
+        onSubmitEditing={(zipCode) => getPropertiesAgainstZipCode(zipCode)}
       />
     </View>
   );
@@ -461,7 +567,7 @@ const styles = StyleSheet.create({
     width: WP(90),
     borderRadius: 15,
     position: 'absolute',
-    bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS * 1.3
+    bottom: WP(18)
   },
   imgStyle: {
     borderRadius: 15,
@@ -508,10 +614,57 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
-  buttonStyle:{
-    position: 'absolute', 
-    bottom: 10,
-    zIndex:5
+  buttonsContainerStyle: {
+    position: 'absolute',
+    bottom: WP(7),
+    width: '100%',
+    alignItems: 'center'
+  },
+  buttonsContainerStyleInner: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  zipCodeContainer: {
+    backgroundColor: colors.white,
+    padding: WP(1),
+    paddingHorizontal: WP(4),
+    borderRadius: WP(1.5),
+    marginBottom: WP(7)
+  },
+  zipCodeTxt: {
+    color: colors.b1,
+    fontSize: size.tiny,
+    fontFamily: family.Gilroy_SemiBold,
+  },
+  zipCodeTxtCloseBtn: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#C4C4C4',
+    height: 16,
+    aspectRatio: 1,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  zipCodeTxtCloseBtnImg: {
+    height: 8,
+    width: 8,
+    tintColor: colors.b1
+  },
+  zipCodeModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  zipCodeInput: {
+    width: WP(30),
+    color: colors.white,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Medium,
+    textAlign: 'center'
   }
 });
 

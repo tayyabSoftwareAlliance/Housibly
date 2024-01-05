@@ -1586,6 +1586,11 @@
   dependencies:
     "merge-options" "^3.0.4"
 
+"@react-native-community/blur@^4.3.2":
+  "integrity" "sha512-0ID+pyZKdC4RdgC7HePxUQ6JmsbNrgz03u+6SgqYpmBoK/rE+7JffqIw7IEsfoKitLEcRNLGekIBsfwCqiEkew=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/blur/-/blur-4.3.2.tgz"
+  "version" "4.3.2"
+
 "@react-native-community/cli-clean@11.3.7":
   "integrity" "sha512-twtsv54ohcRyWVzPXL3F9VHGb4Qhn3slqqRs3wEuRzjR7cTmV2TIO2b1VhaqF4HlCgNd+cGuirvLtK2JJyaxMg=="
   "resolved" "https://registry.npmjs.org/@react-native-community/cli-clean/-/cli-clean-11.3.7.tgz"

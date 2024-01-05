@@ -35,7 +35,7 @@ export default BottomTabs = ({ }) => {
         shadowColor: 'transparent',
         borderTopWidth: 0,
         elevation: 0,
-
+        tabBarHideOnKeyboard:true,
         tabBarShowLabel: false,
         tabBarStyle: [
           {
@@ -43,7 +43,6 @@ export default BottomTabs = ({ }) => {
           },
           null
         ]
-
       }}
 
       // tabBarOptions={{

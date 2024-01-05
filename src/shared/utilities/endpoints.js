@@ -31,6 +31,7 @@ const ENDPOINTS = {
   MATCHED_PROPERTY: 'properties/matching_properties',
   CIRCLE_PROPERTY: 'properties/find_in_circle',
   POLYGON_PROPERTY: 'properties/find_in_polygon',
+  ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
   USER_PREFERENCE: 'user_preferences',
 };
 

@@ -46,4 +46,5 @@ export const app = {
   updatePreference: data => requests.post(ENDPOINTS.USER_PREFERENCE, data),
   getPropertiesInsideCircle: params => requests.get(`${ENDPOINTS.CIRCLE_PROPERTY}?${params}`),
   getPropertiesInsidePolygon: params => requests.get(`${ENDPOINTS.POLYGON_PROPERTY}?${params}`),
+  getPropertiesAgainstZipCode: params => requests.get(`${ENDPOINTS.ZIPCODE_PROPERTY}?${params}`),
 };
