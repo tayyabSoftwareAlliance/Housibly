@@ -127,6 +127,8 @@ export const appIcons = {
   condoStyle: require('../../assets/icons/condoStyle.png'),
   settings: require('../../assets/icons/settings.png'),
   pdf: require('../../assets/icons/pdf.png'),
+  property: require('../../assets/icons/property.png'),
+  support_closer: require('../../assets/icons/support_closer.png'),
 
   //map screen
   circle:require('../../assets/icons/circle.png'),

@@ -6,11 +6,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  txtStyle: {
+  titleTxtStyle: {
     color: colors.b1,
-    fontSize: size.normal,
-    paddingHorizontal: WP('4.1'),
-    fontFamily: family.Gilroy_SemiBold,
+    fontSize: size.h6,
+    paddingTop: WP('5'),
+    paddingBottom: WP('3.6'),
+    paddingHorizontal: WP('4'),
+    fontFamily: family.Gilroy_Bold,
   },
 });
 

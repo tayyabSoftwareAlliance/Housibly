@@ -59,6 +59,7 @@ export {
   lot_area_unit_list,
   property_type_list,
   filter_property_type_list,
+  filter_bookmarks_list,
   level_list,
   currency_list,
   beds_list,

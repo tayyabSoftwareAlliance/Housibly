@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/core';
-import {WP, size, colors, family, appIcons} from '../../shared/exporter';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import { WP, size, colors, family, appIcons } from '../../shared/exporter';
 
 export const BackHeader = ({
   title,
@@ -14,34 +14,38 @@ export const BackHeader = ({
   txtFamily = family.Gilroy_Bold,
   tintColor = colors.b1,
   onPressRight,
-  containerStyle
+  containerStyle,
+  hideBackButton = false
 }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={[styles.mainContainer,containerStyle]}>
+    <View style={[styles.mainContainer, containerStyle]}>
       <View style={styles.mainRowContainer}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => navigation.goBack()}
-          style={styles.rowContainer}>
-          <Image
-            resizeMode="contain"
-            source={appIcons.backArrow}
-            style={[styles.iconStyle, {tintColor: tintColor}]}
-          />
-          {title && (
-            <Text
-              style={styles.titleTxtStyle(
-                isBox,
-                txtCenter,
-                txtSize,
-                txtFamily,
-              )}>
-              {title}
-            </Text>
-          )}
-        </TouchableOpacity>
+        {!hideBackButton ?
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.goBack()}
+            style={styles.rowContainer}>
+            <Image
+              resizeMode="contain"
+              source={appIcons.backArrow}
+              style={[styles.iconStyle, { tintColor: tintColor }]}
+            />
+            {title && (
+              <Text
+                style={styles.titleTxtStyle(
+                  isBox,
+                  txtCenter,
+                  txtSize,
+                  txtFamily,
+                )}>
+                {title}
+              </Text>
+            )}
+          </TouchableOpacity> : 
+          <View/>
+        }
         <View style={styles.center}>
           {subtitle && <Text style={styles.subStyle}>{subtitle}</Text>}
         </View>

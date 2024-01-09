@@ -230,6 +230,24 @@ const filter_property_type_list = [
   }
 ]
 
+const filter_bookmarks_list = [
+  {
+    key:'all',
+    value:'All',
+    source:appIcons.all
+  },
+  {
+    key:'property',
+    value:'Properties',
+    source:appIcons.property
+  },
+  {
+    key:'support_closer',
+    value:'Support Closers',
+    source:appIcons.support_closer
+  }
+]
+
 const level_list = {
   'Basement': 'Basement',
   'Ground Floor': 'Ground Floor',
@@ -1280,6 +1298,7 @@ export {
   currency_list,
   property_type_list,
   filter_property_type_list,
+  filter_bookmarks_list,
   level_list,
   beds_list,
   bath_list,

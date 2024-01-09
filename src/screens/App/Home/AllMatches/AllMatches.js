@@ -16,51 +16,7 @@ import styles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_matched_properties } from '../../../../redux/actions/app-actions/app-actions';
 import { ActivityIndicator } from 'react-native';
-
-const renderItem = (item, index, navigation) => {
-  return (
-    <TouchableOpacity
-      activeOpacity={1}
-      style={styles.itemContainer}
-      onPress={() => navigation.navigate('PropertyDetail', { propertyData: item })}>
-      <Image source={{ uri: item?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
-      <View style={{ paddingVertical: 5 }}>
-        <View style={styles.innerRow}>
-          <Text numberOfLines={1} style={styles.nameTxtStyle}>
-            {item?.title}
-          </Text>
-          <View style={styles.txtContainer}>
-            <Text style={styles.newTxtStyle}>New</Text>
-          </View>
-        </View>
-        <View style={styles.simpleRow}>
-          <Text style={styles.smallTxtStyle}>
-            {`${item?.currency_type} ${item?.price || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
-          </Text>
-          {item?.property_type != 'vacant_land' &&
-            <>
-              <Image
-                resizeMode="contain"
-                source={appIcons.bedIcon}
-                style={styles.bedIconStyle}
-              />
-              <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
-              <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
-              <Text resizeMode="contain" style={styles.smallTxtStyle}>
-                {item?.bath_rooms || 0}
-              </Text>
-            </>
-          }
-        </View>
-        <View style={[styles.simpleRow, { paddingTop: 0 }]}>
-          <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />
-          <Text style={styles.heartTxtStyle}>100% match</Text>
-        </View>
-        <Text style={styles.timeTxtStyle}>Last active: 1 day ago</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+import PropertyComponent from '../../../../components/Custom/PropertyComponent';
 
 const AllMatches = ({ navigation }) => {
 
@@ -149,7 +105,7 @@ const AllMatches = ({ navigation }) => {
       {matched_properties.data.length > 0 &&
         <FlatList
           data={matched_properties.data}
-          renderItem={({ item, index }) => renderItem(item, index, navigation)}
+          renderItem={({ item }) => <PropertyComponent item={item} />}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flStyle}
@@ -162,7 +118,6 @@ const AllMatches = ({ navigation }) => {
             }
           }}
           onEndReached={() => {
-            console.log('thissss', matched_properties.lastPage + 1)
             if (!loading)
               dispatch(get_matched_properties(matched_properties.lastPage + 1))
           }}
