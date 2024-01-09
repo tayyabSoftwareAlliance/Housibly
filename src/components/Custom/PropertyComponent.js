@@ -7,8 +7,6 @@ const PropertyComponent = ({ item, myProperty = false }) => {
 
     const navigation = useNavigation()
 
-    console.log('item?.images?.[0]?.url', item?.images?.[0]?.url)
-
     return (
         <TouchableOpacity
             activeOpacity={1}

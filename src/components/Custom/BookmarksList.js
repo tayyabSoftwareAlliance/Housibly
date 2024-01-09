@@ -33,7 +33,7 @@ const BookmarksList = ({ data = [], scrollEnabled = true }) => {
             <View style={styles.backBtnsContainer}>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    style={[styles.backRightBtn, styles.backRightBtnRight]}
+                    style={[styles.backRightBtn]}
                     onPress={() => {
                         closeRow(rowMap, data?.index);
                         handleDelete(data);
@@ -58,8 +58,8 @@ const BookmarksList = ({ data = [], scrollEnabled = true }) => {
                 disableRightSwipe={true}
                 renderItem={({ item }) => item.type == 'support_closer' ? <SupportCloserComponent item={item} /> : <PropertyComponent item={item} />}
                 renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap)}
-                leftOpenValue={180}
-                rightOpenValue={-180}
+                // leftOpenValue={180}
+                rightOpenValue={-120}
                 previewOpenValue={-40}
                 previewOpenDelay={3000}
                 closeOnScroll
@@ -93,43 +93,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    backLeftBtn: {
-        top: 0,
-        bottom: 0,
-        width: 85,
-        alignItems: 'center',
-        position: 'absolute',
-        justifyContent: 'center',
-    },
-    backLeftBtnLeft: {
-        left: 0,
-        backgroundColor: colors.g26,
-    },
-    backLeftBtnRight: {
-        left: 85,
-        width: 90,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
-        backgroundColor: colors.s5,
-    },
     backRightBtn: {
         top: 0,
         bottom: 0,
-        width: 85,
+        width: 100,
+        right: 0,
+        borderTopLeftRadius:15,
+        borderBottomLeftRadius:15,
+        backgroundColor: colors.r1,
         alignItems: 'center',
         position: 'absolute',
         justifyContent: 'center',
-    },
-    backRightBtnLeft: {
-        right: 85,
-        width: 90,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
-        backgroundColor: colors.g26,
-    },
-    backRightBtnRight: {
-        right: 0,
-        backgroundColor: colors.r1,
     },
     iconStyle: {
         width: 20,
