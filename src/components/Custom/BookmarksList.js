@@ -58,7 +58,6 @@ const BookmarksList = ({ data = [], scrollEnabled = true }) => {
                 disableRightSwipe={true}
                 renderItem={({ item }) => item.type == 'support_closer' ? <SupportCloserComponent item={item} /> : <PropertyComponent item={item} />}
                 renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap)}
-                // leftOpenValue={180}
                 rightOpenValue={-120}
                 previewOpenValue={-40}
                 previewOpenDelay={3000}
