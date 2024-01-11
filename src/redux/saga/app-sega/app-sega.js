@@ -157,7 +157,7 @@ function* updateMyPreference(action) {
   try {
     const res = yield app.updatePreference(action.payload)
     if (res?.status == 200) {
-      console.log('ressss', res?.data)
+      // console.log('ressss', res?.data)
       yield put({
         type: types.UPDATE_MY_PREFERENCE_SUCCESS,
         payload: res?.data || {},
@@ -181,10 +181,10 @@ export function* getMatchedPropertiesRequest() {
   yield takeLatest(types.GET_MATCHED_PROPERTIES_REQUEST, getMatchedProp);
 }
 function* getMatchedProp(action) {
-  console.log('matchedddd start', action.payload.page)
+  // console.log('matchedddd start', action.payload.page)
   try {
     const res = yield app.getMatchedProperties(action.payload.page)
-    console.log('matchedddd ', res.data)
+    // console.log('matchedddd ', res.data)
     if (res?.status == 200 && res?.data?.length > 0) {
       yield put({
         type: types.GET_MATCHED_PROPERTIES_SUCCESS,
