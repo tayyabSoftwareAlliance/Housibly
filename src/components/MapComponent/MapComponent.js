@@ -7,6 +7,7 @@ import {
   FlatList,
   Pressable,
   TextInput,
+  Alert,
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { Circle, Marker, Polygon } from 'react-native-maps';
@@ -202,11 +203,14 @@ export const MapComponent = () => {
       const res = await app.getPropertiesAgainstZipCode(params);
       if (res?.status == 200) {
         setProperties(res.data || [])
-        res.data?.length > 0 && mapRef.current?.animateToRegion({
+        if(res.data?.length > 0) 
+        mapRef.current?.animateToRegion({
           ...region,
           latitude: res.data[0]?.latitude,
           longitude: res.data[0]?.longitude,
         })
+        else
+        Alert.alert('Alert','No Properties Found!')
       }
     } catch (error) {
       console.log(error.response);
