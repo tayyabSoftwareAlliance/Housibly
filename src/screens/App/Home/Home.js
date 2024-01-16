@@ -103,6 +103,7 @@ const Home = ({ navigation }) => {
         }}
         rightIcon
         img={userProfile?.user?.image || userInfo?.user?.image}
+        from={'home'}
       />
       <Spacer androidVal={WP('4')} iOSVal={WP('4')} />
       <KeyboardAwareScrollView
