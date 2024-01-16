@@ -221,6 +221,19 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
   },
+  savedLocationContainer:{
+    backgroundColor: colors.g5,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius:5,
+    marginBottom: WP('2.5'),
+  },
+  savedLocationText:{
+    color: colors.p1,
+    fontSize: size.tiny,
+    fontFamily: family.Gilroy_Regular,
+    textDecorationLine:'underline',
+  }
 });
 
 export default styles;

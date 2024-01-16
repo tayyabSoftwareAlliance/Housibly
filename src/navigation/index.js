@@ -39,6 +39,7 @@ import BoostProfile from '../screens/App/BoostProfile';
 import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
 import AllProperties from '../screens/App/Home/AllProperties';
 import PersonChat from '../screens/App/PersonChat';
+import SavedLocations from '../screens/App/Home/SavedLocations';
 
 const AppStack = createNativeStackNavigator();
 
@@ -90,6 +91,7 @@ const MainAppNav = () => {
         <AppStack.Screen name={"BoostProfileDetail"} component={BoostProfileDetail} />
         <AppStack.Screen name={"AllProperties"} component={AllProperties} />
         <AppStack.Screen name={"PersonChat"} component={PersonChat} />
+        <AppStack.Screen name={"SavedLocations"} component={SavedLocations} />
       </AppStack.Navigator>
     </NavigationContainer>
   );

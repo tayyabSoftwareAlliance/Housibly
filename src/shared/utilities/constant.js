@@ -1275,6 +1275,8 @@ const weekDays = [
   { day: 'Sun', selected: false },
 ];
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 export {
   IOS,
   ANDROID,
@@ -1323,4 +1325,5 @@ export {
   property_image,
   property_image2,
   weekDays,
+  months
 };

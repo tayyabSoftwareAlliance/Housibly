@@ -158,6 +158,9 @@ const BuyTab = ({ navigation }) => {
           </TouchableOpacity>
           <Text style={styles.addressTxtStyle}>Last Updated: None</Text>
         </ImageBackground>
+        <TouchableOpacity style={styles.savedLocationContainer} onPress={() => navigation.navigate('SavedLocations')} >
+          <Text style={styles.savedLocationText}>Saved Locations</Text>
+        </TouchableOpacity>
         <View style={styles.infoRowContainer}>
           <Text style={styles.propertyTxtStyle}>Dream Addresses</Text>
           <TouchableOpacity
