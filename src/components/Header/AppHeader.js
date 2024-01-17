@@ -7,6 +7,7 @@ import {
   family,
   appLogos,
   appImages,
+  profile_uri,
 } from '../../shared/exporter';
 import { Icon } from 'react-native-elements';
 
@@ -44,7 +45,7 @@ export const AppHeader = ({ rightIcon = false, onPressIcon, img, from, container
             <TouchableOpacity activeOpacity={0.7} onPress={onPressIcon}>
               <Image
                 resizeMode="contain"
-                source={appImages.dummyProfile}
+                source={{uri:profile_uri}}
                 style={styles.personImgStyle}
               />
             </TouchableOpacity> :

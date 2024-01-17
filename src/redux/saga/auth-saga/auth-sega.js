@@ -148,8 +148,8 @@ function* resetPass(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log('error',error)
-    console.log('error',error?.response?.data)
+    // console.log('error', error)
+    // console.log('error', error?.response?.data)
     yield put({
       type: types.RESET_PASSWORD_FAILURE,
       payload: null,
@@ -164,7 +164,6 @@ export function* setUserTypeRequest() {
   yield takeLatest(types.USER_TYPE_REQUEST, user_type_request);
 }
 function* user_type_request(params) {
-  console.log(params);
   try {
     yield put({
       type: types.USER_TYPE_SUCCESS,
@@ -223,7 +222,6 @@ export function* addInfoRequestSega() {
 function* add_info(params) {
   try {
     const res = yield auth.addInfo(params?.params);
-    console.log('resss',res)
     if (res?.status == 200) {
       yield put({
         type: types.ADD_ADDITIONAL_INFO_SUCCESS,
@@ -232,8 +230,7 @@ function* add_info(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log('errror',error)
-    console.log('error response ',error?.response);
+    // console.log('error response ',error?.response);
     yield put({
       type: types.ADD_ADDITIONAL_INFO_FAILURE,
       payload: null,

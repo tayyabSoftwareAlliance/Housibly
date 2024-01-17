@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const settingsReducers = (state = initialState, actions) => {
-  const {type, payload} = actions;
+  const { type, payload } = actions;
   switch (type) {
     //************User Get Profile states*************
     case TYPES.GET_PROFILE_SUCCESS:
@@ -48,6 +48,15 @@ const settingsReducers = (state = initialState, actions) => {
         isSuccess: false,
         isFailure: true,
         userProfile: null,
+      };
+    // Add Additional Info Success
+    case TYPES.ADD_ADDITIONAL_INFO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        isFailure: false,
+        userProfile: payload,
       };
     // Add Card Success
     case TYPES.ADD_CARD_SUCCESS:

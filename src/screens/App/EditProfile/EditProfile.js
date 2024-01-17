@@ -297,30 +297,30 @@ const EditProfile = ({ navigation, route }) => {
                       />
                     </>
                   }
-
-                  <AppInput
-                    onChangeText={handleChange('hourly_rate')}
-                    renderErrorMessage={true}
-                    placeholder="Hourly Rate"
-                    value={values.hourly_rate}
-                    onBlur={() => setFieldTouched('hourly_rate')}
-                    blurOnSubmit={false}
-                    disableFullscreenUI={true}
-                    autoCapitalize="none"
-                    touched={touched.hourly_rate}
-                    errorMessage={errors.hourly_rate}
-                    title={'Hourly Rate'}
-                    keyboardType={'numeric'}
-                    leftIcon={
-                      <Icon
-                        type={'fontisto'}
-                        name={'dollar'}
-                        size={12}
-                        color={colors.gr1}
-                      />
-                    }
-                  />
-
+                  {from == 'SUPPORT_CLOSER_HOME' &&
+                    <AppInput
+                      onChangeText={handleChange('hourly_rate')}
+                      renderErrorMessage={true}
+                      placeholder="Hourly Rate"
+                      value={values.hourly_rate}
+                      onBlur={() => setFieldTouched('hourly_rate')}
+                      blurOnSubmit={false}
+                      disableFullscreenUI={true}
+                      autoCapitalize="none"
+                      touched={touched.hourly_rate}
+                      errorMessage={errors.hourly_rate}
+                      title={'Hourly Rate'}
+                      keyboardType={'numeric'}
+                      leftIcon={
+                        <Icon
+                          type={'fontisto'}
+                          name={'dollar'}
+                          size={12}
+                          color={colors.gr1}
+                        />
+                      }
+                    />
+                  }
                   <Text style={styles.textStyle}>Tell something about you</Text>
                   <TextBox
                     conStyle={spacing.px2}
@@ -331,18 +331,20 @@ const EditProfile = ({ navigation, route }) => {
                     touched={touched.bio}
                     height={190}
                   />
-                  <GalleryCard
-                    onPressImg={index => {
-                      // removeImage(index);
-                    }}
-                    imageArray={[]}
-                    title={'Upload Photos'}
-                    titleContainerStyle={{ paddingHorizontal: WP('3') }}
-                    onSelect={(arr) => {
-                      // setimageArray(arr)
-                    }}
-                  // subtitle={'Max 30 images'}
-                  />
+                  {from == 'SUPPORT_CLOSER_HOME' &&
+                    <GalleryCard
+                      onPressImg={index => {
+                        // removeImage(index);
+                      }}
+                      imageArray={[]}
+                      title={'Upload Photos'}
+                      titleContainerStyle={{ paddingHorizontal: WP('3') }}
+                      onSelect={(arr) => {
+                        // setimageArray(arr)
+                      }}
+                    // subtitle={'Max 30 images'}
+                    />
+                  }
                   <View style={styles.btnCon}>
                     <AppButton
                       onPress={handleSubmit}
