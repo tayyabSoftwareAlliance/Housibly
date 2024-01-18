@@ -195,7 +195,7 @@ const Signup = ({navigation, route}) => {
                   By creating account, you agree to our{' '}
                   <Text
                     onPress={() => {
-                      navigation.navigate('TermsConditions');
+                      navigation.navigate('Terms');
                     }}
                     style={[
                       styles.footerText,

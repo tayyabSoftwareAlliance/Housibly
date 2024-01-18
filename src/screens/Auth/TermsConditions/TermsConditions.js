@@ -1,15 +1,18 @@
-import React from 'react';
-import {Text, View, Image, ScrollView, SafeAreaView} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, Image, ScrollView, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import {
   AppButton,
   AppHeader,
   BackHeader,
   Spacer,
 } from '../../../components';
-import {appIcons, WP} from '../../../shared/exporter';
+import { appIcons, WP } from '../../../shared/exporter';
 import styles from './styles';
 
-const TermsConditions = () => {
+const TermsConditions = ({ navigation }) => {
+
+  const [isChecked, setIsChecked] = useState(false)
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <AppHeader />
@@ -41,13 +44,32 @@ const TermsConditions = () => {
         </Text>
       </ScrollView>
       <View style={styles.rowContainer}>
-        <Image source={appIcons.box} style={styles.iconStyle} />
+        {/* <Image source={appIcons.box} style={styles.iconStyle} /> */}
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => setIsChecked(prev => !prev)}>
+          <Image
+            source={isChecked ? appIcons.checkedBox : appIcons.box}
+            style={styles.iconStyle}
+          />
+        </TouchableOpacity>
         <Text style={styles.agreeTxtStyle}>
           I agree to this Terms & Conditions
         </Text>
       </View>
       <View style={styles.btnContainer}>
-        <AppButton title="Continue" />
+        <AppButton
+          title="Continue"
+          onPress={() => {
+            if (isChecked) {
+              setTimeout(() => {
+                navigation.replace('App')
+              }, 500)
+            } else {
+              Alert.alert('Alert', 'Please agree to Term & Conditions')
+            }
+          }}
+        />
       </View>
     </SafeAreaView>
   );

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -27,16 +27,16 @@ import {
   networkText,
 } from '../../../shared/exporter';
 import styles from './styles';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik } from 'formik';
 import ImagePicker from 'react-native-image-crop-picker';
-import {useDispatch, useSelector} from 'react-redux';
-import {addInfoRequest} from '../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addInfoRequest } from '../../../redux/actions';
 
-const AddPersonalInfo = ({navigation}) => {
+const AddPersonalInfo = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {userInfo} = useSelector(state => state?.auth);
+  const { userInfo } = useSelector(state => state?.auth);
   const dispatch = useDispatch(null);
   const onSubmit = async values => {
     const check = await checkConnected();
@@ -52,9 +52,7 @@ const AddPersonalInfo = ({navigation}) => {
       form.append('user[avatar]', imgObj);
       const addInfoSuccess = async res => {
         setLoading(false);
-        setTimeout(() => {
-          navigation?.replace('App');
-        }, 500);
+        navigation?.navigate('AuthPrivacyPolicy');
       };
       const addInfoFailure = async res => {
         setLoading(false);

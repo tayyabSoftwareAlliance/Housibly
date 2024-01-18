@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {WP, colors, size, family} from '../../../shared/exporter';
+import { StyleSheet } from 'react-native';
+import { WP, colors, size, family } from '../../../shared/exporter';
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -21,6 +21,11 @@ const styles = StyleSheet.create({
     fontSize: size.normal,
     marginVertical: WP('5'),
     fontFamily: family.Gilroy_Regular,
+  },
+  btnContainer: {
+    marginTop: WP('9'),
+    marginBottom: WP('4'),
+    paddingHorizontal: WP('8.2'),
   },
 });
 

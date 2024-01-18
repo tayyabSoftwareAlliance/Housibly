@@ -1,12 +1,12 @@
 import React from 'react';
-import {Text, View, FlatList, SafeAreaView} from 'react-native';
-import {AppHeader, BackHeader, Spacer} from '../../../components';
-import {WP} from '../../../shared/exporter';
-import {privacyPolicy} from '../../../shared/utilities/constant';
+import { Text, View, FlatList, SafeAreaView } from 'react-native';
+import { AppButton, AppHeader, BackHeader, Spacer } from '../../../components';
+import { WP } from '../../../shared/exporter';
+import { privacyPolicy } from '../../../shared/utilities/constant';
 import styles from './styles';
 
-const PrivacyPolicy = () => {
-  const renderItem = ({item, index}) => {
+const PrivacyPolicy = ({ navigation }) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View key={index} style={styles.itemContainer}>
         <Text style={styles.quesTxtStyle}>{item.ques}</Text>
@@ -27,6 +27,14 @@ const PrivacyPolicy = () => {
         contentContainerStyle={styles.flStyle}
         keyExtractor={(item, index) => (item + index).toString()}
       />
+      <View style={styles.btnContainer}>
+        <AppButton
+          title="Continue"
+          onPress={() => {
+            navigation.navigate('TermsConditions')
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };

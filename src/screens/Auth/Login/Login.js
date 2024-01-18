@@ -242,7 +242,7 @@ const Login = ({navigation}) => {
                     By creating account, you agree to our{' '}
                     <Text
                       onPress={() => {
-                        navigation.navigate('TermsConditions');
+                        navigation.navigate('Terms');
                       }}
                       style={[
                         styles.footerText,
