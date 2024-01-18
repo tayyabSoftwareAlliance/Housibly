@@ -5,7 +5,7 @@ import styles from './styles';
 import { colors } from '../../../../shared/exporter';
 import { useIsFocused } from '@react-navigation/native';
 
-const MapScreen = () => {
+const MapScreen = ({route}) => {
 
   const isFocused = useIsFocused()
 
@@ -20,7 +20,7 @@ const MapScreen = () => {
   return (
     <SafeAreaView style={styles.rootContainer}>
       <View style={styles.headerStyle}>
-        <BackHeader tintColor={colors.white} />
+        <BackHeader tintColor={colors.white} title={route.params?.savedLocation?.title} txtColor={colors.white} />
       </View>
       <MapComponent />
     </SafeAreaView>

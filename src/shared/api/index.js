@@ -47,4 +47,7 @@ export const app = {
   getPropertiesInsideCircle: params => requests.get(`${ENDPOINTS.CIRCLE_PROPERTY}?${params}`),
   getPropertiesInsidePolygon: params => requests.get(`${ENDPOINTS.POLYGON_PROPERTY}?${params}`),
   getPropertiesAgainstZipCode: params => requests.get(`${ENDPOINTS.ZIPCODE_PROPERTY}?${params}`),
+  createSavedLocation: data => requests.post(ENDPOINTS.SAVED_LOCATIONS,data),
+  updateSavedLocation: (data,id) => requests.put(`${ENDPOINTS.SAVED_LOCATIONS}/${id}`,data),
+  getSavedLocations: () => requests.get(ENDPOINTS.SAVED_LOCATIONS),
 };

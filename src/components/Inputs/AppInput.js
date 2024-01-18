@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import {Input, IconProps, Icon} from 'react-native-elements';
-import {useStore} from 'react-redux';
-import {family, size, colors, WP} from '../../shared/exporter';
+import { Text, View, StyleSheet } from 'react-native';
+import { Input, IconProps, Icon } from 'react-native-elements';
+import { useStore } from 'react-redux';
+import { family, size, colors, WP } from '../../shared/exporter';
 
 const AppInput = ({
   placeholder,
@@ -23,11 +23,12 @@ const AppInput = ({
   title,
   keyboardType,
   maxLength,
+  containerStyle = {}
 }) => {
   const [showPass, setShowPass] = React.useState(secureTextEntry);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {title && <Text style={styles.textStyle}>{title}</Text>}
       <Input
         placeholder={placeholder}
@@ -69,7 +70,7 @@ const AppInput = ({
   );
 };
 
-export {AppInput};
+export { AppInput };
 
 const styles = StyleSheet.create({
   container: {},

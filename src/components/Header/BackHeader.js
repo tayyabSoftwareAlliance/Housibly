@@ -12,6 +12,7 @@ export const BackHeader = ({
   txtCenter = false,
   txtSize = size.h6,
   txtFamily = family.Gilroy_Bold,
+  txtColor,
   tintColor = colors.b1,
   onPressRight,
   containerStyle,
@@ -39,6 +40,7 @@ export const BackHeader = ({
                   txtCenter,
                   txtSize,
                   txtFamily,
+                  txtColor
                 )}>
                 {title}
               </Text>
@@ -83,14 +85,15 @@ const styles = StyleSheet.create({
     width: WP('5'),
     height: WP('5'),
   },
-  titleTxtStyle: (isBox, isCenter, txtSize, txtFamily) => {
+  titleTxtStyle: (isBox, isCenter, txtSize, txtFamily,txtColor) => {
     return {
       width: isBox ? '80%' : '88%',
       left: WP('3.6'),
-      color: colors.b1,
+      color: txtColor || colors.b1,
       fontSize: txtSize,
       fontFamily: txtFamily,
       textAlign: isCenter ? 'center' : 'left',
+      textTransform:'capitalize'
     };
   },
   center: {

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
   WP,
@@ -136,11 +136,22 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
-  footerComponent:{
-    height:WP(10),
-    justifyContent:'center',
-    alignItems:'center',
-    width:'100%'
+  footerComponent: {
+    height: WP(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%'
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  noData: {
+    color: colors.g17,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Regular,
+    textAlign: 'center'
   }
 });
 

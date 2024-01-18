@@ -8,6 +8,7 @@ import {
   Pressable,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { Circle, Marker, Polygon } from 'react-native-maps';
@@ -23,6 +24,7 @@ import Modal from 'react-native-modal';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { AppButton } from '../AppButton/AppButton';
 import { BlurView } from "@react-native-community/blur";
+import { AppInput } from '../Inputs/AppInput';
 
 const DragMarker = () => (
   <View style={styles.dragMarker} />
@@ -121,8 +123,62 @@ const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmitEditing }) => {
   )
 }
 
+
+const SaveLocationTitleModal = ({ isVisible, onBackdropPress, title, setTitle, loader, onSubmitEditing }) => {
+
+  const params = useRoute().params
+
+  return (
+    <Modal
+      isVisible={isVisible}
+      backdropColor='rgba(0,0,0,1)'
+      // onBackdropPress={!loader && onBackdropPress}
+      onBackButtonPress={!loader && onBackdropPress}
+    >
+      <View style={styles.saveLocationModalContainerInner}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.crossIconView}
+          onPress={onBackdropPress}>
+          <Image
+            resizeMode="contain"
+            source={appIcons.crossIcon}
+            style={styles.crossIconStyle}
+          />
+        </TouchableOpacity>
+        <Text style={styles.saveLocationModalTitle}>Add Location Title</Text>
+        <AppInput
+          onChangeText={(e) => setTitle(e)}
+          placeholder="Enter title"
+          value={title}
+          containerStyle={{ marginVertical: WP(4), marginBottom: WP(4) }}
+          renderErrorMessage={false}
+        />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.saveLocationModalButtonStyle}
+          onPress={() => {
+            if (!title) {
+              Alert.alert('Please Enter Title')
+              return
+            }
+            onSubmitEditing(title)
+          }}>
+          {loader ?
+            <ActivityIndicator color={colors.white} /> :
+            <Text style={styles.saveLocationModalBtnTxtStyle}>Save</Text>
+          }
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  )
+}
+
 export const MapComponent = () => {
 
+  const params = useRoute().params
+  const from = params?.from
+  const savedLocation = params?.savedLocation
   const mapRef = useRef()
   const [polygonGuideModal, setPolygonGuideModal] = useState(false)
   const [circleGuideModal, setCircleGuideModal] = useState(false)
@@ -139,6 +195,9 @@ export const MapComponent = () => {
   const [selectedPropertyData, setSelectedPropertyData] = useState(null)
   const [selectedPropertyDataModal, setSelectedPropertyDataModal] = useState(false)
   const [zipCodeModal, setZipCodeModal] = useState(false)
+  const [saveLocationTitleModal, setSaveLocationTitleModal] = useState(false)
+  const [saveLocationTitle, setSaveLocationTitle] = useState('')
+  const [saveLocationLoader, setSaveLocationLoader] = useState(false)
   const [zipCode, setZipCode] = useState('')
   const navigation = useNavigation()
   const isFocused = useIsFocused()
@@ -203,14 +262,14 @@ export const MapComponent = () => {
       const res = await app.getPropertiesAgainstZipCode(params);
       if (res?.status == 200) {
         setProperties(res.data || [])
-        if(res.data?.length > 0) 
-        mapRef.current?.animateToRegion({
-          ...region,
-          latitude: res.data[0]?.latitude,
-          longitude: res.data[0]?.longitude,
-        })
+        if (res.data?.length > 0)
+          mapRef.current?.animateToRegion({
+            ...region,
+            latitude: res.data[0]?.latitude,
+            longitude: res.data[0]?.longitude,
+          })
         else
-        Alert.alert('Alert','No Properties Found!')
+          Alert.alert('Alert', 'No Properties Found!')
       }
     } catch (error) {
       console.log(error.response);
@@ -254,6 +313,7 @@ export const MapComponent = () => {
   const handlePolygon = useCallback(async () => {
     setCircleCoords([])
     setProperties([])
+    setZipCode('')
     if (polygonCoords.length > 0) {
       setPolygonCoords([])
       return
@@ -274,6 +334,7 @@ export const MapComponent = () => {
   const handleCircle = useCallback(async () => {
     setPolygonCoords([])
     setProperties([])
+    setZipCode('')
     if (circleCoords.length > 0) {
       setCircleCoords([])
       return
@@ -327,6 +388,86 @@ export const MapComponent = () => {
   // const handleRefresh = useCallback(() => {
 
   // }, [])
+
+  const navigateToCoordinate = useCallback(() => {
+    let regionToNavigate;
+    if (savedLocation?.search_type == 'polygon' &&
+      savedLocation?.polygon?.length > 0) {
+      regionToNavigate = {
+        ...region,
+        latitude: Number(savedLocation.polygon[0]?.lat),
+        longitude: Number(savedLocation.polygon[0]?.lng),
+      }
+    } else if (savedLocation?.search_type == 'circle' &&
+      savedLocation?.circle?.length > 0) {
+      regionToNavigate = {
+        ...region,
+        latitude: Number(savedLocation.circle[0]?.lat),
+        longitude: Number(savedLocation.circle[0]?.lng),
+      }
+    }
+    if (regionToNavigate) {
+      mapRef.current?.animateToRegion(regionToNavigate)
+      setRegion(regionToNavigate)
+    }
+  }, [])
+
+  const saveLocation = async (title) => {
+    try {
+      setSaveLocationLoader(true)
+      const formData = new FormData()
+      formData.append('saved_search[title]', title)
+      formData.append(
+        'saved_search[search_type]',
+        polygonCoords?.length > 0 ?
+          'polygon' :
+          circleCoords?.length > 0 ?
+            'circle' :
+            'zip_code'
+      )
+      if (polygonCoords.length > 0) {
+        polygonCoords.forEach(item => {
+          formData.append('saved_search[polygon][][lat]', item.latitude)
+          formData.append('saved_search[polygon][][lng]', item.longitude)
+        })
+      } else if (circleCoords.length > 0) {
+        circleCoords.forEach(item => {
+          formData.append('saved_search[circle][][lat]', item.latitude)
+          formData.append('saved_search[circle][][lng]', item.longitude)
+        })
+      } else {
+        formData.append('saved_search[zip_code]', zipCode)
+      }
+      properties[0]?.address && formData.append('saved_search[display_address]', properties[0].address)
+      console.log('formData', formData)
+      const res = from == 'savedLocation' ? await app.updateSavedLocation(formData, savedLocation?.id) : await app.createSavedLocation(formData);
+      if (res?.status == 200) {
+        setSaveLocationTitleModal(false)
+        from != 'savedLocation' && setSaveLocationTitle('')
+        Alert.alert(`Location ${from == 'savedLocation' ? 'Updated' : 'Saved'} Successfully!`)
+        console.log('resss', res?.data)
+      } else {
+        Alert.alert('Failed to Save Location!')
+      }
+    } catch (error) {
+      console.log(error);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setSaveLocationLoader(false)
+    }
+  }
+
+  useEffect(() => {
+    if (from == 'savedLocation') {
+      if (savedLocation?.search_type == 'polygon')
+        setPolygonCoords(savedLocation?.polygon?.map(it => ({ latitude: Number(it?.lat), longitude: Number(it?.lng) })) || [])
+      else if (savedLocation?.search_type == 'circle')
+        setCircleCoords(savedLocation?.circle?.map(it => ({ latitude: Number(it?.lat), longitude: Number(it?.lng) })) || [])
+      else
+        savedLocation?.zip_code && getPropertiesAgainstZipCode(savedLocation?.zip_code)
+      setSaveLocationTitle(savedLocation?.title)
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -406,7 +547,10 @@ export const MapComponent = () => {
         showsMyLocationButton={false}
         onMapReady={() => {
           setTimeout(() => {
-            handleNavigator()
+            if (from == 'savedLocation')
+              navigateToCoordinate()
+            else
+              handleNavigator()
           }, 0)
         }}
       >
@@ -500,6 +644,20 @@ export const MapComponent = () => {
               onPress={() => navigation.navigate('AllProperties', { properties })}
             />
           }
+          {(polygonCoords.length > 0 ||
+            circleCoords.length > 0 ||
+            zipCode) &&
+            <AppButton
+              width="38.5%"
+              height={WP('10.3')}
+              title={from == 'savedLocation' ? 'Update' : 'Save'}
+              borderColor={colors.p2}
+              shadowColor={colors.white}
+              textStyle={styles.btnTxtStyle}
+              buttonStyle={{ marginLeft: WP(5) }}
+              onPress={() => setSaveLocationTitleModal(true)}
+            />
+          }
         </View>
       </View>
       <AppLoader loading={isLoading} />
@@ -521,6 +679,14 @@ export const MapComponent = () => {
         isVisible={zipCodeModal}
         onBackdropPress={() => setZipCodeModal(false)}
         onSubmitEditing={(zipCode) => getPropertiesAgainstZipCode(zipCode)}
+      />
+      <SaveLocationTitleModal
+        isVisible={saveLocationTitleModal}
+        onBackdropPress={() => setSaveLocationTitleModal(false)}
+        title={saveLocationTitle}
+        setTitle={setSaveLocationTitle}
+        loader={saveLocationLoader}
+        onSubmitEditing={saveLocation}
       />
     </View>
   );
@@ -628,7 +794,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexWrap: 'wrap'
   },
   zipCodeContainer: {
     backgroundColor: colors.white,
@@ -669,7 +836,46 @@ const styles = StyleSheet.create({
     fontSize: size.small,
     fontFamily: family.Gilroy_Medium,
     textAlign: 'center'
-  }
+  },
+  saveLocationModalContainerInner: {
+    backgroundColor: 'white',
+    paddingVertical: WP(4),
+    paddingHorizontal: WP(3.5),
+    borderRadius: 8,
+  },
+  crossIconView: {
+    width: WP('5'),
+    height: WP('5'),
+    position: 'absolute',
+    top: WP(2),
+    right: WP(4),
+  },
+  crossIconStyle: {
+    width: WP('2'),
+    height: WP('4'),
+    alignSelf: 'flex-end',
+  },
+  saveLocationModalTitle: {
+    color: colors.b1,
+    fontSize: size.h6,
+    alignSelf: 'center',
+    fontFamily: family.Gilroy_SemiBold,
+    textTransform: 'capitalize'
+  },
+  saveLocationModalButtonStyle: {
+    borderRadius: 15,
+    width: WP('28.7'),
+    height: WP('7.8'),
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.p1,
+  },
+  saveLocationModalBtnTxtStyle: {
+    color: colors.white,
+    fontSize: size.xsmall,
+    fontFamily: family.Gilroy_SemiBold,
+  },
 });
 
 const customStyle = [

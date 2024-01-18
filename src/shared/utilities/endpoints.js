@@ -33,6 +33,7 @@ const ENDPOINTS = {
   POLYGON_PROPERTY: 'properties/find_in_polygon',
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
   USER_PREFERENCE: 'user_preferences',
+  SAVED_LOCATIONS: 'saved_searches',
 };
 
 export { BASE_URL, ENDPOINTS };

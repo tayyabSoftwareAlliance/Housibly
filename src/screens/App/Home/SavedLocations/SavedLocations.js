@@ -8,42 +8,31 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import { BackHeader } from '../../../../components';
+import { AppLoader, BackHeader } from '../../../../components';
 import { appIcons, colors, family, size, WP } from '../../../../shared/exporter';
 import { filter_property_type_list, months, property_image } from '../../../../shared/utilities/constant';
 import styles from './styles';
 import FilterComponent from '../../../../components/Custom/FilterComponent';
-
-const SavedLocationsData = [
-  {
-    id: 1,
-    title: 'Dream Address',
-    address: "abc",
-    createdAt: new Date()
-  },
-  {
-    id: 2,
-    title: 'Dream Address 2',
-    address: "abc",
-    createdAt: new Date()
-  }
-]
+import { app } from '../../../../shared/api';
+import { useIsFocused } from '@react-navigation/native'
 
 const renderDate = (date) => {
   date = new Date(date)
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
 }
 
-const renderItem = (item, index) => {
+const renderItem = (item, index, navigation) => {
   return (
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => { }}>
+      onPress={() => {
+        navigation.navigate('MapScreen', { savedLocation: item, from: 'savedLocation' })
+      }}>
       <View style={{ paddingVertical: 5 }}>
-          <Text numberOfLines={1} style={styles.nameTxtStyle}>{item?.title}</Text>
-        <Text numberOfLines={1} style={[styles.smallTxtStyle, { paddingTop: 13, paddingBottom: 6 }]}>{item?.address}</Text>
-        <Text numberOfLines={1} style={styles.timeTxtStyle}>Saved Last {renderDate(item?.createdAt)}</Text>
+        <Text numberOfLines={1} style={[styles.nameTxtStyle, { textTransform: 'capitalize' }]}>{item?.title}</Text>
+        <Text numberOfLines={1} style={[styles.smallTxtStyle, { paddingTop: 13, paddingBottom: 6 }]}>{item?.display_address || 'N/A'}</Text>
+        <Text numberOfLines={1} style={styles.timeTxtStyle}>Saved Last {renderDate(item?.updated_at)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -51,7 +40,30 @@ const renderItem = (item, index) => {
 
 const SavedLocations = ({ navigation }) => {
 
-  const [data, setData] = useState(SavedLocationsData)
+  const [data, setData] = useState([])
+  const [loader, setLoader] = useState(true)
+  const isFocused = useIsFocused()
+
+  const fetchSavedLocations = async () => {
+    try {
+      setLoader(true)
+      const res = await app.getSavedLocations();
+      if (res?.status == 200) {
+        setData(res.data || [])
+      } else {
+        Alert.alert('Failed to Save Location!')
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setLoader(false)
+    }
+  }
+
+  useEffect(() => {
+    isFocused && fetchSavedLocations()
+  }, [isFocused])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -67,15 +79,20 @@ const SavedLocations = ({ navigation }) => {
         txtFamily={family.Gilroy_SemiBold}
       />
       <Text style={styles.titleTxtStyle}>Saved Lists</Text>
-      {data.length > 0 &&
+      {data.length > 0 ?
         <FlatList
           data={data}
           renderItem={({ item, index }) => renderItem(item, index, navigation)}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flStyle}
-        />
+        /> :
+        !loader ?
+          <View style={styles.noDataContainer} >
+            <Text style={styles.noData} >No Saved Locations</Text>
+          </View> : null
       }
+      <AppLoader loading={loader} />
     </SafeAreaView>
   )
 }
