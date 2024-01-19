@@ -5,6 +5,8 @@ import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useNavigation } from '@react-navigation/native'
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
+import { useIsFocused } from '@react-navigation/native'
+import { app } from '../../../shared/api';
 
 const AllChatsData = [
   {
@@ -114,6 +116,8 @@ const AllChats = () => {
   const navigation = useNavigation()
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedChat, setSelectedChat] = useState(null)
+  const [loader, setLoader] = useState(true)
+  const isFocused = useIsFocused()
 
   const closeRow = (map, key) => {
     map && map[key] && map[key].closeRow();
@@ -123,6 +127,21 @@ const AllChats = () => {
     closeRow(rowMap, data?.index);
     setDeleteModal(true)
     setSelectedChat(data?.item)
+  }
+
+  const fetchAllChats = async () => {
+    try {
+      setLoader(true)
+      const res = await app.getAllChats();
+      if (res?.status == 200) {
+        setData(res.data || [])
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setLoader(false)
+    }
   }
 
   return (

@@ -20,13 +20,11 @@ export const auth = {
   register: data => requests.post(ENDPOINTS.REGISTER, data),
   login: data => requests.post(ENDPOINTS.LOGIN, data),
   socialLogin: data => requests.post(ENDPOINTS.SOCIAL_LOGIN, data),
-  forgotPassword: (type, data) =>
-    requests.post(`${ENDPOINTS.FORGOT_PASS}/${type}`, data),
+  forgotPassword: (type, data) => requests.post(`${ENDPOINTS.FORGOT_PASS}/${type}`, data),
   OTPVerify: data => requests.post(ENDPOINTS.VERIFY_OTP, data),
   resendOTP: data => requests.post(ENDPOINTS.RESEND_OTP, data),
   addInfo: data => requests.post(ENDPOINTS.INFO_CONST, data),
-  resetPassword: (type, data) =>
-    requests.post(`${ENDPOINTS.RESET_PASS}/${type}`, data),
+  resetPassword: (type, data) => requests.post(`${ENDPOINTS.RESET_PASS}/${type}`, data),
   logoutUser: () => requests.post(ENDPOINTS.LOGOUT),
 };
 
@@ -50,4 +48,5 @@ export const app = {
   createSavedLocation: data => requests.post(ENDPOINTS.SAVED_LOCATIONS,data),
   updateSavedLocation: (data,id) => requests.put(`${ENDPOINTS.SAVED_LOCATIONS}/${id}`,data),
   getSavedLocations: () => requests.get(ENDPOINTS.SAVED_LOCATIONS),
+  getAllChats: () => requests.get(ENDPOINTS.CONVERSATIONS),
 };

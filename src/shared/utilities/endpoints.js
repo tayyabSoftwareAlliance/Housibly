@@ -34,6 +34,10 @@ const ENDPOINTS = {
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
+
+  //chat
+  CONVERSATIONS: 'conversations',
+
 };
 
 export { BASE_URL, ENDPOINTS };
