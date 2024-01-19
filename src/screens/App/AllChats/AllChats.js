@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages } from '../../../shared/exporter';
+import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, responseValidator } from '../../../shared/exporter';
 import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useNavigation } from '@react-navigation/native'
