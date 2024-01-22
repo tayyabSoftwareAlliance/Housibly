@@ -27,6 +27,7 @@ import { app } from '../../../shared/api';
 import { useIsFocused } from '@react-navigation/native'
 import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
+import CacheImage from 'react-native-image-cache-wrapper';
 
 const image_options = {
   width: 300,
@@ -43,19 +44,19 @@ const renderItem = (item, index, userId) => {
         // Sender Bubble
         <View style={styles.senderBubble}>
           <View style={styles.senderBubbleStyles}>
-            {item.image && <Image source={{ uri: item.image }} style={styles.personImgStyle} />}
+            {item.image && <CacheImage source={{ uri: item.image }} style={styles.personImgStyle} />}
             {item.body && <Text style={styles.senderMsgStyles}>{item.body}</Text>}
           </View>
         </View>
       ) : (
         // Receiver Bubble
         <View style={styles.receiverBubble}>
-          <View style={{ width: '70%' }}>
+          {/* <View style={{ width: '70%' }}> */}
             <View style={styles.receiverBubbleStyles}>
               {item.image && <Image source={{ uri: item.image }} style={styles.personImgStyle} />}
               {item.body && <Text style={styles.receiverMsgStyles}>{item.body}</Text>}
             </View>
-          </View>
+          {/* </View> */}
         </View>
       )}
     </View>

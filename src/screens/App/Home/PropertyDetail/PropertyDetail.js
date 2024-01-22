@@ -420,6 +420,28 @@ const PropertyDetail = ({ navigation, route }) => {
               />
             </View>
           )}
+          <View style={styles.bottomView}>
+            {/* <AppButton
+            width="38.5%"
+            height={WP('10.3')}
+            title="Enter Address"
+            borderColor={colors.p2}
+            shadowColor={colors.white}
+            textStyle={styles.btnTxtStyle}
+          />
+          <View style={{ width: WP('3') }} /> */}
+            <AppButton
+              onPress={() => {
+                console.log(JSON.stringify(propertyData,null,2))
+                // navigation.navigate('PersonChat', { conversation_id: item?.id, avatar: item?.avatar, full_name: item?.full_name })
+              }}
+              width="38.5%"
+              height={WP('10.3')}
+              borderColor={colors.p2}
+              title="Contact Seller"
+              textStyle={styles.btnTxtStyle}
+            />
+          </View>
         </View>
       </KeyboardAwareScrollView>
       <AppLoader loading={loading} />

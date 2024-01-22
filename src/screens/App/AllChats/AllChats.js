@@ -8,6 +8,7 @@ import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 import { useIsFocused } from '@react-navigation/native'
 import { app } from '../../../shared/api';
 import { AppLoader } from '../../../components';
+import CacheImage from 'react-native-image-cache-wrapper';
 
 const AllChatsData = [
   {
@@ -81,8 +82,8 @@ const renderItem = (item, index, navigation) => {
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => navigation.navigate('PersonChat', { conversation_id: item?.id,avatar:item?.avatar,full_name:item?.full_name })}>
-      <Image
+      onPress={() => navigation.navigate('PersonChat', { conversation_id: item?.id, avatar: item?.avatar, full_name: item?.full_name })}>
+      <CacheImage
         source={{ uri: item?.avatar }}
         style={styles.imgStyle}
       />
@@ -138,12 +139,12 @@ const AllChats = () => {
   }
 
   const fetchAllChats = async () => {
-    console.log('chattttttttttttttttttt')
+    console.log('getAllchat')
     try {
       setLoader(true)
       const res = await app.getAllChats();
       if (res?.status == 200) {
-      const arr = res.data?.sort((a,b) => new Date(b.updated_at)?.getTime() - new Date(a.updated_at)?.getTime())
+        const arr = res.data?.sort((a, b) => new Date(b.updated_at)?.getTime() - new Date(a.updated_at)?.getTime())
         setChats(arr || [])
       }
     } catch (error) {
@@ -166,6 +167,24 @@ const AllChats = () => {
   }, [isFocused])
 
   // console.log('chats ', chats)
+
+  const deleteChat = async () => {
+    console.log('selectedChat?.id',selectedChat?.id)
+    try {
+      setLoader(true)
+      const res = await app.deleteChat(selectedChat?.id);
+      console.log('resss',res)
+      if (res?.status == 200) {
+        const arr = chats.filter(item > item?.id != id)
+        setChats(arr || [])
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setLoader(false)
+    }
+  }
 
   return (
     <>
@@ -201,14 +220,14 @@ const AllChats = () => {
         </View>
       }
       <ChatPopupModal
-        image={selectedChat?.user?.image}
-        title={selectedChat?.user?.name}
+        image={selectedChat?.avatar}
+        title={selectedChat?.full_name}
         subtitle={'Delete conversation?'}
         buttontitle={'Delete'}
         show={deleteModal}
         onPressHide={() => setDeleteModal(false)}
         buttonLoader={false}
-        onButtonPress={() => { }}
+        onButtonPress={deleteChat}
       />
       {/* <AppLoader loading={loader}/> */}
     </>

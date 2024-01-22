@@ -36,7 +36,7 @@ const ENDPOINTS = {
   SAVED_LOCATIONS: 'saved_searches',
 
   //chat
-  GET_ALL_CONVERSATIONS: 'conversations',
+  CONVERSATIONS: 'conversations',
   GET_ALL_MESSAGES: 'messages/get_messages',
   SEND_MESSAGE: 'messages',
   READ_MESSAGES: 'conversations/read_messages',

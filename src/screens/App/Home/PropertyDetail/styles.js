@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   HP,
   WP,
@@ -46,6 +46,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: WP('3.85'),
     paddingVertical: 20,
     marginTop: HP(3),
+  },
+  bottomView: {
+    width: '100%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom:HP(1)
+  },
+  btnTxtStyle: {
+    color: colors.white,
+    fontSize: size.tiny,
+    fontFamily: family.Gilroy_SemiBold,
   },
 });
 

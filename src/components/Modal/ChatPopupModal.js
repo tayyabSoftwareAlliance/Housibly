@@ -17,7 +17,7 @@ export const ChatPopupModal = ({ image, title, subtitle,buttontitle, show, onPre
             style={styles.crossIconStyle}
           />
         </TouchableOpacity>
-        <Image source={image} style={styles.imgStyle} />
+        <Image source={{uri:image}} style={styles.imgStyle} />
         <Text style={styles.nameTxtStyle}>{title || 'N/A'}</Text>
         <Text style={styles.removeTxtStyle}>{subtitle}</Text>
         <TouchableOpacity
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     height: WP('25'),
     borderRadius: 15,
     alignSelf: 'center',
+    backgroundColor:colors.g14
   },
   nameTxtStyle: {
     color: colors.b1,
