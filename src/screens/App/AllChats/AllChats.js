@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, responseValidator } from '../../../shared/exporter';
+import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, colors, responseValidator } from '../../../shared/exporter';
 import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useNavigation } from '@react-navigation/native'
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 import { useIsFocused } from '@react-navigation/native'
 import { app } from '../../../shared/api';
+import { AppLoader } from '../../../components';
 
 const AllChatsData = [
   {
@@ -80,14 +81,20 @@ const renderItem = (item, index, navigation) => {
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => navigation.navigate('PersonChat')}>
+      onPress={() => navigation.navigate('PersonChat', { conversation_id: item?.id,avatar:item?.avatar,full_name:item?.full_name })}>
       <Image
-        source={item?.user?.image}
+        source={{ uri: item?.avatar }}
         style={styles.imgStyle}
       />
       <View>
-        <Text style={styles.chatTitle} numberOfLines={1}>{item?.user?.name}</Text>
-        <Text style={styles.chatMessage} numberOfLines={1}>{item?.lastMessage}</Text>
+        <Text style={styles.chatTitle} numberOfLines={1}>{item?.full_name}</Text>
+        <Text style={styles.chatMessage} numberOfLines={1}>{item?.message}</Text>
+
+        {item?.unread_message ?
+          <View style={styles.badge} >
+            <Text style={styles.badgeTxt}>{item.unread_message}</Text>
+          </View> : null
+        }
       </View>
     </TouchableOpacity>
   );
@@ -116,6 +123,7 @@ const AllChats = () => {
   const navigation = useNavigation()
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedChat, setSelectedChat] = useState(null)
+  const [chats, setChats] = useState([])
   const [loader, setLoader] = useState(true)
   const isFocused = useIsFocused()
 
@@ -130,11 +138,13 @@ const AllChats = () => {
   }
 
   const fetchAllChats = async () => {
+    console.log('chattttttttttttttttttt')
     try {
       setLoader(true)
       const res = await app.getAllChats();
       if (res?.status == 200) {
-        setData(res.data || [])
+      const arr = res.data?.sort((a,b) => new Date(b.updated_at)?.getTime() - new Date(a.updated_at)?.getTime())
+        setChats(arr || [])
       }
     } catch (error) {
       console.log(error.response);
@@ -144,34 +154,52 @@ const AllChats = () => {
     }
   }
 
+  useEffect(() => {
+    let interval;
+    if (isFocused) {
+      fetchAllChats()
+      interval = setInterval(() => fetchAllChats(), 10000)
+    } else {
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+  }, [isFocused])
+
+  // console.log('chats ', chats)
+
   return (
     <>
-      <SwipeListView
-        useFlatList
-        data={AllChatsData}
-        disableRightSwipe={true}
-        renderItem={({ item, index }) => renderItem(item, index, navigation)}
-        renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap, onDeleteButtonPress)}
-        leftOpenValue={180}
-        rightOpenValue={-180}
-        // previewRowKey={'0'}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
-        closeOnScroll
-        onRowOpen={(rowKey, rowMap) => {
-          let key = rowKey;
-          if (key === rowKey) return;
-          setTimeout(() => {
-            rowMap[rowKey].closeRow();
-          }, 2000);
-        }}
-        // closeOnRowPress
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: WP(3) }}
-        ListFooterComponent={<View />}
-        ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
-      />
+      {chats.length > 0 ?
+        <SwipeListView
+          useFlatList
+          data={chats}
+          disableRightSwipe={true}
+          renderItem={({ item, index }) => renderItem(item, index, navigation)}
+          renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap, onDeleteButtonPress)}
+          leftOpenValue={180}
+          rightOpenValue={-180}
+          // previewRowKey={'0'}
+          previewOpenValue={-40}
+          previewOpenDelay={3000}
+          closeOnScroll
+          onRowOpen={(rowKey, rowMap) => {
+            let key = rowKey;
+            if (key === rowKey) return;
+            setTimeout(() => {
+              rowMap[rowKey].closeRow();
+            }, 2000);
+          }}
+          // closeOnRowPress
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: WP(3) }}
+          ListFooterComponent={<View />}
+          ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
+        /> :
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+          <Text style={{ color: colors.g19 }} >No Conversations Found Yet!</Text>
+        </View>
+      }
       <ChatPopupModal
         image={selectedChat?.user?.image}
         title={selectedChat?.user?.name}
@@ -182,6 +210,7 @@ const AllChats = () => {
         buttonLoader={false}
         onButtonPress={() => { }}
       />
+      {/* <AppLoader loading={loader}/> */}
     </>
   );
 };

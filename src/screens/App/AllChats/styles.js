@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     width: WP(17),
     height: WP(17),
     marginRight: WP(2.5),
+    backgroundColor:colors.g14
   },
   backBtnsContainer: {
     height: WP(17),
@@ -53,6 +54,17 @@ const styles = StyleSheet.create({
     fontFamily: family.Gilroy_Medium,
     marginTop:WP(3),
     width:WP(68)
+  },
+  badge:{
+    position:'absolute',
+    right:0,
+    top:5,
+    backgroundColor:colors.p1,
+    paddingHorizontal:5,
+    borderRadius:10
+  },
+  badgeTxt:{
+    color:colors.white
   }
 });
 

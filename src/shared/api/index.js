@@ -48,5 +48,8 @@ export const app = {
   createSavedLocation: data => requests.post(ENDPOINTS.SAVED_LOCATIONS,data),
   updateSavedLocation: (data,id) => requests.put(`${ENDPOINTS.SAVED_LOCATIONS}/${id}`,data),
   getSavedLocations: () => requests.get(ENDPOINTS.SAVED_LOCATIONS),
-  getAllChats: () => requests.get(ENDPOINTS.CONVERSATIONS),
+  getAllChats: () => requests.get(ENDPOINTS.GET_ALL_CONVERSATIONS),
+  getAllMessages: (data) => requests.post(ENDPOINTS.GET_ALL_MESSAGES,data),
+  sendMessage: (data) => requests.post(ENDPOINTS.SEND_MESSAGE,data),
+  readMessages: (data) => requests.post(ENDPOINTS.READ_MESSAGES,data),
 };

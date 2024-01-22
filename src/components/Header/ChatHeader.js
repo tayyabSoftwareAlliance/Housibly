@@ -12,7 +12,7 @@ import {
 } from '../../shared/exporter';
 import {Icon} from 'react-native-elements';
 
-export const ChatHeader = ({rightIcon = false, onPressIcon}) => {
+export const ChatHeader = ({rightIcon = false, onPressIcon,avatar,name}) => {
   const navigation = useNavigation();
 
   return (
@@ -29,10 +29,10 @@ export const ChatHeader = ({rightIcon = false, onPressIcon}) => {
           </TouchableOpacity>
           <Image
             resizeMode="contain"
-            source={appImages.person3}
+            source={{uri:avatar}}
             style={styles.personImgStyle}
           />
-          <Text style={styles.nameTxtStyle}>Aspen Franci</Text>
+          <Text style={styles.nameTxtStyle}>{name}</Text>
         </View>
         <TouchableOpacity activeOpacity={0.7} onPress={onPressIcon}>
           <Icon
@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
     width: WP('8'),
     height: WP('8'),
     marginHorizontal: WP('3'),
+    backgroundColor:colors.g14,
+    borderRadius:5
   },
   nameTxtStyle: {
     color: colors.b1,
