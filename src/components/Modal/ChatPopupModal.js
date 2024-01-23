@@ -3,7 +3,7 @@ import { Text, View, Image, StyleSheet, TouchableOpacity, ActivityIndicator } fr
 import Modal from 'react-native-modal';
 import { colors, WP, family, size, appIcons } from '../../shared/exporter';
 
-export const ChatPopupModal = ({ image, title, subtitle,buttontitle, show, onPressHide,buttonLoader,onButtonPress }) => {
+export const ChatPopupModal = ({ image, title, subtitle,buttontitle, show, onPressHide,buttonLoader,onButtonPress,buttonStyle }) => {
   return (
     <Modal onBackdropPress={onPressHide} isVisible={show}>
       <View style={styles.modalContainer}>
@@ -22,7 +22,7 @@ export const ChatPopupModal = ({ image, title, subtitle,buttontitle, show, onPre
         <Text style={styles.removeTxtStyle}>{subtitle}</Text>
         <TouchableOpacity
           activeOpacity={0.7}
-          style={styles.buttonStyle}
+          style={[styles.buttonStyle,buttonStyle]}
           onPress={onButtonPress}>
           {buttonLoader ?
             <ActivityIndicator color={colors.white} /> :

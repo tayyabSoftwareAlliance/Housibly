@@ -179,6 +179,7 @@ export const MapComponent = () => {
   const params = useRoute().params
   const from = params?.from
   const savedLocation = params?.savedLocation
+  const propertyData = params?.propertyData
   const mapRef = useRef()
   const [polygonGuideModal, setPolygonGuideModal] = useState(false)
   const [circleGuideModal, setCircleGuideModal] = useState(false)
@@ -410,7 +411,17 @@ export const MapComponent = () => {
       mapRef.current?.animateToRegion(regionToNavigate)
       setRegion(regionToNavigate)
     }
-  }, [])
+  }, [region])
+
+  const navigateToSinglePropertyCoordinate = useCallback(() => {
+    const regionToNavigate = {
+      ...region,
+      latitude: Number(propertyData?.latitude),
+      longitude: Number(propertyData?.longitude),
+    }
+    mapRef.current?.animateToRegion(regionToNavigate)
+    setRegion(regionToNavigate)
+  }, [region])
 
   const saveLocation = async (title) => {
     try {
@@ -549,6 +560,8 @@ export const MapComponent = () => {
           setTimeout(() => {
             if (from == 'savedLocation')
               navigateToCoordinate()
+            else if (from == 'property_detail')
+              navigateToSinglePropertyCoordinate()
             else
               handleNavigator()
           }, 0)
@@ -606,6 +619,14 @@ export const MapComponent = () => {
             <PropertyMarker />
           </Marker>
         ))}
+        {(propertyData && !properties.length > 0 && !polygonCoords.length > 0 && !circleCoords.length > 0 && !zipCode) ?
+        <Marker
+            coordinate={{ latitude: propertyData.latitude, longitude: propertyData.longitude }}
+          // anchor={{ x: 0.5, y: 0.5 }}
+          >
+            <PropertyMarker />
+          </Marker> : null
+        }
       </MapView>
       <View style={styles.buttonsContainerStyle} >
         {zipCode &&
@@ -627,7 +648,8 @@ export const MapComponent = () => {
             width="38.5%"
             height={WP('10.3')}
             title="Enter Zip/Postal Code"
-            borderColor={colors.p2}
+            borderColor={colors.g21}
+            bgColor={colors.g21}
             shadowColor={colors.white}
             textStyle={styles.btnTxtStyle}
             onPress={() => setZipCodeModal(true)}
@@ -671,7 +693,7 @@ export const MapComponent = () => {
         onPress={() => {
           setSelectedPropertyDataModal(false)
           setTimeout(() => {
-            navigation.navigate('PropertyDetail', { propertyData: selectedPropertyData })
+            navigation.navigate('PropertyDetail', { propertyData: selectedPropertyData, type: 'not_my_property' })
           }, 1000)
         }}
       />

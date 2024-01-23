@@ -51,6 +51,8 @@ export const app = {
   getAllChats: () => requests.get(ENDPOINTS.CONVERSATIONS),
   deleteChat: (id) => requests.delete(`${ENDPOINTS.CONVERSATIONS}/${id}`),
   getAllMessages: (data) => requests.post(ENDPOINTS.GET_ALL_MESSAGES,data),
+  createConversation: (data) => requests.post(ENDPOINTS.CONVERSATIONS,data),
+  checkIsConversationCreated: (data) => requests.post(ENDPOINTS.CHECK_IS_CONVERSATION_CREATED,data),
   sendMessage: (data) => requests.post(ENDPOINTS.SEND_MESSAGE,data),
   readMessages: (data) => requests.post(ENDPOINTS.READ_MESSAGES,data),
 };

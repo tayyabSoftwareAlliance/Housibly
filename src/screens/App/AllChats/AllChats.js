@@ -126,6 +126,7 @@ const AllChats = () => {
   const [selectedChat, setSelectedChat] = useState(null)
   const [chats, setChats] = useState([])
   const [loader, setLoader] = useState(true)
+  const [deleteLoader, setDeleteLoader] = useState(false)
   const isFocused = useIsFocused()
 
   const closeRow = (map, key) => {
@@ -171,18 +172,19 @@ const AllChats = () => {
   const deleteChat = async () => {
     console.log('selectedChat?.id',selectedChat?.id)
     try {
-      setLoader(true)
+      setDeleteLoader(true)
       const res = await app.deleteChat(selectedChat?.id);
-      console.log('resss',res)
+      console.log('resss',res?.status)
       if (res?.status == 200) {
-        const arr = chats.filter(item > item?.id != id)
+        const arr = chats.filter(item => item?.id != selectedChat?.id)
         setChats(arr || [])
+        setDeleteModal(false)
       }
     } catch (error) {
       console.log(error.response);
       let msg = responseValidator(error?.response?.status, error?.response?.data);
     } finally {
-      setLoader(false)
+      setDeleteLoader(false)
     }
   }
 
@@ -226,7 +228,7 @@ const AllChats = () => {
         buttontitle={'Delete'}
         show={deleteModal}
         onPressHide={() => setDeleteModal(false)}
-        buttonLoader={false}
+        buttonLoader={deleteLoader}
         onButtonPress={deleteChat}
       />
       {/* <AppLoader loading={loader}/> */}

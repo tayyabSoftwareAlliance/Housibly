@@ -29,6 +29,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import CacheImage from 'react-native-image-cache-wrapper';
 
+let interval;
 const image_options = {
   width: 300,
   height: 400,
@@ -44,7 +45,7 @@ const renderItem = (item, index, userId) => {
         // Sender Bubble
         <View style={styles.senderBubble}>
           <View style={styles.senderBubbleStyles}>
-            {item.image && <CacheImage source={{ uri: item.image }} style={styles.personImgStyle} />}
+            {item.image && <Image source={{ uri: item.image }} style={styles.personImgStyle} />}
             {item.body && <Text style={styles.senderMsgStyles}>{item.body}</Text>}
           </View>
         </View>
@@ -52,10 +53,10 @@ const renderItem = (item, index, userId) => {
         // Receiver Bubble
         <View style={styles.receiverBubble}>
           {/* <View style={{ width: '70%' }}> */}
-            <View style={styles.receiverBubbleStyles}>
-              {item.image && <Image source={{ uri: item.image }} style={styles.personImgStyle} />}
-              {item.body && <Text style={styles.receiverMsgStyles}>{item.body}</Text>}
-            </View>
+          <View style={styles.receiverBubbleStyles}>
+            {item.image && <Image source={{ uri: item.image }} style={styles.personImgStyle} />}
+            {item.body && <Text style={styles.receiverMsgStyles}>{item.body}</Text>}
+          </View>
           {/* </View> */}
         </View>
       )}
@@ -65,16 +66,19 @@ const renderItem = (item, index, userId) => {
 
 const PersonChat = ({ navigation, route }) => {
   const params = route.params
+  const [conversationId, setConversationId] = useState(params?.conversation_id);
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [allMessages, setAllMessages] = useState([]);
   const [loader, setLoader] = useState(true)
   const [sendLoader, setSendLoader] = useState(false)
+  const [createConversationLoader, setCreateConversationLoader] = useState(false)
+  const [useEffectRecallFlag, setUseEffectRecallFlag] = useState(false)
   const isFocused = useIsFocused()
   const userData = useSelector(state => state.auth);
   const userId = userData?.userInfo?.user?.id
-  console.log('params',params)
+  console.log('params', params)
   useLayoutEffect(() => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
@@ -84,7 +88,7 @@ const PersonChat = ({ navigation, route }) => {
     try {
       setLoader(true)
       const formData = new FormData()
-      formData.append('conversation_id', params?.conversation_id)
+      formData.append('conversation_id', conversationId)
       const res = await app.getAllMessages(formData);
       if (res?.status == 200) {
         setAllMessages(res.data?.messages || [])
@@ -100,10 +104,10 @@ const PersonChat = ({ navigation, route }) => {
   const callReadMessages = async () => {
     try {
       const formData = new FormData()
-      formData.append('conversation_id', params?.conversation_id)
+      formData.append('conversation_id', conversationId)
       const res = await app.readMessages(formData);
       if (res?.status == 200) {
-        console.log('resssss read message',res?.data)
+        console.log('resssss read message', res?.data)
       }
     } catch (error) {
       console.log(error);
@@ -111,19 +115,66 @@ const PersonChat = ({ navigation, route }) => {
     }
   }
 
-  useEffect(() => {
-    let interval;
-    if (isFocused) {
-      getAllMessages()
-      callReadMessages()
-      interval = setInterval(() => getAllMessages(), 5000)
-    } else {
-      clearInterval(interval)
+  const checkIsConversationCreated = async () => {
+    console.log('call checkIsConversationCreated')
+    try {
+      setCreateConversationLoader(true)
+      const formData = new FormData()
+      formData.append('conversation[recipient_id]', params?.recipient_id)
+      const res = await app.checkIsConversationCreated(formData);
+      if (res?.status == 200) {
+        console.log('resss', res.data)
+        setConversationId(res.data?.id)
+        setUseEffectRecallFlag(prev => !prev)
+      }
+    } catch (error) {
+      console.log('checkIsConversationCreated', error)
+    } finally {
+      setCreateConversationLoader(false)
     }
-    return () => clearInterval(interval)
-  }, [isFocused])
+  }
+  console.log('conversationId', conversationId)
+  const firstCall = async () => {
+    if (isFocused) {
+      if (params?.from == 'not_chats' && !conversationId) {
+        await checkIsConversationCreated()
+      } else {
+        getAllMessages()
+        callReadMessages()
+        interval = setInterval(() => getAllMessages(), 5000)
+      }
+    } else {
+      interval && clearInterval(interval)
+    }
+  }
+
+  useEffect(() => {
+    firstCall()
+    return () => interval && clearInterval(interval)
+  }, [isFocused, useEffectRecallFlag])
+
+  const createConversation = async () => {
+    setCreateConversationLoader(true)
+    try {
+      const formData = new FormData()
+      formData.append('conversation[recipient_id]', params?.recipient_id)
+      const res = await app.createConversation(formData);
+      console.log('createConversation', res.data)
+      if (res?.status == 200) {
+        setConversationId(res.data?.id)
+        return res.data?.id
+      }
+    } catch (error) {
+      console.log('', error);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    }
+  }
 
   const onSend = async (image) => {
+    let formConversationId = conversationId
+    if (!conversationId) {
+      formConversationId = await createConversation()
+    }
     console.log('imageimage', image)
     if (image) {
       image = {
@@ -143,12 +194,13 @@ const PersonChat = ({ navigation, route }) => {
     try {
       setSendLoader(true)
       const formData = new FormData()
-      formData.append('conversation_id', params?.conversation_id)
+      formData.append('conversation_id', formConversationId)
       msg.body && formData.append('message[body]', msg.body)
       image && formData.append('message[image]', image)
       console.log('formmmm', formData)
       const res = await app.sendMessage(formData);
       console.log('resresresres', res?.data)
+      setUseEffectRecallFlag(prev => !prev)
       // if (res?.status == 200) {
       // }
     } catch (error) {
@@ -156,6 +208,7 @@ const PersonChat = ({ navigation, route }) => {
       // let msg = responseValidator(error?.response?.status, error?.response?.data);
     } finally {
       setSendLoader(false)
+      setCreateConversationLoader(false)
     }
   }
 
@@ -205,10 +258,10 @@ const PersonChat = ({ navigation, route }) => {
               <View style={styles.personView}>
                 <Image
                   resizeMode="contain"
-                  source={appImages.person3}
+                  source={{ uri: params?.avatar }}
                   style={styles.personImgStyle}
                 />
-                <Text style={styles.nameTxtStyle}>Aspen Franci</Text>
+                <Text style={styles.nameTxtStyle}>{params?.full_name}</Text>
               </View>
             );
           }}
@@ -266,6 +319,7 @@ const PersonChat = ({ navigation, route }) => {
         </View>
       </KeyboardAvoidingView>
       {/* <AppLoader loading={sendLoader} /> */}
+      <AppLoader loading={createConversationLoader} />
     </SafeAreaView>
   );
 };

@@ -45,13 +45,15 @@ import {
   removeCreatePropertyData,
   update_my_property,
 } from '../../../../redux/actions/app-actions/app-actions';
+import { ChatPopupModal } from '../../../../components/Modal/ChatPopupModal';
 
 const PropertyDetail = ({ navigation, route }) => {
-  const { propertyData, from } = route.params;
+  const { propertyData, from, type } = route.params;
   const { saved_create_property_data, sublists, loading } = useSelector(
     state => state?.appReducer,
   );
   const [imgSelectedIndex, setImgSelectedIndex] = useState(0);
+  const [contactSellerModal, setContactSellerModal] = useState(false);
   const dispatch = useDispatch();
 
   const onPost = async () => {
@@ -420,30 +422,45 @@ const PropertyDetail = ({ navigation, route }) => {
               />
             </View>
           )}
-          <View style={styles.bottomView}>
-            {/* <AppButton
-            width="38.5%"
-            height={WP('10.3')}
-            title="Enter Address"
-            borderColor={colors.p2}
-            shadowColor={colors.white}
-            textStyle={styles.btnTxtStyle}
-          />
-          <View style={{ width: WP('3') }} /> */}
-            <AppButton
-              onPress={() => {
-                console.log(JSON.stringify(propertyData,null,2))
-                // navigation.navigate('PersonChat', { conversation_id: item?.id, avatar: item?.avatar, full_name: item?.full_name })
-              }}
-              width="38.5%"
-              height={WP('10.3')}
-              borderColor={colors.p2}
-              title="Contact Seller"
-              textStyle={styles.btnTxtStyle}
-            />
-          </View>
+          {type == 'not_my_property' &&
+            <View style={styles.bottomView}>
+              <AppButton
+                width="38.5%"
+                height={WP('10.3')}
+                title="View on Map"
+                shadowColor={colors.white}
+                textStyle={styles.btnTxtStyle}
+                borderColor={colors.g21}
+                bgColor={colors.g21}
+                onPress={() => navigation?.navigate('MapScreen', { propertyData, from: 'property_detail' })}
+              />
+              <View style={{ width: WP('3') }} />
+              <AppButton
+                onPress={() => setContactSellerModal(true)}
+                width="38.5%"
+                height={WP('10.3')}
+                borderColor={colors.p2}
+                title="Contact Seller"
+                textStyle={styles.btnTxtStyle}
+              />
+            </View>
+          }
         </View>
       </KeyboardAwareScrollView>
+      <ChatPopupModal
+        image={''}
+        title={'Aspen Franci'}
+        subtitle={'Are you sure you want to contact this seller?'}
+        buttontitle={'Contact'}
+        show={contactSellerModal}
+        onPressHide={() => setContactSellerModal(false)}
+        buttonLoader={false}
+        onButtonPress={() => {
+          setContactSellerModal(false)
+          setTimeout(() => navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: 8, avatar: '', full_name: 'Hassan' }), 500)
+        }}
+        buttonStyle={{ backgroundColor: colors.p1 }}
+      />
       <AppLoader loading={loading} />
     </SafeAreaView>
   );

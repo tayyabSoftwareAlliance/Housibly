@@ -37,6 +37,7 @@ const ENDPOINTS = {
 
   //chat
   CONVERSATIONS: 'conversations',
+  CHECK_IS_CONVERSATION_CREATED:'conversations/check_conversation_between_users',
   GET_ALL_MESSAGES: 'messages/get_messages',
   SEND_MESSAGE: 'messages',
   READ_MESSAGES: 'conversations/read_messages',
