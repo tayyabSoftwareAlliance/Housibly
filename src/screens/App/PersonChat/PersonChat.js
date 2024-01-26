@@ -28,6 +28,7 @@ import { useIsFocused } from '@react-navigation/native'
 import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import CacheImage from 'react-native-image-cache-wrapper';
+import useChannel from '../../../shared/utilities/useChannel';
 
 let interval;
 const image_options = {
@@ -76,9 +77,10 @@ const PersonChat = ({ navigation, route }) => {
   const [createConversationLoader, setCreateConversationLoader] = useState(false)
   const [useEffectRecallFlag, setUseEffectRecallFlag] = useState(false)
   const isFocused = useIsFocused()
-  const userData = useSelector(state => state.auth);
+  const userData = useSelector(state => state.auth)
   const userId = userData?.userInfo?.user?.id
-  console.log('params', params)
+  const {createChannel,removeChannel} = useChannel()
+  
   useLayoutEffect(() => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
@@ -107,7 +109,7 @@ const PersonChat = ({ navigation, route }) => {
       formData.append('conversation_id', conversationId)
       const res = await app.readMessages(formData);
       if (res?.status == 200) {
-        console.log('resssss read message', res?.data)
+        // console.log('resssss read message', res?.data)
       }
     } catch (error) {
       console.log(error);
@@ -116,14 +118,12 @@ const PersonChat = ({ navigation, route }) => {
   }
 
   const checkIsConversationCreated = async () => {
-    console.log('call checkIsConversationCreated')
     try {
       setCreateConversationLoader(true)
       const formData = new FormData()
       formData.append('conversation[recipient_id]', params?.recipient_id)
       const res = await app.checkIsConversationCreated(formData);
       if (res?.status == 200) {
-        console.log('resss', res.data)
         setConversationId(res.data?.id)
         setUseEffectRecallFlag(prev => !prev)
       }
@@ -133,7 +133,7 @@ const PersonChat = ({ navigation, route }) => {
       setCreateConversationLoader(false)
     }
   }
-  console.log('conversationId', conversationId)
+
   const firstCall = async () => {
     if (isFocused) {
       if (params?.from == 'not_chats' && !conversationId) {
@@ -141,16 +141,16 @@ const PersonChat = ({ navigation, route }) => {
       } else {
         getAllMessages()
         callReadMessages()
-        interval = setInterval(() => getAllMessages(), 5000)
+        // interval = setInterval(() => getAllMessages(), 5000)
       }
     } else {
-      interval && clearInterval(interval)
+      // interval && clearInterval(interval)
     }
   }
 
   useEffect(() => {
     firstCall()
-    return () => interval && clearInterval(interval)
+    // return () => interval && clearInterval(interval)
   }, [isFocused, useEffectRecallFlag])
 
   const createConversation = async () => {
@@ -159,7 +159,6 @@ const PersonChat = ({ navigation, route }) => {
       const formData = new FormData()
       formData.append('conversation[recipient_id]', params?.recipient_id)
       const res = await app.createConversation(formData);
-      console.log('createConversation', res.data)
       if (res?.status == 200) {
         setConversationId(res.data?.id)
         return res.data?.id
@@ -175,7 +174,6 @@ const PersonChat = ({ navigation, route }) => {
     if (!conversationId) {
       formConversationId = await createConversation()
     }
-    console.log('imageimage', image)
     if (image) {
       image = {
         uri: image.path,
@@ -197,9 +195,9 @@ const PersonChat = ({ navigation, route }) => {
       formData.append('conversation_id', formConversationId)
       msg.body && formData.append('message[body]', msg.body)
       image && formData.append('message[image]', image)
-      console.log('formmmm', formData)
+      // console.log('formmmm', formData)
       const res = await app.sendMessage(formData);
-      console.log('resresresres', res?.data)
+      // console.log('resresresres', res?.data)
       setUseEffectRecallFlag(prev => !prev)
       // if (res?.status == 200) {
       // }
@@ -215,7 +213,6 @@ const PersonChat = ({ navigation, route }) => {
   const openGallery = () => {
     setTimeout(() => {
       ImagePicker.openPicker(image_options).then(image => {
-        console.log('imageeeee', image)
         onSend(image)
       });
     }, 400);
@@ -234,6 +231,28 @@ const PersonChat = ({ navigation, route }) => {
   };
   // console.log('allMessages', JSON.stringify(allMessages, null, 2))
 
+  useEffect(() => {
+    createChannel({
+      connected:() => {
+        console.log('connected')
+      },
+      received:(e) => {
+        console.log('received',e)
+        if(!e)return
+        const msg = {
+          id:e.id,
+          body:e.body,
+          conversation_id:e.conversation_id,
+          created_at:e.created_at,
+        }
+      },
+      disconnected:() => {
+        console.log('disconnected')
+      }
+    })
+    return removeChannel
+}, [])
+console.log(allMessages)
   return (
     <SafeAreaView style={styles.rootContainer}>
       <ChatHeader

@@ -1537,6 +1537,13 @@
   "resolved" "https://registry.npmjs.org/@jsamr/react-native-li/-/react-native-li-2.3.1.tgz"
   "version" "2.3.1"
 
+"@kesha-antonov/react-native-action-cable@^1.1.4":
+  "integrity" "sha512-Qy0jozu8fcAy9d0Reb/fIkWKr+0RXtt4nkwDKPz2xx6tD3it6XhgyfX1fVk1UMqnjwy8YyPCcB61TEAH2RbeYA=="
+  "resolved" "https://registry.npmjs.org/@kesha-antonov/react-native-action-cable/-/react-native-action-cable-1.1.4.tgz"
+  "version" "1.1.4"
+  dependencies:
+    "eventemitter3" "4.0.7"
+
 "@native-html/css-processor@1.11.0":
   "integrity" "sha512-NnhBEbJX5M2gBGltPKOetiLlKhNf3OHdRafc8//e2ZQxXN8JaSW/Hy8cm94pnIckQxwaMKxrtaNT3x4ZcffoNQ=="
   "resolved" "https://registry.npmjs.org/@native-html/css-processor/-/css-processor-1.11.0.tgz"
@@ -3739,6 +3746,11 @@
   "integrity" "sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ=="
   "resolved" "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   "version" "5.0.1"
+
+"eventemitter3@4.0.7":
+  "integrity" "sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw=="
+  "resolved" "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
+  "version" "4.0.7"
 
 "execa@^0.7.0":
   "integrity" "sha512-RztN09XglpYI7aBBrJCPW95jEH7YF1UEPOoX9yDhUTPdp7mK+CQvnLTuD10BNXZ3byLTu2uehZ8EcKT/4CGiFw=="
