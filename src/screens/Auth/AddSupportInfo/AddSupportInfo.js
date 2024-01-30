@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -30,34 +30,34 @@ import {
   WP,
 } from '../../../shared/exporter';
 import styles from './styles';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik } from 'formik';
 import ImagePicker from 'react-native-image-crop-picker';
-import {useDispatch, useSelector} from 'react-redux';
-import {addInfoRequest, setSupportClosureRequest} from '../../../redux/actions';
-import {Icon} from 'react-native-elements/dist/icons/Icon';
+import { useDispatch, useSelector } from 'react-redux';
+import { addInfoRequest, setSupportClosureRequest } from '../../../redux/actions';
+import { Icon } from 'react-native-elements/dist/icons/Icon';
 
-const AddSupportInfo = ({navigation}) => {
+const AddSupportInfo = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {userInfo} = useSelector(state => state?.auth);
+  const { userInfo } = useSelector(state => state?.auth);
   const [professionList, setprofessionList] = useState([
     {
-      id: 1,
       title: '',
     },
   ]);
   const dispatch = useDispatch(null);
-
+  console.log('userInfo', userInfo)
   //On Submit
   const onSubmit = async values => {
     const check = await checkConnected();
     if (check) {
-      if (professionList[0].title) {
+      const filteredProfessionList = professionList.filter(item => item?.title)
+      if (filteredProfessionList[0].title) {
         const body = {
           description: values?.desc,
           avatar: values?.image,
-          profession: professionList,
+          profession: filteredProfessionList,
           hourly_rate: values?.hourly_rate,
         };
         const addInfoSuccess = async () => {
@@ -151,7 +151,7 @@ const AddSupportInfo = ({navigation}) => {
                       <Text style={styles.error}>{errors.image}</Text>
                     )}
                   </View>
-                  <View style={[spacing.my4]}>
+                  <View style={[spacing.mt4]}>
                     <Text
                       style={[
                         styles.h1Style,
@@ -164,34 +164,34 @@ const AddSupportInfo = ({navigation}) => {
                     </Text>
                     <FlatList
                       data={professionList}
-                      renderItem={({item, index}) => {
+                      keyExtractor={(_, index) => index}
+                      renderItem={({ item, index }) => {
                         return (
                           <AppInput
                             placeholder="Enter Profession"
-                            // value={professionList[index].profession}
+                            value={item.title}
                             onChangeText={text => {
                               professionList[index].title = text;
+                              setprofessionList([...professionList])
                             }}
                           />
                         );
                       }}
                       ListFooterComponent={() => {
                         return (
-                          <>
+                          professionList[professionList.length - 1]?.title ?
                             <Text
                               onPress={() => {
                                 setprofessionList([
                                   ...professionList,
                                   {
-                                    id: professionList.length + 1,
                                     title: '',
                                   },
                                 ]);
                               }}
-                              style={styles.rightText}>
+                              style={[styles.rightText, spacing.mb4]}>
                               Add More
-                            </Text>
-                          </>
+                            </Text> : null
                         );
                       }}
                     />

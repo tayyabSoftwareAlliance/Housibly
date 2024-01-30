@@ -13,7 +13,7 @@ const Document = ({ data }) => {
             />
             <View>
                 <Text style={styles.h1} >{data?.name}</Text>
-                <Text style={styles.size} >{`${data?.size}mb`}</Text>
+                <Text style={styles.size} >{data?.size}</Text>
             </View>
         </View>
     )

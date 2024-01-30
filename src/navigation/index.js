@@ -40,6 +40,9 @@ import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
 import AllProperties from '../screens/App/Home/AllProperties';
 import PersonChat from '../screens/App/PersonChat';
 import SavedLocations from '../screens/App/Home/SavedLocations';
+import SearchSupportCloser from '../screens/App/SearchSupportCloser';
+import SupportCloserDetail from '../screens/App/SupportCloserDetail';
+import AddReview from '../screens/App/AddReview';
 
 const AppStack = createNativeStackNavigator();
 
@@ -92,6 +95,9 @@ const MainAppNav = () => {
         <AppStack.Screen name={"AllProperties"} component={AllProperties} />
         <AppStack.Screen name={"PersonChat"} component={PersonChat} />
         <AppStack.Screen name={"SavedLocations"} component={SavedLocations} />
+        <AppStack.Screen name={"SearchSupportCloser"} component={SearchSupportCloser} />
+        <AppStack.Screen name={"SupportCloserDetail"} component={SupportCloserDetail} />
+        <AppStack.Screen name={"AddReview"} component={AddReview} />
       </AppStack.Navigator>
     </NavigationContainer>
   );

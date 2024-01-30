@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import {emailRegex} from './constant';
+import { emailRegex } from './constant';
 
 export const PhoneAuthFields = {
   contact: '',
@@ -23,7 +23,7 @@ export const AddPersonalInfoField = {
 };
 
 export const AddSupportInfoField = {
-  image: '',
+  image: null,
   hourly_rate: '',
   desc: '',
 };
@@ -49,9 +49,10 @@ export const codeFormFields = {
 };
 
 export const editFormFields = {
-  full_name:'',
+  full_name: '',
   email: '',
   phone: '',
+  hourly_rate: '',
   bio: '',
 };
 
@@ -111,6 +112,7 @@ export const editProfileFieldsVS = yup.object().shape({
     .string()
     .required('Email Required')
     .email('Please provide a valid email address'),
+  hourly_rate: yup.string().required('Hourly Rate Required'),
   bio: yup.string().required('Bio data Required'),
 });
 

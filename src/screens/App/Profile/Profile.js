@@ -34,8 +34,8 @@ const Profile = ({navigation}) => {
   const getUserProfile = () => {
     setIsLoading(true);
     const getProfileSuccess = async res => {
-      setData(res?.user);
-      setUserImage(res?.user?.image);
+      setData(res);
+      setUserImage(res?.avatar);
       setIsLoading(false);
     };
     const getProfileFailure = async err => {

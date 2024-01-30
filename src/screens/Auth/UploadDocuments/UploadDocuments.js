@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, SafeAreaView} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, SafeAreaView } from 'react-native';
 import {
   AppButton,
   AppHeader,
@@ -12,20 +12,20 @@ import {
   OutlineBox,
   TextBox,
 } from '../../../components';
-import {image_options, networkText} from '../../../shared/exporter';
+import { image_options, networkText } from '../../../shared/exporter';
 import styles from './styles';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
-import {setSupportClosureRequest} from '../../../redux/actions';
-const UploadDocuments = ({navigation}) => {
+import { setSupportClosureRequest } from '../../../redux/actions';
+const UploadDocuments = ({ navigation }) => {
 
   const [loading, setLoading] = useState(false);
   const [imageArray, setimageArray] = useState([]);
   const [docArray, setDocArray] = useState([]);
 
-  const {support_info} = useSelector(state => state?.auth);
+  const { support_info } = useSelector(state => state?.auth);
   const dispatch = useDispatch(null);
 
   // Remove Images
@@ -41,7 +41,7 @@ const UploadDocuments = ({navigation}) => {
   //Open Docs
   const openDocumentPicker = async () => {
     const results = await DocumentPicker.pick({
-      allowMultiSelection:true,
+      allowMultiSelection: true,
       type: [DocumentPicker.types.pdf],
       //There can me more options as well find above
     });
@@ -82,13 +82,11 @@ const UploadDocuments = ({navigation}) => {
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.inputContainer}>
               <GalleryCard
-                onPressImg={index => {
-                  removeImage(index);
-                }}
                 imageArray={imageArray}
                 title={'Upload Photos'}
                 onSelect={(arr) => setimageArray(arr)}
-                // subtitle={'Max 30 images'}
+                onRemove={removeImage}
+              // subtitle={'Max 30 images'}
               />
               <OutlineBox
                 onPress={() => {

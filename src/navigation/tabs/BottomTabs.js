@@ -6,7 +6,7 @@ import { appIcons, BOTTOM_TAB_HEIGHT, colors, WP } from '../../shared/exporter';
 
 import HomeStack from '../stacks/HomeStack';
 import SearchStack from '../stacks/SearchStack';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getSublists } from '../../redux/actions';
 import HomeSupportCloserStack from '../stacks/HomeSupportCloserStack';
 import MessagesAndNotificationStack from '../stacks/MessagesAndNotificationStack';
@@ -16,6 +16,7 @@ const Tab = createBottomTabNavigator();
 
 export default BottomTabs = ({ }) => {
 
+  const { userInfo } = useSelector(state => state?.auth);
   let hasNotch = DeviceInfo.hasNotch();
   const dispatch = useDispatch()
 
@@ -35,7 +36,7 @@ export default BottomTabs = ({ }) => {
         shadowColor: 'transparent',
         borderTopWidth: 0,
         elevation: 0,
-        tabBarHideOnKeyboard:true,
+        tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
         tabBarStyle: [
           {
@@ -50,7 +51,7 @@ export default BottomTabs = ({ }) => {
       // }}
 
       initialRouteName={'Home'}>
-      {false ? <Tab.Screen
+      {userInfo?.user?.profile_type == 'support_closer' ? <Tab.Screen
         name="Home"
         component={HomeSupportCloserStack}
         options={{

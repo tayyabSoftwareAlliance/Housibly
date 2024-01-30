@@ -4,7 +4,7 @@ import { SwipeListView } from 'react-native-swipe-list-view'
 import { useNavigation } from '@react-navigation/native'
 import { WP, appIcons, colors, family, size } from '../../shared/exporter'
 import PropertyComponent from './PropertyComponent'
-import SupportCloserComponent from './SupportCloserComponent'
+import SupportCloserComponent from './SearchSupportCloserComponent'
 import { RemoveBookmarkModal } from '../Modal/RemoveBookmarkModal'
 
 const BookmarksList = ({ data = [], scrollEnabled = true }) => {

@@ -209,42 +209,42 @@ const property_type_list = {
 
 const filter_property_type_list = [
   {
-    key:'all',
-    value:'All',
-    source:appIcons.all
+    key: 'all',
+    value: 'All',
+    source: appIcons.all
   },
   {
-    key:'house',
-    value:'House',
-    source:appIcons.modelHome
+    key: 'house',
+    value: 'House',
+    source: appIcons.modelHome
   },
   {
-    key:'condo',
-    value:'Condo',
-    source:appIcons.condoStyle
+    key: 'condo',
+    value: 'Condo',
+    source: appIcons.condoStyle
   },
   {
-    key:'vacant_land',
-    value:'Vacant Land',
-    source:appIcons.vacant
+    key: 'vacant_land',
+    value: 'Vacant Land',
+    source: appIcons.vacant
   }
 ]
 
 const filter_bookmarks_list = [
   {
-    key:'all',
-    value:'All',
-    source:appIcons.all
+    key: 'all',
+    value: 'All',
+    source: appIcons.all
   },
   {
-    key:'property',
-    value:'Properties',
-    source:appIcons.property
+    key: 'property',
+    value: 'Properties',
+    source: appIcons.property
   },
   {
-    key:'support_closer',
-    value:'Support Closers',
-    source:appIcons.support_closer
+    key: 'support_closer',
+    value: 'Support Closers',
+    source: appIcons.support_closer
   }
 ]
 
@@ -1263,16 +1263,13 @@ const property_image = 'https://wallpaperaccess.com/full/1700222.jpg';
 const property_image2 = require('../../assets/images/property_image.jpeg');
 
 const weekDays = [
-  {
-    day: 'Mon',
-    selected: false,
-  },
-  { day: 'Tue', selected: false },
-  { day: 'Wed', selected: false },
-  { day: 'Thu', selected: false },
-  { day: 'Fri', selected: false },
-  { day: 'Sat', selected: false },
-  { day: 'Sun', selected: false },
+  { day: 'monday', selected: false },
+  { day: 'tuesday', selected: false },
+  { day: 'wednesday', selected: false },
+  { day: 'thursday', selected: false },
+  { day: 'friday', selected: false },
+  { day: 'saturday', selected: false },
+  { day: 'sunday', selected: false }
 ];
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]

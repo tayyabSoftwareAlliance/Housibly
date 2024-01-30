@@ -25,7 +25,8 @@ export const GalleryCard = ({
   subtitle,
   imageArray,
   onSelect,
-  titleContainerStyle
+  titleContainerStyle,
+  onRemove
 }) => {
 
   const [show, setShow] = useState(false)
@@ -64,13 +65,9 @@ export const GalleryCard = ({
     }
   };
 
-  const onRemove = (index) => {
-    onSelect(imageArray.filter((_, i) => i != index))
-  }
-
   return (
     <View style={styles.container}>
-      <View style={[styles.titleCon,titleContainerStyle]}>
+      <View style={[styles.titleCon, titleContainerStyle]}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
@@ -85,16 +82,17 @@ export const GalleryCard = ({
           data={imageArray}
           horizontal
           renderItem={({ item, index }) => (
-            <ImageBackground
-              imageStyle={{ borderRadius: 13 }}
-              style={styles.imgCon}
-              source={{ uri: item?.id ? item?.url : item?.path }}>
-              <TouchableOpacity
-                style={styles.iconCon}
-                onPress={() => onRemove(index)}>
-                <Image style={styles.iconStyle} source={appIcons.cross} />
-              </TouchableOpacity>
-            </ImageBackground>
+            item?.deleted ? null :
+              <ImageBackground
+                imageStyle={{ borderRadius: 13 }}
+                style={styles.imgCon}
+                source={{ uri: item?.id ? item?.url : item?.path }}>
+                <TouchableOpacity
+                  style={styles.iconCon}
+                  onPress={() => onRemove(index)}>
+                  <Image style={styles.iconStyle} source={appIcons.cross} />
+                </TouchableOpacity>
+              </ImageBackground>
           )}
         />
       </View>

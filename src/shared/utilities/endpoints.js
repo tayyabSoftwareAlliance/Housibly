@@ -17,7 +17,7 @@ const ENDPOINTS = {
   RESEND_OTP: 'verify_otp/resend_otp',
 
   //setting
-  GET_PROFILE: 'get_profile.json',
+  GET_PROFILE: 'show_profile',
   UPDATE_PROFILE: 'update_profile.json',
   CARD_CONST: 'card',
   CARDS_CONST: 'cards',
@@ -34,6 +34,7 @@ const ENDPOINTS = {
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
+  GET_OTHER_USER_PROFILE: 'show_other_user_profile',
 
   //chat
   CONVERSATIONS: 'conversations',
@@ -41,6 +42,10 @@ const ENDPOINTS = {
   GET_ALL_MESSAGES: 'messages/get_messages',
   SEND_MESSAGE: 'messages',
   READ_MESSAGES: 'conversations/read_messages',
+
+  //support closer
+  SEARCH_SUPPORT_CLOSER:'search_support_closers',
+  GET_SUPPORT_CLOSER_REVIEWS:'reviews/get_reviews'
 
 };
 

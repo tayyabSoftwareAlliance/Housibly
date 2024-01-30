@@ -19,7 +19,7 @@ const SignUpPurpose = ({navigation, route}) => {
   const [showSlide, setShowSlide] = useState(0);
 
   const handleNavigation = (userType, licensed, contacted) => {
-    if (selected == 'want_support_closer') {
+    if (selected == 'support_closer') {
       navigation.navigate('SignUp', {
         regPurpose: selected,
       });
@@ -91,15 +91,15 @@ const SignUpPurpose = ({navigation, route}) => {
             style={styles.iconStyle}
             borderColor={colors.white}
             shadowColor={colors.white}
-            onPress={() => setSelected('want_support_closer')}
+            onPress={() => setSelected('support_closer')}
             bgColor={
-              selected === 'want_support_closer' ? colors.s2 : colors.g12
+              selected === 'support_closer' ? colors.s2 : colors.g12
             }
             textColor={
-              selected === 'want_support_closer' ? colors.white : colors.b1
+              selected === 'support_closer' ? colors.white : colors.b1
             }
             icon={
-              selected === 'want_support_closer'
+              selected === 'support_closer'
                 ? appIcons.buyHome
                 : appIcons.contractorHome
             }
@@ -109,7 +109,7 @@ const SignUpPurpose = ({navigation, route}) => {
           <AppButton
             title="Next"
             onPress={() => {
-              if (selected == 'want_support_closer') {
+              if (selected == 'support_closer') {
                 handleNavigation();
               } else {
                 setShow(true);

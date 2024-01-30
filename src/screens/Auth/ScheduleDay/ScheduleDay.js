@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, SafeAreaView, Alert, ScrollView} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, SafeAreaView, Alert, ScrollView } from 'react-native';
 import {
   AppButton,
   AppHeader,
@@ -8,20 +8,20 @@ import {
   DayBox,
   TimePickerCard,
 } from '../../../components';
-import {checkConnected, colors, weekDays} from '../../../shared/exporter';
+import { checkConnected, colors, networkText, weekDays } from '../../../shared/exporter';
 import styles from './styles';
-import {useDispatch, useSelector} from 'react-redux';
-import {addInfoRequest} from '../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addInfoRequest } from '../../../redux/actions';
 import moment from 'moment';
 
-const ScheduleDay = ({navigation}) => {
+const ScheduleDay = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [week_days, setWeek_days] = useState(weekDays);
-  const {userInfo, support_info} = useSelector(state => state?.auth);
+  const { userInfo, support_info } = useSelector(state => state?.auth);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
-  console.log('support_info',support_info)
+  console.log('support_info', support_info)
 
   const dispatch = useDispatch(null);
 
@@ -37,8 +37,10 @@ const ScheduleDay = ({navigation}) => {
         uri: support_info?.avatar?.path,
       };
       form.append('user[avatar]', imgObj);
-      form.append('user[profession]', support_info?.profession);
-      form.append('user[currency_amount]', support_info?.hourly_rate);
+      support_info?.profession?.forEach((item, index) => {
+        form.append(`user[professions_attributes][${index}][title]`, item?.title);
+      })
+      form.append('user[hourly_rate]', support_info?.hourly_rate);
       form.append('user[description]', support_info?.description);
       support_info?.images?.forEach(item => {
         form.append('user[images][]', {
@@ -46,28 +48,24 @@ const ScheduleDay = ({navigation}) => {
           type: item?.mime || 'image/jpeg',
           name: item?.filename || 'image',
         });
-      }),
-        support_info?.documents?.forEach(item => {
-          form.append('user[certificates][]', {
-            uri: item?.uri,
-            type: item?.type || 'sample/jpeg',
-            name: item?.name || 'pdf',
-          });
-        }),
-        form.append(
-          'user[working_days][]',
-          week_days.map(item => {
-            if (item?.selected) {
-              return item?.day;
-            }
-          }),
-        );
-      form.append(
-        'user[starting_time]',
-        moment(startTime).format('DD-MM-YYYY'),
-      );
-      form.append('user[ending_time]', moment(endTime).format('DD-MM-YYYY'));
-
+      })
+      support_info?.documents?.forEach(item => {
+        form.append('user[certificates][]', {
+          uri: item?.uri,
+          type: item?.type || 'sample/jpeg',
+          name: item?.name || 'pdf',
+        });
+      })
+      week_days.forEach(item => {
+        if (item?.selected)
+          form.append(
+            'user[schedule_attributes][working_days][]',
+            item?.day
+          );
+      })
+      form.append('user[schedule_attributes][starting_time]', moment(startTime).format('LT'));
+      form.append('user[schedule_attributes][ending_time]', moment(endTime).format('LT'));
+      console.log('forrmmm', form)
       const addInfoSuccess = async res => {
         console.log(res);
         setLoading(false);
@@ -82,7 +80,7 @@ const ScheduleDay = ({navigation}) => {
 
       dispatch(addInfoRequest(form, addInfoSuccess, addInfoFailure));
     } else {
-      Alert.alert('Error', 'At least one profession required!');
+      Alert.alert('Error', networkText);
     }
   };
 
@@ -99,7 +97,7 @@ const ScheduleDay = ({navigation}) => {
           showsVerticalScrollIndicator={false}
           style={styles.contentContainer}>
           <View style={styles.inputContainer}>
-            <Text style={[styles.h1Style]}>Profession</Text>
+            <Text style={[styles.h1Style]}>Choose a Day</Text>
             <View style={styles.listCon}>
               {week_days.map((item, index) => {
                 return (

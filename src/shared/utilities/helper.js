@@ -502,3 +502,8 @@ export const handleCameraPermission = async () => {
     await request(PERMISSIONS.ANDROID.CAMERA)
   return result == RESULTS.GRANTED
 }
+
+export const extractFileType = (url) => {
+  const arr = url?.split('.') || []
+  return arr[arr.length - 1]
+}

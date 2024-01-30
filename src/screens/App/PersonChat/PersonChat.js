@@ -42,7 +42,7 @@ const renderItem = (item, index, userId) => {
 
   return (
     <View style={styles.msgContainer}>
-      {item.user_id === userId ? (
+      {item.user_id == userId ? (
         // Sender Bubble
         <View style={styles.senderBubble}>
           <View style={styles.senderBubbleStyles}>
@@ -79,8 +79,8 @@ const PersonChat = ({ navigation, route }) => {
   const isFocused = useIsFocused()
   const userData = useSelector(state => state.auth)
   const userId = userData?.userInfo?.user?.id
-  const {createChannel,removeChannel} = useChannel()
-  
+  const { createChannel, removeChannel } = useChannel()
+  console.log('userId', userId)
   useLayoutEffect(() => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
@@ -92,6 +92,7 @@ const PersonChat = ({ navigation, route }) => {
       const formData = new FormData()
       formData.append('conversation_id', conversationId)
       const res = await app.getAllMessages(formData);
+      console.log('res.data?.messages', JSON.stringify(res.data?.messages, null, 2))
       if (res?.status == 200) {
         setAllMessages(res.data?.messages || [])
       }
@@ -184,7 +185,7 @@ const PersonChat = ({ navigation, route }) => {
     if (!message && !image) return
     const msg = {
       user_id: userId,
-      body: message,
+      body: image ? '' : message,
       image: image?.uri
     }
     setAllMessages(previousMessages => ([msg, ...previousMessages]))
@@ -193,8 +194,8 @@ const PersonChat = ({ navigation, route }) => {
       setSendLoader(true)
       const formData = new FormData()
       formData.append('conversation_id', formConversationId)
-      msg.body && formData.append('message[body]', msg.body)
       image && formData.append('message[image]', image)
+      msg.body && formData.append('message[body]', msg.body)
       // console.log('formmmm', formData)
       const res = await app.sendMessage(formData);
       // console.log('resresresres', res?.data)
@@ -233,26 +234,33 @@ const PersonChat = ({ navigation, route }) => {
 
   useEffect(() => {
     createChannel({
-      connected:() => {
+      connected: () => {
         console.log('connected')
       },
-      received:(e) => {
-        console.log('received',e)
-        if(!e)return
-        const msg = {
-          id:e.id,
-          body:e.body,
-          conversation_id:e.conversation_id,
-          created_at:e.created_at,
+      received: (e) => {
+        console.log('received', e)
+        console.log('e?.messages?.user_id', e?.messages?.user_id)
+        if (e?.messages?.id && e.messages.conversation_id == params?.conversation_id && e.messages.user_id != userId) {
+          const msg = {
+            id: e.messages.id,
+            body: e.messages.message,
+            image: e.messages.image,
+            conversation_id: e.messages.conversation_id,
+            user_id: e.messages.user_id,
+            created_at: e.messages.created_at,
+            updated_at: e.messages.updated_at,
+          }
+          setAllMessages(previousMessages => ([msg, ...previousMessages].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))))
+          callReadMessages()
         }
       },
-      disconnected:() => {
+      disconnected: () => {
         console.log('disconnected')
       }
     })
     return removeChannel
-}, [])
-console.log(allMessages)
+  }, [])
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <ChatHeader
@@ -317,7 +325,7 @@ console.log(allMessages)
                 type={'ionicons'}
                 size={22}
                 color={colors.g16}
-                onPress={onSend}
+                onPress={() => onSend()}
               />
             )}
           </View>

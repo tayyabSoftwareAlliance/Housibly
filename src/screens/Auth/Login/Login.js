@@ -124,13 +124,13 @@ const Login = ({navigation}) => {
           }, 500);
         } else {
           if (res?.user?.is_otp_verified) {
-            if (res?.user?.profile_type == 'want_support_closer') {
-              navigation?.navigate('AddSupportInfo');
+            if (res?.user?.profile_type == 'support_closer') {
+              navigation?.replace('AddSupportInfo');
             } else {
-              navigation?.navigate('AddPersonalInfo');
+              navigation?.replace('AddPersonalInfo');
             }
           } else {
-            navigation?.navigate('VerifyOTP', {
+            navigation?.replace('VerifyOTP', {
               email: values?.email,
               registeration: true,
             });

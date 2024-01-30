@@ -32,7 +32,7 @@ export const DayBox = ({
           />
         </View>
       )}
-      <Text>{day}</Text>
+      <Text style={{color:colors.g40,textTransform:'capitalize'}} >{day?.slice(0,3)}</Text>
     </TouchableOpacity>
   );
 };

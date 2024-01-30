@@ -28,9 +28,9 @@ export const AppHeader = ({ rightIcon = false, onPressIcon, img, from, container
           <Icon
             type={'ionicons'}
             name={'settings'}
-            onPress={() => {
-              navigation?.navigate('Settings');
-            }}
+            // onPress={() => {
+            //   navigation?.navigate('Settings');
+            // }}
           />
         </TouchableOpacity> :
         img ?

@@ -46,6 +46,7 @@ export function* updateProfileRequest() {
 function* updateProfile(params) {
   try {
     const res = yield setting.updateProfile(params?.params);
+    console.log('res',res)
     if (res?.status == 200) {
       yield put({
         type: types.UPDATE_PROFILE_SUCCESS,
@@ -60,7 +61,7 @@ function* updateProfile(params) {
       params?.cbFailure(res?.data);
     }
   } catch (error) {
-    console.log(error);
+    console.log('error',error);
     yield put({
       type: types.UPDATE_PROFILE_FAILURE,
       payload: null,

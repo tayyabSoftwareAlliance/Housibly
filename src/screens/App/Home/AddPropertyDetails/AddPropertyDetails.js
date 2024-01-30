@@ -165,6 +165,10 @@ const AddPropertyDetails = ({ navigation, route }) => {
     }
   }
 
+  const onImageRemove = (index) => {
+    setValue('images', data.images?.filter((_, i) => i != index) || [])
+  }
+
   useEffect(() => {
     if (!isFocused && saved_create_property_data && from != 'edit')
       setData(JSON.parse(JSON.stringify(saved_create_property_data)))
@@ -199,7 +203,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
               subtitle={'Max 30 images'}
               imageArray={data.images}
               onSelect={arr => setValue('images', arr)}
-              onRemove={index => removeImage(index)}
+              onRemove={onImageRemove}
             />
             <Divider color={colors.g18} />
             <FilterInput

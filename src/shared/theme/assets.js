@@ -130,6 +130,8 @@ export const appIcons = {
   pdf: require('../../assets/icons/pdf.png'),
   property: require('../../assets/icons/property.png'),
   support_closer: require('../../assets/icons/support_closer.png'),
+  chat: require('../../assets/icons/chat.png'),
+  phone: require('../../assets/icons/phone.png'),
 
   //map screen
   circle:require('../../assets/icons/circle.png'),

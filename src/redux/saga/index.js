@@ -1,4 +1,4 @@
-import {fork} from 'redux-saga/effects';
+import { fork } from 'redux-saga/effects';
 import {
   getMyPropertiesRequest,
   getSublistsRequest,
@@ -22,7 +22,8 @@ import {
   OTPVerifyRequest,
   resendOTPRequestSega,
   addInfoRequestSega,
-  supportInfoSega,
+  setSupportInfoSega,
+  addSupportInfoRequestSega,
 } from './auth-saga/auth-sega';
 
 import {
@@ -50,7 +51,8 @@ export function* rootSaga() {
   yield fork(addInfoRequestSega);
   yield fork(getProfileRequest);
   yield fork(updateProfileRequest);
-  yield fork(supportInfoSega);
+  yield fork(setSupportInfoSega);
+  yield fork(addSupportInfoRequestSega);
 
   //Payments
   yield fork(addcardRequest);
@@ -75,5 +77,5 @@ export function* rootSaga() {
 
   //Matched Properties
   yield fork(getMatchedPropertiesRequest);
-  
+
 }

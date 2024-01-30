@@ -240,8 +240,8 @@ function* add_info(params) {
   }
 }
 
-// *************Support Info Sega**************
-export function* supportInfoSega() {
+// *************Set Support Info Sega**************
+export function* setSupportInfoSega() {
   yield takeLatest(types.SET_SUPPORT_INFO_REQUEST, support_info);
 }
 
@@ -254,5 +254,31 @@ function* support_info(params) {
     params?.callBack(params?.params);
   } catch (error) {
     console.log(error);
+  }
+}
+
+// *************Add Support Info Sega**************
+export function* addSupportInfoRequestSega() {
+  yield takeLatest(types.ADD_SUPPORT_INFO_REQUEST, add_support_info);
+}
+
+function* add_support_info(params) {
+  try {
+    const res = yield auth.addInfo(params?.params);
+    if (res?.status == 200) {
+      yield put({
+        type: types.ADD_SUPPORT_INFO_SUCCESS,
+        payload: res.data,
+      });
+      params?.cbSuccess(res.data);
+    }
+  } catch (error) {
+    // console.log('error response ',error?.response);
+    yield put({
+      type: types.ADD_SUPPORT_INFO_FAILURE,
+      payload: null,
+    });
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    params?.cbFailure(msg);
   }
 }

@@ -56,15 +56,20 @@ const EditProfile = ({ navigation, route }) => {
   const [data, setData] = useState(route?.params?.item);
   const [oldImage, setOldImage] = useState(profile_uri);
   const [userImage, setUserImage] = useState('');
-
+  const [professionList, setprofessionList] = useState([
+    {
+      title: '',
+    },
+  ]);
+  const [imageArray, setImageArray] = useState([]);
   const dispatch = useDispatch(null);
 
   useLayoutEffect(() => {
-    let userImg = route?.params?.item?.image;
+    let userImg = route?.params?.item?.avatar;
     if (userImg === '') {
       console.log('empty image');
     } else {
-      setOldImage(route?.params?.item?.image);
+      setOldImage(route?.params?.item?.avatar);
     }
   }, [navigation, route]);
 
@@ -94,7 +99,23 @@ const EditProfile = ({ navigation, route }) => {
     }, 400);
   };
 
+  const removeImage = (index) => {
+    setImageArray(() => {
+      if (imageArray[index]?.id)
+        return imageArray.map((item, i) => {
+          if (i == index)
+            item.deleted = true
+          return { ...item }
+        })
+      return imageArray.filter((_, i) => i != index)
+    })
+  }
+
   const handleUpdateProfile = values => {
+    if (!professionList.filter(item => item.title).length > 0) {
+      Alert.alert('Error', 'At least one profession required!');
+      return
+    }
     setIsLoading(true);
     const data = new FormData();
     let phone = '';
@@ -104,8 +125,19 @@ const EditProfile = ({ navigation, route }) => {
       phone = values.phone;
     }
     data.append('user[full_name]', values?.full_name);
-    data.append('user[email]', values?.email);
-    data.append('user[phone_number]', phone);
+    // data.append('user[email]', values?.email);
+    // data.append('user[phone_number]', phone);
+    professionList.map((item, index) => {
+      if (item.id) {
+        data.append(`user[professions_attributes][${index}][id]`, item.id)
+        if (item.title)
+          data.append(`user[professions_attributes][${index}][title]`, item.title)
+        else
+          data.append(`user[professions_attributes][${index}][_destroy]`, true)
+      } else if (item.title)
+        data.append(`user[professions_attributes][${index}][title]`, item.title)
+    })
+    data.append('user[hourly_rate]', values?.hourly_rate);
     data.append('user[description]', values?.bio);
     data.append('user[country_name]', cca2);
     data.append('user[country_code]', country?.callingCode[0]);
@@ -121,10 +153,23 @@ const EditProfile = ({ navigation, route }) => {
       console.log('imggg', imgObj)
       data.append('user[avatar]', imgObj);
     }
-
+    imageArray.map(item => {
+      if (item.id) {
+        if (!item.deleted)
+          data.append('user[images][]', item.id)
+      } else {
+        const imgObj = {
+          name: item.filename || 'image',
+          uri: item.path,
+          type: item.mime,
+        }
+        data.append('user[images][]', imgObj)
+      }
+    })
+    console.log('form data ', data)
     const updateProfileSuccess = async res => {
-      // alert('Profile is updated successfully.');
-      navigation.replace('Profile');
+      // Alert.alert('Success', 'Profile Updated Successfully!');
+      navigation.goBack();
       setIsLoading(false);
     };
     const updateProfileFailure = async err => {
@@ -136,7 +181,7 @@ const EditProfile = ({ navigation, route }) => {
       updateProfileRequest(data, updateProfileSuccess, updateProfileFailure),
     );
   };
-  console.log('dataa', JSON.stringify(data, null, 2))
+  console.log('imageArray', JSON.stringify(imageArray, null, 2))
   return (
     <SafeAreaView style={styles.rootContainer}>
       <AppHeader />
@@ -167,6 +212,9 @@ const EditProfile = ({ navigation, route }) => {
               setFieldValue('phone', data?.phone_number);
               setcca2(data?.country_name || 'US');
               setcountry({ callingCode: data?.country_code || '1' });
+              data?.professions?.length > 0 && setprofessionList(data.professions);
+              setFieldValue('hourly_rate', data?.hourly_rate);
+              setImageArray(data?.images || [])
             }, [data]);
             return (
               <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
@@ -258,19 +306,15 @@ const EditProfile = ({ navigation, route }) => {
                         Profession
                       </Text>
                       <FlatList
-                        data={[
-                          {
-                            id: 1,
-                            title: '',
-                          },
-                        ]}
+                        data={professionList}
                         renderItem={({ item, index }) => {
                           return (
                             <AppInput
                               placeholder="Enter Profession"
-                              // value={professionList[index].profession}
+                              value={item.title}
                               onChangeText={text => {
                                 professionList[index].title = text;
+                                setprofessionList([...professionList])
                               }}
                             />
                           );
@@ -280,13 +324,12 @@ const EditProfile = ({ navigation, route }) => {
                             <>
                               <Text
                                 onPress={() => {
-                                  // setprofessionList([
-                                  //   ...professionList,
-                                  //   {
-                                  //     id: professionList.length + 1,
-                                  //     title: '',
-                                  //   },
-                                  // ]);
+                                  setprofessionList([
+                                    ...professionList,
+                                    {
+                                      title: '',
+                                    },
+                                  ]);
                                 }}
                                 style={styles.rightText}>
                                 Add More
@@ -297,12 +340,13 @@ const EditProfile = ({ navigation, route }) => {
                       />
                     </>
                   }
+
                   {from == 'SUPPORT_CLOSER_HOME' &&
                     <AppInput
                       onChangeText={handleChange('hourly_rate')}
                       renderErrorMessage={true}
                       placeholder="Hourly Rate"
-                      value={values.hourly_rate}
+                      value={`${values.hourly_rate}`}
                       onBlur={() => setFieldTouched('hourly_rate')}
                       blurOnSubmit={false}
                       disableFullscreenUI={true}
@@ -333,15 +377,11 @@ const EditProfile = ({ navigation, route }) => {
                   />
                   {from == 'SUPPORT_CLOSER_HOME' &&
                     <GalleryCard
-                      onPressImg={index => {
-                        // removeImage(index);
-                      }}
-                      imageArray={[]}
+                      imageArray={imageArray}
                       title={'Upload Photos'}
                       titleContainerStyle={{ paddingHorizontal: WP('3') }}
-                      onSelect={(arr) => {
-                        // setimageArray(arr)
-                      }}
+                      onSelect={arr => setImageArray(arr)}
+                      onRemove={removeImage}
                     // subtitle={'Max 30 images'}
                     />
                   }

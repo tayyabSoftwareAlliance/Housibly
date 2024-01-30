@@ -1,16 +1,16 @@
 import React from 'react';
-import {SafeAreaView, Text, View, Image, TouchableOpacity} from 'react-native';
-import {AppButton, AppHeader, BackHeader, Spacer} from '../../../../components';
-import {colors, settings, WP} from '../../../../shared/exporter';
+import { SafeAreaView, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { AppButton, AppHeader, BackHeader, Spacer } from '../../../../components';
+import { colors, settings, WP } from '../../../../shared/exporter';
 import styles from './styles';
-import {useDispatch} from 'react-redux';
-import {Icon} from 'react-native-elements';
-import {logoutRequset} from '../../../../redux/actions';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { useDispatch } from 'react-redux';
+import { Icon } from 'react-native-elements';
+import { logoutRequset } from '../../../../redux/actions';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CommonActions} from '@react-navigation/routers';
+import { CommonActions } from '@react-navigation/routers';
 
-const Settings = ({navigation}) => {
+const Settings = ({ navigation }) => {
   const dispatch = useDispatch(null);
 
   const logout = async () => {
@@ -20,7 +20,7 @@ const Settings = ({navigation}) => {
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
-            routes: [{name: 'Auth'}],
+            routes: [{ name: 'Auth' }],
           }),
         );
       }),
@@ -29,6 +29,11 @@ const Settings = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={colors.white}
+        barStyle={'dark-content'}
+      />
       <AppHeader subtitle={'Settings'} />
       <BackHeader title={'Settings'} />
       <Spacer androidVal={WP('12')} iOSVal={WP('12')} />

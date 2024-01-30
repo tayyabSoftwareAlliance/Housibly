@@ -58,6 +58,15 @@ const settingsReducers = (state = initialState, actions) => {
         isFailure: false,
         userProfile: payload,
       };
+    // Add Support Info Success
+    case TYPES.ADD_SUPPORT_INFO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        isFailure: false,
+        userProfile: payload,
+      };
     // Add Card Success
     case TYPES.ADD_CARD_SUCCESS:
       return {

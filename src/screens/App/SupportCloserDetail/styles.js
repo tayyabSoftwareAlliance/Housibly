@@ -42,27 +42,19 @@ const styles = StyleSheet.create({
     paddingVertical: WP('10'),
   },
   iconCon: {
-    backgroundColor: colors.s2,
+    backgroundColor: colors.p1,
     height: 43,
     width: 43,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    position:'absolute',
+    top:10,
+    right:0
   },
   iconStyle: {
     width: 22,
     height: 22,
-  },
-  startIconCon: {
-    backgroundColor: '#FFC107',
-    height: 43,
-    width: 43,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: 0,
-    top: 10
   },
   h1: {
     fontSize: size.h6,
@@ -126,7 +118,7 @@ const styles = StyleSheet.create({
   },
   photoContainer:{
     flexDirection:'row',
-    flexWrap:'wrap'
+    flexWrap:'wrap',
   },
   photo:{
     width:WP(29),

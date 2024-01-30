@@ -55,7 +55,8 @@ const Home = ({ navigation }) => {
   const seeAllItemClick = () => {
     setShowMenu(false);
     setTimeout(() => {
-      setShowModal(true);
+      // setShowModal(true);
+      navigation.navigate('SearchSupportCloser')
     }, 500);
   };
 

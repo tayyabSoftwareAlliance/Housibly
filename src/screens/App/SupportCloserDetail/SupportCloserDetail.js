@@ -21,51 +21,54 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { getProfileRequest } from '../../../redux/actions';
-import { HP, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, appIcons, appImages, colors, profile_uri, size, spacing } from '../../../shared/exporter';
+import { HP, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, appIcons, appImages, colors, family, profile_uri, responseValidator, size, spacing } from '../../../shared/exporter';
 import { Divider, Icon } from 'react-native-elements';
 import Document from '../../../components/Custom/Document';
 import { ScrollView } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import Review from '../../../components/Custom/Review';
-import { extractFileType } from '../../../shared/utilities/helper';
 import { app } from '../../../shared/api';
+import { extractFileType } from '../../../shared/utilities/helper';
 
-const HomeSupportCloser = ({ navigation }) => {
+const SupportCloserDetail = ({ navigation, route }) => {
 
+  const id = route.params?.id
   const dispatch = useDispatch(null);
-  const { userProfile } = useSelector(state => state?.settings);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
+  const [reviews, setReviews] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showFulldescription, setShowFullDescription] = useState(false)
-  const [reviews, setReviews] = useState(null);
   const isFocus = useIsFocused(null);
 
   const getReviews = async () => {
-    const res = await app.getSupportCloserReviews(userProfile?.id, 'all', 1)
+    const res = await app.getSupportCloserReviews(id, 'all', 1)
     if (res?.status == 200)
       setReviews(res.data)
   }
 
-  const getUserProfile = () => {
-    setIsLoading(true);
-    const getProfileSuccess = async res => {
-      setData(res);
-      getReviews()
-      setIsLoading(false);
-    };
-    const getProfileFailure = async err => {
-      console.log('Err is ==> ', err);
-      Alert.alert('Error', err);
-      setIsLoading(false);
-    };
-    dispatch(getProfileRequest(getProfileSuccess, getProfileFailure));
-  };
+  const getUserProfile = async () => {
+    setIsLoading(true)
+    try {
+      const res = await app.getOtherUserProfile(id)
+      if (res?.status == 200) {
+        setData(res.data)
+        getReviews()
+      }
+    } catch (error) {
+      console.log('error', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
-    if (isFocus)
-      getUserProfile()
-  }, [isFocus])
-console.log('dataaa',JSON.stringify(reviews,null,2))
+    getUserProfile();
+  }, []);
+
+  const desc = 'fr furf ruf rfurb fjhr rhrtbfrutfbr ftugfb tugtb gbtiug trgtugbt gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj erfriofb f4foirbfkr f5oifb rfrfibf 5ifnri jfrfirubf rkjfb4rfkrnf 5f5fb4 5kfrnbfi krf5fb'
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar
@@ -74,30 +77,23 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
         barStyle={'dark-content'}
       />
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} >
-        <AppHeader
-          onPressIcon={() => {
-            navigation.navigate('Settings');
-          }}
-          rightIcon
-          from={'SUPPORT_CLOSER_HOME'}
-          containerStyle={{ backgroundColor: '#F9FBFC' }}
+        <BackHeader
+          title="Profile"
+          txtCenter
+          txtSize={size.xsmall}
+          txtFamily={family.Gilroy_SemiBold}
         />
         <View style={styles.contentContainer}>
-          <View style={styles.headingContainer} >
-            <Text style={styles.heading} >Your Profile</Text>
+          <View style={spacing.pt8}>
             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('EditProfile', { item: data, from: 'SUPPORT_CLOSER_HOME' })
-              }}
+              onPress={() => navigation.navigate('PersonChat', { conversation_id: data?.id, avatar: data?.avatar, full_name: data?.full_name })}
               style={styles.iconCon}>
-              <Image style={styles.iconStyle} source={appIcons.bgPencil} />
+              <Image style={styles.iconStyle} source={appIcons.chat} />
             </TouchableOpacity>
-          </View>
-          <View style={spacing.pt4}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('BoostProfile')}
-              style={styles.startIconCon}>
-              <Image style={styles.iconStyle} source={appIcons.starWithLinesIcon} resizeMode={'contain'} />
+              onPress={() => { }}
+              style={[styles.iconCon, { top: 60 }]}>
+              <Image style={styles.iconStyle} source={appIcons.phone} resizeMode={'contain'} />
             </TouchableOpacity>
             <View style={styles.imgCon}>
               <Image
@@ -105,8 +101,8 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
                 source={{ uri: data?.avatar || profile_uri }}
               />
             </View>
-            <Text style={styles.h1}>{data?.full_name}</Text>
-            {/* <Text style={styles.subtitle}>{'Company abc'}</Text> */}
+            <Text style={styles.h1}>{data?.full_name || 'N/A'}</Text>
+            <Text style={styles.subtitle}>{'Company abc'}</Text>
           </View>
           <View style={styles.ratingContainer} >
             <TouchableOpacity
@@ -118,7 +114,7 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
             </TouchableOpacity>
             <View >
               <Text style={styles.ratingText} >Rating</Text>
-              <Text style={styles.ratingNumber}>{data?.average_rating}</Text>
+              <Text style={styles.ratingNumber}>{data?.average_rating || 0}</Text>
             </View>
           </View>
           <View style={spacing.mt6}>
@@ -183,20 +179,6 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
           </View>
         </View>
         <View style={styles.peoplesContainer} >
-          <Text style={styles.peoplesContainerTitle} >Who Viewed Your Profile?</Text>
-          <View style={styles.peoplesImagesContainer} >
-            <FlatList
-              data={[1, 2, 3, 4, 5, 6]}
-              keyExtractor={(_, index) => index}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ }) => (
-                <Image style={styles.peoplesImage} source={appImages.avatar} />
-              )}
-            />
-          </View>
-        </View>
-        <View style={styles.peoplesContainer} >
           <View style={styles.reviewsTitleContainer} >
             <Text style={styles.peoplesContainerTitle} >Your Reviews ({reviews?.count || 0})</Text>
             <StarRating
@@ -223,14 +205,13 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
             borderColor={colors.p2}
             title="View all Reviews"
             textStyle={{ fontSize: size.tiny }}
-            onPress={() => navigation.navigate('Reviews', { id: userProfile?.id, from: 'SUPPORT_CLOSER_HOME' })}
+            onPress={() => navigation.navigate('Reviews', { id, full_name: data?.full_name })}
           />
         </View>
-        {/* <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }} /> */}
       </ScrollView>
       <AppLoader loading={isLoading} />
     </SafeAreaView>
   );
 };
 
-export default HomeSupportCloser
+export default SupportCloserDetail
