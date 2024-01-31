@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
-import { WP, colors, size, family } from '../../../shared/exporter';
+import { WP, colors, size, family, HP } from '../../../shared/exporter';
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.white,
   },
   contentContainer: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: WP('3.85'),
   },
   imgCon: {
@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   ratingContainer: {
-    flex:1,
-    justifyContent:'center'
+    flexGrow:1,
+    paddingTop:HP(5),
+    // justifyContent:'center'
   },
 });
 

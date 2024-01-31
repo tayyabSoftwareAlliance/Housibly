@@ -35,6 +35,7 @@ const ENDPOINTS = {
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
   GET_OTHER_USER_PROFILE: 'show_other_user_profile',
+  CREATE_REVIEW:'reviews',
 
   //chat
   CONVERSATIONS: 'conversations',
@@ -45,7 +46,8 @@ const ENDPOINTS = {
 
   //support closer
   SEARCH_SUPPORT_CLOSER:'search_support_closers',
-  GET_SUPPORT_CLOSER_REVIEWS:'reviews/get_reviews'
+  GET_SUPPORT_CLOSER_REVIEWS:'reviews/get_reviews',
+  GET_VISITORS:'profile_visitor_list',
 
 };
 

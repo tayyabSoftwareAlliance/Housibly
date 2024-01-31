@@ -11,6 +11,8 @@ import { getSublists } from '../../redux/actions';
 import HomeSupportCloserStack from '../stacks/HomeSupportCloserStack';
 import MessagesAndNotificationStack from '../stacks/MessagesAndNotificationStack';
 import BookmarksStack from '../stacks/BookmarksStack';
+import SupportCloserChats from '../../screens/App/SupportCloserChats';
+import SupportCloserNotifications from '../../screens/App/SupportCloserNotifications';
 
 const Tab = createBottomTabNavigator();
 
@@ -51,22 +53,57 @@ export default BottomTabs = ({ }) => {
       // }}
 
       initialRouteName={'Home'}>
-      {userInfo?.user?.profile_type == 'support_closer' ? <Tab.Screen
-        name="Home"
-        component={HomeSupportCloserStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <>
-              <Image
-                resizeMode="contain"
-                source={appIcons.homeIcon}
-                style={styles.iconStyle(focused)}
-              />
-              <View style={styles.barViewStyle(focused)} />
-            </>
-          ),
-        }}
-      /> :
+      {userInfo?.user?.profile_type == 'support_closer' ?
+        <>
+          <Tab.Screen
+            name="Home"
+            component={HomeSupportCloserStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.homeIcon}
+                    style={styles.iconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="SupportCloserChats"
+            component={SupportCloserChats}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.messageIcon}
+                    style={styles.iconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="SupportCloserNotifications"
+            component={SupportCloserNotifications}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    source={appIcons.notify}
+                    style={styles.iconStyle(focused)}
+                  />
+                  <View style={styles.barViewStyle(focused)} />
+                </>
+              ),
+            }}
+          />
+        </> :
         <>
           <Tab.Screen
             name="Home"

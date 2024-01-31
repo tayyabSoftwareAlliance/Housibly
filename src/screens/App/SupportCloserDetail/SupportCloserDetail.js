@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   StatusBar,
+  Linking,
 } from 'react-native';
 import styles from './styles';
 import {
@@ -38,7 +39,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
   const [reviews, setReviews] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showFulldescription, setShowFullDescription] = useState(false)
-  const isFocus = useIsFocused(null);
+  const isFocus = useIsFocused();
 
   const getReviews = async () => {
     const res = await app.getSupportCloserReviews(id, 'all', 1)
@@ -64,10 +65,8 @@ const SupportCloserDetail = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    getUserProfile();
-  }, []);
-
-  const desc = 'fr furf ruf rfurb fjhr rhrtbfrutfbr ftugfb tugtb gbtiug trgtugbt gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj gtgitbgtgbtgjktbgtj gtugbtgbtgibtgujt gtigb tgtbg tjgbtguitrbg rrufbgruivr frujfbr friofb jnribrk frifortbftf jkrjnfkj erfriofb f4foirbfkr f5oifb rfrfibf 5ifnri jfrfirubf rkjfb4rfkrnf 5f5fb4 5kfrnbfi krf5fb'
+    isFocus && getUserProfile()
+  }, [isFocus])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -86,12 +85,12 @@ const SupportCloserDetail = ({ navigation, route }) => {
         <View style={styles.contentContainer}>
           <View style={spacing.pt8}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('PersonChat', { conversation_id: data?.id, avatar: data?.avatar, full_name: data?.full_name })}
+              onPress={() => navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: data?.id, avatar: data?.avatar, full_name: data?.full_name })}
               style={styles.iconCon}>
               <Image style={styles.iconStyle} source={appIcons.chat} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => { }}
+              onPress={() => Linking.openURL(`tel:${data?.phone_number}`)}
               style={[styles.iconCon, { top: 60 }]}>
               <Image style={styles.iconStyle} source={appIcons.phone} resizeMode={'contain'} />
             </TouchableOpacity>
@@ -205,7 +204,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
             borderColor={colors.p2}
             title="View all Reviews"
             textStyle={{ fontSize: size.tiny }}
-            onPress={() => navigation.navigate('Reviews', { id, full_name: data?.full_name })}
+            onPress={() => navigation.navigate('Reviews', { id, full_name: data?.full_name, avatar: data?.avatar })}
           />
         </View>
       </ScrollView>

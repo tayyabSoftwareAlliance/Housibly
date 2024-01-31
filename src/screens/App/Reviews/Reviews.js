@@ -8,17 +8,19 @@ import Review from '../../../components/Custom/Review';
 import FilterComponent from '../../../components/Custom/FilterComponent';
 import ReviewsFilterComponent from '../../../components/Custom/ReviewsFilterComponent';
 import { app } from '../../../shared/api';
+import { useIsFocused } from '@react-navigation/native'
 
 let page = 1;
 
 const Reviews = ({ navigation, route }) => {
 
-  const { id, full_name, from } = route.params
+  const { id, full_name, avatar, from } = route.params
   const [selectedFilter, setSelectedFilter] = useState(0)
   const [loader, setLoader] = useState(false)
   const [refreshLoader, setRefreshLoader] = useState(false)
   const [count, setCount] = useState(0)
   const [reviews, setReviews] = useState([])
+  const isFocused = useIsFocused()
 
   const fetchData = async (from) => {
     if (loader || refreshLoader) return
@@ -46,8 +48,8 @@ const Reviews = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    fetchData('useEffect')
-  }, [selectedFilter])
+    isFocused && fetchData('useEffect')
+  }, [selectedFilter, isFocused])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -94,7 +96,7 @@ const Reviews = ({ navigation, route }) => {
               borderColor={colors.p2}
               shadowColor={colors.white}
               textStyle={styles.btnTxtStyle}
-              onPress={() => navigation.navigate('AddReview', { id, full_name })}
+              onPress={() => navigation.navigate('AddReview', { id, full_name, avatar })}
             />
           </View>
         }

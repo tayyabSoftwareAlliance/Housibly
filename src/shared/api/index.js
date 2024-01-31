@@ -58,4 +58,6 @@ export const app = {
   searchSupportCloser: (search, page) => requests.get(`${ENDPOINTS.SEARCH_SUPPORT_CLOSER}?search_query=${search}&page=${page}`),
   getOtherUserProfile: (id) => requests.get(`${ENDPOINTS.GET_OTHER_USER_PROFILE}?user_id=${id}`),
   getSupportCloserReviews: (id, rating, page) => requests.get(`${ENDPOINTS.GET_SUPPORT_CLOSER_REVIEWS}?review[support_closer_id]=${id}${rating == 'all' ? '' : ('&review[rating]=' + rating)}&page=${page}`),
+  getVisitors: () => requests.get(`${ENDPOINTS.GET_VISITORS}`),
+  createReview: (data) => requests.post(ENDPOINTS.CREATE_REVIEW, data),
 };

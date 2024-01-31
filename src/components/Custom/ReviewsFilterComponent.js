@@ -30,7 +30,7 @@ const ReviewsFilterComponent = ({ selected = {}, setSelected }) => {
                 onRequestClose={() => setShow(false)}>
                 <MenuItem
                     onPress={() => {
-                        setSelected(item)
+                        setSelected(0)
                         setShow(false)
                     }}
                     style={selected == 0 && { backgroundColor: colors.g1 }}

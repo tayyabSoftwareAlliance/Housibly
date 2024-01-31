@@ -170,11 +170,11 @@ const AllChats = () => {
   // console.log('chats ', chats)
 
   const deleteChat = async () => {
-    console.log('selectedChat?.id',selectedChat?.id)
+    console.log('selectedChat?.id', selectedChat?.id)
     try {
       setDeleteLoader(true)
       const res = await app.deleteChat(selectedChat?.id);
-      console.log('resss',res?.status)
+      console.log('resss', res?.status)
       if (res?.status == 200) {
         const arr = chats.filter(item => item?.id != selectedChat?.id)
         setChats(arr || [])
@@ -231,7 +231,7 @@ const AllChats = () => {
         buttonLoader={deleteLoader}
         onButtonPress={deleteChat}
       />
-      {/* <AppLoader loading={loader}/> */}
+      <AppLoader loading={!chats.length > 0 && loader} />
     </>
   );
 };

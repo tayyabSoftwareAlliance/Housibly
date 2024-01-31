@@ -9,6 +9,8 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   StatusBar,
+  Pressable,
+  StyleSheet,
 } from 'react-native';
 import styles from './styles';
 import {
@@ -21,7 +23,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { getProfileRequest } from '../../../redux/actions';
-import { HP, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, appIcons, appImages, colors, profile_uri, size, spacing } from '../../../shared/exporter';
+import { HP, PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, colors, family, profile_uri, size, spacing } from '../../../shared/exporter';
 import { Divider, Icon } from 'react-native-elements';
 import Document from '../../../components/Custom/Document';
 import { ScrollView } from 'react-native';
@@ -29,6 +31,82 @@ import StarRating from 'react-native-star-rating';
 import Review from '../../../components/Custom/Review';
 import { extractFileType } from '../../../shared/utilities/helper';
 import { app } from '../../../shared/api';
+import Modal from 'react-native-modal';
+import { useNavigation } from '@react-navigation/native'
+import moment from 'moment';
+import { BlurView } from "@react-native-community/blur";
+
+const VisitorDetailModal = ({ isVisible, data, onPressHide }) => {
+
+  const [viewFull, setViewFull] = useState(false)
+  const [viewFullDesc, setViewFullDesc] = useState(false)
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    !isVisible && setViewFull(false)
+  }, [isVisible])
+
+  return (
+    <Modal onBackdropPress={onPressHide} isVisible={isVisible}>
+      <View style={styles.modalContainer}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.crossIconView}
+          onPress={() => onPressHide()}>
+          <Image
+            resizeMode="contain"
+            source={appIcons.crossIcon}
+            style={styles.crossIconStyle}
+          />
+        </TouchableOpacity>
+        <Image source={{ uri: data?.avatar }} style={styles.imgStyle} />
+        <Text style={styles.nameTxtStyle}>{data?.full_name || 'N/A'}</Text>
+        {viewFull ?
+          <>
+            <View style={spacing.mt6}>
+              <Text style={styles.desc}>
+                {viewFullDesc ? (data?.description || 'Describe something') : (data?.description?.slice(0, 270) || 'N/A')}
+                {data?.description?.length > 270 &&
+                  <TouchableWithoutFeedback onPress={() => setViewFullDesc(!viewFullDesc)} >
+                    {!viewFullDesc ?
+                      <Text style={styles.moreText}> More...</Text> :
+                      <Text style={styles.moreText}> Less</Text>
+                    }
+                  </TouchableWithoutFeedback>
+                }
+              </Text>
+            </View>
+            <Divider style={spacing.my3} color={colors.g18} />
+            <View style={{ width: '100%', marginVertical: 10 }} >
+              <Text style={{ color: colors.b1, fontSize: size.xsmall, fontFamily: family.Gilroy_Medium }}>Email Address</Text>
+              <Text style={{ color: colors.g19, fontSize: size.xsmall, fontFamily: family.Gilroy_Medium }}>{data?.email || 'N/A'}</Text>
+            </View>
+            <View style={{ width: '100%', marginVertical: 10 }} >
+              <Text style={{ color: colors.b1, fontSize: size.xsmall, fontFamily: family.Gilroy_Medium }}>Phone Number</Text>
+              <Text style={{ color: colors.g19, fontSize: size.xsmall, fontFamily: family.Gilroy_Medium }}>{data?.phone_number || 'N/A'}</Text>
+            </View>
+          </> :
+          <>
+            <Text style={styles.subtitle}>Viewed Your Profile</Text>
+            <Text style={styles.time}>{moment(data?.viewed_time).fromNow()}</Text>
+          </>
+        }
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonStyle}
+          onPress={() => {
+            if (viewFull) {
+              navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: data?.id, avatar: data?.avatar, full_name: data?.full_name })
+              onPressHide()
+            } else
+              setViewFull(true)
+          }}>
+          <Text style={styles.btnTxtStyle}>{viewFull ? 'Send Message' : 'View Full Profile'}</Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  )
+}
 
 const HomeSupportCloser = ({ navigation }) => {
 
@@ -38,7 +116,16 @@ const HomeSupportCloser = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showFulldescription, setShowFullDescription] = useState(false)
   const [reviews, setReviews] = useState(null);
+  const [visitors, setVisitors] = useState([]);
+  const [visitorDetailModal, setVisitorDetailModal] = useState(false);
+  const [selectedVisitor, setSelectedVisitor] = useState(null);
   const isFocus = useIsFocused(null);
+
+  const getVisitors = async () => {
+    const res = await app.getVisitors()
+    if (res?.status == 200)
+      setVisitors(res.data || [])
+  }
 
   const getReviews = async () => {
     const res = await app.getSupportCloserReviews(userProfile?.id, 'all', 1)
@@ -50,6 +137,7 @@ const HomeSupportCloser = ({ navigation }) => {
     setIsLoading(true);
     const getProfileSuccess = async res => {
       setData(res);
+      getVisitors()
       getReviews()
       setIsLoading(false);
     };
@@ -65,7 +153,7 @@ const HomeSupportCloser = ({ navigation }) => {
     if (isFocus)
       getUserProfile()
   }, [isFocus])
-console.log('dataaa',JSON.stringify(reviews,null,2))
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar
@@ -102,7 +190,7 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
             <View style={styles.imgCon}>
               <Image
                 style={styles.imgStyle}
-                source={{ uri: data?.avatar || profile_uri }}
+                source={{ uri: data?.avatar }}
               />
             </View>
             <Text style={styles.h1}>{data?.full_name}</Text>
@@ -186,14 +274,23 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
           <Text style={styles.peoplesContainerTitle} >Who Viewed Your Profile?</Text>
           <View style={styles.peoplesImagesContainer} >
             <FlatList
-              data={[1, 2, 3, 4, 5, 6]}
+              data={visitors}
               keyExtractor={(_, index) => index}
               horizontal
               showsHorizontalScrollIndicator={false}
-              renderItem={({ }) => (
-                <Image style={styles.peoplesImage} source={appImages.avatar} />
+              renderItem={({ item }) => (
+                <Pressable onPress={() => { setSelectedVisitor(item); setVisitorDetailModal(true) }} >
+                  <Image style={styles.peoplesImage} source={{ uri: item.avatar }} />
+                </Pressable>
               )}
             />
+            {!data?.has_subscription && false &&
+              <BlurView
+                style={{ ...StyleSheet.absoluteFill }}
+                blurType="light"
+                blurAmount={5}
+              />
+            }
           </View>
         </View>
         <View style={styles.peoplesContainer} >
@@ -229,6 +326,7 @@ console.log('dataaa',JSON.stringify(reviews,null,2))
         {/* <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }} /> */}
       </ScrollView>
       <AppLoader loading={isLoading} />
+      <VisitorDetailModal isVisible={visitorDetailModal} onPressHide={() => setVisitorDetailModal(false)} data={selectedVisitor} />
     </SafeAreaView>
   );
 };

@@ -345,7 +345,6 @@ const PersonChat = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-      {/* <AppLoader loading={sendLoader} /> */}
       <AppLoader loading={createConversationLoader} />
     </SafeAreaView>
   );
