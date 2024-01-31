@@ -128,6 +128,20 @@ const styles = StyleSheet.create({
     width: WP('6'),
     height: WP('6'),
   },
+  optionsModalContentContainer:{
+    position:'absolute',
+    top:WP(5),
+    right:WP(5),
+    backgroundColor:colors.white,
+    padding:WP(2),
+    borderRadius:5,
+    elevation:5
+  },
+  optionsModalTxt:{
+    color:colors.b1,
+    fontFamily:family.Gilroy_Regular,
+    fontSize:size.small
+  }
 });
 
 export default styles;

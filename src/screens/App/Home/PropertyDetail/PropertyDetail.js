@@ -83,6 +83,8 @@ const PropertyDetail = ({ navigation, route }) => {
     dispatch(saveCreatePropertyData(propertyData));
   };
 
+  console.log('propertyData', JSON.stringify(propertyData?.user, null, 2))
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar
@@ -448,8 +450,8 @@ const PropertyDetail = ({ navigation, route }) => {
         </View>
       </KeyboardAwareScrollView>
       <ChatPopupModal
-        image={''}
-        title={'Aspen Franci'}
+        image={propertyData.user?.avatar}
+        title={propertyData.user?.full_name}
         subtitle={'Are you sure you want to contact this seller?'}
         buttontitle={'Contact'}
         show={contactSellerModal}
@@ -457,7 +459,7 @@ const PropertyDetail = ({ navigation, route }) => {
         buttonLoader={false}
         onButtonPress={() => {
           setContactSellerModal(false)
-          setTimeout(() => navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: 8, avatar: '', full_name: 'Hassan' }), 500)
+          setTimeout(() => navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: propertyData.user?.id, avatar: propertyData.user?.avatar, full_name: propertyData.user?.full_name }), 500)
         }}
         buttonStyle={{ backgroundColor: colors.p1 }}
       />

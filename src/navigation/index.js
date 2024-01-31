@@ -43,6 +43,7 @@ import SavedLocations from '../screens/App/Home/SavedLocations';
 import SearchSupportCloser from '../screens/App/SearchSupportCloser';
 import SupportCloserDetail from '../screens/App/SupportCloserDetail';
 import AddReview from '../screens/App/AddReview';
+import BlockedList from '../screens/App/Profile/BlockedList';
 
 const AppStack = createNativeStackNavigator();
 
@@ -75,6 +76,7 @@ const MainAppNav = () => {
         <AppStack.Screen name={'SupportQuery'} component={SupportQuery} />
         <AppStack.Screen name={'SupportChat'} component={SupportChat} />
         <AppStack.Screen name={'FAQ'} component={FAQ} />
+        <AppStack.Screen name={'BlockedList'} component={BlockedList} />
         <AppStack.Screen name={'NewMessages'} component={NewMessages} />
         <AppStack.Screen name={'MapScreen'} component={MapScreen} />
         <AppStack.Screen name={'AddCard'} component={AddCard} />

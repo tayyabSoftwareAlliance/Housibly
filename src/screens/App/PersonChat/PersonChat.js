@@ -16,9 +16,11 @@ import {
   appIcons,
   appImages,
   colors,
+  family,
   handleCameraPermission,
   platformOrientedCode,
   responseValidator,
+  size,
   WP,
 } from '../../../shared/exporter';
 import styles from './styles';
@@ -29,6 +31,33 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import CacheImage from 'react-native-image-cache-wrapper';
 import useChannel from '../../../shared/utilities/useChannel';
+import Modal from 'react-native-modal';
+import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
+
+const OptionsModal = ({ isVisible, onPressHide, onPressBlock }) => {
+  return (
+    <Modal
+      isVisible={isVisible}
+      onBackdropPress={onPressHide}
+      animationIn={'slideInRight'}
+      animationOut={'slideOutRight'}
+      backdropOpacity={0}
+    >
+      <View style={{ flex: 1 }} >
+        <View style={styles.optionsModalContentContainer} >
+          <TouchableOpacity
+            onPress={() => {
+              onPressHide()
+              onPressBlock()
+            }}
+          >
+            <Text style={styles.optionsModalTxt} >Block User</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  )
+}
 
 let interval;
 const image_options = {
@@ -76,6 +105,9 @@ const PersonChat = ({ navigation, route }) => {
   const [sendLoader, setSendLoader] = useState(false)
   const [createConversationLoader, setCreateConversationLoader] = useState(false)
   const [useEffectRecallFlag, setUseEffectRecallFlag] = useState(false)
+  const [optionsModal, setOptionsModal] = useState(false)
+  const [blockModal, setBlockModal] = useState(false)
+  const [blockLoader, setBlockLoader] = useState(false)
   const isFocused = useIsFocused()
   const userData = useSelector(state => state.auth)
   const userId = userData?.userInfo?.user?.id
@@ -232,6 +264,10 @@ const PersonChat = ({ navigation, route }) => {
   };
   // console.log('allMessages', JSON.stringify(allMessages, null, 2))
 
+  const blockUser = () => {
+
+  }
+
   useEffect(() => {
     createChannel({
       connected: () => {
@@ -264,9 +300,7 @@ const PersonChat = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.rootContainer}>
       <ChatHeader
-        onPressIcon={() => {
-          // navigation.navigate('Profile');
-        }}
+        onPressIcon={() => setOptionsModal(true)}
         rightIcon
         avatar={params?.avatar}
         name={params?.full_name}
@@ -346,6 +380,18 @@ const PersonChat = ({ navigation, route }) => {
         </View>
       </KeyboardAvoidingView>
       <AppLoader loading={createConversationLoader} />
+      <OptionsModal isVisible={optionsModal} onPressHide={() => setOptionsModal(false)} onPressBlock={() => setBlockModal(true)} />
+      <ChatPopupModal
+        image={params?.avatar}
+        title={params?.full_name}
+        subtitle={'Block user?'}
+        buttontitle={'Block'}
+        show={blockModal}
+        onPressHide={() => setBlockModal(false)}
+        buttonLoader={blockLoader}
+        onButtonPress={blockUser}
+        buttonStyle={{backgroundColor:colors.b1}}
+      />
     </SafeAreaView>
   );
 };

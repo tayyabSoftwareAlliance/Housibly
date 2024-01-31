@@ -82,6 +82,7 @@ export const appIcons = {
   support: require('../../assets/icons/support.png'),
   terms: require('../../assets/icons/terms.png'),
   faq: require('../../assets/icons/faq.png'),
+  blockedList: require('../../assets/icons/blocked_list.png'),
   cards: require('../../assets/icons/cards.png'),
   googleWallet: require('../../assets/icons/google_wallet.png'),
   checked: require('../../assets/icons/checked.png'),
