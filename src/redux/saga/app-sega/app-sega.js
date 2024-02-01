@@ -33,7 +33,10 @@ export function* createMyPropertyRequest() {
 }
 function* createMyProp(action) {
   try {
+    console.log('createeeeee')
     const res = yield app.createProperty(action.payload)
+    console.log('status',res.status)
+    console.log('data',res.data)
     if (res?.status == 200) {
       yield put({
         type: types.CREATE_MY_PROPERTY_SUCCESS,
@@ -42,7 +45,7 @@ function* createMyProp(action) {
       action.onSuccess()
     }
   } catch (error) {
-    // console.log('error',error?.response?.data)
+    console.log('error',error)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {

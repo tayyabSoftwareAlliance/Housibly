@@ -60,4 +60,6 @@ export const app = {
   getSupportCloserReviews: (id, rating, page) => requests.get(`${ENDPOINTS.GET_SUPPORT_CLOSER_REVIEWS}?review[support_closer_id]=${id}${rating == 'all' ? '' : ('&review[rating]=' + rating)}&page=${page}`),
   getVisitors: () => requests.get(`${ENDPOINTS.GET_VISITORS}`),
   createReview: (data) => requests.post(ENDPOINTS.CREATE_REVIEW, data),
+  blockUnblockUser: (data) => requests.post(ENDPOINTS.BLOCK_UNLBLOCK_USER,data),
+  getBlockedUsers: () => requests.get(ENDPOINTS.GET_BLOCKED_USERS),
 };

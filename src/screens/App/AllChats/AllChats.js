@@ -9,6 +9,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { app } from '../../../shared/api';
 import { AppLoader } from '../../../components';
 import CacheImage from 'react-native-image-cache-wrapper';
+import { useSelector } from 'react-redux';
 
 const AllChatsData = [
   {
@@ -77,12 +78,21 @@ const AllChatsData = [
   }
 ]
 
-const renderItem = (item, index, navigation) => {
+const renderItem = (item, index, userId, navigation) => {
   return (
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => navigation.navigate('PersonChat', { conversation_id: item?.id, avatar: item?.avatar, full_name: item?.full_name })}>
+      onPress={() => navigation.navigate('PersonChat',
+        {
+          conversation_id: item?.id,
+          avatar: item?.avatar,
+          full_name: item?.full_name,
+          recipient_id: userId == item?.recipient_id ? item?.sender_id : item?.recipient_id,
+          is_blocked: item?.is_blocked
+        }
+      )}
+    >
       <CacheImage
         source={{ uri: item?.avatar }}
         style={styles.imgStyle}
@@ -128,6 +138,8 @@ const AllChats = () => {
   const [loader, setLoader] = useState(true)
   const [deleteLoader, setDeleteLoader] = useState(false)
   const isFocused = useIsFocused()
+  const userData = useSelector(state => state.auth)
+  const userId = userData?.userInfo?.user?.id
 
   const closeRow = (map, key) => {
     map && map[key] && map[key].closeRow();
@@ -140,7 +152,6 @@ const AllChats = () => {
   }
 
   const fetchAllChats = async () => {
-    console.log('getAllchat')
     try {
       setLoader(true)
       const res = await app.getAllChats();
@@ -170,11 +181,9 @@ const AllChats = () => {
   // console.log('chats ', chats)
 
   const deleteChat = async () => {
-    console.log('selectedChat?.id', selectedChat?.id)
     try {
       setDeleteLoader(true)
       const res = await app.deleteChat(selectedChat?.id);
-      console.log('resss', res?.status)
       if (res?.status == 200) {
         const arr = chats.filter(item => item?.id != selectedChat?.id)
         setChats(arr || [])
@@ -195,7 +204,7 @@ const AllChats = () => {
           useFlatList
           data={chats}
           disableRightSwipe={true}
-          renderItem={({ item, index }) => renderItem(item, index, navigation)}
+          renderItem={({ item, index }) => renderItem(item, index, userId, navigation)}
           renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap, onDeleteButtonPress)}
           leftOpenValue={180}
           rightOpenValue={-180}

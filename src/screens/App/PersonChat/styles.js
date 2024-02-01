@@ -1,10 +1,11 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   WP,
   colors,
   size,
   family,
   platformOrientedCode,
+  scrWidth,
 } from '../../../shared/exporter';
 import DeviceInfo from 'react-native-device-info';
 
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     width: WP('22'),
     height: WP('22'),
     borderRadius: 15,
-    backgroundColor:colors.g14
+    backgroundColor: colors.g14
   },
   nameTxtStyle: {
     color: colors.b1,
@@ -128,20 +129,19 @@ const styles = StyleSheet.create({
     width: WP('6'),
     height: WP('6'),
   },
-  optionsModalContentContainer:{
-    position:'absolute',
-    top:WP(5),
-    right:WP(5),
-    backgroundColor:colors.white,
-    padding:WP(2),
-    borderRadius:5,
-    elevation:5
+  menuContainer: {
+    width: '100%',
+    top: 0,
+    alignItems: 'flex-end',
   },
-  optionsModalTxt:{
-    color:colors.b1,
-    fontFamily:family.Gilroy_Regular,
-    fontSize:size.small
-  }
+  menuItemStyle: {
+  },
+  menuTxtStyle: {
+    color: colors.b1,
+    fontSize: size.xsmall,
+    fontFamily: family.Gilroy_Regular,
+    textAlign: 'center'
+  },
 });
 
 export default styles;

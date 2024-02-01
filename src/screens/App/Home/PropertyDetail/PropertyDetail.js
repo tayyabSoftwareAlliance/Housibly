@@ -72,6 +72,7 @@ const PropertyDetail = ({ navigation, route }) => {
           update_my_property({ data: formdata, id: propertyData?.id }, onSuccess),
         );
       } else {
+        console.log('from',from)
         dispatch(create_my_property(formdata, onSuccess));
       }
     } else {

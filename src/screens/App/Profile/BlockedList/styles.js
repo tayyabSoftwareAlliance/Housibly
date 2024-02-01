@@ -39,6 +39,11 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.small,
     fontFamily: family.Gilroy_SemiBold,
+  },
+  noData:{
+    color: colors.g19,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Regular,
   }
 });
 

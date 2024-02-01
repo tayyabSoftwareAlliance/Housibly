@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { AppLoader, ChatHeader, Spacer } from '../../../components';
@@ -31,35 +32,29 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import CacheImage from 'react-native-image-cache-wrapper';
 import useChannel from '../../../shared/utilities/useChannel';
-import Modal from 'react-native-modal';
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
+import { Menu, MenuItem } from 'react-native-material-menu';
 
-const OptionsModal = ({ isVisible, onPressHide, onPressBlock }) => {
+const OptionsMenu = ({ isVisible, onPressHide, onPressBlock }) => {
   return (
-    <Modal
-      isVisible={isVisible}
-      onBackdropPress={onPressHide}
-      animationIn={'slideInRight'}
-      animationOut={'slideOutRight'}
-      backdropOpacity={0}
-    >
-      <View style={{ flex: 1 }} >
-        <View style={styles.optionsModalContentContainer} >
-          <TouchableOpacity
-            onPress={() => {
-              onPressHide()
-              onPressBlock()
-            }}
-          >
-            <Text style={styles.optionsModalTxt} >Block User</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
+    <View style={styles.menuContainer}>
+      <Menu
+        visible={isVisible}
+        onRequestClose={onPressHide}>
+        <MenuItem
+          style={styles.menuItemStyle}
+          textStyle={styles.menuTxtStyle}
+          onPress={() => {
+            onPressHide()
+            onPressBlock()
+          }}>
+          Block User
+        </MenuItem>
+      </Menu>
+    </View>
   )
 }
 
-let interval;
 const image_options = {
   width: 300,
   height: 400,
@@ -97,6 +92,7 @@ const renderItem = (item, index, userId) => {
 const PersonChat = ({ navigation, route }) => {
   const params = route.params
   const [conversationId, setConversationId] = useState(params?.conversation_id);
+  const [isBlocked, setIsBlocked] = useState(params?.is_blocked);
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
   const [visibility, setVisibility] = useState(false);
@@ -112,7 +108,7 @@ const PersonChat = ({ navigation, route }) => {
   const userData = useSelector(state => state.auth)
   const userId = userData?.userInfo?.user?.id
   const { createChannel, removeChannel } = useChannel()
-  console.log('userId', userId)
+
   useLayoutEffect(() => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
@@ -124,7 +120,6 @@ const PersonChat = ({ navigation, route }) => {
       const formData = new FormData()
       formData.append('conversation_id', conversationId)
       const res = await app.getAllMessages(formData);
-      console.log('res.data?.messages', JSON.stringify(res.data?.messages, null, 2))
       if (res?.status == 200) {
         setAllMessages(res.data?.messages || [])
       }
@@ -158,6 +153,7 @@ const PersonChat = ({ navigation, route }) => {
       const res = await app.checkIsConversationCreated(formData);
       if (res?.status == 200) {
         setConversationId(res.data?.id)
+        setIsBlocked(res.data?.is_blocked)
         setUseEffectRecallFlag(prev => !prev)
       }
     } catch (error) {
@@ -168,22 +164,16 @@ const PersonChat = ({ navigation, route }) => {
   }
 
   const firstCall = async () => {
-    if (isFocused) {
-      if (params?.from == 'not_chats' && !conversationId) {
-        await checkIsConversationCreated()
-      } else {
-        getAllMessages()
-        callReadMessages()
-        // interval = setInterval(() => getAllMessages(), 5000)
-      }
+    if (params?.from == 'not_chats' && !conversationId) {
+      await checkIsConversationCreated()
     } else {
-      // interval && clearInterval(interval)
+      getAllMessages()
+      callReadMessages()
     }
   }
 
   useEffect(() => {
-    firstCall()
-    // return () => interval && clearInterval(interval)
+    isFocused && firstCall()
   }, [isFocused, useEffectRecallFlag])
 
   const createConversation = async () => {
@@ -264,8 +254,25 @@ const PersonChat = ({ navigation, route }) => {
   };
   // console.log('allMessages', JSON.stringify(allMessages, null, 2))
 
-  const blockUser = () => {
-
+  const blockUser = async () => {
+    try {
+      setBlockLoader(true)
+      const formData = new FormData()
+      formData.append('user_id', params?.recipient_id)
+      formData.append('is_blocked', true)
+      console.log('form', formData)
+      const res = await app.blockUnblockUser(formData)
+      if (res?.status == 200) {
+        setBlockModal(false)
+        setIsBlocked(true)
+        Alert.alert('Success','User Blocked Successfully!')
+      }
+    } catch (error) {
+      console.log(error.response?.data);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+    } finally {
+      setBlockLoader(false)
+    }
   }
 
   useEffect(() => {
@@ -301,10 +308,17 @@ const PersonChat = ({ navigation, route }) => {
     <SafeAreaView style={styles.rootContainer}>
       <ChatHeader
         onPressIcon={() => setOptionsModal(true)}
-        rightIcon
+        rightIcon={!isBlocked}
         avatar={params?.avatar}
         name={params?.full_name}
       />
+      {!isBlocked &&
+        <OptionsMenu
+          isVisible={optionsModal}
+          onPressHide={() => setOptionsModal(false)}
+          onPressBlock={() => setBlockModal(true)}
+        />
+      }
       <Spacer androidVal={WP('2')} iOSVal={WP('2')} />
       {allMessages?.length > 0 ? (
         <FlatList
@@ -332,55 +346,56 @@ const PersonChat = ({ navigation, route }) => {
           <Text style={{ color: colors.g19 }} >No Messages Found Yet!</Text>
         </View>
       )}
-      <KeyboardAvoidingView
-        behavior={platformOrientedCode('height', 'padding')}>
-        <View style={styles.inputView}>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              placeholder={'Type here...'}
-              value={message}
-              ellipsizeMode="tail"
-              multiline
-              maxHeight={75}
-              onChangeText={text => setMessage(text)}
-              placeholderTextColor={colors.g40}
-              style={styles.inputStyles}
-            />
-            {visibility ? (
-              <ActivityIndicator
-                animating
-                size={'small'}
-                color={colors.p1}
-                style={{ left: 3 }}
+      {!isBlocked &&
+        <KeyboardAvoidingView
+          behavior={platformOrientedCode('height', 'padding')}>
+          <View style={styles.inputView}>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                placeholder={'Type here...'}
+                value={message}
+                ellipsizeMode="tail"
+                multiline
+                maxHeight={75}
+                onChangeText={text => setMessage(text)}
+                placeholderTextColor={colors.g40}
+                style={styles.inputStyles}
               />
-            ) : (
-              <Icon
-                name={'send'}
-                type={'ionicons'}
-                size={22}
-                color={colors.g16}
-                onPress={() => onSend()}
+              {visibility ? (
+                <ActivityIndicator
+                  animating
+                  size={'small'}
+                  color={colors.p1}
+                  style={{ left: 3 }}
+                />
+              ) : (
+                <Icon
+                  name={'send'}
+                  type={'ionicons'}
+                  size={22}
+                  color={colors.g16}
+                  onPress={() => onSend()}
+                />
+              )}
+            </View>
+            <TouchableOpacity onPress={openGallery} >
+              <Image
+                resizeMode="contain"
+                source={appIcons.galleryIcon}
+                style={[styles.iconStyle, { marginRight: 7 }]}
               />
-            )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={openCamera}>
+              <Image
+                resizeMode="contain"
+                source={appIcons.cameraIcon}
+                style={[styles.iconStyle, { marginLeft: 7 }]}
+              />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={openGallery} >
-            <Image
-              resizeMode="contain"
-              source={appIcons.galleryIcon}
-              style={[styles.iconStyle, { marginRight: 7 }]}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={openCamera}>
-            <Image
-              resizeMode="contain"
-              source={appIcons.cameraIcon}
-              style={[styles.iconStyle, { marginLeft: 7 }]}
-            />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      }
       <AppLoader loading={createConversationLoader} />
-      <OptionsModal isVisible={optionsModal} onPressHide={() => setOptionsModal(false)} onPressBlock={() => setBlockModal(true)} />
       <ChatPopupModal
         image={params?.avatar}
         title={params?.full_name}
@@ -390,7 +405,7 @@ const PersonChat = ({ navigation, route }) => {
         onPressHide={() => setBlockModal(false)}
         buttonLoader={blockLoader}
         onButtonPress={blockUser}
-        buttonStyle={{backgroundColor:colors.b1}}
+        buttonStyle={{ backgroundColor: colors.b1 }}
       />
     </SafeAreaView>
   );

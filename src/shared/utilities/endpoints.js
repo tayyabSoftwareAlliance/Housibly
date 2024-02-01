@@ -36,6 +36,8 @@ const ENDPOINTS = {
   SAVED_LOCATIONS: 'saved_searches',
   GET_OTHER_USER_PROFILE: 'show_other_user_profile',
   CREATE_REVIEW:'reviews',
+  BLOCK_UNLBLOCK_USER:'block_unblock_user',
+  GET_BLOCKED_USERS:'blocked_users',
 
   //chat
   CONVERSATIONS: 'conversations',
