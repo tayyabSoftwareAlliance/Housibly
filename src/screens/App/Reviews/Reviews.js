@@ -1,11 +1,9 @@
-import { ActivityIndicator, Alert, FlatList, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, SafeAreaView, StatusBar, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AppButton, BackHeader } from '../../../components';
-import { WP, colors, family, filter_property_type_list, responseValidator, size } from '../../../shared/exporter';
+import { WP, colors, family, responseValidator, size } from '../../../shared/exporter';
 import styles from './styles';
-import StarRating from 'react-native-star-rating';
 import Review from '../../../components/Custom/Review';
-import FilterComponent from '../../../components/Custom/FilterComponent';
 import ReviewsFilterComponent from '../../../components/Custom/ReviewsFilterComponent';
 import { app } from '../../../shared/api';
 import { useIsFocused } from '@react-navigation/native'
@@ -26,15 +24,13 @@ const Reviews = ({ navigation, route }) => {
     if (loader || refreshLoader) return
     if (from == 'refresh' || from == 'useEffect') page = 1
     from == 'refresh' ? setRefreshLoader(true) : setLoader(true)
-    console.log('formmmm', page)
     try {
       const res = await app.getSupportCloserReviews(id, selectedFilter || 'all', page)
-      console.log('resss ', JSON.stringify(res.data, null, 2))
-      if (res?.status == 200 && res?.data?.reviews?.length > 0) {
+      if (res?.status == 200) {
         setCount(res.data?.count || 0)
         if (page == 1)
-          setReviews(res.data?.reviews)
-        else
+          setReviews(res.data?.reviews || [])
+        else if (res?.data?.reviews?.length > 0)
           setReviews(prev => [...prev, ...res.data?.reviews])
         page++
       }
