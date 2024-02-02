@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import { StatusBar, LogBox } from 'react-native';
+import React, { useEffect } from 'react';
+import { StatusBar, LogBox, Clipboard } from 'react-native';
 import MainNavigation from './src/navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -8,6 +8,8 @@ import store, { persistor } from './src/redux/store';
 import { colors, stripe_publishableKey } from './src/shared/exporter';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import messaging from '@react-native-firebase/messaging';
+import { requestNotificationPermission } from './src/shared/utilities/helper';
 // import {StripeProvider} from '@stripe/stripe-react-native';
 
 // ignore warnings
@@ -22,6 +24,14 @@ GoogleSignin.configure({
 });
 
 const App = () => {
+
+  useEffect(async() => {
+    // requestNotificationPermission()
+    const token = await messaging().getToken();
+    // Clipboard.setString(token);
+    console.log('FCM Token: ',token)
+  },[])
+
   return (
     <Provider store={store}>
       <StatusBar

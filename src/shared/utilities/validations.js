@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-
+import parsePhoneNumber from 'libphonenumber-js'
 import { emailRegex } from './constant';
 
 export const PhoneAuthFields = {
@@ -103,6 +103,19 @@ export const PhoneAuthFieldsVS = yup.object().shape({
 });
 
 export const editProfileFieldsVS = yup.object().shape({
+  full_name: yup.string().required('Full name Required'),
+  phone: yup
+    .number()
+    .typeError('Invalid phone number')
+    .required('Phone number Required'),
+  email: yup
+    .string()
+    .required('Email Required')
+    .email('Please provide a valid email address'),
+  bio: yup.string().required('Bio data Required'),
+});
+
+export const supportCloserEditProfileFieldsVS = yup.object().shape({
   full_name: yup.string().required('Full name Required'),
   phone: yup
     .number()

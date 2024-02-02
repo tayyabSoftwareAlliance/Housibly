@@ -1788,6 +1788,11 @@
     "opencollective-postinstall" "^2.0.3"
     "superstruct" "^0.6.2"
 
+"@react-native-firebase/messaging@^18.6.0":
+  "integrity" "sha512-0fBDvbu13MJazAJhiT1rm//hnxhzOSu1ZpqmGUKpNu73llxPqVYDk4L8uZ7WBRtu3e6TP7Mw8IfH3gGB1qeelA=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.6.0.tgz"
+  "version" "18.6.0"
+
 "@react-native-google-signin/google-signin@^10.1.0":
   "integrity" "sha512-9hhIlnNMfB6NO2738M437egA1p6inKdXXazh0qf6HJeBuLBTePSecePCOkVPczivM1mglquYXWCHJlx4D3Z7xw=="
   "resolved" "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-10.1.0.tgz"
@@ -5312,6 +5317,11 @@
   dependencies:
     "prelude-ls" "^1.2.1"
     "type-check" "~0.4.0"
+
+"libphonenumber-js@^1.10.54":
+  "integrity" "sha512-P+38dUgJsmh0gzoRDoM4F5jLbyfztkU6PY6eSK6S5HwTi/LPvnwXqVCQZlAy1FxZ5c48q25QhxGQ0pq+WQcSlQ=="
+  "resolved" "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.54.tgz"
+  "version" "1.10.54"
 
 "lines-and-columns@^1.1.6":
   "integrity" "sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg=="

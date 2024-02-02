@@ -37,6 +37,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Formik } from 'formik';
 import CountryPicker from 'react-native-country-picker-modal';
 import { Icon } from 'react-native-elements/dist/icons/Icon';
+import { supportCloserEditProfileFieldsVS } from '../../../shared/utilities/validations';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 const EditProfile = ({ navigation, route }) => {
 
@@ -80,6 +82,7 @@ const EditProfile = ({ navigation, route }) => {
       ImagePicker.openPicker({
         width: 300,
         height: 400,
+        mediaType: 'photo',
       }).then(image => {
         setUserImage(image);
       });
@@ -93,6 +96,7 @@ const EditProfile = ({ navigation, route }) => {
       ImagePicker.openCamera({
         width: 300,
         height: 400,
+        mediaType: 'photo',
       }).then(image => {
         setUserImage(image);
       });
@@ -112,7 +116,7 @@ const EditProfile = ({ navigation, route }) => {
   }
 
   const handleUpdateProfile = values => {
-    if (!professionList.filter(item => item.title).length > 0) {
+    if (from == 'SUPPORT_CLOSER_HOME' && !professionList.filter(item => item.title).length > 0) {
       Alert.alert('Error', 'At least one profession required!');
       return
     }
@@ -126,7 +130,7 @@ const EditProfile = ({ navigation, route }) => {
     }
     data.append('user[full_name]', values?.full_name);
     // data.append('user[email]', values?.email);
-    // data.append('user[phone_number]', phone);
+    data.append('user[phone_number]', phone);
     professionList.map((item, index) => {
       if (item.id) {
         data.append(`user[professions_attributes][${index}][id]`, item.id)
@@ -166,7 +170,6 @@ const EditProfile = ({ navigation, route }) => {
         data.append('user[images][]', imgObj)
       }
     })
-    console.log('form data ', data)
     const updateProfileSuccess = async res => {
       // Alert.alert('Success', 'Profile Updated Successfully!');
       navigation.goBack();
@@ -177,11 +180,12 @@ const EditProfile = ({ navigation, route }) => {
       Alert.alert('Error', err);
       setIsLoading(false);
     };
+    console.log('data', data)
     dispatch(
       updateProfileRequest(data, updateProfileSuccess, updateProfileFailure),
     );
   };
-  console.log('imageArray', JSON.stringify(imageArray, null, 2))
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <AppHeader />
@@ -193,7 +197,13 @@ const EditProfile = ({ navigation, route }) => {
           onSubmit={values => {
             handleUpdateProfile(values);
           }}
-          validationSchema={editProfileFieldsVS}>
+          validate={(values) => {
+            const errors = {}
+            if (!isValidPhoneNumber(values.phone, cca2))
+              errors.phone = 'Invalid phone number'
+            return errors
+          }}
+          validationSchema={from == 'SUPPORT_CLOSER_HOME' ? supportCloserEditProfileFieldsVS : editProfileFieldsVS}>
           {({
             values,
             handleChange,

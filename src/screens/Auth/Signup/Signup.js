@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, SafeAreaView, StatusBar, Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, SafeAreaView, StatusBar, Text, View } from 'react-native';
 import styles from './styles';
 import {
   checkConnected,
@@ -19,13 +19,14 @@ import {
   AuthFooter,
   BackHeader,
 } from '../../../components';
-import {Formik} from 'formik';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useDispatch} from 'react-redux';
-import {signUpRequest} from '../../../redux/actions';
+import { Formik } from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch } from 'react-redux';
+import { signUpRequest } from '../../../redux/actions';
 import CountryPicker from 'react-native-country-picker-modal';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
-const Signup = ({navigation, route}) => {
+const Signup = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [country, setcountry] = useState({
     name: 'United States',
@@ -62,7 +63,7 @@ const Signup = ({navigation, route}) => {
           item?.userType ? item?.userType.toLowerCase() : 'neither',
         );
         data.append('user[profile_type]', profileType);
-        console.log('data',data)
+        console.log('data', data)
         const signUpSuccess = async res => {
           navigation?.replace('VerifyOTP', {
             registeration: true,
@@ -103,6 +104,12 @@ const Signup = ({navigation, route}) => {
           initialValues={signupFormFields}
           onSubmit={values => {
             handleSignUp(values);
+          }}
+          validate={(values) => {
+            const errors = {}
+            if (!isValidPhoneNumber(values.contact, cca2))
+              errors.contact = 'Invalid phone number'
+            return errors
           }}
           validationSchema={SignupVS}>
           {({

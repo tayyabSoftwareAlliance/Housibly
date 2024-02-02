@@ -5,6 +5,7 @@ import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
 import { isLocationEnabled, promptForEnableLocationIfNeeded } from 'react-native-android-location-enabler';
+import messaging from '@react-native-firebase/messaging';
 
 export const checkConnected = () => {
   return NetInfo.fetch().then(state => {
@@ -506,4 +507,26 @@ export const handleCameraPermission = async () => {
 export const extractFileType = (url) => {
   const arr = url?.split('.') || []
   return arr[arr.length - 1]
+}
+
+export const requestNotificationPermission = async () => {
+  let flag = false
+  if (Platform.OS == 'ios') {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      flag = true
+    }
+  } else if (Platform.Version > 32) {
+    await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then((result) => {
+      if (result == RESULTS.GRANTED) {
+        flag = true
+      }
+    });
+  } else {
+    flag = true
+  }
+  return flag;
 }

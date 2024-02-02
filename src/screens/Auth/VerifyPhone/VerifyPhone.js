@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, Image, SafeAreaView, Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Image, SafeAreaView, Text, View } from 'react-native';
 import {
   AppButton,
   AppHeader,
@@ -16,13 +16,14 @@ import {
   PhoneAuthFieldsVS,
 } from '../../../shared/exporter';
 import styles from './styles';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
-import {useDispatch} from 'react-redux';
-import {forgotPassRequest} from '../../../redux/actions';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { forgotPassRequest } from '../../../redux/actions';
 import CountryPicker from 'react-native-country-picker-modal';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
-const VerifyPhone = ({navigation}) => {
+const VerifyPhone = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [country, setcountry] = useState({
     name: 'United States',
@@ -52,7 +53,7 @@ const VerifyPhone = ({navigation}) => {
           res => {
             console.log('phone forgot otp', res);
             setLoading(false);
-            navigation?.navigate('VerifyOTP', {phone: values?.contact});
+            navigation?.navigate('VerifyOTP', { phone: values?.contact });
           },
           res => {
             Alert.alert('Error', res);
@@ -74,6 +75,12 @@ const VerifyPhone = ({navigation}) => {
           initialValues={PhoneAuthFields}
           onSubmit={values => {
             onSubmit(values);
+          }}
+          validate={(values) => {
+            const errors = {}
+            if (!isValidPhoneNumber(values.contact, cca2))
+              errors.contact = 'Invalid phone number'
+            return errors
           }}
           validationSchema={PhoneAuthFieldsVS}>
           {({
