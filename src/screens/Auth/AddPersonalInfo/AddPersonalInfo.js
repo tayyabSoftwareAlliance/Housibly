@@ -96,6 +96,7 @@ const AddPersonalInfo = ({ navigation }) => {
               ImagePicker.openPicker({
                 width: 300,
                 height: 400,
+                mediaType: 'photo',
               }).then(image => {
                 setFieldValue('image', image);
                 setShow(false);
@@ -109,6 +110,7 @@ const AddPersonalInfo = ({ navigation }) => {
               ImagePicker.openCamera({
                 width: 300,
                 height: 400,
+                mediaType: 'photo',
               }).then(image => {
                 setFieldValue('image', image);
 

@@ -48,7 +48,7 @@ const EditProfile = ({ navigation, route }) => {
     callingCode: ['1'],
   });
   const [cca2, setcca2] = useState('US');
-
+console.log('country',country)
   const setCountryValue = val => {
     setcca2(val.cca2);
     setcountry(val);
@@ -221,7 +221,7 @@ const EditProfile = ({ navigation, route }) => {
               setFieldValue('bio', data?.description);
               setFieldValue('phone', data?.phone_number);
               setcca2(data?.country_name || 'US');
-              setcountry({ callingCode: data?.country_code || '1' });
+              setcountry({ callingCode: [data?.country_code] || ['1'] });
               data?.professions?.length > 0 && setprofessionList(data.professions);
               setFieldValue('hourly_rate', data?.hourly_rate);
               setImageArray(data?.images || [])
