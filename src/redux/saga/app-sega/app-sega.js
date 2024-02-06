@@ -209,6 +209,29 @@ function* getMatchedProp(action) {
   }
 }
 
+//Get top support closers
+export function* getTopSupportClosersRequest() {
+  yield takeLatest(types.GET_TOP_SUPPORT_CLOSERS_REQUEST, getTopSupportClosers);
+}
+function* getTopSupportClosers() {
+  try {
+    const res = yield app.getTopSupportClosers()
+    if (res?.status == 200) {
+      yield put({
+        type: types.GET_TOP_SUPPORT_CLOSERS_SUCCESS,
+        payload: res?.data || [],
+      });
+    }
+  } catch (error) {
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    // Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.GET_TOP_SUPPORT_CLOSERS_FINALLY
+    });
+  }
+}
+
 // *************SET ADDRESS Info**************
 export function* setAddressRequest() {
   yield takeLatest(types.SET_ADDRESS_REQUEST, setAddress);

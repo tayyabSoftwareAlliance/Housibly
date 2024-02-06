@@ -38,7 +38,8 @@ const ENDPOINTS = {
   CREATE_REVIEW:'reviews',
   BLOCK_UNLBLOCK_USER:'block_unblock_user',
   GET_BLOCKED_USERS:'blocked_users',
-
+  GET_TOP_SUPPORT_CLOSERS:'top_support_closers',
+  
   //chat
   CONVERSATIONS: 'conversations',
   CHECK_IS_CONVERSATION_CREATED:'conversations/check_conversation_between_users',

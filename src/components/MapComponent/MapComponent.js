@@ -219,7 +219,8 @@ export const MapComponent = () => {
   const getPropertiesAgainstPolygon = async () => {
     try {
       setIsLoading(true)
-      const polygon = encodeURIComponent(JSON.stringify(polygonCoords.map(item => ({ lat: item.latitude, lng: item.longitude }))))
+      // const polygon = encodeURIComponent(JSON.stringify(polygonCoords.map(item => ({ lat: item.latitude, lng: item.longitude }))))
+      const polygon = JSON.stringify(polygonCoords.map(item => ({ lat: item.latitude, lng: item.longitude })))
       const params = `search[polygon]=${polygon}`
       const res = await app.getPropertiesInsidePolygon(params);
       if (res?.status == 200) {
@@ -237,8 +238,10 @@ export const MapComponent = () => {
     try {
       setIsLoading(true)
       const radius = haversineDistance(circleCoords[0].latitude, circleCoords[0].longitude, circleCoords[1].latitude, circleCoords[1].longitude) / 1000  // get radius in kilometers
-      const origin = encodeURIComponent(JSON.stringify({ lat: circleCoords[0].latitude, lng: circleCoords[0].longitude }))
+      // const origin = encodeURIComponent(JSON.stringify({ lat: circleCoords[0].latitude, lng: circleCoords[0].longitude }))
+      const origin = JSON.stringify({ lat: circleCoords[0].latitude, lng: circleCoords[0].longitude })
       const params = `search[radius]=${radius}&search[origin]=${origin}`
+      console.log('params',params)
       const res = await app.getPropertiesInsideCircle(params);
       if (res?.status == 200) {
         setProperties(res.data || [])
@@ -258,6 +261,7 @@ export const MapComponent = () => {
       setPolygonCoords([])
       setCircleCoords([])
       setProperties([])
+      await new Promise(res => setTimeout(res, 1000))
       setIsLoading(true)
       const params = `search[zip_code]=${zipCode}`
       const res = await app.getPropertiesAgainstZipCode(params);
@@ -620,7 +624,7 @@ export const MapComponent = () => {
           </Marker>
         ))}
         {(propertyData && !properties.length > 0 && !polygonCoords.length > 0 && !circleCoords.length > 0 && !zipCode) ?
-        <Marker
+          <Marker
             coordinate={{ latitude: propertyData.latitude, longitude: propertyData.longitude }}
           // anchor={{ x: 0.5, y: 0.5 }}
           >
@@ -766,6 +770,7 @@ const styles = StyleSheet.create({
     width: WP('26.3'),
     height: WP('24.1'),
     marginRight: WP('2.5'),
+    backgroundColor:colors.g14
   },
   innerRow: {
     flexDirection: 'row',

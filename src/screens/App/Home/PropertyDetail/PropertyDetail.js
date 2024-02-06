@@ -72,7 +72,7 @@ const PropertyDetail = ({ navigation, route }) => {
           update_my_property({ data: formdata, id: propertyData?.id }, onSuccess),
         );
       } else {
-        console.log('from',from)
+        console.log('from', from)
         dispatch(create_my_property(formdata, onSuccess));
       }
     } else {
@@ -460,7 +460,7 @@ const PropertyDetail = ({ navigation, route }) => {
         buttonLoader={false}
         onButtonPress={() => {
           setContactSellerModal(false)
-          setTimeout(() => navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: propertyData.user?.id, avatar: propertyData.user?.avatar, full_name: propertyData.user?.full_name }), 500)
+          setTimeout(() => navigation.navigate('PersonChat', { recipient_id: propertyData.user?.id, avatar: propertyData.user?.avatar, full_name: propertyData.user?.full_name, from: 'not_chats' }), 500)
         }}
         buttonStyle={{ backgroundColor: colors.p1 }}
       />

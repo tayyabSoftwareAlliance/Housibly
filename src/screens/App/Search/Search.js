@@ -4,6 +4,7 @@ import { AppHeader, MapComponent, Spacer } from '../../../components';
 import { WP } from '../../../shared/exporter';
 import styles from './styles';
 import { useIsFocused } from '@react-navigation/native';
+import { View } from 'react-native';
 
 const Search = () => {
 
@@ -17,9 +18,9 @@ const Search = () => {
   }, [isFocused])
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
+    <View style={styles.rootContainer}>
       <MapComponent />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     width: WP('22'),
     height: WP('22'),
     borderRadius: 15,
+    backgroundColor:colors.g14
   },
   txtContainer: {
     paddingHorizontal: WP('4'),
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: size.normal,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
   },
   h1TxtStyle: {
     paddingTop: 6,
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: size.tiny,
     fontFamily: family.Gilroy_Medium,
+    textTransform:'capitalize'
   },
   iconContainer: {
     right: 5,
@@ -113,7 +116,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: -5,
     borderRadius: 8,
-    height: WP('20'),
+    // height: WP('20'),
+    height: WP('12'),
     width: scrWidth / 3.7,
   },
   menuItemStyle: {

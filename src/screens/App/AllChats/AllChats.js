@@ -9,7 +9,8 @@ import { useIsFocused } from '@react-navigation/native'
 import { app } from '../../../shared/api';
 import { AppLoader } from '../../../components';
 import CacheImage from 'react-native-image-cache-wrapper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { delete_chat, get_all_chats } from '../../../redux/actions/chat-actions/chat-actions';
 
 const AllChatsData = [
   {
@@ -131,14 +132,13 @@ const renderHiddenItem = (data, rowMap, onDeleteButtonPress) => {
 
 const AllChats = () => {
 
+  const dispatch = useDispatch()
   const navigation = useNavigation()
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedChat, setSelectedChat] = useState(null)
-  const [chats, setChats] = useState([])
-  const [loader, setLoader] = useState(true)
-  const [deleteLoader, setDeleteLoader] = useState(false)
   const isFocused = useIsFocused()
   const userData = useSelector(state => state.auth)
+  const { loading,delete_loader, all_chats } = useSelector(state => state.chat)
   const userId = userData?.userInfo?.user?.id
 
   const closeRow = (map, key) => {
@@ -151,58 +151,23 @@ const AllChats = () => {
     setSelectedChat(data?.item)
   }
 
-  const fetchAllChats = async () => {
-    try {
-      setLoader(true)
-      const res = await app.getAllChats();
-      if (res?.status == 200) {
-        const arr = res.data?.sort((a, b) => new Date(b.updated_at)?.getTime() - new Date(a.updated_at)?.getTime())
-        setChats(arr || [])
-      }
-    } catch (error) {
-      console.log(error.response);
-      let msg = responseValidator(error?.response?.status, error?.response?.data);
-    } finally {
-      setLoader(false)
-    }
-  }
-
   useEffect(() => {
     let interval;
     if (isFocused) {
-      fetchAllChats()
-      interval = setInterval(() => fetchAllChats(), 10000)
+      dispatch(get_all_chats())
+      interval = setInterval(() => dispatch(get_all_chats()), 10000)
     } else {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
   }, [isFocused])
 
-  // console.log('chats ', chats)
-
-  const deleteChat = async () => {
-    try {
-      setDeleteLoader(true)
-      const res = await app.deleteChat(selectedChat?.id);
-      if (res?.status == 200) {
-        const arr = chats.filter(item => item?.id != selectedChat?.id)
-        setChats(arr || [])
-        setDeleteModal(false)
-      }
-    } catch (error) {
-      console.log(error.response);
-      let msg = responseValidator(error?.response?.status, error?.response?.data);
-    } finally {
-      setDeleteLoader(false)
-    }
-  }
-
   return (
     <>
-      {chats.length > 0 ?
+      {all_chats.length > 0 ?
         <SwipeListView
           useFlatList
-          data={chats}
+          data={all_chats}
           disableRightSwipe={true}
           renderItem={({ item, index }) => renderItem(item, index, userId, navigation)}
           renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap, onDeleteButtonPress)}
@@ -237,10 +202,10 @@ const AllChats = () => {
         buttontitle={'Delete'}
         show={deleteModal}
         onPressHide={() => setDeleteModal(false)}
-        buttonLoader={deleteLoader}
-        onButtonPress={deleteChat}
+        buttonLoader={delete_loader}
+        onButtonPress={() => dispatch(delete_chat(selectedChat?.id,() => setDeleteModal(false)))}
       />
-      <AppLoader loading={!chats.length > 0 && loader} />
+      <AppLoader loading={!all_chats.length > 0 && loading} />
     </>
   );
 };

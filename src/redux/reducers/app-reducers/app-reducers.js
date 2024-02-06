@@ -10,7 +10,8 @@ const initialState = {
   address: '',
   all_properties: [],
   my_preference: { property_type: 'house', currency_type: currency_list[0] },
-  matched_properties: { lastPage: 0, data: [] }
+  matched_properties: { lastPage: 0, data: [] },
+  top_support_closers: []
 };
 
 const appReducers = (state = initialState, actions) => {
@@ -157,6 +158,24 @@ const appReducers = (state = initialState, actions) => {
         }
       };
     case TYPES.GET_MATCHED_PROPERTIES_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
+
+
+    //************ Get Top Support Closers states*************
+    case TYPES.GET_TOP_SUPPORT_CLOSERS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.GET_TOP_SUPPORT_CLOSERS_SUCCESS:
+      return {
+        ...state,
+        top_support_closers: payload,
+      };
+    case TYPES.GET_TOP_SUPPORT_CLOSERS_FINALLY:
       return {
         ...state,
         loading: false,

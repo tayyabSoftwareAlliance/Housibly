@@ -44,6 +44,7 @@ import SearchSupportCloser from '../screens/App/SearchSupportCloser';
 import SupportCloserDetail from '../screens/App/SupportCloserDetail';
 import AddReview from '../screens/App/AddReview';
 import BlockedList from '../screens/App/Profile/BlockedList';
+import linking from '../shared/utilities/linking';
 
 const AppStack = createNativeStackNavigator();
 
@@ -56,7 +57,7 @@ const MainAppNav = () => {
   }, [])
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <AppStack.Navigator
         initialRouteName="Splash"
         screenOptions={{ headerShown: false }}>

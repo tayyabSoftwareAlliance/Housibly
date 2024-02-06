@@ -96,7 +96,7 @@ const VisitorDetailModal = ({ isVisible, data, onPressHide }) => {
           style={styles.buttonStyle}
           onPress={() => {
             if (viewFull) {
-              navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: data?.id, avatar: data?.avatar, full_name: data?.full_name })
+              navigation.navigate('PersonChat', { recipient_id: data?.id, avatar: data?.avatar, full_name: data?.full_name, from: 'not_chats' })
               onPressHide()
             } else
               setViewFull(true)

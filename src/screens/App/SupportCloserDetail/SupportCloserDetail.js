@@ -85,7 +85,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
         <View style={styles.contentContainer}>
           <View style={spacing.pt8}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('PersonChat', { from: 'not_chats', recipient_id: data?.id, avatar: data?.avatar, full_name: data?.full_name })}
+              onPress={() => navigation.navigate('PersonChat', { recipient_id: data?.id, avatar: data?.avatar, full_name: data?.full_name, from: 'not_chats' })}
               style={styles.iconCon}>
               <Image style={styles.iconStyle} source={appIcons.chat} />
             </TouchableOpacity>
@@ -101,7 +101,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
               />
             </View>
             <Text style={styles.h1}>{data?.full_name || 'N/A'}</Text>
-            <Text style={styles.subtitle}>{'Company abc'}</Text>
+            {/* <Text style={styles.subtitle}>{'Company abc'}</Text> */}
           </View>
           <View style={styles.ratingContainer} >
             <TouchableOpacity
@@ -113,7 +113,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
             </TouchableOpacity>
             <View >
               <Text style={styles.ratingText} >Rating</Text>
-              <Text style={styles.ratingNumber}>{data?.average_rating || 0}</Text>
+              <Text style={styles.ratingNumber}>{data?.average_rating ? Number(data.average_rating).toFixed(1) : 0}</Text>
             </View>
           </View>
           <View style={spacing.mt6}>

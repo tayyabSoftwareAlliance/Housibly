@@ -29,11 +29,12 @@ import { chat } from '../../../shared/utilities/constant';
 import { app } from '../../../shared/api';
 import { useIsFocused } from '@react-navigation/native'
 import ImagePicker from 'react-native-image-crop-picker';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CacheImage from 'react-native-image-cache-wrapper';
 import useChannel from '../../../shared/utilities/useChannel';
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 import { Menu, MenuItem } from 'react-native-material-menu';
+import { read_chat_messages } from '../../../redux/actions/chat-actions/chat-actions';
 
 const OptionsMenu = ({ isVisible, onPressHide, onPressBlock }) => {
   return (
@@ -46,7 +47,9 @@ const OptionsMenu = ({ isVisible, onPressHide, onPressBlock }) => {
           textStyle={styles.menuTxtStyle}
           onPress={() => {
             onPressHide()
-            onPressBlock()
+            setTimeout(() => {
+              onPressBlock()
+            }, 1000)
           }}>
           Block User
         </MenuItem>
@@ -90,8 +93,11 @@ const renderItem = (item, index, userId) => {
 }
 
 const PersonChat = ({ navigation, route }) => {
+
   const params = route.params
+  const dispatch = useDispatch()
   const [conversationId, setConversationId] = useState(params?.conversation_id);
+  const [avatar, _] = useState(decodeURIComponent(params.avatar));
   const [isBlocked, setIsBlocked] = useState(params?.is_blocked);
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
@@ -131,20 +137,6 @@ const PersonChat = ({ navigation, route }) => {
     }
   }
 
-  const callReadMessages = async () => {
-    try {
-      const formData = new FormData()
-      formData.append('conversation_id', conversationId)
-      const res = await app.readMessages(formData);
-      if (res?.status == 200) {
-        // console.log('resssss read message', res?.data)
-      }
-    } catch (error) {
-      console.log(error);
-      let msg = responseValidator(error?.response?.status, error?.response?.data);
-    }
-  }
-
   const checkIsConversationCreated = async () => {
     try {
       setCreateConversationLoader(true)
@@ -153,6 +145,7 @@ const PersonChat = ({ navigation, route }) => {
       const res = await app.checkIsConversationCreated(formData);
       if (res?.status == 200) {
         setConversationId(res.data?.id)
+        dispatch(read_chat_messages(res.data?.id))
         setIsBlocked(res.data?.is_blocked)
         setUseEffectRecallFlag(prev => !prev)
       }
@@ -168,7 +161,7 @@ const PersonChat = ({ navigation, route }) => {
       await checkIsConversationCreated()
     } else {
       getAllMessages()
-      callReadMessages()
+      dispatch(read_chat_messages(conversationId))
     }
   }
 
@@ -265,7 +258,7 @@ const PersonChat = ({ navigation, route }) => {
       if (res?.status == 200) {
         setBlockModal(false)
         setIsBlocked(true)
-        Alert.alert('Success','User Blocked Successfully!')
+        Alert.alert('Success', 'User Blocked Successfully!')
       }
     } catch (error) {
       console.log(error.response?.data);
@@ -294,7 +287,7 @@ const PersonChat = ({ navigation, route }) => {
             updated_at: e.messages.updated_at,
           }
           setAllMessages(previousMessages => ([msg, ...previousMessages].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))))
-          callReadMessages()
+          dispatch(read_chat_messages(conversationId))
         }
       },
       disconnected: () => {
@@ -309,7 +302,7 @@ const PersonChat = ({ navigation, route }) => {
       <ChatHeader
         onPressIcon={() => setOptionsModal(true)}
         rightIcon={!isBlocked}
-        avatar={params?.avatar}
+        avatar={avatar}
         name={params?.full_name}
       />
       {!isBlocked &&
@@ -333,7 +326,7 @@ const PersonChat = ({ navigation, route }) => {
               <View style={styles.personView}>
                 <Image
                   resizeMode="contain"
-                  source={{ uri: params?.avatar }}
+                  source={{ uri: avatar }}
                   style={styles.personImgStyle}
                 />
                 <Text style={styles.nameTxtStyle}>{params?.full_name}</Text>
@@ -397,7 +390,7 @@ const PersonChat = ({ navigation, route }) => {
       }
       <AppLoader loading={createConversationLoader} />
       <ChatPopupModal
-        image={params?.avatar}
+        image={avatar}
         title={params?.full_name}
         subtitle={'Block user?'}
         buttontitle={'Block'}

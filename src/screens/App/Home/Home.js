@@ -5,6 +5,8 @@ import {
   Image,
   SafeAreaView,
   TouchableOpacity,
+  Linking,
+  Pressable,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Carousel from 'react-native-snap-carousel';
@@ -33,23 +35,21 @@ import MatchesTab from './Tabs/MatchesTab/MatchesTab';
 import SellTab from './Tabs/SellTab/SellTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_my_properties } from '../../../redux/actions';
-import { get_matched_properties } from '../../../redux/actions/app-actions/app-actions';
+import { get_matched_properties, get_top_support_closers } from '../../../redux/actions/app-actions/app-actions';
 
 const Home = ({ navigation }) => {
 
   const dispatch = useDispatch()
   const carouselRef = useRef(null);
-  const [hideAds, setHideAds] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [selected, setSelected] = useState('buy');
   const [showModal, setShowModal] = useState(false);
   const { userInfo } = useSelector(state => state?.auth);
   const { userProfile } = useSelector(state => state?.settings);
-  const { my_preference } = useSelector(state => state?.appReducer)
+  const { my_preference, top_support_closers } = useSelector(state => state?.appReducer)
 
   const hideItemClick = () => {
     setShowMenu(false);
-    setHideAds(true);
   };
 
   const seeAllItemClick = () => {
@@ -62,13 +62,13 @@ const Home = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.itemContainer}>
+      <Pressable style={styles.itemContainer} onPress={() => navigation.navigate('SupportCloserDetail', { id: item?.id })}>
         <View style={styles.itemInnerRow}>
-          <Image source={appImages.personImg} style={styles.personImgStyle} />
+          <Image source={{ uri: item?.avatar }} style={styles.personImgStyle} />
           <View style={styles.txtContainer}>
-            <Text style={styles.itemNameStyle}>Harden Eusaff</Text>
-            <Text style={styles.h1TxtStyle}>Corporate Home X</Text>
-            <Text style={styles.h2TxtStyle}>Home Inspector</Text>
+            <Text style={styles.itemNameStyle}>{item?.full_name || 'N/A'}</Text>
+            {/* <Text style={styles.h1TxtStyle}>Corporate Home X</Text> */}
+            <Text style={styles.h2TxtStyle}>{item?.professions?.map(item => item?.title)?.join(', ') || 'N/A'}</Text>
           </View>
         </View>
         <View>
@@ -84,12 +84,13 @@ const Home = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </Pressable>
     );
   };
 
   useEffect(() => {
     dispatch(get_my_properties())
+    dispatch(get_top_support_closers())
   }, [])
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const Home = ({ navigation }) => {
           navigation.navigate('Profile');
         }}
         rightIcon
-        img={userProfile?.user?.image || userInfo?.user?.image}
+        img={userProfile?.user?.avatar || userInfo?.user?.avatar}
         from={'home'}
       />
       <Spacer androidVal={WP('4')} iOSVal={WP('4')} />
@@ -116,7 +117,7 @@ const Home = ({ navigation }) => {
               <Text style={styles.propertyTxtStyle}>Find a property</Text>
               <View style={styles.innerRow}>
                 <Image source={appIcons.locIcon} style={styles.locIconStyle} />
-                <Text style={styles.locTxtStyle}>New York, US</Text>
+                <Text style={styles.locTxtStyle}>Location</Text>
                 <Icon
                   type={'feather'}
                   name={'chevron-down'}
@@ -129,13 +130,13 @@ const Home = ({ navigation }) => {
             </View>
             <Image source={appImages.personPh1} style={styles.phImgStyle} />
           </View>
-          {!hideAds && (
+          {top_support_closers?.length > 0 && (
             <Carousel
               ref={carouselRef}
               sliderWidth={scrWidth}
               sliderHeight={scrHeight}
               itemWidth={scrWidth / 1.15}
-              data={[1, 2, 3]}
+              data={top_support_closers}
               renderItem={renderItem}
             />
           )}
@@ -144,12 +145,12 @@ const Home = ({ navigation }) => {
               visible={showMenu}
               style={styles.menuStyle}
               onRequestClose={() => setShowMenu(false)}>
-              <MenuItem
+              {/* <MenuItem
                 style={styles.menuItemStyle}
                 textStyle={styles.menuTxtStyle}
                 onPress={() => hideItemClick()}>
                 Hide this ad
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem
                 style={styles.menuItemStyle}
                 textStyle={styles.menuTxtStyle}

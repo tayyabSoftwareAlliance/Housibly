@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
         width: WP(26),
         height: WP(25),
         marginRight: WP(2.5),
+        backgroundColor:colors.g14
     },
     innerRow: {
         width: WP(63),

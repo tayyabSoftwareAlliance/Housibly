@@ -13,7 +13,7 @@ const SearchSupportCloserComponent = ({ item }) => {
             style={styles.itemContainer}
             onPress={() => navigation.navigate('SupportCloserDetail',{id:item?.id})}>
             <Image
-                source={item?.avatar ? { uri: item?.avatar } : appImages.avatar}
+                source={{ uri: item?.avatar }}
                 style={styles.imgStyle}
             />
             <View style={{ paddingVertical: 5 }}>
@@ -23,10 +23,10 @@ const SearchSupportCloserComponent = ({ item }) => {
                     </Text>
                     <View style={styles.simpleRow}>
                         <Image source={appIcons.starIcon} style={styles.starIconStyle} />
-                        <Text style={styles.ratingTxtStyle}>{item?.average_rating || 0}</Text>
+                        <Text style={styles.ratingTxtStyle}>{item?.average_rating ? Number(item.average_rating).toFixed(1) : 0}</Text>
                     </View>
                 </View>
-                <Text style={[styles.smallTxtStyle, { fontFamily: family.Gilroy_SemiBold, paddingTop: WP(1) }]}>{item?.company || 'N/A'}</Text>
+                {/* <Text style={[styles.smallTxtStyle, { fontFamily: family.Gilroy_SemiBold, paddingTop: WP(1) }]}>{item?.company || 'N/A'}</Text> */}
                 <Text style={[styles.smallTxtStyle, { textTransform: 'capitalize' }]}>{item?.professions?.map(item => item?.title)?.join(', ') || 'N/A'}</Text>
             </View>
         </TouchableOpacity >

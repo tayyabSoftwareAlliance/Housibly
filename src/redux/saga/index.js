@@ -9,6 +9,7 @@ import {
   updateMyPreferenceRequest,
   getMyPreferenceRequest,
   getMatchedPropertiesRequest,
+  getTopSupportClosersRequest,
 } from './app-sega/app-sega';
 
 import {
@@ -37,6 +38,8 @@ import {
   payWithDebitRequest,
   updateProfileRequest,
 } from './settings-saga/settings-saga';
+import { deleteChatRequest, getAllChatsRequest, readChatMessagesRequest } from './chat-sega/chat-sega';
+import { getAllNotificationsRequest } from './notification-sega/notification-sega';
 
 export function* rootSaga() {
   yield fork(loginRequest);
@@ -53,6 +56,7 @@ export function* rootSaga() {
   yield fork(updateProfileRequest);
   yield fork(setSupportInfoSega);
   yield fork(addSupportInfoRequestSega);
+  yield fork(getTopSupportClosersRequest);
 
   //Payments
   yield fork(addcardRequest);
@@ -77,5 +81,13 @@ export function* rootSaga() {
 
   //Matched Properties
   yield fork(getMatchedPropertiesRequest);
+
+  //Chats
+  yield fork(getAllChatsRequest);
+  yield fork(deleteChatRequest);
+  yield fork(readChatMessagesRequest);
+
+  //Notifications
+  yield fork(getAllNotificationsRequest);
 
 }

@@ -89,3 +89,10 @@ export const get_matched_properties = (page,onFinally) => {
     onFinally
   };
 };
+
+//Get Top Support Closers
+export const get_top_support_closers = () => {
+  return {
+    type: TYPES.GET_TOP_SUPPORT_CLOSERS_REQUEST,
+  };
+};

@@ -4,10 +4,12 @@ import { BackHeader, MapComponent } from '../../../../components';
 import styles from './styles';
 import { colors } from '../../../../shared/exporter';
 import { useIsFocused } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const MapScreen = ({route}) => {
 
   const isFocused = useIsFocused()
+  const {top} = useSafeAreaInsets()
 
   useEffect(() => {
     if (isFocused)
@@ -18,12 +20,12 @@ const MapScreen = ({route}) => {
   }, [isFocused])
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <View style={styles.headerStyle}>
+    <View style={styles.rootContainer}>
+      <View style={[styles.headerStyle,{paddingTop:top}]}>
         <BackHeader tintColor={colors.white} title={route.params?.savedLocation?.title} txtColor={colors.white} />
       </View>
       <MapComponent />
-    </SafeAreaView>
+    </View>
   );
 };
 

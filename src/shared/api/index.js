@@ -42,6 +42,7 @@ export const app = {
   deleteProperty: id => requests.delete(`${ENDPOINTS.PROPERTY}/${id}`),
   getPreference: () => requests.get(ENDPOINTS.USER_PREFERENCE),
   updatePreference: data => requests.post(ENDPOINTS.USER_PREFERENCE, data),
+  getTopSupportClosers: () => requests.get(ENDPOINTS.GET_TOP_SUPPORT_CLOSERS),
   getPropertiesInsideCircle: params => requests.get(`${ENDPOINTS.CIRCLE_PROPERTY}?${params}`),
   getPropertiesInsidePolygon: params => requests.get(`${ENDPOINTS.POLYGON_PROPERTY}?${params}`),
   getPropertiesAgainstZipCode: params => requests.get(`${ENDPOINTS.ZIPCODE_PROPERTY}?${params}`),
