@@ -2,7 +2,7 @@ const linking = {
     prefixes: ['housibly://'],
     config: {
         screens: {
-            PersonChat: 'PersonChat/:recipient_id/:avatar/:full_name/:from'
+            PersonChat: 'PersonChat/:conversation_id/:recipient_id/:avatar/:full_name'
         }
     }
 }

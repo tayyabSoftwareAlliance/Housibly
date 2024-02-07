@@ -87,9 +87,9 @@ const renderItem = (item, index, userId, navigation) => {
       onPress={() => navigation.navigate('PersonChat',
         {
           conversation_id: item?.id,
+          recipient_id: userId == item?.recipient_id ? item?.sender_id : item?.recipient_id,
           avatar: item?.avatar,
           full_name: item?.full_name,
-          recipient_id: userId == item?.recipient_id ? item?.sender_id : item?.recipient_id,
           is_blocked: item?.is_blocked
         }
       )}

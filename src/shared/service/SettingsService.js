@@ -88,7 +88,7 @@ export const getDefaultCard = async () => {
 export const delDebitCard = async params => {
   const token = await GetToken();
   const res = await axios.post(
-    `${BASE_URL}${ENDPOINTS.DELETE_CARD_CONST}`,
+    `${BASE_URL}${ENDPOINTS.DELETE_CARD}`,
     params,
     {
       headers: {

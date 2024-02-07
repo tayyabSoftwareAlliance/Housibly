@@ -14,12 +14,14 @@ const styles = StyleSheet.create({
     width: WP(17),
     height: WP(17),
     marginRight: WP(2.5),
+    backgroundColor:colors.g14
   },
   notificationTitle: {
     color: colors.b1,
     fontSize: size.normal,
     fontFamily: family.Gilroy_Medium,
-    width:WP(68)
+    width:WP(68),
+    textTransform:'capitalize'
   },
   notificationBody: {
     color: colors.b1,

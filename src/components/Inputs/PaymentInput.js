@@ -1,14 +1,15 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-// import {CardField} from '@stripe/stripe-react-native';
-import {colors, family, size, WP} from '../../shared/exporter';
+import { StyleSheet, Text, View } from 'react-native';
+import React, { forwardRef } from 'react';
+import { CardField } from '@stripe/stripe-react-native';
+import { colors, family, size, WP } from '../../shared/exporter';
 
-export const PaymentInput = ({title, onCardChange, onFocus}) => {
+export const PaymentInput = forwardRef(({ title, onCardChange, onFocus }, ref) => {
   return (
-    <View style={{paddingHorizontal: WP('3')}}>
+    <View style={{ paddingHorizontal: WP('3') }}>
       {title && <Text style={styles.textStyle}>{title}</Text>}
 
-      {/* <CardField
+      <CardField
+        ref={ref}
         placeholder={{
           number: 'Card Number',
         }}
@@ -17,10 +18,10 @@ export const PaymentInput = ({title, onCardChange, onFocus}) => {
         style={[styles.payStyle]}
         onCardChange={onCardChange}
         onFocus={onFocus}
-      /> */}
+      />
     </View>
   );
-};
+})
 
 const styles = StyleSheet.create({
   payStyle: {
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   textStyle: {
     marginBottom: 10,
     color: colors.b1,
-    fontFamily: family.Gilroy_Medium,
+    fontFamily: family.Gilroy_SemiBold,
   },
   cardStyle: {
     backgroundColor: colors.g5,

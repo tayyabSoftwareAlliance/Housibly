@@ -97,7 +97,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
             <View style={styles.imgCon}>
               <Image
                 style={styles.imgStyle}
-                source={{ uri: data?.avatar || profile_uri }}
+                source={{ uri: data?.avatar }}
               />
             </View>
             <Text style={styles.h1}>{data?.full_name || 'N/A'}</Text>

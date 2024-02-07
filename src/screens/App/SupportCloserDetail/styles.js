@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:colors.g14
   },
   inputContainer: {
     paddingVertical: WP('10'),

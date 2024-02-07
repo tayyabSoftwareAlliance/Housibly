@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Text,
   View,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import {
   AppButton,
   AppHeader,
@@ -25,6 +25,7 @@ import {
   checkConnected,
   colors,
   networkText,
+  responseValidator,
   WP,
 } from '../../../../shared/exporter';
 import styles from './styles';
@@ -34,94 +35,103 @@ import {
   delete_card_request,
   default_card_request,
 } from '../../../../redux/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/core';
-const AllCards = ({navigation}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/core';
+import { app } from '../../../../shared/api';
+const AllCards = ({ navigation }) => {
   const [method, setMethod] = useState('cards');
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {payment_card_list} = useSelector(state => state?.settings);
+  const [cards, setCards] = useState([]);
+  const { payment_card_list } = useSelector(state => state?.settings);
   const [currentCard, setcurrentCard] = useState(null);
   const [currentIndex, setcurrentIndex] = useState(0);
 
   const dispatch = useDispatch(null);
   const isFocus = useIsFocused(null);
   const modalRef = useRef(null);
-  useEffect(() => {
-    getCards();
-  }, [isFocus]);
 
   //Get Cards
   const getCards = async () => {
-    const isConnected = await checkConnected();
-    if (isConnected) {
-      setLoading(true);
-      const onSuccess = res => {
-        setLoading(false);
-        console.log('On Get Card Success');
-        setLoading(false);
-      };
-      const onFailure = res => {
-        setLoading(false);
-        Alert.alert('Error', res);
-        console.log('On Get Card Failure', res);
-        setLoading(false);
-      };
-      dispatch(get_payment_cards_request(onSuccess, onFailure));
-    } else {
-      Alert.alert('Error', networkText);
+    try {
+      setLoading(true)
+      const isConnected = await checkConnected();
+      if (isConnected) {
+        const res = await app.getAllCards()
+        console.log('ressss', res.data)
+        if (res.status == 200) {
+          setCards(res.data || [])
+        }
+      } else {
+        Alert.alert('Error', networkText);
+      }
+    } catch (error) {
+      console.log('errorrr', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoading(false)
     }
   };
 
+  useEffect(() => {
+    isFocus && getCards()
+  }, [isFocus])
+
   //Delete Card
   const deleteCard = async () => {
-    const isConnected = await checkConnected();
-    if (isConnected) {
-      setLoading(true);
-      const onSuccess = res => {
-        setShow(false);
-        setLoading(false);
-        console.log('On DEL Card Success', res);
-        getCards();
-      };
-      const onFailure = res => {
-        console.log(res);
-        setShow(false);
-        setLoading(false);
-        Alert.alert('Error', res || 'Unable to Delete Card');
-        console.log('On DEL Card Failure', res);
-      };
-      const requestBody = {
-        'payment[id]': currentCard?.card?.id,
-      };
-      dispatch(delete_card_request(requestBody, onSuccess, onFailure));
-    } else {
-      Alert.alert('Error', networkText);
+    try {
+      setLoading(true)
+      const isConnected = await checkConnected();
+      if (isConnected) {
+        const res = await app.deleteCard(currentCard?.card?.id)
+        console.log('ressss', res.data)
+        if (res.status == 200) {
+          // setCards(res.data || [])
+        }
+      } else {
+        Alert.alert('Error', networkText);
+      }
+    }
+    catch (error) {
+      console.log('errorrr', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoading(false)
     }
   };
 
   //On Set Default Card
-  const onDafultCardHandler = (item, index) => {
-    const requestBody = {
-      card: currentCard,
-      id: currentIndex,
-    };
-    const onSuccess = res => {
-      console.log('On Default Card Success');
-      modalRef.current.close();
-    };
-    const onFailure = res => {
-      Alert.alert('Error', res);
-      console.log('On Default Card Failure', res);
-    };
-    dispatch(default_card_request(requestBody, onSuccess, onFailure));
+  const onDafultCardHandler = async (item, index) => {
+    try {
+      setLoading(true)
+      const isConnected = await checkConnected();
+      if (isConnected) {
+        const res = await app.setDefaultCard(currentCard?.card?.id)
+        console.log('ressss', res.data)
+        if (res.status == 200) {
+          // setCards(res.data || [])
+        }
+      } else {
+        Alert.alert('Error', networkText);
+      }
+    }
+    catch (error) {
+      console.log('errorrr', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoading(false)
+    }
   };
-  const renderItem = ({item, index}) => {
+
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.itemContainer}
-        onPress={() => navigation.navigate('CardDetails', {card_detail: item})}>
+        onPress={() => navigation.navigate('CardDetails', { card_detail: item })}>
         <View style={styles.row}>
           <View>
             <Text style={styles.titleTxtStyle}>
@@ -172,19 +182,24 @@ const AllCards = ({navigation}) => {
       />
 
       <Spacer androidVal={WP('5.5')} iOSVal={WP('5.5')} />
-      <View style={{marginBottom: 50, flex: 1}}>
+      <View style={{ marginBottom: 50, flex: 1 }}>
+        {cards.length > 0 ?
         <FlatList
-          data={payment_card_list}
+          data={cards}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}
           keyExtractor={(item, index) => item + index.toString()}
-        />
+        /> :
+        <View style={{flex:1,justifyContent:'center',alignItems:'center'}} >
+          <Text style={styles.noData} >No Cards Found Yet!</Text>
+        </View>
+}
       </View>
       <View style={styles.bottomView}>
         <AppButton
           title="Continue"
-          onPress={() => {}}
+          onPress={() => { }}
           borderColor={colors.white}
           shadowColor={colors.white}
         />
@@ -218,7 +233,7 @@ const AllCards = ({navigation}) => {
         }}
         modalRef={modalRef}
       />
-      <AppLoader loading={loading} />
+      <AppLoader loading={!(cards.length > 0) && loading} />
     </SafeAreaView>
   );
 };

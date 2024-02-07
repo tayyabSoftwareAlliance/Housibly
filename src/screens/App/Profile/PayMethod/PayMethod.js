@@ -30,7 +30,7 @@ const PayMethod = ({navigation}) => {
 
   useEffect(() => {
     if (isFocus) {
-      getDefaultCard();
+      // getDefaultCard();
     }
   }, [isFocus]);
 

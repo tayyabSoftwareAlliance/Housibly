@@ -10,11 +10,27 @@ export function* getAllNotificationsRequest() {
 }
 function* getAllNotifications() {
   try {
-    const res = yield app.getAllChats()
-    if (res?.status == 200) {
+    const res = yield app.getAllNotifications()
+    if (res?.status == 200 && res.data?.notification?.length > 0) {
+      const arr = res.data.notification.map(item => {
+        return {
+          id: item.id,
+          title: item.title,
+          body: item.action,
+          type: 'message',
+          seen: false,
+          time: new Date(item.created_at),
+          data: {
+            conversation_id: item.conversation_id,
+            sender_id: item.sender_id,
+            sender_name: item.sender_name,
+            sender_avatar: item.sender_avatar,
+          }
+        }
+      })
       yield put({
         type: types.GET_ALL_NOTIFICATIONS_SUCCESS,
-        payload: res?.data || [],
+        payload: arr,
       });
     }
   } catch (error) {

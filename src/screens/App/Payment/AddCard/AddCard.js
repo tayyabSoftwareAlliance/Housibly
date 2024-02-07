@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, SafeAreaView, Text, View} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
 import styles from './styles';
 import {
   addCardFormFields,
@@ -9,6 +9,7 @@ import {
   commonStyles,
   family,
   networkText,
+  responseValidator,
   spacing,
 } from '../../../../shared/exporter';
 import {
@@ -20,14 +21,22 @@ import {
   BackHeader,
   PaymentInput,
 } from '../../../../components';
-import {Formik} from 'formik';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useDispatch} from 'react-redux';
-// import {createToken} from '@stripe/stripe-react-native';
-import {add_card_request} from '../../../../redux/actions';
-const AddCard = ({navigation, route}) => {
+import { Formik } from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch } from 'react-redux';
+import { add_card_request } from '../../../../redux/actions';
+import { createToken } from '@stripe/stripe-react-native';
+import CountryPicker from 'react-native-country-picker-modal';
+import { CountryInput } from '../../../../components/Inputs/CountryInput';
+import { app } from '../../../../shared/api';
+
+const AddCard = ({ navigation, route }) => {
+
+  const cardRef = useRef(null)
   const [isLoading, setIsLoading] = useState(false);
+  const [country, setCountry] = useState({ name: 'Pakistan', cca2: 'PK' });
   const dispatch = useDispatch(null);
+
   //Add Card
   // const addCardHanlder = async values => {
   //   const isConnected = await checkConnected();
@@ -77,8 +86,44 @@ const AddCard = ({navigation, route}) => {
         <AppHeading title={'Billing Information'} />
         <Formik
           initialValues={addCardFormFields}
-          onSubmit={values => {
+          onSubmit={async values => {
             // addCardHanlder(values);
+            try {
+              setIsLoading(true)
+              const isConnected = await checkConnected();
+              if (isConnected) {
+                cardRef.current?.blur()
+                const { token, error } = await createToken({
+                  type: 'Card',
+                })
+                console.log('tokennnnnnn', token)
+                return
+                console.log('errorrr', error)
+                if (token?.id) {
+                  const formData = new FormData()
+                  formData.append('payment[token]', token.id)
+                  formData.append('payment[name]', values.fullname)
+                  formData.append('payment[country]', country.cca2)
+                  console.log('formData', formData)
+                  const res = await app.createCard(formData)
+                  console.log('ressss', res.data)
+                  if (res.status == 200) {
+                    Alert.alert('Success', 'Card Added Successfully!')
+                    navigation.goBack()
+                  }
+                } else {
+                  Alert.alert('Error', 'Something went wrong!');
+                }
+              } else {
+                Alert.alert('Error', networkText);
+              }
+            } catch (error) {
+              console.log('errorrr', error)
+              let msg = responseValidator(error?.response?.status, error?.response?.data);
+              Alert.alert('Error', msg || 'Something went wrong!');
+            } finally {
+              setIsLoading(false)
+            }
           }}
           validationSchema={addCardVS}>
           {({
@@ -109,21 +154,11 @@ const AddCard = ({navigation, route}) => {
                   errorMessage={errors.fullname}
                   title={'Full Name'}
                 />
-                <AppInput
-                  onChangeText={handleChange('country')}
-                  renderErrorMessage={true}
-                  placeholder="Country"
-                  value={values.country}
-                  onBlur={() => setFieldTouched('country')}
-                  blurOnSubmit={false}
-                  disableFullscreenUI={true}
-                  autoCapitalize="none"
-                  touched={touched.country}
-                  errorMessage={errors.country}
-                  title={'Country'}
-                  keyboardType={'default'}
+                <CountryInput
+                  country={country}
+                  onSelect={setCountry}
                 />
-                <PaymentInput title={'Card Information'} />
+                <PaymentInput ref={cardRef} title={'Card Information'} onCardChange={(e) => console.log('thisss', e)} />
               </View>
               <View style={[commonStyles.aiCenter, spacing.my4]}>
                 <View style={styles.btnCon}>

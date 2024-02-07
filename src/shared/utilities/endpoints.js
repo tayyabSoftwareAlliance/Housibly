@@ -21,7 +21,6 @@ const ENDPOINTS = {
   UPDATE_PROFILE: 'update_profile.json',
   CARD_CONST: 'card',
   CARDS_CONST: 'cards',
-  DELETE_CARD_CONST: 'delete_card',
   EDIT_CARD_CONST: 'update_card',
   DEFAULT_CARD_CONST: 'default_card',
 
@@ -39,6 +38,10 @@ const ENDPOINTS = {
   BLOCK_UNLBLOCK_USER:'block_unblock_user',
   GET_BLOCKED_USERS:'blocked_users',
   GET_TOP_SUPPORT_CLOSERS:'top_support_closers',
+  CREATE_CARD:'create_card',
+  GET_ALL_CARDS:'get_all_cards',
+  DELETE_CARD: 'delete_card',
+  SET_DEFAULT_CARD: 'set_default_card',
   
   //chat
   CONVERSATIONS: 'conversations',
@@ -46,6 +49,9 @@ const ENDPOINTS = {
   GET_ALL_MESSAGES: 'messages/get_messages',
   SEND_MESSAGE: 'messages',
   READ_MESSAGES: 'conversations/read_messages',
+
+  //notification
+  GET_ALL_NOTIFICATIONS: 'messages/get_notification',
 
   //support closer
   SEARCH_SUPPORT_CLOSER:'search_support_closers',

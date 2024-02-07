@@ -1,5 +1,5 @@
-import {Platform, StyleSheet} from 'react-native';
-import {WP, colors, size, family} from '../../../../shared/exporter';
+import { Platform, StyleSheet } from 'react-native';
+import { WP, colors, size, family } from '../../../../shared/exporter';
 import DeviceInfo from 'react-native-device-info';
 
 const isNotch = DeviceInfo.hasNotch();
@@ -71,6 +71,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     paddingHorizontal: WP('8.2'),
   },
+  noData: {
+    color: colors.g17,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Regular,
+  }
 });
 
 export default styles;

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Linking,
   Pressable,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Carousel from 'react-native-snap-carousel';
@@ -27,6 +28,8 @@ import {
   scrHeight,
   PADDING_BOTTOM_FOR_TAB_BAR_SCREENS,
   HP,
+  family,
+  size,
 } from '../../../shared/exporter';
 import styles from './styles';
 // Tabs
@@ -36,6 +39,9 @@ import SellTab from './Tabs/SellTab/SellTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_my_properties } from '../../../redux/actions';
 import { get_matched_properties, get_top_support_closers } from '../../../redux/actions/app-actions/app-actions';
+import { useNavigation } from '@react-navigation/native'
+import moment from 'moment';
+import Modal from 'react-native-modal';
 
 const Home = ({ navigation }) => {
 
@@ -43,7 +49,8 @@ const Home = ({ navigation }) => {
   const carouselRef = useRef(null);
   const [showMenu, setShowMenu] = useState(false);
   const [selected, setSelected] = useState('buy');
-  const [showModal, setShowModal] = useState(false);
+  const [personDetailModal, setPersonDetailModal] = useState(false);
+  const [selectedPerson, setSelectedPerson] = useState(null);
   const { userInfo } = useSelector(state => state?.auth);
   const { userProfile } = useSelector(state => state?.settings);
   const { my_preference, top_support_closers } = useSelector(state => state?.appReducer)
@@ -60,9 +67,10 @@ const Home = ({ navigation }) => {
     }, 500);
   };
 
-  const renderItem = ({ item, index }) => {
+
+  const renderItem = (item, index,onPress) => {
     return (
-      <Pressable style={styles.itemContainer} onPress={() => navigation.navigate('SupportCloserDetail', { id: item?.id })}>
+      <Pressable style={styles.itemContainer} onPress={() => onPress(item)}>
         <View style={styles.itemInnerRow}>
           <Image source={{ uri: item?.avatar }} style={styles.personImgStyle} />
           <View style={styles.txtContainer}>
@@ -137,7 +145,7 @@ const Home = ({ navigation }) => {
               sliderHeight={scrHeight}
               itemWidth={scrWidth / 1.15}
               data={top_support_closers}
-              renderItem={renderItem}
+              renderItem={({item,index}) => renderItem(item,index,(data) => {setSelectedPerson(data);setPersonDetailModal(true)})}
             />
           )}
           <View style={styles.menuContainer}>
@@ -222,8 +230,9 @@ const Home = ({ navigation }) => {
         </View>
       }
       <PersonDetailsModal
-        show={showModal}
-        onPressHide={() => setShowModal(false)}
+        show={personDetailModal}
+        onPressHide={() => setPersonDetailModal(false)}
+        data={selectedPerson}
       />
     </SafeAreaView>
   );

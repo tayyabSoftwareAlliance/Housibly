@@ -27,6 +27,26 @@ const notificationReducers = (state = initialState, actions) => {
         loading: false,
       };
 
+    //************ Notification Seen States*************
+    case TYPES.NOTIFICATION_SEEN:
+      return {
+        ...state,
+        all_notifications: state.all_notifications.map(item => {
+          if (item.id == payload.id) {
+            item.seen = true
+            return { ...item }
+          }
+          return item
+        }),
+      };
+
+    //************ Notification Add States*************
+    case TYPES.ADD_NOTIFICATION:
+      return {
+        ...state,
+        all_notifications:[payload.notification,...state.all_notifications]
+      };
+
     default:
       return state;
   }

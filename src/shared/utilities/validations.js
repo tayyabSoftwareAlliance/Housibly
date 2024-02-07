@@ -58,7 +58,6 @@ export const editFormFields = {
 
 export const addCardFormFields = {
   fullname: '',
-  country: '',
 };
 
 export const LoginVS = yup.object().shape({
@@ -163,5 +162,4 @@ export const ResetPasswordVS = yup.object().shape({
 
 export const addCardVS = yup.object().shape({
   fullname: yup.string().required('Full Name Required'),
-  country: yup.string().required('Country Required'),
 });

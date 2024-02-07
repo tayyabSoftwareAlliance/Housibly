@@ -5,6 +5,10 @@ import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useNavigation } from '@react-navigation/native'
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
+import { useDispatch, useSelector } from 'react-redux'
+import { AppLoader } from '../../../components';
+import moment from 'moment';
+import { navigateFromNotifi } from '../../../shared/utilities/notifications';
 
 const AllNotificationsData = [
   {
@@ -28,15 +32,15 @@ const renderItem = (item, index, navigation) => {
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => {}}>
+      onPress={() => navigateFromNotifi(item)}>
       <Image
-        source={item?.image}
+        source={{uri:item.data?.sender_avatar}}
         style={styles.imgStyle}
       />
       <View>
-        <Text style={styles.notificationTitle} numberOfLines={1}>{item?.title}</Text>
-        <Text style={styles.notificationBody} numberOfLines={1}>{item?.body}</Text>
-        <Text style={styles.notificationTime} numberOfLines={1}>{item?.time}</Text>
+        <Text style={styles.notificationTitle} numberOfLines={1}>{item.title}</Text>
+        <Text style={styles.notificationBody} numberOfLines={1}>{item.body}</Text>
+        <Text style={styles.notificationTime} numberOfLines={1}>{moment(item.time).fromNow()}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -45,10 +49,12 @@ const renderItem = (item, index, navigation) => {
 const Notifications = () => {
 
   const navigation = useNavigation()
+  const { loading, all_notifications } = useSelector(state => state?.notification);
 
   return (
+    <>
       <FlatList
-        data={AllNotificationsData}
+        data={all_notifications}
         renderItem={({ item, index }) => renderItem(item, index, navigation)}
         keyExtractor={(item, index) => index}
         showsVerticalScrollIndicator={false}
@@ -56,6 +62,8 @@ const Notifications = () => {
         ListFooterComponent={<View />}
         ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
       />
+      <AppLoader loading={!(all_notifications.length > 0) && loading} />
+    </>
   );
 };
 

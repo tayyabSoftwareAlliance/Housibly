@@ -50,6 +50,7 @@ export const app = {
   updateSavedLocation: (data, id) => requests.put(`${ENDPOINTS.SAVED_LOCATIONS}/${id}`, data),
   getSavedLocations: () => requests.get(ENDPOINTS.SAVED_LOCATIONS),
   getAllChats: () => requests.get(ENDPOINTS.CONVERSATIONS),
+  getAllNotifications: () => requests.get(ENDPOINTS.GET_ALL_NOTIFICATIONS),
   deleteChat: (id) => requests.delete(`${ENDPOINTS.CONVERSATIONS}/${id}`),
   getAllMessages: (data) => requests.post(ENDPOINTS.GET_ALL_MESSAGES, data),
   createConversation: (data) => requests.post(ENDPOINTS.CONVERSATIONS, data),
@@ -63,4 +64,8 @@ export const app = {
   createReview: (data) => requests.post(ENDPOINTS.CREATE_REVIEW, data),
   blockUnblockUser: (data) => requests.post(ENDPOINTS.BLOCK_UNLBLOCK_USER,data),
   getBlockedUsers: () => requests.get(ENDPOINTS.GET_BLOCKED_USERS),
+  createCard: (data) => requests.post(ENDPOINTS.CREATE_CARD,data),
+  getAllCards: () => requests.get(ENDPOINTS.GET_ALL_CARDS),
+  deleteCard: (id) => requests.delete(`${ENDPOINTS.DELETE_CARD}?payment[id]=${id}`),
+  setDefaultCard: (id) => requests.put(`${ENDPOINTS.SET_DEFAULT_CARD}?payment[id]=${id}`),
 };

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import Splash from '../screens/Splash';
 import Walkthrough from '../screens/Walkthrough';
 import AuthStack from '../navigation/stacks/AuthStack';
@@ -32,7 +31,7 @@ import PropertyDetail from '../screens/App/Home/PropertyDetail';
 import AddAddress from '../screens/App/Home/AddAddress';
 import Video from '../screens/App/Video';
 import AddRoom from '../screens/App/Home/AddRoom';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAuthToken } from '../shared/api';
 import Reviews from '../screens/App/Reviews';
 import BoostProfile from '../screens/App/BoostProfile';
@@ -45,15 +44,121 @@ import SupportCloserDetail from '../screens/App/SupportCloserDetail';
 import AddReview from '../screens/App/AddReview';
 import BlockedList from '../screens/App/Profile/BlockedList';
 import linking from '../shared/utilities/linking';
+import messaging from '@react-native-firebase/messaging';
+import { notificationFormater } from '../shared/utilities/notifications';
+import Toast from 'react-native-toast-message';
+import { AppState } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { add_notification, get_all_notifications } from '../redux/actions/notification-actions/notification-actions';
 
 const AppStack = createNativeStackNavigator();
 
 const MainAppNav = () => {
 
   const { userInfo } = useSelector(state => state?.auth);
+  const dispatch = useDispatch()
+
+  const notificationSeen = (id) => {
+    // dispatch(seenNotification(id))
+    // commonFlow.notificationSeen(id)
+    //   .then((res) => {
+    //     // console.log('Seen notification success', res);
+    //   })
+    //   .catch((error) => {
+    //     // console.log('Seen notification error', error);
+    //   })
+  }
+
+  const addToRedux = (notification) => {
+    dispatch(add_notification(notification))
+  }
+
+  const onMessageCallback = async remoteMessage => {
+    console.log('on message remoteMessage', JSON.stringify(remoteMessage, null, 2))
+    const notification = notificationFormater(remoteMessage)
+    console.log('notificationnnnnnn', JSON.stringify(notification, null, 2))
+    addToRedux(notification)
+    if ((notification.type == 'message' && chatOpenedId == notification?.data?.chat_id) || (notification.type == 'group-message' && chatOpenedId == notification?.data?.group_id)) return;
+    Toast.show({
+      type: 'info',
+      text1: notification?.title,
+      text2: notification?.body,
+      onPress: () => {
+        notificationSeen(notification?.id)
+        navigateFromNotifi(notification)
+        Toast.hide()
+      }
+    });
+  }
+
+  const onAppStateChangeCallback = async (state) => {
+    if (state == 'active') {
+      let notifications = await AsyncStorage.getItem('new_notifications')
+      notifications = notifications && JSON.parse(notifications)
+      notifications?.length > 0 && notifications.forEach((notification, index) => {
+        addToRedux(notification)
+      })
+      AsyncStorage.removeItem('new_notifications')
+    }
+  }
+
+  const onNotificationOpenedAppCallback = remoteMessage => {
+    // console.log(
+    //   'Notification caused app to open from background state:',
+    //   remoteMessage,
+    // );
+    const notification = notificationFormater(remoteMessage)
+    if (notification.type != 'message' && notification.type != 'group-message') {
+      notificationSeen(notification?.id)
+    }
+    navigateFromNotifi(notification)
+  }
+
+  const getInitialNotificationCallback = remoteMessage => {
+    if (remoteMessage) {
+      // console.log(
+      //   'Notification caused app to open from quit state:',
+      //   remoteMessage
+      // )
+      const notification = notificationFormater(remoteMessage)
+      if (notification.type != 'message' && notification.type != 'group-message') {
+        setTimeout(() => {
+          notificationSeen(notification?.id)
+        }, 3000)
+      }
+      navigateFromNotifi(notification)
+    }
+  }
+
+  const addNotificationListeners = () => {
+
+    //listener for listening notification when app is in foreground state
+    unsubscribe = messaging().onMessage(onMessageCallback)
+
+    //when app state changes
+    appStateListener = AppState.addEventListener('change', onAppStateChangeCallback)
+
+    //when app is in background state and opened by clicking on notification
+    messaging().onNotificationOpenedApp(onNotificationOpenedAppCallback);
+
+    //when app is in quit state and opened by clicking on notification
+    messaging()
+      .getInitialNotification()
+      .then(getInitialNotificationCallback);
+
+  }
 
   useEffect(() => {
     setAuthToken(userInfo?.user?.auth_token)
+    dispatch(get_all_notifications())
+  }, [userInfo])
+
+  useEffect(() => {
+    addNotificationListeners()
+    return () => {
+      unsubscribe && unsubscribe()
+      appStateListener && appStateListener.remove()
+    }
   }, [])
 
   return (

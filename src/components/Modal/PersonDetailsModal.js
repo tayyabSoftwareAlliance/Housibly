@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   colors,
@@ -7,10 +7,11 @@ import {
   family,
   size,
   appIcons,
-  appImages,
 } from '../../shared/exporter';
+import { useNavigation } from '@react-navigation/native'
 
-export const PersonDetailsModal = ({show, onPressHide}) => {
+export const PersonDetailsModal = ({ show, onPressHide, data }) => {
+  const navigation = useNavigation()
   return (
     <Modal onBackdropPress={onPressHide} isVisible={show}>
       <View style={styles.modalContainer}>
@@ -25,25 +26,25 @@ export const PersonDetailsModal = ({show, onPressHide}) => {
           />
         </TouchableOpacity>
         <Image
-          resizeMode="contain"
-          source={appImages.personImg}
+          // resizeMode="contain"
+          source={{ uri: data?.avatar }}
           style={styles.imgStyle}
         />
-        <Text style={styles.nameTxtStyle}>Harden Eusaff</Text>
-        <Text style={styles.companyTxtStyle}>Company 123</Text>
+        <Text style={styles.nameTxtStyle}>{data?.full_name || 'N/A'}</Text>
+        {/* <Text style={styles.companyTxtStyle}>Company 123</Text> */}
         <View style={styles.rowContainer}>
           <Image
             resizeMode="contain"
             source={appIcons.starIcon}
             style={styles.starIconStyle}
           />
-          <Text style={styles.ratingTxtStyle}>5</Text>
+          <Text style={styles.ratingTxtStyle}>{data?.average_rating ? Number(data.average_rating).toFixed(1) : 0}</Text>
         </View>
-        <Text style={styles.skillTxtStyle}>Home Technician</Text>
+        <Text style={styles.skillTxtStyle}>{data?.professions?.map(item => item?.title).join(', ') || 'N/A'}</Text>
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.buttonStyle}
-          onPress={() => onPressHide()}>
+          onPress={() => { onPressHide(); navigation.navigate('SupportCloserDetail', { id: data?.id }) }}>
           <Text style={styles.btnTxtStyle}>View Profile</Text>
         </TouchableOpacity>
       </View>
@@ -69,19 +70,12 @@ const styles = StyleSheet.create({
     height: WP('4'),
     alignSelf: 'flex-end',
   },
-  iconContainer: {
-    width: WP('25'),
-    height: WP('25'),
-    borderRadius: 15,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.g11,
-  },
   imgStyle: {
     width: WP('25'),
     height: WP('25'),
     alignSelf: 'center',
+    borderRadius:15,
+    backgroundColor: colors.g14
   },
   nameTxtStyle: {
     color: colors.b1,
@@ -99,7 +93,7 @@ const styles = StyleSheet.create({
     fontFamily: family.Gilroy_SemiBold,
   },
   rowContainer: {
-    paddingTop: 7,
+    paddingTop: WP('5'),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
