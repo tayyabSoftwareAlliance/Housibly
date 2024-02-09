@@ -40,8 +40,10 @@ import { useIsFocused } from '@react-navigation/core';
 import { app } from '../../../../shared/api';
 const AllCards = ({ navigation }) => {
   const [method, setMethod] = useState('cards');
-  const [show, setShow] = useState(false);
+  const [delShow, setDelShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [delLoading, setDelLoading] = useState(false);
+  const [defaultLoading, setDefaultLoading] = useState(false);
   const [cards, setCards] = useState([]);
   const { payment_card_list } = useSelector(state => state?.settings);
   const [currentCard, setcurrentCard] = useState(null);
@@ -81,48 +83,48 @@ const AllCards = ({ navigation }) => {
   //Delete Card
   const deleteCard = async () => {
     try {
-      setLoading(true)
+      setDelLoading(true)
       const isConnected = await checkConnected();
       if (isConnected) {
-        const res = await app.deleteCard(currentCard?.card?.id)
-        console.log('ressss', res.data)
+        const res = await app.deleteCard(currentCard?.id)
         if (res.status == 200) {
-          // setCards(res.data || [])
+          setCards(prev => prev.filter(item => item.id != currentCard?.id))
+          setDelShow(false)
         }
       } else {
         Alert.alert('Error', networkText);
       }
     }
     catch (error) {
-      console.log('errorrr', error)
+      // console.log('error ', error)
       let msg = responseValidator(error?.response?.status, error?.response?.data);
       Alert.alert('Error', msg || 'Something went wrong!');
     } finally {
-      setLoading(false)
+      setDelLoading(false)
     }
   };
 
   //On Set Default Card
   const onDafultCardHandler = async (item, index) => {
     try {
-      setLoading(true)
+      setDefaultLoading(true)
       const isConnected = await checkConnected();
       if (isConnected) {
-        const res = await app.setDefaultCard(currentCard?.card?.id)
-        console.log('ressss', res.data)
+        const res = await app.setDefaultCard(currentCard?.id)
         if (res.status == 200) {
-          // setCards(res.data || [])
+          console.log('ress', res.data)
+          Alert.alert('Success', 'Card successfully set as default!');
         }
       } else {
         Alert.alert('Error', networkText);
       }
     }
     catch (error) {
-      console.log('errorrr', error)
+      console.log('error ', error)
       let msg = responseValidator(error?.response?.status, error?.response?.data);
       Alert.alert('Error', msg || 'Something went wrong!');
     } finally {
-      setLoading(false)
+      setDefaultLoading(false)
     }
   };
 
@@ -135,12 +137,12 @@ const AllCards = ({ navigation }) => {
         <View style={styles.row}>
           <View>
             <Text style={styles.titleTxtStyle}>
-              {capitalizeFirstLetter(item?.card?.name)}
+              {capitalizeFirstLetter(item?.name)}
             </Text>
             <Text
               style={
                 styles.valTxtStyle
-              }>{`**** **** **** ${item?.card?.last4}`}</Text>
+              }>{`**** **** **** ${item?.last4}`}</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -160,7 +162,7 @@ const AllCards = ({ navigation }) => {
         </View>
         <Image
           resizeMode="contain"
-          source={checkBrand(item?.card?.brand)}
+          source={checkBrand(item?.brand)}
           style={styles.iconStyle}
         />
       </TouchableOpacity>
@@ -184,56 +186,57 @@ const AllCards = ({ navigation }) => {
       <Spacer androidVal={WP('5.5')} iOSVal={WP('5.5')} />
       <View style={{ marginBottom: 50, flex: 1 }}>
         {cards.length > 0 ?
-        <FlatList
-          data={cards}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.contentContainer}
-          keyExtractor={(item, index) => item + index.toString()}
-        /> :
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}} >
-          <Text style={styles.noData} >No Cards Found Yet!</Text>
-        </View>
-}
+          <FlatList
+            data={cards}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.contentContainer}
+            keyExtractor={(item, index) => item + index.toString()}
+          /> :
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+            <Text style={styles.noData} >No Cards Found Yet!</Text>
+          </View>
+        }
       </View>
-      <View style={styles.bottomView}>
+      {/* <View style={styles.bottomView}>
         <AppButton
           title="Continue"
           onPress={() => { }}
           borderColor={colors.white}
           shadowColor={colors.white}
         />
-      </View>
+      </View> */}
       <DelPaymentCard
-        show={show}
+        show={delShow}
         onPressHide={() => {
-          setShow(false);
+          setDelShow(false);
         }}
-        onPress={() => {
-          deleteCard();
-        }}
-        expiry_date={currentCard?.card?.last4}
-        brand={checkBrand(currentCard?.card?.brand)}
+        onPress={deleteCard}
+        expiry_date={currentCard?.last4}
+        brand={checkBrand(currentCard?.brand)}
+        loading={delLoading}
       />
       <CardOptionModal
         onPressRemove={() => {
           modalRef.current.close();
           setTimeout(() => {
-            setShow(true);
-          }, 500);
+            setDelShow(true);
+          }, 1000);
         }}
-        onPressEdit={() => {
-          navigation?.navigate('EditCard', {
-            card_detail: currentCard,
-          });
-          modalRef.current.close();
-        }}
+        // onPressEdit={() => {
+        //   navigation?.navigate('EditCard', {
+        //     card_detail: currentCard,
+        //   });
+        //   modalRef.current.close();
+        // }}
         onPressDefault={() => {
-          onDafultCardHandler();
+          modalRef.current.close()
+          setTimeout(onDafultCardHandler, 1000)
         }}
         modalRef={modalRef}
       />
       <AppLoader loading={!(cards.length > 0) && loading} />
+      <AppLoader loading={defaultLoading} />
     </SafeAreaView>
   );
 };

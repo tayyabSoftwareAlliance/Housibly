@@ -97,7 +97,6 @@ const AddCard = ({ navigation, route }) => {
                   type: 'Card',
                 })
                 console.log('tokennnnnnn', token)
-                return
                 console.log('errorrr', error)
                 if (token?.id) {
                   const formData = new FormData()

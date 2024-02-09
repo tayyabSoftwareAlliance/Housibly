@@ -23,6 +23,7 @@ import {
   appIcons,
   appImages,
   appLogos,
+  capitalizeFirstLetter,
   checkBrand,
   checkConnected,
   colors,
@@ -30,12 +31,14 @@ import {
   WP,
 } from '../../../../shared/exporter';
 import styles from './styles';
+import { app } from '../../../../shared/api';
 
 const CardDetails = ({navigation, route}) => {
   const {card_detail} = route?.params;
   const [method, setMethod] = useState('cards');
+  const [delShow, setDelShow] = useState(false);
+  const [delLoading, setDelLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch(null);
 
   const RenderRow = ({title, value}) => {
@@ -46,30 +49,28 @@ const CardDetails = ({navigation, route}) => {
       </View>
     );
   };
+
   //Delete Card
   const deleteCard = async () => {
-    const isConnected = await checkConnected();
-    if (isConnected) {
-      setLoading(true);
-      const onSuccess = res => {
-        setShow(false);
-        setLoading(false);
-        navigation?.goBack();
-        console.log('On DEL Card Success');
-      };
-      const onFailure = res => {
-        console.log(res);
-        setShow(false);
-        setLoading(false);
-        Alert.alert('Error', res || 'Unable to Delete Card');
-        console.log('On DEL Card Failure', res);
-      };
-      const requestBody = {
-        'payment[id]': card_detail?.card?.id,
-      };
-      dispatch(delete_card_request(requestBody, onSuccess, onFailure));
-    } else {
-      Alert.alert('Error', networkText);
+    try {
+      setDelLoading(true)
+      const isConnected = await checkConnected();
+      if (isConnected) {
+        const res = await app.deleteCard(card_detail?.id)
+        if (res.status == 200) {
+          setDelShow(false)
+          navigation.goBack()
+        }
+      } else {
+        Alert.alert('Error', networkText);
+      }
+    }
+    catch (error) {
+      // console.log('error ', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setDelLoading(false)
     }
   };
 
@@ -88,7 +89,7 @@ const CardDetails = ({navigation, route}) => {
           />
         }
         onPressRight={() => {
-          setShow(true);
+          setDelShow(true);
         }}
       />
 
@@ -101,7 +102,7 @@ const CardDetails = ({navigation, route}) => {
             <View>
               <Image
                 resizeMode="contain"
-                source={checkBrand(card_detail?.card?.brand)}
+                source={checkBrand(card_detail?.brand)}
                 style={styles.iconStyle}
               />
               {/* <Text style={styles.catTxtStyle}>Platinum</Text> */}
@@ -109,24 +110,24 @@ const CardDetails = ({navigation, route}) => {
             <Text
               style={
                 styles.numTxtStyle
-              }>{`• • • • ${card_detail?.card?.last4}`}</Text>
+              }>{`• • • • ${card_detail?.last4}`}</Text>
           </View>
         </ImageBackground>
         <RenderRow
           title="Card Holder Name"
-          value={card_detail?.card?.name || 'name'}
+          value={capitalizeFirstLetter(card_detail?.name)}
         />
-        <RenderRow title="Ending in" value={card_detail?.card?.last4} />
+        <RenderRow title="Ending in" value={card_detail?.last4} />
         <RenderRow
           title="Expiry"
-          value={`${card_detail?.card?.exp_month}/${card_detail?.card?.exp_year}`}
+          value={`${card_detail?.exp_month?.toString().padStart(2,'0')}/${card_detail?.exp_year}`}
         />
         {/* <RenderRow
           title="Card Holder Address"
           value="31901 Thornridge Cir. Shiloh, Hawaii 81063"
         /> */}
         <Text style={styles.transTxtStyle}>Last Transactions</Text>
-        <View style={styles.itemContainer}>
+        {/* <View style={styles.itemContainer}>
           <View style={styles.row}>
             <View style={styles.logoContainer}>
               <Image source={appLogos.appLogo} style={styles.imgStyle} />
@@ -137,29 +138,28 @@ const CardDetails = ({navigation, route}) => {
             </View>
           </View>
           <Text style={styles.valTxtStyle}>$100.00</Text>
-        </View>
+        </View> */}
         <Spacer androidVal={WP('5.5')} iOSVal={WP('5.5')} />
       </KeyboardAwareScrollView>
-      <View style={styles.bottomView}>
+      {/* <View style={styles.bottomView}>
         <AppButton
           title="Proceed"
           onPress={() => {
-            alert('Coming Soon');
+            Alert.alert('Coming Soon');
           }}
           borderColor={colors.white}
           shadowColor={colors.white}
         />
-      </View>
+      </View> */}
       <DelPaymentCard
-        show={show}
+        show={delShow}
         onPressHide={() => {
-          setShow(false);
+          setDelShow(false);
         }}
-        onPress={() => {
-          deleteCard();
-        }}
-        expiry_date={card_detail?.card?.last4}
-        brand={checkBrand(card_detail?.card?.brand)}
+        onPress={deleteCard}
+        expiry_date={card_detail?.last4}
+        brand={checkBrand(card_detail?.brand)}
+        loading={delLoading}
       />
       <AppLoader loading={loading} />
     </SafeAreaView>

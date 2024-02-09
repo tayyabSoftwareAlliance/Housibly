@@ -19,6 +19,7 @@ export const DelPaymentCard = ({
   expiry_date,
   onPress,
   brand,
+  loading
 }) => {
   return (
     <Modal onBackdropPress={onPressHide} isVisible={show}>
@@ -26,13 +27,12 @@ export const DelPaymentCard = ({
         <Text style={[styles.h1]}>Remove Card</Text>
         <Text style={[styles.h2]}>Are you sure you want to remove card?</Text>
         <Image style={styles.brandStyle} source={brand} />
-
         <View style={[styles.leftCon]}>
-          <Text style={[styles.h3]}>{`ENDING IN`}</Text>
-          <Text style={[styles.h4]}>{expiry_date || '2050'}</Text>
+          <Text style={[styles.h3]}>ENDING IN</Text>
+          <Text style={[styles.h4]}>{expiry_date}</Text>
         </View>
         <View style={[spacing.mt8, spacing.mx2]}>
-          <AppButton onPress={onPress} title={'Confirm'} fontSize={size.tiny} />
+          <AppButton onPress={onPress} title={'Confirm'} fontSize={size.tiny} loading={loading} />
           <AppButton
             title={'Cancel'}
             fontSize={size.tiny}

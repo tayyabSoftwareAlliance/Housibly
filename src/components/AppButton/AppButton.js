@@ -17,7 +17,8 @@ const AppButton = ({
   shadowColor = colors.p1,
   fontSize = size.large,
   marginVertical,
-  buttonStyle
+  buttonStyle,
+  loading
 }) => {
   return (
     <TouchableOpacity
@@ -34,7 +35,7 @@ const AppButton = ({
       ),buttonStyle]}>
       {icon && <Image source={icon} style={[styles.imgStyle, style]} />}
       <Text style={[styles.buttonTextStyle(textColor, fontSize), textStyle]}>
-        {title}
+        {loading ? 'Loading' : title}
       </Text>
     </TouchableOpacity>
   );

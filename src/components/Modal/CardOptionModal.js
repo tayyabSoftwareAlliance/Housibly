@@ -8,7 +8,7 @@ export const CardOptionModal = ({
   height,
   onPressDefault,
   onPressRemove,
-  onPressEdit,
+  // onPressEdit,
 }) => {
   const OptionButton = ({img, title, bgColor, onPress}) => {
     return (
@@ -40,12 +40,12 @@ export const CardOptionModal = ({
         img={appIcons.delete}
         title={'Remove Card'}
       />
-      <OptionButton
+      {/* <OptionButton
         onPress={onPressEdit}
         bgColor={colors.p7}
         img={appIcons.edit}
         title={'Edit Card'}
-      />
+      /> */}
     </RBSheet>
   );
 };
