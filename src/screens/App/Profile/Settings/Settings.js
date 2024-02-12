@@ -41,7 +41,7 @@ const Settings = ({ navigation }) => {
         return (
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate(item.screen)}
+            onPress={() => item.onPress ? item.onPress() : navigation.navigate(item.screen)}
             style={styles.rowContainer}>
             <View style={styles.innerRow}>
               <Image

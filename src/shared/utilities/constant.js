@@ -1,3 +1,4 @@
+import { Share } from 'react-native';
 import { appIcons } from '../exporter';
 import { appImages, appLogos } from '../theme/assets';
 import { colors } from '../theme/colors';
@@ -922,7 +923,10 @@ const settings = [
   {
     id: 1,
     title: 'Share App',
-    screen: 'share',
+    onPress: () => Share.share(
+      {
+        message: 'Housibly App Store URL',
+      }),
     icon: appIcons.share,
   },
   {

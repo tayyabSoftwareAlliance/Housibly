@@ -19,7 +19,7 @@ const Notifications = ({navigation}) => {
       <Spacer androidVal={WP('8.2')} iOSVal={WP('8.2')} />
       <View style={styles.contentContainer}>
         <Text style={styles.descTxtStyle}>
-          Control your notications depending on your prefereces.
+          Control your notications depending on your preferences.
         </Text>
         <Text style={styles.notifyTxtStyle}>Message Notification</Text>
         <TouchableOpacity
