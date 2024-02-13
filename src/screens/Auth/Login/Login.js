@@ -47,6 +47,24 @@ const Login = ({navigation}) => {
     GoogleSignin.signOut();
   }, []);
 
+  const handleSocialLogin = (provider, token) => {
+    const socialLoginSuccess = async res => {
+      setIsLoading(false);
+      setTimeout(() => {
+        navigation?.replace('App');
+      }, 500);
+    };
+    const socialLoginFailure = async err => {
+      console.log('Err is ==> ', err);
+      Alert.alert('Error', err);
+      setIsLoading(false);
+    };
+    const form = new FormData();
+    form.append('provider', provider);
+    form.append('token', token);
+    dispatch(socialLoginRequest(form, socialLoginSuccess, socialLoginFailure));
+  };
+
   const handleGoogleLogin = async () => {
     try {
       // Get the users ID token
@@ -89,24 +107,6 @@ const Login = ({navigation}) => {
     if (credentialState === appleAuth.State.AUTHORIZED) {
       // user is authenticated
     }
-  };
-
-  const handleSocialLogin = (provider, token) => {
-    const socialLoginSuccess = async res => {
-      setIsLoading(false);
-      setTimeout(() => {
-        navigation?.replace('App');
-      }, 500);
-    };
-    const socialLoginFailure = async err => {
-      console.log('Err is ==> ', err);
-      Alert.alert('Error', err);
-      setIsLoading(false);
-    };
-    const form = new FormData();
-    form.append('provider', provider);
-    form.append('token', token);
-    dispatch(socialLoginRequest(form, socialLoginSuccess, socialLoginFailure));
   };
 
   const onSubmit = async values => {

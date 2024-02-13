@@ -42,6 +42,8 @@ import { get_matched_properties, get_top_support_closers } from '../../../redux/
 import { useNavigation } from '@react-navigation/native'
 import moment from 'moment';
 import Modal from 'react-native-modal';
+import { get_all_notifications } from '../../../redux/actions/notification-actions/notification-actions';
+import { requestNotificationPermission } from '../../../shared/utilities/helper';
 
 const Home = ({ navigation }) => {
 
@@ -68,7 +70,7 @@ const Home = ({ navigation }) => {
   };
 
 
-  const renderItem = (item, index,onPress) => {
+  const renderItem = (item, index, onPress) => {
     return (
       <Pressable style={styles.itemContainer} onPress={() => onPress(item)}>
         <View style={styles.itemInnerRow}>
@@ -99,6 +101,8 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     dispatch(get_my_properties())
     dispatch(get_top_support_closers())
+    dispatch(get_all_notifications())
+    setTimeout(requestNotificationPermission, 1000)
   }, [])
 
   useEffect(() => {
@@ -145,7 +149,7 @@ const Home = ({ navigation }) => {
               sliderHeight={scrHeight}
               itemWidth={scrWidth / 1.15}
               data={top_support_closers}
-              renderItem={({item,index}) => renderItem(item,index,(data) => {setSelectedPerson(data);setPersonDetailModal(true)})}
+              renderItem={({ item, index }) => renderItem(item, index, (data) => { setSelectedPerson(data); setPersonDetailModal(true) })}
             />
           )}
           <View style={styles.menuContainer}>

@@ -45,11 +45,13 @@ import AddReview from '../screens/App/AddReview';
 import BlockedList from '../screens/App/Profile/BlockedList';
 import linking from '../shared/utilities/linking';
 import messaging from '@react-native-firebase/messaging';
-import { notificationFormater } from '../shared/utilities/notifications';
+import { navigateFromNotifi, notificationFormater } from '../shared/utilities/notifications';
 import Toast from 'react-native-toast-message';
 import { AppState } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { add_notification, get_all_notifications } from '../redux/actions/notification-actions/notification-actions';
+import { add_notification } from '../redux/actions/notification-actions/notification-actions';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HP } from '../shared/exporter';
 
 const AppStack = createNativeStackNavigator();
 
@@ -57,6 +59,7 @@ const MainAppNav = () => {
 
   const { userInfo } = useSelector(state => state?.auth);
   const dispatch = useDispatch()
+  const {top} = useSafeAreaInsets()
 
   const notificationSeen = (id) => {
     // dispatch(seenNotification(id))
@@ -78,11 +81,11 @@ const MainAppNav = () => {
     const notification = notificationFormater(remoteMessage)
     console.log('notificationnnnnnn', JSON.stringify(notification, null, 2))
     addToRedux(notification)
-    if ((notification.type == 'message' && chatOpenedId == notification?.data?.chat_id) || (notification.type == 'group-message' && chatOpenedId == notification?.data?.group_id)) return;
     Toast.show({
       type: 'info',
       text1: notification?.title,
       text2: notification?.body,
+      topOffset:top+HP(2),
       onPress: () => {
         notificationSeen(notification?.id)
         navigateFromNotifi(notification)
@@ -150,7 +153,6 @@ const MainAppNav = () => {
 
   useEffect(() => {
     setAuthToken(userInfo?.user?.auth_token)
-    dispatch(get_all_notifications())
   }, [userInfo])
 
   useEffect(() => {
