@@ -27,14 +27,14 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_Medium,
-    marginTop:WP(2),
-    width:WP(68)
+    marginTop:WP(1),
+    width:WP(68),
   },
   notificationTime: {
     color: '#171717',
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_Regular,
-    marginTop:WP(2),
+    marginTop:WP(1),
     width:WP(68)
   }
 });

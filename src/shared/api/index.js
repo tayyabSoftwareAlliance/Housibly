@@ -66,6 +66,7 @@ export const app = {
   getBlockedUsers: () => requests.get(ENDPOINTS.GET_BLOCKED_USERS),
   createCard: (data) => requests.post(ENDPOINTS.CREATE_CARD,data),
   getAllCards: () => requests.get(ENDPOINTS.GET_ALL_CARDS),
+  getCardDetail: (id) => requests.get(`${ENDPOINTS.GET_CARD_DETAIL}?payment[id]=${id}`),
   deleteCard: (id) => requests.delete(`${ENDPOINTS.DELETE_CARD}?payment[id]=${id}`),
   setDefaultCard: (id) => requests.put(`${ENDPOINTS.SET_DEFAULT_CARD}?payment[id]=${id}`),
 };

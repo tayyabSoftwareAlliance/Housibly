@@ -47,7 +47,7 @@ const App = () => {
           <PersistGate persistor={persistor}>
             <SafeAreaProvider>
               <MainNavigation />
-              {/* <PropertySuggestionInAppNotification /> */}
+              <PropertySuggestionInAppNotification />
             </SafeAreaProvider>
           </PersistGate>
         </StripeProvider>

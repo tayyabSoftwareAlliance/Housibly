@@ -25,6 +25,7 @@ import { useDispatch } from 'react-redux';
 import { signUpRequest } from '../../../redux/actions';
 import CountryPicker from 'react-native-country-picker-modal';
 import { isValidPhoneNumber } from 'libphonenumber-js';
+import messaging from '@react-native-firebase/messaging';
 
 const Signup = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +48,8 @@ const Signup = ({ navigation, route }) => {
       }
       try {
         setIsLoading(true);
+        const token = await messaging().getToken();
+        console.log('tokennnnnn', token)
         let item = route?.params?.item;
         let profileType = route?.params?.regPurpose;
         const data = new FormData();
@@ -63,6 +66,7 @@ const Signup = ({ navigation, route }) => {
           item?.userType ? item?.userType.toLowerCase() : 'neither',
         );
         data.append('user[profile_type]', profileType);
+        data.append('user[mobile_devices_attributes][][mobile_device_token]', token);
         console.log('data', data)
         const signUpSuccess = async res => {
           navigation?.replace('VerifyOTP', {

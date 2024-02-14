@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -33,13 +33,14 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import styles from './styles';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
-import {useDispatch} from 'react-redux';
-import {loginRequest, socialLoginRequest} from '../../../redux/actions';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { loginRequest, socialLoginRequest } from '../../../redux/actions';
 import appleAuth from '@invertase/react-native-apple-authentication';
+import messaging from '@react-native-firebase/messaging';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch(null);
 
@@ -68,7 +69,7 @@ const Login = ({navigation}) => {
   const handleGoogleLogin = async () => {
     try {
       // Get the users ID token
-      const {idToken} = await GoogleSignin.signIn();
+      const { idToken } = await GoogleSignin.signIn();
       if (idToken) {
         setIsLoading(true);
         handleSocialLogin('google', idToken);
@@ -113,9 +114,12 @@ const Login = ({navigation}) => {
     const check = await checkConnected();
     if (check) {
       setIsLoading(true);
+      const token = await messaging().getToken();
+      console.log('tokennnnnn', token)
       const form = new FormData();
       form.append('user[email]', values.email);
       form.append('user[password]', values.password);
+      form.append('user[mobile_devices_attributes][][mobile_device_token]', token);
       const loginSuccess = async res => {
         setIsLoading(false);
         if (res?.user?.is_confirmed && res?.user?.is_otp_verified) {

@@ -18,9 +18,15 @@ export const notificationFormater = (notification) => {
                 sender_name: sender?.full_name,
                 sender_avatar: sender?.avatar,
             } :
-            {
-
-            }
+            notification?.data?.type == 'buy_property' ?
+                {
+                    property_id:notification?.data?.property_id,
+                    property_image:notification?.data?.property_image,
+                } :
+                {
+                    property_id:notification?.data?.property_id,
+                    property_owner_image:notification?.data?.property_owner_image,
+                }
     }
 }
 export const navigateFromNotifi = (notification) => {

@@ -133,7 +133,7 @@ const AllCards = ({ navigation }) => {
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.itemContainer}
-        onPress={() => navigation.navigate('CardDetails', { card_detail: item })}>
+        onPress={() => navigation.navigate('CardDetails', { id: item?.id })}>
         <View style={styles.row}>
           <View>
             <Text style={styles.titleTxtStyle}>

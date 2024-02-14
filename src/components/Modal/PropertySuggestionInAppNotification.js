@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   colors,
@@ -8,58 +8,63 @@ import {
   size,
   appIcons,
   HP,
+  capitalizeFirstLetter,
 } from '../../shared/exporter';
+import { navigateFromNotifi } from '../../shared/utilities/notifications';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 let showNotification = () => { }, hideNotification = () => { }
 
-const PropertySuggestionInAppNotification = ({ onPressHide, data }) => {
+const PropertySuggestionInAppNotification = () => {
 
   const [show, setShow] = useState(false)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
-    showNotification = () => setShow(true)
-    hideNotification = () => setShow(false)
+    showNotification = (notification) => {
+      if (show) return
+      setNotification(notification)
+      setShow(true)
+    }
+    hideNotification = () => {
+      setShow(false)
+      setNotification(null)
+    }
   }, [])
 
-  return show || true && (
+  return show && (
     // <Modal onBackdropPress={onPressHide} isVisible={show}>
-    <View style={styles.container} >
-    <View style={styles.modalContainer}>
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={styles.crossIconView}
-        onPress={() => onPressHide()}>
+    <Pressable style={styles.container} >
+      <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.modalContainer}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.crossIconView}
+          onPress={hideNotification}>
+          <Image
+            resizeMode="contain"
+            source={appIcons.crossIcon}
+            style={styles.crossIconStyle}
+          />
+        </TouchableOpacity>
         <Image
-          resizeMode="contain"
-          source={appIcons.crossIcon}
-          style={styles.crossIconStyle}
+          // resizeMode="contain"
+          source={{ uri: notification?.type == 'buy_property' ? notification?.data?.property_image : notification?.data?.property_owner_image }}
+          style={styles.imgStyle}
         />
-      </TouchableOpacity>
-      <Image
-        // resizeMode="contain"
-        source={{ uri: data?.avatar }}
-        style={styles.imgStyle}
-      />
-      <Text style={styles.nameTxtStyle}>{data?.full_name || 'N/A'}</Text>
-      {/* <Text style={styles.companyTxtStyle}>Company 123</Text> */}
-      <View style={styles.rowContainer}>
-        <Image
-          resizeMode="contain"
-          source={appIcons.starIcon}
-          style={styles.starIconStyle}
-        />
-        <Text style={styles.ratingTxtStyle}>{data?.average_rating ? Number(data.average_rating).toFixed(1) : 0}</Text>
-      </View>
-      <Text style={styles.skillTxtStyle}>{data?.professions?.map(item => item?.title).join(', ') || 'N/A'}</Text>
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={styles.buttonStyle}
-      // onPress={() => { onPressHide(); navigation.navigate('SupportCloserDetail', { id: data?.id }) }}
-      >
-        <Text style={styles.btnTxtStyle}>View Detail</Text>
-      </TouchableOpacity>
-    </View>
-    </View>
+        <Text style={styles.nameTxtStyle}>{notification?.title || 'N/A'}</Text>
+        <Text style={styles.skillTxtStyle}>{capitalizeFirstLetter(notification?.body) || 'N/A'}</Text>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonStyle}
+          onPress={() => {
+            hideNotification()
+            navigateFromNotifi(notification)
+          }}
+        >
+          <Text style={styles.btnTxtStyle}>View Detail</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </Pressable>
     // </Modal>
   )
 };
@@ -68,27 +73,28 @@ export default PropertySuggestionInAppNotification
 export { showNotification, hideNotification }
 
 const styles = StyleSheet.create({
-  container:{
-    width:WP(100),
-    height:HP(100),
-    justifyContent:'center',
-    alignItems:'center',
+  container: {
+    width: WP(100),
+    height: HP(100),
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
-    top:0,
+    top: 0,
   },
   modalContainer: {
-    width:WP(80),
-    alignItems:'center',
+    width: WP(80),
+    alignItems: 'center',
     borderRadius: 8,
     paddingTop: WP('3.5'),
     backgroundColor: 'white',
     marginHorizontal: WP('5'),
     paddingHorizontal: WP('3.5'),
-    elevation:5,
+    elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
-    shadowRadius:4
+    shadowRadius: 4,
+    zIndex: 1
   },
   crossIconView: {
     width: WP('5'),
@@ -113,31 +119,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingTop: WP('4'),
     fontFamily: family.Gilroy_SemiBold,
-  },
-  companyTxtStyle: {
-    color: colors.b1,
-    textAlign: 'center',
-    alignSelf: 'center',
-    fontSize: size.tiny,
-    paddingTop: WP('1.5'),
-    fontFamily: family.Gilroy_SemiBold,
+    textTransform: 'capitalize'
   },
   rowContainer: {
     paddingTop: WP('5'),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  starIconStyle: {
-    width: WP('3'),
-    height: WP('3'),
-  },
-  ratingTxtStyle: {
-    top: 1.2,
-    paddingLeft: 5,
-    color: colors.g17,
-    fontSize: size.tiny,
-    fontFamily: family.Gilroy_Medium,
   },
   skillTxtStyle: {
     color: colors.b1,

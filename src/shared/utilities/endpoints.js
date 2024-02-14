@@ -40,6 +40,7 @@ const ENDPOINTS = {
   GET_TOP_SUPPORT_CLOSERS:'top_support_closers',
   CREATE_CARD:'create_card',
   GET_ALL_CARDS:'get_all_cards',
+  GET_CARD_DETAIL:'get_card',
   DELETE_CARD: 'delete_card',
   SET_DEFAULT_CARD: 'set_default_card',
   

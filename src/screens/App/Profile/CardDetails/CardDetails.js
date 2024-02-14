@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,9 +7,9 @@ import {
   ImageBackground,
   Alert,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useDispatch} from 'react-redux';
+import { Icon } from 'react-native-elements';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch } from 'react-redux';
 import {
   AppButton,
   AppHeader,
@@ -18,7 +18,6 @@ import {
   DelPaymentCard,
   Spacer,
 } from '../../../../components';
-import {delete_card_request} from '../../../../redux/actions';
 import {
   appIcons,
   appImages,
@@ -32,16 +31,17 @@ import {
 } from '../../../../shared/exporter';
 import styles from './styles';
 import { app } from '../../../../shared/api';
+import moment from 'moment';
 
-const CardDetails = ({navigation, route}) => {
-  const {card_detail} = route?.params;
-  const [method, setMethod] = useState('cards');
+const CardDetails = ({ navigation, route }) => {
+  const { id } = route?.params;
+  const [data, setData] = useState(null);
   const [delShow, setDelShow] = useState(false);
   const [delLoading, setDelLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch(null);
 
-  const RenderRow = ({title, value}) => {
+  const RenderRow = ({ title, value }) => {
     return (
       <View style={styles.rowContainer}>
         <Text style={styles.titleTxtStyle}>{title}</Text>
@@ -56,7 +56,7 @@ const CardDetails = ({navigation, route}) => {
       setDelLoading(true)
       const isConnected = await checkConnected();
       if (isConnected) {
-        const res = await app.deleteCard(card_detail?.id)
+        const res = await app.deleteCard(id)
         if (res.status == 200) {
           setDelShow(false)
           navigation.goBack()
@@ -73,6 +73,32 @@ const CardDetails = ({navigation, route}) => {
       setDelLoading(false)
     }
   };
+
+  const getCardDetail = async () => {
+    try {
+      setLoading(true)
+      const isConnected = await checkConnected();
+      if (isConnected) {
+        const res = await app.getCardDetail(id)
+        if (res.status == 200) {
+          setData(res.data)
+        }
+      } else {
+        Alert.alert('Error', networkText);
+      }
+    }
+    catch (error) {
+      // console.log('error ', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  useEffect(() => {
+    getCardDetail()
+  }, [])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -92,7 +118,6 @@ const CardDetails = ({navigation, route}) => {
           setDelShow(true);
         }}
       />
-
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <ImageBackground
           resizeMode="contain"
@@ -102,7 +127,7 @@ const CardDetails = ({navigation, route}) => {
             <View>
               <Image
                 resizeMode="contain"
-                source={checkBrand(card_detail?.brand)}
+                source={checkBrand(data?.card?.brand)}
                 style={styles.iconStyle}
               />
               {/* <Text style={styles.catTxtStyle}>Platinum</Text> */}
@@ -110,35 +135,37 @@ const CardDetails = ({navigation, route}) => {
             <Text
               style={
                 styles.numTxtStyle
-              }>{`• • • • ${card_detail?.last4}`}</Text>
+              }>{`• • • • ${data?.card?.last4 || ''}`}</Text>
           </View>
         </ImageBackground>
         <RenderRow
           title="Card Holder Name"
-          value={capitalizeFirstLetter(card_detail?.name)}
+          value={capitalizeFirstLetter(data?.card?.name) || ''}
         />
-        <RenderRow title="Ending in" value={card_detail?.last4} />
+        <RenderRow title="Ending in" value={data?.card?.last4} />
         <RenderRow
           title="Expiry"
-          value={`${card_detail?.exp_month?.toString().padStart(2,'0')}/${card_detail?.exp_year}`}
+          value={data?.card?.exp_month ? `${data?.card?.exp_month?.toString().padStart(2, '0')}/${data?.card?.exp_year}` : ''}
         />
         {/* <RenderRow
           title="Card Holder Address"
           value="31901 Thornridge Cir. Shiloh, Hawaii 81063"
         /> */}
         <Text style={styles.transTxtStyle}>Last Transactions</Text>
-        {/* <View style={styles.itemContainer}>
-          <View style={styles.row}>
-            <View style={styles.logoContainer}>
-              <Image source={appLogos.appLogo} style={styles.imgStyle} />
+        {data?.transactions?.map(item => (
+          <View style={styles.itemContainer}>
+            <View style={styles.row}>
+              <View style={styles.logoContainer}>
+                <Image source={appLogos.appLogo} style={styles.imgStyle} />
+              </View>
+              <View>
+                <Text style={styles.txtStyle}>Housibly</Text>
+                <Text style={styles.timeTxtStyle}>{moment(item?.created_at).fromNow()}</Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.txtStyle}>Housibly</Text>
-              <Text style={styles.timeTxtStyle}>2 hr ago</Text>
-            </View>
+            <Text style={styles.valTxtStyle}>{`${item.currency} ${item.amount}`}</Text>
           </View>
-          <Text style={styles.valTxtStyle}>$100.00</Text>
-        </View> */}
+        ))}
         <Spacer androidVal={WP('5.5')} iOSVal={WP('5.5')} />
       </KeyboardAwareScrollView>
       {/* <View style={styles.bottomView}>
@@ -157,8 +184,8 @@ const CardDetails = ({navigation, route}) => {
           setDelShow(false);
         }}
         onPress={deleteCard}
-        expiry_date={card_detail?.last4}
-        brand={checkBrand(card_detail?.brand)}
+        expiry_date={data?.card?.last4}
+        brand={checkBrand(data?.card?.brand)}
         loading={delLoading}
       />
       <AppLoader loading={loading} />

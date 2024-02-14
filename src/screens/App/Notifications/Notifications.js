@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages } from '../../../shared/exporter';
+import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, capitalizeFirstLetter } from '../../../shared/exporter';
 import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useNavigation } from '@react-navigation/native'
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppLoader } from '../../../components';
 import moment from 'moment';
 import { navigateFromNotifi } from '../../../shared/utilities/notifications';
+import { showNotification } from '../../../components/Modal/PropertySuggestionInAppNotification';
 
 const AllNotificationsData = [
   {
@@ -32,17 +33,22 @@ const renderItem = (item, index, navigation) => {
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => navigateFromNotifi(item)}>
+      onPress={() => {
+        if (item.type == 'buy_property' || item.type == 'sell_property') {
+          showNotification(item)
+        } else
+          navigateFromNotifi()
+      }}>
       <Image
-        source={{uri:item.data?.sender_avatar}}
+        source={{ uri: item.data?.sender_avatar }}
         style={styles.imgStyle}
       />
       <View>
         <Text style={styles.notificationTitle} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.notificationBody} numberOfLines={1}>{item.body}</Text>
+        <Text style={styles.notificationBody} numberOfLines={2}>{capitalizeFirstLetter(item.body)}</Text>
         <Text style={styles.notificationTime} numberOfLines={1}>{moment(item.time).fromNow()}</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 };
 

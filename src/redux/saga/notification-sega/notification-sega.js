@@ -13,19 +13,26 @@ function* getAllNotifications() {
     const res = yield app.getAllNotifications()
     if (res?.status == 200 && res.data?.notification?.length > 0) {
       const arr = res.data.notification.map(item => {
+        console.log('item', item)
         return {
           id: item.id,
           title: item.title,
           body: item.action,
-          type: 'message',
-          seen: false,
+          type: item.event_type,
+          seen: item.seen,
           time: new Date(item.created_at),
-          data: {
+          data: item.event_type == 'message' ? {
             conversation_id: item.conversation_id,
             sender_id: item.sender_id,
             sender_name: item.sender_name,
             sender_avatar: item.sender_avatar,
-          }
+          } : item.event_type == 'buy_property' ? {
+            property_id: item.property_id,
+            property_image: item.property_image,
+          } : item.event_type == 'sell_property' ? {
+            property_id: item.property_id,
+            property_owner_image:item.property_owner_image,
+          } : {}
         }
       })
       yield put({

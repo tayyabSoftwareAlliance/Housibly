@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     color: colors.s5,
     fontSize: size.large,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'uppercase'
   },
   bottomView: {
     width: '100%',

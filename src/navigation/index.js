@@ -52,6 +52,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { add_notification } from '../redux/actions/notification-actions/notification-actions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HP } from '../shared/exporter';
+import { showNotification } from '../components/Modal/PropertySuggestionInAppNotification';
 
 const AppStack = createNativeStackNavigator();
 
@@ -59,7 +60,7 @@ const MainAppNav = () => {
 
   const { userInfo } = useSelector(state => state?.auth);
   const dispatch = useDispatch()
-  const {top} = useSafeAreaInsets()
+  const { top } = useSafeAreaInsets()
 
   const notificationSeen = (id) => {
     // dispatch(seenNotification(id))
@@ -81,17 +82,26 @@ const MainAppNav = () => {
     const notification = notificationFormater(remoteMessage)
     console.log('notificationnnnnnn', JSON.stringify(notification, null, 2))
     addToRedux(notification)
-    Toast.show({
-      type: 'info',
-      text1: notification?.title,
-      text2: notification?.body,
-      topOffset:top+HP(2),
-      onPress: () => {
-        notificationSeen(notification?.id)
-        navigateFromNotifi(notification)
-        Toast.hide()
+    if (notification.type == 'buy_property' || notification.type == 'sell_property') {
+      const data = {
+        image: notification?.data?.property_image,
+        title: notification?.title,
+        body: notification?.body,
       }
-    });
+      showNotification(data)
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: notification?.title,
+        text2: notification?.body,
+        topOffset: top + HP(2),
+        onPress: () => {
+          notificationSeen(notification?.id)
+          navigateFromNotifi(notification)
+          Toast.hide()
+        }
+      })
+    }
   }
 
   const onAppStateChangeCallback = async (state) => {

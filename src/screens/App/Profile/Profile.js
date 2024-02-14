@@ -20,15 +20,15 @@ import {appIcons, colors, profile_uri, spacing} from '../../../shared/exporter';
 import {Divider, Icon} from 'react-native-elements';
 
 const Profile = ({navigation}) => {
+  
   const dispatch = useDispatch(null);
   const [data, setData] = useState([]);
   const [userImage, setUserImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const isFocus = useIsFocused(null);
 
   useEffect(() => {
-    getUserProfile();
+    isFocus && getUserProfile();
   }, [isFocus, navigation]);
 
   const getUserProfile = () => {
