@@ -105,7 +105,7 @@ const AllMatches = ({ navigation }) => {
       {matched_properties.data.length > 0 &&
         <FlatList
           data={matched_properties.data}
-          renderItem={({ item }) => <PropertyComponent item={item} type={'not_my_property'} />}
+          renderItem={({ item }) => <PropertyComponent item={item} />}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flStyle}

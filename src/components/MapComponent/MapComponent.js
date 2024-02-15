@@ -241,7 +241,7 @@ export const MapComponent = () => {
       // const origin = encodeURIComponent(JSON.stringify({ lat: circleCoords[0].latitude, lng: circleCoords[0].longitude }))
       const origin = JSON.stringify({ lat: circleCoords[0].latitude, lng: circleCoords[0].longitude })
       const params = `search[radius]=${radius}&search[origin]=${origin}`
-      console.log('params',params)
+      console.log('params', params)
       const res = await app.getPropertiesInsideCircle(params);
       if (res?.status == 200) {
         setProperties(res.data || [])
@@ -697,7 +697,7 @@ export const MapComponent = () => {
         onPress={() => {
           setSelectedPropertyDataModal(false)
           setTimeout(() => {
-            navigation.navigate('PropertyDetail', { propertyData: selectedPropertyData, type: 'not_my_property' })
+            navigation.navigate('PropertyDetail', { propertyData: selectedPropertyData, id: selectedPropertyData?.id })
           }, 1000)
         }}
       />
@@ -770,7 +770,7 @@ const styles = StyleSheet.create({
     width: WP('26.3'),
     height: WP('24.1'),
     marginRight: WP('2.5'),
-    backgroundColor:colors.g14
+    backgroundColor: colors.g14
   },
   innerRow: {
     flexDirection: 'row',

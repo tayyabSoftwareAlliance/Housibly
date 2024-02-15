@@ -16,10 +16,9 @@ export const add_notification = (notification) => {
 };
 
 // Notification seen
-export const seen_notification = (id) => {
+export const seen_notification = () => {
   return {
-    type: TYPES.NOTIFICATION_SEEN,
-    payload: { id }
+    type: TYPES.NOTIFICATION_SEEN
   };
 };
 

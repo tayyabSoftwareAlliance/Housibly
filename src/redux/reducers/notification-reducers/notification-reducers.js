@@ -32,11 +32,8 @@ const notificationReducers = (state = initialState, actions) => {
       return {
         ...state,
         all_notifications: state.all_notifications.map(item => {
-          if (item.id == payload.id) {
-            item.seen = true
-            return { ...item }
-          }
-          return item
+          item.seen = true
+          return { ...item }
         }),
       };
 
@@ -44,7 +41,7 @@ const notificationReducers = (state = initialState, actions) => {
     case TYPES.ADD_NOTIFICATION:
       return {
         ...state,
-        all_notifications:[payload.notification,...state.all_notifications]
+        all_notifications: [payload.notification, ...state.all_notifications]
       };
 
     default:

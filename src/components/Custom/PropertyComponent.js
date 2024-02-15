@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { WP, appIcons, appImages, colors, family, property_image, size } from '../../shared/exporter'
 
-const PropertyComponent = ({ item, myProperty = false, type }) => {
+const PropertyComponent = ({ item, myProperty = false }) => {
 
     const navigation = useNavigation()
 
@@ -15,7 +15,7 @@ const PropertyComponent = ({ item, myProperty = false, type }) => {
                 if (myProperty)
                     navigation.navigate('PotentialBuyers', { item })
                 else
-                    navigation.navigate('PropertyDetail', { propertyData: item, type })
+                    navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id })
             }}
         >
             <Image
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         width: WP(26),
         height: WP(25),
         marginRight: WP(2.5),
-        backgroundColor:colors.g14
+        backgroundColor: colors.g14
     },
     innerRow: {
         width: WP(63),

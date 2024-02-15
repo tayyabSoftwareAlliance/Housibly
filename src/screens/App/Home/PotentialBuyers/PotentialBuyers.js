@@ -52,7 +52,7 @@ const PotentialBuyers = ({ navigation, route }) => {
       <TouchableOpacity
         activeOpacity={1}
         style={styles.detailsContainer}
-        onPress={() => navigation.navigate('PropertyDetail', { propertyData: item })}>
+        onPress={() => navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id })}>
         <Image
           source={{ uri: item?.images?.[0]?.url || property_image }}
           style={styles.imgStyle}

@@ -106,6 +106,7 @@ const PersonChat = ({ navigation, route }) => {
   const [allMessages, setAllMessages] = useState([]);
   const [loader, setLoader] = useState(true)
   const [sendLoader, setSendLoader] = useState(false)
+  const [blockCheckLoader, setBlockCheckLoaderLoader] = useState(false)
   const [createConversationLoader, setCreateConversationLoader] = useState(false)
   const [useEffectRecallFlag, setUseEffectRecallFlag] = useState(false)
   const [optionsModal, setOptionsModal] = useState(false)
@@ -157,11 +158,28 @@ const PersonChat = ({ navigation, route }) => {
     }
   }
 
+  const checkIsConversationBlocked = async () => {
+    try {
+      setBlockCheckLoaderLoader(true)
+      const formData = new FormData()
+      formData.append('conversation_id', conversationId)
+      const res = await app.checkIsConversationBlocked(formData);
+      if (res?.status == 200) {
+        setIsBlocked(res.data?.is_blocked)
+      }
+    } catch (error) {
+      console.log('checkIsConversationBlocked Error: ', error)
+    } finally {
+      setBlockCheckLoaderLoader(false)
+    }
+  }
+
   const firstCall = async () => {
     dispatch(set_conversation_opened_id())
     if (params?.from == 'not_chats' && !conversationId) {
       await checkIsConversationCreated()
     } else {
+      checkIsConversationBlocked()
       getAllMessages()
       dispatch(read_chat_messages(conversationId))
     }
@@ -394,7 +412,7 @@ const PersonChat = ({ navigation, route }) => {
           </View>
         </KeyboardAvoidingView>
       }
-      <AppLoader loading={createConversationLoader} />
+      <AppLoader loading={createConversationLoader || blockCheckLoader} />
       <ChatPopupModal
         image={avatar}
         title={params?.full_name}

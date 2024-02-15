@@ -43,8 +43,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: size.xxxtiny,
     fontFamily: family.Gilroy_Bold,
-  },
-
+  }
 });
 
 export default styles;

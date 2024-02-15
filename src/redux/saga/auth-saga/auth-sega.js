@@ -52,7 +52,7 @@ function* socialLoginUser(params) {
       params?.cbFailure(res?.data);
     }
   } catch (error) {
-    console.log(error);
+    console.log(JSON.stringify(error?.response,null,2));
     yield put({
       type: types.SOCIAL_LOGIN_REQUEST_FAILURE,
       payload: null,

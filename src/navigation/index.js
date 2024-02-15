@@ -63,19 +63,6 @@ const MainAppNav = () => {
   const dispatch = useDispatch()
   const { top } = useSafeAreaInsets()
 
-  const notificationSeen = (id) => {
-    dispatch(seen_notification(id))
-    const formData = new FormData()
-    formData.append('id', id)
-    app.notificationSeen(formData)
-      .then((res) => {
-        console.log('Seen notification success', res);
-      })
-      .catch((error) => {
-        console.log('Seen notification error', error);
-      })
-  }
-
   const addToRedux = (notification) => {
     dispatch(add_notification(notification))
   }
@@ -95,7 +82,6 @@ const MainAppNav = () => {
         text2: notification?.body,
         topOffset: top + HP(2),
         onPress: () => {
-          notificationSeen(notification?.id)
           navigateFromNotifi(notification)
           Toast.hide()
         }
@@ -120,9 +106,6 @@ const MainAppNav = () => {
     //   remoteMessage,
     // );
     const notification = notificationFormater(remoteMessage)
-    if (notification.type != 'message' && notification.type != 'group-message') {
-      notificationSeen(notification?.id)
-    }
     navigateFromNotifi(notification)
   }
 
@@ -133,11 +116,6 @@ const MainAppNav = () => {
       //   remoteMessage
       // )
       const notification = notificationFormater(remoteMessage)
-      if (notification.type != 'message' && notification.type != 'group-message') {
-        setTimeout(() => {
-          notificationSeen(notification?.id)
-        }, 3000)
-      }
       navigateFromNotifi(notification)
     }
   }

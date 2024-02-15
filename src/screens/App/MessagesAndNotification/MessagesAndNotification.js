@@ -27,8 +27,13 @@ const MessagesAndNotification = () => {
   }))
 
   const unSeenNotificationCount = useMemo(() => {
-    const count = all_notifications?.filter(item => !item.seen)?.length || 0
-    return count > 99 ? '99+' : count
+    let count = all_notifications?.filter(item => !item.seen)?.length || 0
+    count = count > 99 ? '99+' : count
+    return count ? (
+      <View style={styles.badge} >
+        <Text style={styles.badgeTxt}>{count}</Text>
+      </View>
+    ) : null
   }, [all_notifications])
 
   return (
@@ -43,9 +48,7 @@ const MessagesAndNotification = () => {
           <Text style={[styles.topTabTxt, selectedTab == 'notifications' && { color: colors.b1 }]} >
             Notifications
           </Text>
-          <View style={styles.badge} >
-            <Text style={styles.badgeTxt}>{unSeenNotificationCount}</Text>
-          </View>
+          {unSeenNotificationCount}
         </TouchableOpacity>
         <Animated.View style={[styles.topTabLine, topTabLineAnimatedStyle]} />
       </View>

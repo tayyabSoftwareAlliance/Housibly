@@ -28,7 +28,7 @@ const AddpropertyDesc = ({ navigation, route }) => {
       Alert.alert('Error', 'Description is Required');
     } else {
       if (data.property_type == 'vacant_land') {
-        navigation.navigate('PropertyDetail', { propertyData: data, from });
+        navigation.navigate('PropertyDetail', { propertyData: data, id: data?.id, from });
       } else {
         navigation.navigate('AddRoom', { propertyData: data, from });
       }

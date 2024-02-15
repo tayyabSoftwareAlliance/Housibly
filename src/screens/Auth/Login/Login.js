@@ -65,7 +65,7 @@ const Login = ({ navigation }) => {
     const form = new FormData();
     form.append('provider', provider);
     form.append('token', token);
-    form.append('user[mobile_devices_attributes][][mobile_device_token]', fcmToken);
+    form.append('mobile_device_token', fcmToken);
     dispatch(socialLoginRequest(form, socialLoginSuccess, socialLoginFailure));
   };
 

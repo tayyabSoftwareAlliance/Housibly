@@ -13,7 +13,6 @@ function* getAllNotifications() {
     const res = yield app.getAllNotifications()
     if (res?.status == 200 && res.data?.length > 0) {
       const arr = res.data.map(item => {
-        console.log('item', item)
         return {
           id: item.id,
           title: item.title,

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, capitalizeFirstLetter } from '../../../shared/exporter';
 import styles from './styles';
-import { SwipeListView } from 'react-native-swipe-list-view';
-import { useNavigation } from '@react-navigation/native'
-import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
+import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppLoader } from '../../../components';
 import moment from 'moment';
@@ -12,23 +10,6 @@ import { navigateFromNotifi } from '../../../shared/utilities/notifications';
 import { showNotification } from '../../../components/Modal/PropertySuggestionInAppNotification';
 import { seen_notification } from '../../../redux/actions/notification-actions/notification-actions';
 import { app } from '../../../shared/api';
-
-const AllNotificationsData = [
-  {
-    id: 1,
-    title: 'Someone messages you',
-    body: 'Davis Vaccaro messaged you, check doing well at hr rjf rfirf rif',
-    image: appImages.avatar,
-    time: '3 min ago'
-  },
-  {
-    id: 2,
-    title: 'Someone searched your location',
-    body: 'Cheyenne Dias searched the address 2118 Thor check doing well at hr rjf rfirf rif',
-    image: appImages.avatar,
-    time: '5 min ago'
-  }
-]
 
 const renderItem = (item, index, onPress) => {
   return (
@@ -54,12 +35,11 @@ const Notifications = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const { loading, all_notifications } = useSelector(state => state?.notification);
+  const isFocused = useIsFocused()
 
-  const notificationSeen = (id) => {
-    dispatch(seen_notification(id))
-    const formData = new FormData()
-    formData.append('id', id)
-    app.notificationSeen(formData)
+  const notificationSeen = () => {
+    dispatch(seen_notification())
+    app.notificationSeen()
       .then((res) => {
         console.log('Seen notification success', res);
       })
@@ -68,11 +48,14 @@ const Notifications = () => {
       })
   }
 
+  useEffect(() => {
+    isFocused && notificationSeen()
+  }, [isFocused])
+
   const onNotificationPress = (item) => {
     notificationSeen(item.id)
     {
       if (item.type == 'buy_property' || item.type == 'sell_property') {
-        console.log('iteeeeeeeemm', item)
         showNotification(item)
       } else
         navigateFromNotifi(item)

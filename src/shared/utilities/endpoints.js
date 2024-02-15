@@ -31,6 +31,7 @@ const ENDPOINTS = {
   CIRCLE_PROPERTY: 'properties/find_in_circle',
   POLYGON_PROPERTY: 'properties/find_in_polygon',
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
+  GET_PROPERTY_DETAIL: 'properties/details_by_property_id',
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
   GET_OTHER_USER_PROFILE: 'show_other_user_profile',
@@ -47,6 +48,7 @@ const ENDPOINTS = {
   //chat
   CONVERSATIONS: 'conversations',
   CHECK_IS_CONVERSATION_CREATED:'conversations/check_conversation_between_users',
+  CHECK_IS_CONVERSATION_BLOCKED:'conversations/check_conversation_blocked_status',
   GET_ALL_MESSAGES: 'messages/get_messages',
   SEND_MESSAGE: 'messages',
   READ_MESSAGES: 'conversations/read_messages',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable, Linking } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   colors,
@@ -53,16 +53,30 @@ const PropertySuggestionInAppNotification = () => {
         />
         <Text style={styles.nameTxtStyle}>{notification?.title || 'N/A'}</Text>
         <Text style={styles.skillTxtStyle}>{capitalizeFirstLetter(notification?.body) || 'N/A'}</Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.buttonStyle}
-          onPress={() => {
-            hideNotification()
-            navigateFromNotifi(notification)
-          }}
-        >
-          <Text style={styles.btnTxtStyle}>{notification?.type == 'sell_property' ? 'Contact Person' : 'View Detail'}</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsContainerStyle}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.buttonStyle}
+            onPress={() => {
+              hideNotification()
+              Linking.openURL(`housibly://PropertyDetail/${notification?.data?.property_id}`)
+            }}
+          >
+            <Text style={styles.btnTxtStyle}>{notification?.type == 'sell_property' ? 'View Property' : 'View Detail'}</Text>
+          </TouchableOpacity>
+          {notification?.type == 'sell_property' &&
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={[styles.buttonStyle, { marginLeft: WP(3) }]}
+              onPress={() => {
+                hideNotification()
+                navigateFromNotifi(notification)
+              }}
+            >
+              <Text style={styles.btnTxtStyle}>Contact Person</Text>
+            </TouchableOpacity>
+          }
+        </View>
       </Animated.View>
     </Pressable>
     // </Modal>
@@ -134,14 +148,19 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_Regular,
   },
+  buttonsContainerStyle: {
+    marginTop: WP('3.3'),
+    marginBottom: WP('6'),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   buttonStyle: {
     borderRadius: 15,
     width: WP('28.7'),
     height: WP('7.8'),
     alignSelf: 'center',
     alignItems: 'center',
-    marginTop: WP('3.3'),
-    marginBottom: WP('6'),
     justifyContent: 'center',
     backgroundColor: colors.p2,
   },
