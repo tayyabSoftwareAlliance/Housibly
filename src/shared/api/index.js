@@ -13,6 +13,7 @@ const requests = {
   get: endpoint => axios.get(endpoint),
   post: (endpoint, data) => axios.post(endpoint, data),
   put: (endpoint, data) => axios.put(endpoint, data),
+  patch: (endpoint, data) => axios.patch(endpoint, data),
   delete: endpoint => axios.delete(endpoint),
 };
 
@@ -51,6 +52,7 @@ export const app = {
   getSavedLocations: () => requests.get(ENDPOINTS.SAVED_LOCATIONS),
   getAllChats: () => requests.get(ENDPOINTS.CONVERSATIONS),
   getAllNotifications: () => requests.get(ENDPOINTS.GET_ALL_NOTIFICATIONS),
+  notificationSeen: (data) => requests.patch(ENDPOINTS.NOTIFICATION_SEEN,data),
   deleteChat: (id) => requests.delete(`${ENDPOINTS.CONVERSATIONS}/${id}`),
   getAllMessages: (data) => requests.post(ENDPOINTS.GET_ALL_MESSAGES, data),
   createConversation: (data) => requests.post(ENDPOINTS.CONVERSATIONS, data),

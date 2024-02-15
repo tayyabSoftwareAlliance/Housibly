@@ -32,7 +32,7 @@ import AddAddress from '../screens/App/Home/AddAddress';
 import Video from '../screens/App/Video';
 import AddRoom from '../screens/App/Home/AddRoom';
 import { useDispatch, useSelector } from 'react-redux'
-import { setAuthToken } from '../shared/api';
+import { app, setAuthToken } from '../shared/api';
 import Reviews from '../screens/App/Reviews';
 import BoostProfile from '../screens/App/BoostProfile';
 import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
@@ -49,7 +49,7 @@ import { navigateFromNotifi, notificationFormater } from '../shared/utilities/no
 import Toast from 'react-native-toast-message';
 import { AppState } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { add_notification } from '../redux/actions/notification-actions/notification-actions';
+import { add_notification, seen_notification } from '../redux/actions/notification-actions/notification-actions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HP } from '../shared/exporter';
 import { showNotification } from '../components/Modal/PropertySuggestionInAppNotification';
@@ -59,18 +59,21 @@ const AppStack = createNativeStackNavigator();
 const MainAppNav = () => {
 
   const { userInfo } = useSelector(state => state?.auth);
+  const { conversation_opened_id } = useSelector(state => state?.appReducer)
   const dispatch = useDispatch()
   const { top } = useSafeAreaInsets()
 
   const notificationSeen = (id) => {
-    // dispatch(seenNotification(id))
-    // commonFlow.notificationSeen(id)
-    //   .then((res) => {
-    //     // console.log('Seen notification success', res);
-    //   })
-    //   .catch((error) => {
-    //     // console.log('Seen notification error', error);
-    //   })
+    dispatch(seen_notification(id))
+    const formData = new FormData()
+    formData.append('id', id)
+    app.notificationSeen(formData)
+      .then((res) => {
+        console.log('Seen notification success', res);
+      })
+      .catch((error) => {
+        console.log('Seen notification error', error);
+      })
   }
 
   const addToRedux = (notification) => {
@@ -83,13 +86,9 @@ const MainAppNav = () => {
     console.log('notificationnnnnnn', JSON.stringify(notification, null, 2))
     addToRedux(notification)
     if (notification.type == 'buy_property' || notification.type == 'sell_property') {
-      const data = {
-        image: notification?.data?.property_image,
-        title: notification?.title,
-        body: notification?.body,
-      }
-      showNotification(data)
+      showNotification(notification)
     } else {
+      if (notification.type == 'message' && notification.data?.conversation_id == conversation_opened_id) return
       Toast.show({
         type: 'info',
         text1: notification?.title,
@@ -171,7 +170,7 @@ const MainAppNav = () => {
       unsubscribe && unsubscribe()
       appStateListener && appStateListener.remove()
     }
-  }, [])
+  }, [conversation_opened_id])
 
   return (
     <NavigationContainer linking={linking}>

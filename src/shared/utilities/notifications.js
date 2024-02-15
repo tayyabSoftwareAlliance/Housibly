@@ -7,8 +7,8 @@ export const notificationFormater = (notification) => {
         id: notification?.data?.id,
         title: notification?.notification?.title,
         body: notification?.notification?.body,
+        image: notification?.data?.type == 'message' ? notification?.data?.avatar : notification?.data?.type == 'buy_property' ? notification?.data?.property_image : notification?.data?.type == 'sell_property' ? notification?.data?.sender_avatar : '',
         type: notification?.data?.type,
-        // receiver: notification?.data?.receiver,
         seen: false,
         time: new Date(notification.sentTime),
         data: notification?.data?.type == 'message' ?
@@ -16,22 +16,27 @@ export const notificationFormater = (notification) => {
                 conversation_id: notification?.data?.conversation_id,
                 sender_id: sender?.id,
                 sender_name: sender?.full_name,
-                sender_avatar: sender?.avatar,
             } :
             notification?.data?.type == 'buy_property' ?
                 {
-                    property_id:notification?.data?.property_id,
-                    property_image:notification?.data?.property_image,
+                    property_id: notification?.data?.property_id,
                 } :
-                {
-                    property_id:notification?.data?.property_id,
-                    property_owner_image:notification?.data?.property_owner_image,
-                }
+                notification?.data?.type == 'sell_property' ?
+                    {
+                        property_id: notification?.data?.property_id,
+                        property_owner_id: notification?.data?.sender_id,
+                        property_owner_name: notification?.notification?.title,
+                    } :
+                    {}
     }
 }
 export const navigateFromNotifi = (notification) => {
-    // console.log('notification in utitility', JSON.stringify(notification, null, 2));
+    console.log('notification in utitility', JSON.stringify(notification, null, 2));
     if (notification?.type == 'message') {
-        Linking.openURL(`housibly://PersonChat/${notification?.data?.conversation_id}/${notification?.data?.sender_id}/${notification.data.sender_avatar ? encodeURIComponent(notification?.data?.sender_avatar) : 'avatar'}/${notification?.data?.sender_name}`)
+        Linking.openURL(`housibly://PersonChat/${notification?.data?.sender_id}/${notification.image ? encodeURIComponent(notification?.image) : 'avatar'}/${notification?.data?.sender_name}/message_notification/${notification?.data?.conversation_id}`)
+    } else if (notification?.type == 'buy_property') {
+        Linking.openURL(`housibly://PropertyDetail/${notification?.data?.property_id}`)
+    } else if (notification?.type == 'sell_property') {
+        Linking.openURL(`housibly://PersonChat/${notification?.data?.property_owner_id}/${notification.image ? encodeURIComponent(notification?.image) : 'avatar'}/${notification?.data?.property_owner_name}/not_chats`)
     }
 }

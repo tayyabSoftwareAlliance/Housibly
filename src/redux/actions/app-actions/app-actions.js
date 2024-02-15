@@ -96,3 +96,10 @@ export const get_top_support_closers = () => {
     type: TYPES.GET_TOP_SUPPORT_CLOSERS_REQUEST,
   };
 };
+
+export const set_conversation_opened_id = (id) => {
+  return {
+    type: TYPES.SET_CONVERSATION_OPENED_ID,
+    payload:{id}
+  };
+};

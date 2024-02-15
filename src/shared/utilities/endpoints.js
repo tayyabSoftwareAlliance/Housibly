@@ -52,7 +52,8 @@ const ENDPOINTS = {
   READ_MESSAGES: 'conversations/read_messages',
 
   //notification
-  GET_ALL_NOTIFICATIONS: 'messages/get_notification',
+  GET_ALL_NOTIFICATIONS: 'get_user_notifications',
+  NOTIFICATION_SEEN: 'mark_as_read',
 
   //support closer
   SEARCH_SUPPORT_CLOSER:'search_support_closers',

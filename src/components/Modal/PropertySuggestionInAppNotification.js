@@ -48,7 +48,7 @@ const PropertySuggestionInAppNotification = () => {
         </TouchableOpacity>
         <Image
           // resizeMode="contain"
-          source={{ uri: notification?.type == 'buy_property' ? notification?.data?.property_image : notification?.data?.property_owner_image }}
+          source={{ uri: notification?.image }}
           style={styles.imgStyle}
         />
         <Text style={styles.nameTxtStyle}>{notification?.title || 'N/A'}</Text>
@@ -61,7 +61,7 @@ const PropertySuggestionInAppNotification = () => {
             navigateFromNotifi(notification)
           }}
         >
-          <Text style={styles.btnTxtStyle}>View Detail</Text>
+          <Text style={styles.btnTxtStyle}>{notification?.type == 'sell_property' ? 'Contact Person' : 'View Detail'}</Text>
         </TouchableOpacity>
       </Animated.View>
     </Pressable>

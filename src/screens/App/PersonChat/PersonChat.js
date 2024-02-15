@@ -35,6 +35,7 @@ import useChannel from '../../../shared/utilities/useChannel';
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 import { Menu, MenuItem } from 'react-native-material-menu';
 import { read_chat_messages } from '../../../redux/actions/chat-actions/chat-actions';
+import { set_conversation_opened_id } from '../../../redux/actions/app-actions/app-actions';
 
 const OptionsMenu = ({ isVisible, onPressHide, onPressBlock }) => {
   return (
@@ -157,6 +158,7 @@ const PersonChat = ({ navigation, route }) => {
   }
 
   const firstCall = async () => {
+    dispatch(set_conversation_opened_id())
     if (params?.from == 'not_chats' && !conversationId) {
       await checkIsConversationCreated()
     } else {
@@ -168,6 +170,11 @@ const PersonChat = ({ navigation, route }) => {
   useEffect(() => {
     isFocused && firstCall()
   }, [isFocused, useEffectRecallFlag])
+
+  useEffect(() => {
+    dispatch(set_conversation_opened_id(conversationId))
+    return () => dispatch(set_conversation_opened_id(-1))
+  }, [conversationId])
 
   const createConversation = async () => {
     setCreateConversationLoader(true)
@@ -325,7 +332,6 @@ const PersonChat = ({ navigation, route }) => {
             return (
               <View style={styles.personView}>
                 <Image
-                  resizeMode="contain"
                   source={{ uri: avatar }}
                   style={styles.personImgStyle}
                 />

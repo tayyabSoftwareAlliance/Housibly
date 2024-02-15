@@ -11,7 +11,8 @@ const initialState = {
   all_properties: [],
   my_preference: { property_type: 'house', currency_type: currency_list[0] },
   matched_properties: { lastPage: 0, data: [] },
-  top_support_closers: []
+  top_support_closers: [],
+  conversation_opened_id: -1,
 };
 
 const appReducers = (state = initialState, actions) => {
@@ -180,6 +181,14 @@ const appReducers = (state = initialState, actions) => {
         ...state,
         loading: false,
       };
+
+
+    case TYPES.SET_CONVERSATION_OPENED_ID:
+      return {
+        ...state,
+        conversation_opened_id: payload?.id,
+      };
+
 
     default:
       return state;

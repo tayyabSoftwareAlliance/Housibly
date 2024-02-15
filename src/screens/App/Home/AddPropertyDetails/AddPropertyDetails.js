@@ -112,10 +112,11 @@ const AddPropertyDetails = ({ navigation, route }) => {
 
   const [data, setData] = useState(
     JSON.parse(JSON.stringify(
-      from == 'edit' ?
+      (from == 'edit' ?
         propertyData :
-        saved_create_property_data
-    )) || INITIAL_DATA
+        saved_create_property_data)
+      || INITIAL_DATA
+    ))
   )
   const isFocused = useIsFocused()
 

@@ -10,6 +10,8 @@ import { AppLoader } from '../../../components';
 import moment from 'moment';
 import { navigateFromNotifi } from '../../../shared/utilities/notifications';
 import { showNotification } from '../../../components/Modal/PropertySuggestionInAppNotification';
+import { seen_notification } from '../../../redux/actions/notification-actions/notification-actions';
+import { app } from '../../../shared/api';
 
 const AllNotificationsData = [
   {
@@ -28,19 +30,14 @@ const AllNotificationsData = [
   }
 ]
 
-const renderItem = (item, index, navigation) => {
+const renderItem = (item, index, onPress) => {
   return (
     <TouchableOpacity
       activeOpacity={1}
       style={styles.itemContainer}
-      onPress={() => {
-        if (item.type == 'buy_property' || item.type == 'sell_property') {
-          showNotification(item)
-        } else
-          navigateFromNotifi()
-      }}>
+      onPress={() => onPress(item)}>
       <Image
-        source={{ uri: item.data?.sender_avatar }}
+        source={{ uri: item.image }}
         style={styles.imgStyle}
       />
       <View>
@@ -55,13 +52,38 @@ const renderItem = (item, index, navigation) => {
 const Notifications = () => {
 
   const navigation = useNavigation()
+  const dispatch = useDispatch()
   const { loading, all_notifications } = useSelector(state => state?.notification);
+
+  const notificationSeen = (id) => {
+    dispatch(seen_notification(id))
+    const formData = new FormData()
+    formData.append('id', id)
+    app.notificationSeen(formData)
+      .then((res) => {
+        console.log('Seen notification success', res);
+      })
+      .catch((error) => {
+        console.log('Seen notification error', error);
+      })
+  }
+
+  const onNotificationPress = (item) => {
+    notificationSeen(item.id)
+    {
+      if (item.type == 'buy_property' || item.type == 'sell_property') {
+        console.log('iteeeeeeeemm', item)
+        showNotification(item)
+      } else
+        navigateFromNotifi(item)
+    }
+  }
 
   return (
     <>
       <FlatList
         data={all_notifications}
-        renderItem={({ item, index }) => renderItem(item, index, navigation)}
+        renderItem={({ item, index }) => renderItem(item, index, onNotificationPress)}
         keyExtractor={(item, index) => index}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingTop: WP(3) }}

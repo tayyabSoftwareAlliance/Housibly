@@ -48,7 +48,7 @@ const Login = ({ navigation }) => {
     GoogleSignin.signOut();
   }, []);
 
-  const handleSocialLogin = (provider, token) => {
+  const handleSocialLogin = async (provider, token) => {
     const socialLoginSuccess = async res => {
       setIsLoading(false);
       setTimeout(() => {
@@ -60,9 +60,12 @@ const Login = ({ navigation }) => {
       Alert.alert('Error', err);
       setIsLoading(false);
     };
+    const fcmToken = await messaging().getToken();
+    console.log('tokennnnnn', fcmToken)
     const form = new FormData();
     form.append('provider', provider);
     form.append('token', token);
+    form.append('user[mobile_devices_attributes][][mobile_device_token]', fcmToken);
     dispatch(socialLoginRequest(form, socialLoginSuccess, socialLoginFailure));
   };
 

@@ -11,14 +11,15 @@ export const get_all_notifications = () => {
 export const add_notification = (notification) => {
   return {
     type: TYPES.ADD_NOTIFICATION,
-    payload:{notification}
+    payload: { notification }
   };
 };
 
 // Notification seen
-export const seen_notification = () => {
+export const seen_notification = (id) => {
   return {
     type: TYPES.NOTIFICATION_SEEN,
+    payload: { id }
   };
 };
 

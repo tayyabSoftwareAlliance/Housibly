@@ -28,7 +28,6 @@ export const ChatHeader = ({ onPressIcon, avatar, name,rightIcon }) => {
           />
         </TouchableOpacity>
         <Image
-          resizeMode="contain"
           source={{ uri: avatar }}
           style={styles.personImgStyle}
         />
