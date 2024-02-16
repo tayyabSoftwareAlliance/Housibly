@@ -63,6 +63,7 @@ function* readChatMessages(action) {
     const formData = new FormData()
     formData.append('conversation_id', action.payload.id)
     const res = yield app.readMessages(formData);
+    console.log('ressss',res?.data)
     if (res?.status == 200) {
       yield put({
         type: types.READ_CHAT_MESSAGES_SUCCESS,

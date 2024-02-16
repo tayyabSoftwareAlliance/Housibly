@@ -52,6 +52,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Housibly wants to access your location to show this on map</string>
+	<key>NSCameraUsageDescription</key>
+  	<string>Housibly wants to access your camera to capture photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+  	<string>Housibly wants to access your photo library to pick photos</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  	<string>Housibly wants to access your location to show your current location on map</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

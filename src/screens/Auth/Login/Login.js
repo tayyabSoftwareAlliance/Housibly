@@ -61,7 +61,8 @@ const Login = ({ navigation }) => {
       setIsLoading(false);
     };
     const fcmToken = await messaging().getToken();
-    console.log('tokennnnnn', fcmToken)
+    console.log('tokennnnnn', token)
+    console.log('fcmToken', fcmToken)
     const form = new FormData();
     form.append('provider', provider);
     form.append('token', token);
