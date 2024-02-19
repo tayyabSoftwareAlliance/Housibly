@@ -18,9 +18,7 @@ const Settings = ({ navigation }) => {
   const logout = async () => {
     const formData = new FormData()
     formData.append('mobile_device_token', userInfo?.user?.mobile_device_token)
-    const res = await auth.logoutUser(formData);
-    console.log('Signout resssss', res.status)
-    console.log('Signout resssss', res.data)
+    auth.logoutUser(formData);
     dispatch(
       logoutRequset(null, () => {
         GoogleSignin.signOut();
