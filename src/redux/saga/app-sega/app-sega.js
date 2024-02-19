@@ -69,6 +69,7 @@ function* getMyProp() {
       });
     }
   } catch (error) {
+    console.log('get my properties error ',error)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {

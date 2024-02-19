@@ -103,3 +103,10 @@ export const set_conversation_opened_id = (id) => {
     payload:{id}
   };
 };
+
+export const set_in_app_notification_to_show = (notification) => {
+  return {
+    type: TYPES.SET_IN_APP_NOTIFICATION_TO_SHOW,
+    payload:{notification}
+  };
+};

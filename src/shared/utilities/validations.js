@@ -33,6 +33,8 @@ export const loginFormFields = {
   // password: '12345678',
   email: '',
   password: '',
+  // email: 'ibrahim.mir61+9@gmail.com',
+  // password: 'qwertyuiop',
 };
 
 export const forgotFormFields = {

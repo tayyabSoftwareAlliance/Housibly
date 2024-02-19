@@ -10,6 +10,8 @@ export function* loginRequest() {
 function* login(params) {
   try {
     const res = yield auth.login(params?.params);
+    console.log('ressssss',res.status)
+    console.log('ressssss',res.data)
     if (res?.status == 200) {
       yield put({
         type: types.LOGIN_REQUEST_SUCCESS,
@@ -19,7 +21,7 @@ function* login(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log(error);
+    console.log('login error ',error);
     yield put({
       type: types.LOGIN_REQUEST_FAILURE,
       payload: null,

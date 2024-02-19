@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   },
   txtContainer: {
     paddingHorizontal: WP('4'),
+    width: WP('60'),
   },
   itemNameStyle: {
     color: colors.white,
@@ -94,7 +95,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: size.tiny,
     fontFamily: family.Gilroy_Medium,
-    textTransform:'capitalize'
+    textTransform:'capitalize',
+
   },
   iconContainer: {
     right: 5,

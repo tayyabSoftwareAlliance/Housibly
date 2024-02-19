@@ -52,14 +52,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { add_notification, seen_notification } from '../redux/actions/notification-actions/notification-actions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HP } from '../shared/exporter';
-import { showNotification } from '../components/Modal/PropertySuggestionInAppNotification';
+import { set_in_app_notification_to_show } from '../redux/actions/app-actions/app-actions';
 
 const AppStack = createNativeStackNavigator();
 
 const MainAppNav = () => {
 
   const { userInfo } = useSelector(state => state?.auth);
-  const { conversation_opened_id } = useSelector(state => state?.appReducer)
+  const { conversation_opened_id,showed_in_app_notification } = useSelector(state => state?.appReducer)
   const dispatch = useDispatch()
   const { top } = useSafeAreaInsets()
 
@@ -73,7 +73,7 @@ const MainAppNav = () => {
     console.log('notificationnnnnnn', JSON.stringify(notification, null, 2))
     addToRedux(notification)
     if (notification.type == 'buy_property' || notification.type == 'sell_property') {
-      showNotification(notification)
+      !showed_in_app_notification && dispatch(set_in_app_notification_to_show(notification))
     } else {
       if (notification.type == 'message' && notification.data?.conversation_id == conversation_opened_id) return
       Toast.show({
@@ -148,7 +148,7 @@ const MainAppNav = () => {
       unsubscribe && unsubscribe()
       appStateListener && appStateListener.remove()
     }
-  }, [conversation_opened_id])
+  }, [conversation_opened_id,showed_in_app_notification])
 
   return (
     <NavigationContainer linking={linking}>

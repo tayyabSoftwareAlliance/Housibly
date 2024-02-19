@@ -27,13 +27,13 @@ GoogleSignin.configure({
 
 const App = () => {
 
-  useEffect(async () => {
-    const token = await messaging().getToken();
-    // // Clipboard.setString(token);
-    console.log('FCM Token: '+Platform.OS, token)
-    // unsubscribe = messaging().onMessage((remoteMessage) => console.log('remoteeee',JSON.stringify(remoteMessage,null,2)))
-    // return() => unsubscribe()
-  }, [])
+  // useEffect(async () => {
+  //   const token = await messaging().getToken();
+  //   // // Clipboard.setString(token);
+  //   console.log('FCM Token: '+Platform.OS, token)
+  //   // unsubscribe = messaging().onMessage((remoteMessage) => console.log('remoteeee',JSON.stringify(remoteMessage,null,2)))
+  //   // return() => unsubscribe()
+  // }, [])
 
   return (
     <>

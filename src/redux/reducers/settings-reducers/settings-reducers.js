@@ -21,7 +21,7 @@ const settingsReducers = (state = initialState, actions) => {
         loading: false,
         isSuccess: true,
         isFailure: false,
-        userProfile: payload,
+        userProfile: state.userProfile ? { ...state.userProfile, user: payload } : { user: payload },
       };
     case TYPES.GET_PROFILE_FAILURE:
       return {

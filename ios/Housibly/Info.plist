@@ -50,14 +50,14 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Housibly wants to access your camera to capture photo</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Housibly wants to access your location to show your current location on map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Housibly wants to access your location to show this on map</string>
-	<key>NSCameraUsageDescription</key>
-  	<string>Housibly wants to access your camera to capture photo</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-  	<string>Housibly wants to access your photo library to pick photos</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  	<string>Housibly wants to access your location to show your current location on map</string>
+	<string>Housibly wants to access your photo library to pick photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -105,8 +105,12 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

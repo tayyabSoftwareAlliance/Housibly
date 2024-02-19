@@ -56,7 +56,7 @@ const Home = ({ navigation }) => {
   const { userInfo } = useSelector(state => state?.auth);
   const { userProfile } = useSelector(state => state?.settings);
   const { my_preference, top_support_closers } = useSelector(state => state?.appReducer)
-
+  
   const hideItemClick = () => {
     setShowMenu(false);
   };
@@ -76,9 +76,9 @@ const Home = ({ navigation }) => {
         <View style={styles.itemInnerRow}>
           <Image source={{ uri: item?.avatar }} style={styles.personImgStyle} />
           <View style={styles.txtContainer}>
-            <Text style={styles.itemNameStyle}>{item?.full_name || 'N/A'}</Text>
+            <Text numberOfLines={1} style={styles.itemNameStyle}>{item?.full_name || 'N/A'}</Text>
             {/* <Text style={styles.h1TxtStyle}>Corporate Home X</Text> */}
-            <Text style={styles.h2TxtStyle}>{item?.professions?.map(item => item?.title)?.join(', ') || 'N/A'}</Text>
+            <Text numberOfLines={1} style={styles.h2TxtStyle}>{item?.professions?.map(item => item?.title)?.join(', ') || 'N/A'}</Text>
           </View>
         </View>
         <View>

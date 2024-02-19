@@ -26,7 +26,7 @@ export const auth = {
   resendOTP: data => requests.post(ENDPOINTS.RESEND_OTP, data),
   addInfo: data => requests.post(ENDPOINTS.INFO_CONST, data),
   resetPassword: (type, data) => requests.post(`${ENDPOINTS.RESET_PASS}/${type}`, data),
-  logoutUser: () => requests.post(ENDPOINTS.LOGOUT),
+  logoutUser: (data) => requests.post(ENDPOINTS.LOGOUT,data),
 };
 
 export const setting = {

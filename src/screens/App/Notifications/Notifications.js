@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppLoader } from '../../../components';
 import moment from 'moment';
 import { navigateFromNotifi } from '../../../shared/utilities/notifications';
-import { showNotification } from '../../../components/Modal/PropertySuggestionInAppNotification';
 import { seen_notification } from '../../../redux/actions/notification-actions/notification-actions';
 import { app } from '../../../shared/api';
+import { set_in_app_notification_to_show } from '../../../redux/actions/app-actions/app-actions';
 
 const renderItem = (item, index, onPress) => {
   return (
@@ -56,7 +56,7 @@ const Notifications = () => {
     notificationSeen(item.id)
     {
       if (item.type == 'buy_property' || item.type == 'sell_property') {
-        showNotification(item)
+        dispatch(set_in_app_notification_to_show(item))
       } else
         navigateFromNotifi(item)
     }

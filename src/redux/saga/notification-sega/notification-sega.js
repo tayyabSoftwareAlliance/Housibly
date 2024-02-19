@@ -40,8 +40,9 @@ function* getAllNotifications() {
       });
     }
   } catch (error) {
+    console.log('Get notifications error ',error?.response)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
-    Alert.alert('Error', msg || 'Something went wrong!');
+    // Alert.alert('Error', msg || 'Something went wrong!');
   } finally {
     yield put({
       type: types.GET_ALL_NOTIFICATIONS_FINALLY

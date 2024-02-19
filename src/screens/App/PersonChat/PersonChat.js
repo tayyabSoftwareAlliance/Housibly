@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
+import React, { useRef, useState, useLayoutEffect, useEffect, useMemo } from 'react';
 import {
   Text,
   View,
@@ -96,9 +96,10 @@ const renderItem = (item, index, userId) => {
 const PersonChat = ({ navigation, route }) => {
 
   const params = route.params
+  console.log('paramssssss',params)
   const dispatch = useDispatch()
   const [conversationId, setConversationId] = useState(params?.conversation_id);
-  const [avatar, _] = useState(decodeURIComponent(params.avatar));
+  const [avatar, setAvatar] = useState(decodeURIComponent(params?.avatar));
   const [isBlocked, setIsBlocked] = useState(params?.is_blocked);
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
@@ -187,7 +188,7 @@ const PersonChat = ({ navigation, route }) => {
 
   useEffect(() => {
     isFocused && firstCall()
-  }, [isFocused, useEffectRecallFlag])
+  }, [isFocused, useEffectRecallFlag, params])
 
   useEffect(() => {
     dispatch(set_conversation_opened_id(conversationId))
@@ -294,6 +295,9 @@ const PersonChat = ({ navigation, route }) => {
   }
 
   useEffect(() => {
+  setConversationId(params?.conversation_id)
+  setAvatar(decodeURIComponent(params?.avatar))
+    setAllMessages([])
     createChannel({
       connected: () => {
         console.log('connected')
@@ -320,7 +324,11 @@ const PersonChat = ({ navigation, route }) => {
       }
     })
     return removeChannel
-  }, [])
+  }, [params])
+
+  const showName = useMemo(() => {
+    return params?.full_name?.replace(/%20/g, ' ') || 'N/A'
+  }, [params])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -328,7 +336,7 @@ const PersonChat = ({ navigation, route }) => {
         onPressIcon={() => setOptionsModal(true)}
         rightIcon={!isBlocked}
         avatar={avatar}
-        name={params?.full_name}
+        name={showName}
       />
       {!isBlocked &&
         <OptionsMenu
@@ -353,7 +361,7 @@ const PersonChat = ({ navigation, route }) => {
                   source={{ uri: avatar }}
                   style={styles.personImgStyle}
                 />
-                <Text style={styles.nameTxtStyle}>{params?.full_name}</Text>
+                <Text style={styles.nameTxtStyle}>{showName}</Text>
               </View>
             );
           }}

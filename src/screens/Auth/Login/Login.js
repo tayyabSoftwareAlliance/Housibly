@@ -51,9 +51,18 @@ const Login = ({ navigation }) => {
   const handleSocialLogin = async (provider, token) => {
     const socialLoginSuccess = async res => {
       setIsLoading(false);
+      console.log('ressssssss', JSON.stringify(res, null, 2))
       setTimeout(() => {
-        navigation?.replace('App');
-      }, 500);
+        if (res?.user?.is_confirmed) {
+          navigation?.replace('App');
+        } else {
+          if (res?.user?.profile_type == 'support_closer') {
+            navigation?.replace('AddSupportInfo');
+          } else {
+            navigation?.replace('AddPersonalInfo');
+          }
+        }
+      }, 1000);
     };
     const socialLoginFailure = async err => {
       console.log('Err is ==> ', err);
@@ -72,10 +81,11 @@ const Login = ({ navigation }) => {
 
   const handleGoogleLogin = async () => {
     try {
+      setIsLoading(true);
+      await new Promise(res => setTimeout(res, 500))
       // Get the users ID token
       const { idToken } = await GoogleSignin.signIn();
       if (idToken) {
-        setIsLoading(true);
         handleSocialLogin('google', idToken);
       } else {
         setIsLoading(false);
@@ -94,24 +104,35 @@ const Login = ({ navigation }) => {
     }
   };
   const handleAppleLogin = async () => {
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      // Note: it appears putting FULL_NAME first is important, see issue #293
-      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-    });
+    try {
+      setIsLoading(true);
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        // Note: it appears putting FULL_NAME first is important, see issue #293
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+      });
 
-    console.log('appleAuthRequestResponse', appleAuthRequestResponse);
-
-    // get current authentication state for user
-    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    const credentialState = await appleAuth.getCredentialStateForUser(
-      appleAuthRequestResponse.user,
-    );
-
-    // use credentialState response to ensure the user is authenticated
-    if (credentialState === appleAuth.State.AUTHORIZED) {
-      // user is authenticated
+      console.log('appleAuthRequestResponse', appleAuthRequestResponse?.identityToken);
+      if (appleAuthRequestResponse?.identityToken) {
+        handleSocialLogin('apple', appleAuthRequestResponse.identityToken)
+      } else {
+        Alert.alert('Error', 'Something went wrong!');
+      }
+    } catch (error) {
+      console.log('Apple login error ', error)
+      Alert.alert('Error', 'Something went wrong!');
     }
+
+    // // get current authentication state for user
+    // // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    // const credentialState = await appleAuth.getCredentialStateForUser(
+    //   appleAuthRequestResponse.user,
+    // );
+
+    // // use credentialState response to ensure the user is authenticated
+    // if (credentialState === appleAuth.State.AUTHORIZED) {
+    //   // user is authenticated
+    // }
   };
 
   const onSubmit = async values => {
@@ -126,10 +147,9 @@ const Login = ({ navigation }) => {
       form.append('user[mobile_devices_attributes][][mobile_device_token]', token);
       const loginSuccess = async res => {
         setIsLoading(false);
+        await new Promise(res => setTimeout(res, 1000))
         if (res?.user?.is_confirmed && res?.user?.is_otp_verified) {
-          setTimeout(() => {
-            navigation?.replace('App');
-          }, 500);
+          navigation?.replace('App');
         } else {
           if (res?.user?.is_otp_verified) {
             if (res?.user?.profile_type == 'support_closer') {

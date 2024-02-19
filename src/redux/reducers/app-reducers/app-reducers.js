@@ -13,6 +13,7 @@ const initialState = {
   matched_properties: { lastPage: 0, data: [] },
   top_support_closers: [],
   conversation_opened_id: -1,
+  showed_in_app_notification: null,
 };
 
 const appReducers = (state = initialState, actions) => {
@@ -182,13 +183,17 @@ const appReducers = (state = initialState, actions) => {
         loading: false,
       };
 
-
     case TYPES.SET_CONVERSATION_OPENED_ID:
       return {
         ...state,
         conversation_opened_id: payload?.id,
       };
 
+    case TYPES.SET_IN_APP_NOTIFICATION_TO_SHOW:
+      return {
+        ...state,
+        showed_in_app_notification: payload?.notification
+      }
 
     default:
       return state;

@@ -3,17 +3,24 @@ import { SafeAreaView, Text, View, Image, TouchableOpacity, StatusBar } from 're
 import { AppButton, AppHeader, BackHeader, Spacer } from '../../../../components';
 import { colors, settings, WP } from '../../../../shared/exporter';
 import styles from './styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import { logoutRequset } from '../../../../redux/actions';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/routers';
+import { auth } from '../../../../shared/api';
 
 const Settings = ({ navigation }) => {
   const dispatch = useDispatch(null);
+  const { userInfo } = useSelector(state => state?.auth);
 
   const logout = async () => {
+    const formData = new FormData()
+    formData.append('mobile_device_token', userInfo?.user?.mobile_device_token)
+    const res = await auth.logoutUser(formData);
+    console.log('Signout resssss', res.status)
+    console.log('Signout resssss', res.data)
     dispatch(
       logoutRequset(null, () => {
         GoogleSignin.signOut();

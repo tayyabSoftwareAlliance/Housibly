@@ -12,34 +12,22 @@ import {
 } from '../../shared/exporter';
 import { navigateFromNotifi } from '../../shared/utilities/notifications';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-
-let showNotification = () => { }, hideNotification = () => { }
+import { useDispatch, useSelector } from 'react-redux'
+import { set_in_app_notification_to_show } from '../../redux/actions/app-actions/app-actions';
 
 const PropertySuggestionInAppNotification = () => {
 
-  const [show, setShow] = useState(false)
-  const [notification, setNotification] = useState(null)
+  const { showed_in_app_notification } = useSelector(state => state?.appReducer)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    showNotification = (notification) => {
-      if (show) return
-      setNotification(notification)
-      setShow(true)
-    }
-    hideNotification = () => {
-      setShow(false)
-      setNotification(null)
-    }
-  }, [])
-
-  return show && (
+  return showed_in_app_notification && (
     // <Modal onBackdropPress={onPressHide} isVisible={show}>
     <Pressable style={styles.container} >
       <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.modalContainer}>
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.crossIconView}
-          onPress={hideNotification}>
+          onPress={() => dispatch(set_in_app_notification_to_show(null))}>
           <Image
             resizeMode="contain"
             source={appIcons.crossIcon}
@@ -48,29 +36,29 @@ const PropertySuggestionInAppNotification = () => {
         </TouchableOpacity>
         <Image
           // resizeMode="contain"
-          source={{ uri: notification?.image }}
+          source={{ uri: showed_in_app_notification?.image }}
           style={styles.imgStyle}
         />
-        <Text style={styles.nameTxtStyle}>{notification?.title || 'N/A'}</Text>
-        <Text style={styles.skillTxtStyle}>{capitalizeFirstLetter(notification?.body) || 'N/A'}</Text>
+        <Text style={styles.nameTxtStyle}>{showed_in_app_notification?.title || 'N/A'}</Text>
+        <Text style={styles.skillTxtStyle}>{capitalizeFirstLetter(showed_in_app_notification?.body) || 'N/A'}</Text>
         <View style={styles.buttonsContainerStyle}>
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.buttonStyle}
             onPress={() => {
-              hideNotification()
-              Linking.openURL(`housibly://PropertyDetail/${notification?.data?.property_id}`)
+              dispatch(set_in_app_notification_to_show(null))
+              Linking.openURL(`housibly://PropertyDetail/${showed_in_app_notification?.data?.property_id}`)
             }}
           >
-            <Text style={styles.btnTxtStyle}>{notification?.type == 'sell_property' ? 'View Property' : 'View Detail'}</Text>
+            <Text style={styles.btnTxtStyle}>{showed_in_app_notification?.type == 'sell_property' ? 'View Property' : 'View Detail'}</Text>
           </TouchableOpacity>
-          {notification?.type == 'sell_property' &&
+          {showed_in_app_notification?.type == 'sell_property' &&
             <TouchableOpacity
               activeOpacity={0.7}
               style={[styles.buttonStyle, { marginLeft: WP(3) }]}
               onPress={() => {
-                hideNotification()
-                navigateFromNotifi(notification)
+                dispatch(set_in_app_notification_to_show(null))
+                navigateFromNotifi(showed_in_app_notification)
               }}
             >
               <Text style={styles.btnTxtStyle}>Contact Person</Text>
@@ -84,7 +72,6 @@ const PropertySuggestionInAppNotification = () => {
 };
 
 export default PropertySuggestionInAppNotification
-export { showNotification, hideNotification }
 
 const styles = StyleSheet.create({
   container: {
