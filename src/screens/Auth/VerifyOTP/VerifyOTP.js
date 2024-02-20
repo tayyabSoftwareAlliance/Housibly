@@ -1,7 +1,7 @@
-import React, {useRef, useState} from 'react';
-import {View, Text, TouchableOpacity, Alert, SafeAreaView, StatusBar} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {AppButton, AppHeader, AppLoader, BackHeader} from '../../../components';
+import React, { useRef, useState } from 'react';
+import { View, Text, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { AppButton, AppHeader, AppLoader, BackHeader } from '../../../components';
 import {
   checkConnected,
   codeFormFields,
@@ -18,11 +18,11 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import CountDown from 'react-native-countdown-component';
-import {Formik} from 'formik';
-import {resendOTPRequest, verifyOTPRequest} from '../../../redux/actions';
-import {useDispatch, useSelector} from 'react-redux';
+import { Formik } from 'formik';
+import { resendOTPRequest, verifyOTPRequest } from '../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
-const VerifyOTP = ({navigation, route}) => {
+const VerifyOTP = ({ navigation, route }) => {
   const [value, setValue] = useState('');
   const [codeFieldProps, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -46,25 +46,26 @@ const VerifyOTP = ({navigation, route}) => {
       form.append('otp', values?.code);
 
       const otpSuccess = async res => {
+        setLoading(false);
+        await new Promise(res => setTimeout(res, 1000))
         if (route?.params?.registeration) {
           if (route?.params?.profileType === 'support_closer') {
-            navigation?.replace('AddSupportInfo');
+            navigation?.replace('AddSupportInfo', { profile_complete: true });
           } else {
-            navigation?.replace('AddPersonalInfo');
+            navigation?.replace('AddPersonalInfo', { profile_complete: true });
           }
         } else {
           navigation?.replace(
             'ResetPassword',
             route?.params?.email
               ? {
-                  email: route?.params?.email,
-                }
+                email: route?.params?.email,
+              }
               : {
-                  phone: route?.params?.phone,
-                },
+                phone: route?.params?.phone,
+              },
           );
         }
-        setLoading(false);
       };
 
       const otpFailure = async res => {
@@ -150,7 +151,7 @@ const VerifyOTP = ({navigation, route}) => {
                   autoCapitalize="none"
                   onSubmitEditing={handleSubmit}
                   keyboardType="number-pad"
-                  renderCell={({index, symbol, isFocused}) => (
+                  renderCell={({ index, symbol, isFocused }) => (
                     <View
                       key={index}
                       style={[
@@ -170,9 +171,8 @@ const VerifyOTP = ({navigation, route}) => {
                   <Text style={styles.errorStyle}>{errors.code}</Text>
                 )}
                 <Text style={styles.paraTextStyle}>
-                  {`Please enter your verification code sent to your ${
-                    route?.params?.email ? 'email account' : 'phone number'
-                  }`}
+                  {`Please enter your verification code sent to your ${route?.params?.email ? 'email account' : 'phone number'
+                    }`}
                 </Text>
               </View>
               <View style={styles.btnCon}>
@@ -211,7 +211,7 @@ const VerifyOTP = ({navigation, route}) => {
                         onFinish={() => {
                           setResendCode(false);
                         }}
-                        timeLabels={{m: null, s: null}}
+                        timeLabels={{ m: null, s: null }}
                       />
                       <Text
                         style={[

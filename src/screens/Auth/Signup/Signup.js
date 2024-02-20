@@ -69,12 +69,14 @@ const Signup = ({ navigation, route }) => {
         data.append('user[mobile_devices_attributes][][mobile_device_token]', token);
         console.log('data', data)
         const signUpSuccess = async res => {
-          navigation?.replace('VerifyOTP', {
-            registeration: true,
-            email: values?.email,
-            profileType
-          });
           setIsLoading(false);
+          setTimeout(() => {
+            navigation?.replace('VerifyOTP', {
+              registeration: true,
+              email: values?.email,
+              profileType
+            });
+          }, 1000)
         };
         const signUpFailure = async res => {
           Alert.alert('Error', res);

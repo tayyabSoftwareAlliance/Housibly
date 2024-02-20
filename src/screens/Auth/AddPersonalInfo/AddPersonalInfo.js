@@ -33,11 +33,13 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { addInfoRequest } from '../../../redux/actions';
 
-const AddPersonalInfo = ({ navigation }) => {
+const AddPersonalInfo = ({ navigation, route }) => {
+  const { params } = route
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userInfo } = useSelector(state => state?.auth);
   const dispatch = useDispatch(null);
+  console.log('paramssss', JSON.stringify(params, null, 2))
   const onSubmit = async values => {
     const check = await checkConnected();
     if (check) {
@@ -50,7 +52,15 @@ const AddPersonalInfo = ({ navigation }) => {
       const form = new FormData();
       form.append('user[description]', values?.desc);
       form.append('user[avatar]', imgObj);
+      if (!params?.profile_complete) {
+        form.append('user[licensed_realtor]', params?.item?.licensed || 'No');
+        form.append('user[contacted_by_real_estate]', params?.item?.contacted || 'No');
+        form.append('user[user_type]',params?.item?.userType ? params.item.userType.toLowerCase() : 'neither');
+        form.append('user[profile_type]', params?.regPurpose);
+        form.append('user[phone_number]', '3000000000');
+      }
       const addInfoSuccess = async res => {
+        console.log('addInfoSuccess resss',res)
         setLoading(false);
         navigation?.navigate('AuthPrivacyPolicy');
       };

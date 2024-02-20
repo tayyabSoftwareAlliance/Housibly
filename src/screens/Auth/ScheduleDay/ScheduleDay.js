@@ -27,6 +27,7 @@ const ScheduleDay = ({ navigation }) => {
 
   //On Submit
   const onSubmit = async values => {
+    setLoading(true)
     const check = await checkConnected();
     if (check) {
       console.log(support_info?.avatar);
@@ -80,6 +81,7 @@ const ScheduleDay = ({ navigation }) => {
 
       dispatch(addInfoRequest(form, addInfoSuccess, addInfoFailure));
     } else {
+      setLoading(false)
       Alert.alert('Error', networkText);
     }
   };

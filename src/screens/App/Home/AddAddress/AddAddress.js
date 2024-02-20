@@ -13,8 +13,9 @@ import { set_address_request } from '../../../../redux/actions';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const AddAddress = ({ navigation,route }) => {
+const AddAddress = ({ navigation, route }) => {
   const { address } = useSelector(state => state?.appReducer);
+  const from = route.params?.from
   const dispatch = useDispatch(null);
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -34,8 +35,10 @@ const AddAddress = ({ navigation,route }) => {
               latitude: details?.geometry?.location?.lat,
               longitude: details?.geometry?.location?.lng,
             }
-            await AsyncStorage.setItem('address', JSON.stringify(addressObj))
-            navigation.goBack()
+            if (from == 'create_property') {
+              await AsyncStorage.setItem('address', JSON.stringify(addressObj))
+              navigation.goBack()
+            }
           }}
           query={{
             key: GOOGLE_MAP_KEY,
@@ -44,13 +47,12 @@ const AddAddress = ({ navigation,route }) => {
           styles={{
             container: {
               flex: 0,
-              // backgroundColor:'red'
+              zIndex: 1
             },
             listView: {
               position: 'absolute',
               left: 0,
               top: 50,
-              zIndex: 1,
               backgroundColor: colors.white,
               elevation: 5,
               shadowOffset: { width: 1, height: 1 },
@@ -59,23 +61,27 @@ const AddAddress = ({ navigation,route }) => {
             },
             textInput: {
               color: colors.b1
-            },
+            }
           }}
         />
         <Divider color={colors.g13} />
-        <Text style={styles.h1}>People who searched this address</Text>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={[1, 2, 3, 4, 5]}
-            renderItem={() => {
-              return (
-                <View>
-                  <AddressCard />
-                </View>
-              );
-            }}
-          />
-        </View>
+        {from == 'enter_address' &&
+          <>
+            <Text style={styles.h1}>People who searched this address</Text>
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={[1, 2, 3, 4, 5]}
+                renderItem={() => {
+                  return (
+                    <View>
+                      <AddressCard />
+                    </View>
+                  );
+                }}
+              />
+            </View>
+          </>
+        }
       </View>
     </SafeAreaView>
   );

@@ -241,7 +241,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
             <Divider color={colors.g18} />
             <TouchableOpacity
               onPress={() => {
-                navigation?.navigate('AddAddress');
+                navigation?.navigate('AddAddress',{from:'create_property'});
               }}
             >
               <Text

@@ -26,13 +26,15 @@ export const BackHeader = ({
         {!hideBackButton ?
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.canGoBack() && navigation.goBack()}
             style={styles.rowContainer}>
-            <Image
-              resizeMode="contain"
-              source={appIcons.backArrow}
-              style={[styles.iconStyle, { tintColor: tintColor }]}
-            />
+            {navigation.canGoBack() &&
+              <Image
+                resizeMode="contain"
+                source={appIcons.backArrow}
+                style={[styles.iconStyle, { tintColor: tintColor }]}
+              />
+            }
             {title && (
               <Text
                 style={styles.titleTxtStyle(
@@ -45,8 +47,8 @@ export const BackHeader = ({
                 {title}
               </Text>
             )}
-          </TouchableOpacity> : 
-          <View/>
+          </TouchableOpacity> :
+          <View />
         }
         <View style={styles.center}>
           {subtitle && <Text style={styles.subStyle}>{subtitle}</Text>}
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     width: WP('5'),
     height: WP('5'),
   },
-  titleTxtStyle: (isBox, isCenter, txtSize, txtFamily,txtColor) => {
+  titleTxtStyle: (isBox, isCenter, txtSize, txtFamily, txtColor) => {
     return {
       width: isBox ? '80%' : '88%',
       left: WP('3.6'),
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
       fontSize: txtSize,
       fontFamily: txtFamily,
       textAlign: isCenter ? 'center' : 'left',
-      textTransform:'capitalize'
+      textTransform: 'capitalize'
     };
   },
   center: {

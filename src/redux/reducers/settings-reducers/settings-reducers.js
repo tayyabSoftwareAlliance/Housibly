@@ -49,15 +49,6 @@ const settingsReducers = (state = initialState, actions) => {
         isFailure: true,
         userProfile: null,
       };
-    // Add Additional Info Success
-    case TYPES.ADD_ADDITIONAL_INFO_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        isSuccess: true,
-        isFailure: false,
-        userProfile: payload,
-      };
     // Add Support Info Success
     case TYPES.ADD_SUPPORT_INFO_SUCCESS:
       return {

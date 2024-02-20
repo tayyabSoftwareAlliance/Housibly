@@ -28,11 +28,11 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                     <Text numberOfLines={1} style={styles.nameTxtStyle}>
                         {item?.title}
                     </Text>
-                    {myProperty &&
+                    {/* {myProperty &&
                         <View style={styles.txtContainer}>
                             <Text style={styles.newTxtStyle}>{5}</Text>
                         </View>
-                    }
+                    } */}
                 </View>
                 <View style={styles.simpleRow}>
                     <Text style={styles.smallTxtStyle}>

@@ -53,7 +53,9 @@ const VerifyPhone = ({ navigation }) => {
           res => {
             console.log('phone forgot otp', res);
             setLoading(false);
-            navigation?.navigate('VerifyOTP', { phone: values?.contact });
+            setTimeout(() => {
+              navigation?.navigate('VerifyOTP', { phone: values?.contact });
+            }, 1000)
           },
           res => {
             Alert.alert('Error', res);

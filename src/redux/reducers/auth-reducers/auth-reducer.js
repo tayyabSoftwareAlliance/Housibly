@@ -13,7 +13,7 @@ const initialState = {
   support_info: null,
 };
 const authReducer = (state = initialState, actions) => {
-  const {type, payload} = actions;
+  const { type, payload } = actions;
   switch (type) {
     //************Login Sates*************
     case TYPES.LOGIN_REQUEST_SUCCESS:
@@ -167,6 +167,16 @@ const authReducer = (state = initialState, actions) => {
         isSuccess: false,
         isFailure: true,
         userInfo: state?.userInfo,
+      };
+
+    // Add Additional Info Success
+    case TYPES.ADD_ADDITIONAL_INFO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        isFailure: false,
+        userInfo: payload,
       };
 
     //Support Info

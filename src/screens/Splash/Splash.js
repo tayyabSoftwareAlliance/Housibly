@@ -1,22 +1,35 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect} from 'react';
-import {View, Text, Image, StatusBar} from 'react-native';
-import {useSelector} from 'react-redux';
-import {appLogos} from '../../shared/theme/assets';
+import React, { useEffect } from 'react';
+import { View, Text, Image, StatusBar } from 'react-native';
+import { useSelector } from 'react-redux';
+import { appLogos } from '../../shared/theme/assets';
 import styles from './styles';
 
-const Splash = ({navigation}) => {
-  const {userInfo} = useSelector(state => state?.auth);
+const Splash = ({ navigation }) => {
+  const { userInfo } = useSelector(state => state?.auth);
+
   useEffect(() => {
     handleAppEntry();
   }, []);
 
+  console.log('userInfo', JSON.stringify(userInfo, null, 2))
   const handleAppEntry = async () => {
     const isnotWalkthrough = await AsyncStorage.getItem('walkthrough');
     setTimeout(() => {
       if (isnotWalkthrough) {
-        if (userInfo?.user?.auth_token && userInfo?.user?.is_otp_verified) {
+        if (userInfo?.user?.auth_token && (userInfo.user.is_otp_verified || userInfo.user.login_type == "social_login") && userInfo.user.is_confirmed && userInfo.user.profile_complete) {
           navigation.replace('App');
+        } else if (userInfo?.user) {
+          if (!userInfo?.user?.profile_complete) {
+            navigation.replace('Auth', { screen: 'SignUpPurpose', params: { login_type: 'social_login' } })
+          } else if (!userInfo?.user?.is_confirmed) {
+            if (userInfo?.user?.profile_type == 'support_closer')
+              navigation.replace('Auth', { screen: 'AddSupportInfo', params: { profile_complete: true } })
+            else
+              navigation.replace('Auth', { screen: 'AddPersonalInfo', params: { profile_complete: true } })
+          } else if (!userInfo?.user?.is_otp_verified && userInfo?.user?.login_type != "social_login") {
+            navigation?.replace('Auth', { screen: 'VerifyOTP', params: { email: userInfo?.user?.email_address, registeration: true } });
+          }
         } else {
           navigation.replace('Auth');
         }

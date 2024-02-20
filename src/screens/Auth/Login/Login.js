@@ -51,18 +51,31 @@ const Login = ({ navigation }) => {
   const handleSocialLogin = async (provider, token) => {
     const socialLoginSuccess = async res => {
       setIsLoading(false);
+      await new Promise(res => setTimeout(res, 1000))
       console.log('ressssssss', JSON.stringify(res, null, 2))
-      setTimeout(() => {
-        if (res?.user?.is_confirmed) {
-          navigation?.replace('App');
-        } else {
-          if (res?.user?.profile_type == 'support_closer') {
-            navigation?.replace('AddSupportInfo');
-          } else {
-            navigation?.replace('AddPersonalInfo');
-          }
-        }
-      }, 1000);
+      // setTimeout(() => {
+      //   if (!res?.user?.profile_complete) {
+      //     navigation?.replace('SignUpPurpose', { from: 'social_login' });
+      //   } else if (res?.user?.is_confirmed) {
+      //     navigation?.replace('App');
+      //   } else {
+      //     if (res?.user?.profile_type == 'support_closer') {
+      //       navigation?.replace('AddSupportInfo');
+      //     } else {
+      //       navigation?.replace('AddPersonalInfo');
+      //     }
+      //   }
+      // }, 1000);
+      if (res?.user?.auth_token && res.user.is_confirmed && res.user.profile_complete) {
+        navigation.replace('App');
+      } else if (!res?.user?.profile_complete) {
+        navigation.replace('SignUpPurpose', { login_type: 'social_login' })
+      } else if (!res?.user?.is_confirmed) {
+        if (res?.user?.profile_type == 'support_closer')
+          navigation.replace('AddSupportInfo', { profile_complete: true })
+        else
+          navigation.replace('AddPersonalInfo', { profile_complete: true })
+      }
     };
     const socialLoginFailure = async err => {
       console.log('Err is ==> ', err);
@@ -112,14 +125,16 @@ const Login = ({ navigation }) => {
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
 
-      console.log('appleAuthRequestResponse', appleAuthRequestResponse?.identityToken);
+      console.log('appleAuthRequestResponse', appleAuthRequestResponse);
       if (appleAuthRequestResponse?.identityToken) {
         handleSocialLogin('apple', appleAuthRequestResponse.identityToken)
       } else {
-        Alert.alert('Error', 'Something went wrong!');
+        setIsLoading(false);
       }
     } catch (error) {
       console.log('Apple login error ', error)
+      setIsLoading(false);
+      if (error.code == 1001) return
       Alert.alert('Error', 'Something went wrong!');
     }
 
@@ -146,23 +161,38 @@ const Login = ({ navigation }) => {
       form.append('user[password]', values.password);
       form.append('user[mobile_devices_attributes][][mobile_device_token]', token);
       const loginSuccess = async res => {
+        console.log('ressssss', res)
         setIsLoading(false);
         await new Promise(res => setTimeout(res, 1000))
-        if (res?.user?.is_confirmed && res?.user?.is_otp_verified) {
-          navigation?.replace('App');
-        } else {
-          if (res?.user?.is_otp_verified) {
-            if (res?.user?.profile_type == 'support_closer') {
-              navigation?.replace('AddSupportInfo');
-            } else {
-              navigation?.replace('AddPersonalInfo');
-            }
-          } else {
-            navigation?.replace('VerifyOTP', {
-              email: values?.email,
-              registeration: true,
-            });
-          }
+
+        // if (res?.user?.is_confirmed && res?.user?.is_otp_verified) {
+        //   navigation?.replace('App');
+        // } else {
+        //   if (res?.user?.is_otp_verified) {
+        //     if (res?.user?.profile_type == 'support_closer') {
+        //       navigation?.replace('AddSupportInfo');
+        //     } else {
+        //       navigation?.replace('AddPersonalInfo');
+        //     }
+        //   } else {
+        //   setTimeout(() => {
+        //     navigation?.replace('VerifyOTP', {
+        //       email: values?.email,
+        //       registeration: true,
+        //     });
+        //   },1000)
+        //   }
+        // }
+
+        if (res?.user?.auth_token && (res.user.is_otp_verified || res.user.login_type == "social_login") && res.user.is_confirmed && res.user.profile_complete) {
+          navigation.replace('App');
+        } else if (!res?.user?.is_confirmed) {
+          if (res?.user?.profile_type == 'support_closer')
+            navigation.replace('AddSupportInfo', { profile_complete: true })
+          else
+            navigation.replace('AddPersonalInfo', { profile_complete: true })
+        } else if (!res?.user?.is_otp_verified && res?.user?.login_type != "social_login") {
+          navigation.replace('VerifyOTP', { email: values?.email, registeration: true });
         }
       };
       const loginFailure = async res => {

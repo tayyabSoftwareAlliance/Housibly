@@ -219,6 +219,7 @@ const Home = ({ navigation }) => {
             borderColor={colors.p2}
             shadowColor={colors.white}
             textStyle={styles.btnTxtStyle}
+            onPress={() => navigation?.navigate('AddAddress',{from:'enter_address'})}
           />
           <View style={{ width: WP('3') }} />
           <AppButton

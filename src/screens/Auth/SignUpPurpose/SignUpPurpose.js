@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,48 +9,70 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {AppButton, BackHeader, SignUpModal, Spacer} from '../../../components';
-import {appIcons, appImages, colors, WP} from '../../../shared/exporter';
+import { AppButton, BackHeader, SignUpModal, Spacer } from '../../../components';
+import { appIcons, appImages, colors, WP } from '../../../shared/exporter';
 import styles from './styles';
 
-const SignUpPurpose = ({navigation, route}) => {
+const SignUpPurpose = ({ navigation, route }) => {
+  const login_type = route.params?.login_type
   const [selected, setSelected] = useState('want_sell');
   const [show, setShow] = useState(false);
   const [showSlide, setShowSlide] = useState(0);
 
   const handleNavigation = (userType, licensed, contacted) => {
-    if (selected == 'support_closer') {
-      navigation.navigate('SignUp', {
-        regPurpose: selected,
-      });
+    if (login_type == 'social_login') {
+      if (selected == 'support_closer') {
+        navigation.navigate('AddSupportInfo', {
+          profile_complete: false,
+          regPurpose: selected,
+        });
+      } else {
+        navigation.navigate('AddPersonalInfo', {
+          profile_complete: false,
+          regPurpose: selected,
+          item: {
+            userType,
+            licensed,
+            contacted,
+          },
+        });
+      }
     } else {
-      navigation.navigate('SignUp', {
-        regPurpose: selected,
-        item: {
-          userType,
-          licensed,
-          contacted,
-        },
-      });
+      if (selected == 'support_closer') {
+        navigation.navigate('SignUp', {
+          regPurpose: selected,
+        });
+      } else {
+        navigation.navigate('SignUp', {
+          regPurpose: selected,
+          item: {
+            userType,
+            licensed,
+            contacted,
+          },
+        });
+      }
     }
     setShowSlide(0);
   };
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
+    <View style={styles.rootContainer}>
       <StatusBar backgroundColor={'transparent'} translucent={true} />
       <ImageBackground source={appImages.homeImg} style={styles.bgImgStyle}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation?.goBack();
-          }}
-          style={styles.btnCon}>
-          <Image
-            resizeMode="contain"
-            source={appIcons.backArrow}
-            style={[styles.iconStyle1]}
-          />
-        </TouchableOpacity>
+        {navigation?.canGoBack() &&
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.goBack();
+            }}
+            style={styles.btnCon}>
+            <Image
+              resizeMode="contain"
+              source={appIcons.backArrow}
+              style={[styles.iconStyle1]}
+            />
+          </TouchableOpacity>
+        }
         <Text style={styles.helloTxtStyle}>Hello, roberto</Text>
         <Text style={styles.chooseTxtStyle}>
           Choose, What do you want to do?{' '}
@@ -58,7 +80,7 @@ const SignUpPurpose = ({navigation, route}) => {
       </ImageBackground>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1}}>
+        contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.btnsContainer}>
           <AppButton
             borderRadius={32}
@@ -125,7 +147,7 @@ const SignUpPurpose = ({navigation, route}) => {
         buttonClick={() => setShowSlide(showSlide + 1)}
         valueCallBack={handleNavigation}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

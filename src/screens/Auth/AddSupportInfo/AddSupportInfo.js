@@ -37,7 +37,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addInfoRequest, setSupportClosureRequest } from '../../../redux/actions';
 import { Icon } from 'react-native-elements/dist/icons/Icon';
 
-const AddSupportInfo = ({ navigation }) => {
+const AddSupportInfo = ({ navigation, route }) => {
+
+  const { params } = route
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userInfo } = useSelector(state => state?.auth);
@@ -60,6 +62,13 @@ const AddSupportInfo = ({ navigation }) => {
           profession: filteredProfessionList,
           hourly_rate: values?.hourly_rate,
         };
+        if (!params?.profile_complete) {
+          body.licensed_realtor = 'No'
+          body.contacted_by_real_estate = 'No'
+          body.user_type = 'neither'
+          body.profile_type = params?.regPurpose
+          body.phone_number = '3000000000'
+        }
         const addInfoSuccess = async () => {
           setTimeout(() => {
             navigation?.navigate('UploadDocuments');
