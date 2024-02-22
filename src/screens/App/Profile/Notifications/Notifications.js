@@ -1,16 +1,27 @@
-import React, {useState} from 'react';
-import {SafeAreaView, Text, View, Switch, TouchableOpacity} from 'react-native';
-import {Icon} from 'react-native-elements';
-import {AppHeader, BackHeader, Spacer} from '../../../../components';
-import {colors, WP} from '../../../../shared/exporter';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, Text, View, Switch, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { AppHeader, BackHeader, Spacer } from '../../../../components';
+import { colors, WP } from '../../../../shared/exporter';
 import styles from './styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Notifications = ({navigation}) => {
-  const [isEnabled, setIsEnabled] = useState(false);
+const Notifications = ({ navigation }) => {
+  const [isEnabled, setIsEnabled] = useState(true);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     setIsEnabled(previousState => !previousState);
+    await AsyncStorage.setItem('notification_vibration', isEnabled ? 'false' : 'true')
   };
+
+  const getNotificationVibrationValue = async () => {
+    const value = await AsyncStorage.getItem('notification_vibration')
+    setIsEnabled(value == 'true' ? true : false)
+  }
+
+  useEffect(() => {
+    getNotificationVibrationValue()
+  }, [])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -42,7 +53,7 @@ const Notifications = ({navigation}) => {
         <View style={styles.rowContainer}>
           <Text style={styles.txtStyle}>Enable App Vibrations</Text>
           <Switch
-            trackColor={{false: colors.g1, true: colors.p1}}
+            trackColor={{ false: colors.g1, true: colors.p1 }}
             thumbColor={colors.white}
             ios_backgroundColor={colors.g4}
             onValueChange={toggleSwitch}

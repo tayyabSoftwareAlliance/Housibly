@@ -76,4 +76,6 @@ export const app = {
   getCardDetail: (id) => requests.get(`${ENDPOINTS.GET_CARD_DETAIL}?payment[id]=${id}`),
   deleteCard: (id) => requests.delete(`${ENDPOINTS.DELETE_CARD}?payment[id]=${id}`),
   setDefaultCard: (id) => requests.put(`${ENDPOINTS.SET_DEFAULT_CARD}?payment[id]=${id}`),
+  getNotificationSetting: () => requests.get(`${ENDPOINTS.GET_NOTIFICATION_SETTING}`),
+  updateNotificationSetting: (data) => requests.put(`${ENDPOINTS.UPDATE_NOTIFICATION_SETTING}`,data),
 };
