@@ -91,10 +91,10 @@ const PropertyDetail = ({ navigation, route }) => {
       setLoader(true)
       const res = await app.getPropertyDetail(id)
       if (res?.status == 200 && res.data) {
-        const data = { ...res.data, ...res.data?.property, property: null }
-        setData(data)
+        setData(res.data)
       }
     } catch (error) {
+      console.log('getPropertyDetail error ',error)
       let msg = responseValidator(error?.response?.status, error?.response?.data);
       Alert.alert('Error', msg || 'Something went wrong!');
     } finally {

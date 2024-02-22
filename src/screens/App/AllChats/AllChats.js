@@ -138,7 +138,8 @@ const AllChats = () => {
   const [selectedChat, setSelectedChat] = useState(null)
   const isFocused = useIsFocused()
   const userData = useSelector(state => state.auth)
-  const { loading,delete_loader, all_chats } = useSelector(state => state.chat)
+  const { delete_loader, all_chats } = useSelector(state => state.chat)
+  const [loader, setLoader] = useState(false)
   const userId = userData?.userInfo?.user?.id
 
   const closeRow = (map, key) => {
@@ -153,8 +154,12 @@ const AllChats = () => {
 
   useEffect(() => {
     let interval;
+    const onFinally = () => {
+      setLoader(false)
+    }
     if (isFocused) {
-      dispatch(get_all_chats())
+      setLoader(true)
+      dispatch(get_all_chats(onFinally))
       interval = setInterval(() => dispatch(get_all_chats()), 10000)
     } else {
       clearInterval(interval)
@@ -203,9 +208,9 @@ const AllChats = () => {
         show={deleteModal}
         onPressHide={() => setDeleteModal(false)}
         buttonLoader={delete_loader}
-        onButtonPress={() => dispatch(delete_chat(selectedChat?.id,() => setDeleteModal(false)))}
+        onButtonPress={() => dispatch(delete_chat(selectedChat?.id, () => setDeleteModal(false)))}
       />
-      <AppLoader loading={!all_chats.length > 0 && loading} />
+      <AppLoader loading={!all_chats.length > 0 && loader} />
     </>
   );
 };

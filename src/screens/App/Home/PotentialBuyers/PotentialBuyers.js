@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
 import {
   Text,
   View,
@@ -7,12 +7,13 @@ import {
   StatusBar,
   SafeAreaView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/core';
-import { Spacer, BackHeader } from '../../../../components';
+import { Spacer, BackHeader, AppLoader } from '../../../../components';
 import { Menu, MenuItem } from 'react-native-material-menu';
-import { appIcons, colors, family, size, WP } from '../../../../shared/exporter';
+import { appIcons, appLogos, colors, family, responseValidator, size, WP } from '../../../../shared/exporter';
 import {
   condoMatches,
   landMatches,
@@ -20,32 +21,68 @@ import {
   property_image,
 } from '../../../../shared/utilities/constant';
 import styles from './styles';
+import { app } from '../../../../shared/api';
+import { formatNumber } from '../../../../shared/utilities/helper';
 
 const PotentialBuyers = ({ navigation, route }) => {
 
   const { item } = route.params
+  const property_type = item?.property_type
   const isFocus = useIsFocused();
+  const [masterData, setMasterData] = useState([]);
   const [data, setData] = useState([]);
+  const [loader, setLoader] = useState(false)
   const [showMenu, setShowMenu] = useState(false);
-  const [matchFilter, setMatchFilter] = useState('Match');
-  const [filterType, setFilterType] = useState('Top Match');
-  const [showMatchMenu, setShowMatchMenu] = useState(false);
+  // const [matchFilter, setMatchFilter] = useState('Match');
+  const [filterType, setFilterType] = useState('Newest First');
+  // const [showMatchMenu, setShowMatchMenu] = useState(false);
 
   useLayoutEffect(() => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
   }, [isFocus]);
 
-  useLayoutEffect(() => {
-    let type = item?.type;
-    if (type === 'House') {
-      setData(propertyMatches);
-    } else if (type === 'Condo') {
-      setData(condoMatches);
-    } else {
-      setData(landMatches);
+  // useLayoutEffect(() => {
+  //   let type = item?.type;
+  //   if (type === 'House') {
+  //     setData(propertyMatches);
+  //   } else if (type === 'Condo') {
+  //     setData(condoMatches);
+  //   } else {
+  //     setData(landMatches);
+  //   }
+  // }, []);
+
+  const getPotentialBuyers = async () => {
+    try {
+      setLoader(true)
+      const res = await app.getPotentialBuyers(item?.id)
+      console.log('ressssss', res.data)
+      if (res?.status == 200) {
+        setMasterData(res.data || [])
+        setData(res.data || [])
+      }
+    } catch (error) {
+      console.log('getPotentialBuyers error ', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoader(false)
     }
-  }, []);
+  }
+
+  useEffect(() => {
+    getPotentialBuyers()
+  }, [])
+
+  useEffect(() => {
+    if (filterType == 'Top Matches') {
+      const array = JSON.parse(JSON.stringify(masterData)).sort((a, b) => b.match_percentage - a.match_percentage)
+      setData(array)
+    } else {
+      setData(masterData)
+    }
+  }, [filterType])
 
   const RenderDetails = () => {
     return (
@@ -88,10 +125,10 @@ const PotentialBuyers = ({ navigation, route }) => {
     setShowMenu(false);
   };
 
-  const hideMatchClick = type => {
-    setMatchFilter(type);
-    setShowMatchMenu(false);
-  };
+  // const hideMatchClick = type => {
+  //   setMatchFilter(type);
+  //   setShowMatchMenu(false);
+  // };
 
   const renderItem = ({ item, index }) => {
     return (
@@ -101,16 +138,16 @@ const PotentialBuyers = ({ navigation, route }) => {
         onPress={() =>
           navigation.navigate('PersonDetails', {
             item: item,
-            itemType: item?.type,
+            property_type,
           })
         }>
         <View style={styles.innerRow}>
-          <Image source={item?.img} style={styles.itemImgStyle} />
+          <Image source={{ uri: item?.user?.avatar }} style={styles.itemImgStyle} />
           <View style={styles.contentContainer}>
-            <Text style={styles.nameStyle}>{item?.name}</Text>
-            <Text style={styles.txtStyle}>
-              Budget: <Text style={styles.spanTxtStyle}>$25,000</Text> to{' '}
-              <Text style={styles.spanTxtStyle}>$50,000</Text>
+            <Text numberOfLines={1} style={styles.nameStyle}>{item?.user?.full_name || 'N/A'}</Text>
+            <Text numberOfLines={2} style={styles.txtStyle}>
+              Budget: <Text style={styles.spanTxtStyle}>${formatNumber(item?.price?.value?.min) || 0}</Text> to{' '}
+              <Text style={styles.spanTxtStyle}>{item?.price?.value?.max ? `$${formatNumber(item.price.value.max)}` : 'any'}</Text>
             </Text>
             <View style={styles.iconRow}>
               <Icon
@@ -119,18 +156,18 @@ const PotentialBuyers = ({ navigation, route }) => {
                 size={10}
                 color={colors.r2}
               />
-              <Text style={styles.matchTxtStyle}> {item?.match} match</Text>
+              <Text style={styles.matchTxtStyle}> {Number(item?.match_percentage).toFixed(0)}% match</Text>
             </View>
           </View>
         </View>
-        <Image source={item?.matchIcon} style={styles.matchImgStyle} />
+        <Image source={appLogos.roundLogo} style={styles.matchImgStyle} />
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={styles.rootContainer}>
-      <StatusBar backgroundColor={colors.g5} />
+      <StatusBar backgroundColor={colors.white} />
       <BackHeader
         title="Potential Buyers"
         txtCenter
@@ -155,7 +192,7 @@ const PotentialBuyers = ({ navigation, route }) => {
               style={{ marginLeft: 5 }}
             />
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             activeOpacity={0.7}
             style={styles.typeRow}
             onPress={() => setShowMatchMenu(true)}>
@@ -168,7 +205,7 @@ const PotentialBuyers = ({ navigation, route }) => {
               color={colors.g2}
               style={{ marginLeft: 5 }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.menuContainer}>
           <Menu
@@ -189,7 +226,7 @@ const PotentialBuyers = ({ navigation, route }) => {
             </MenuItem>
           </Menu>
         </View>
-        <View style={styles.menuContainer1}>
+        {/* <View style={styles.menuContainer1}>
           <Menu
             visible={showMatchMenu}
             style={styles.menuStyle1}
@@ -213,14 +250,20 @@ const PotentialBuyers = ({ navigation, route }) => {
               <Text>Dream Address</Text>
             </MenuItem>
           </Menu>
-        </View>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          keyExtracto={(item, index) => item + index.toString()}
-        />
+        </View> */}
+        {data.length > 0 ?
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => item + index.toString()}
+          /> :
+          <View style={styles.noDataContainer} >
+            <Text style={styles.noData} >No Buyers Found Yet!</Text>
+          </View>
+        }
       </View>
+      <AppLoader loading={loader} />
     </SafeAreaView>
   );
 };

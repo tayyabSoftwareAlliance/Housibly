@@ -971,6 +971,13 @@ const settings = [
     screen: 'BlockedList',
     icon: appIcons.blockedList,
   },
+  {
+    id: 7,
+    title: 'Delete Account',
+    screen: 'DeleteAccount',
+    icon: appIcons.delete,
+    textColor:colors.r1
+  },
 ];
 
 const networkText = 'Check Internet Connection';

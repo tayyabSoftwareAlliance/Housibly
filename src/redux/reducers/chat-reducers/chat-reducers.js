@@ -2,7 +2,6 @@ import { currency_list } from '../../../shared/exporter';
 import * as TYPES from '../../actions/types';
 
 const initialState = {
-  loading: false,
   delete_loader: false,
   all_chats: []
 };
@@ -12,20 +11,10 @@ const chatReducers = (state = initialState, actions) => {
   switch (type) {
 
     //************ Get All Chats States*************
-    case TYPES.GET_ALL_CHATS_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
     case TYPES.GET_ALL_CHATS_SUCCESS:
       return {
         ...state,
         all_chats: payload,
-      };
-    case TYPES.GET_ALL_CHATS_FINALLY:
-      return {
-        ...state,
-        loading: false,
       };
 
     //************ Delete Chat States*************

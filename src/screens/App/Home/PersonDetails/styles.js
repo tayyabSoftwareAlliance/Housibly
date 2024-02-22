@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     width: WP('26.3'),
     height: WP('24.1'),
     marginRight: WP('3'),
+    backgroundColor:colors.g14
   },
   nameTxtStyle: {
     color: colors.b1,
@@ -164,15 +165,15 @@ const styles = StyleSheet.create({
     fontSize: size.normal,
     fontFamily: family.Gilroy_Medium,
   },
-  itemRow: index => {
+  itemRow: even => {
     return {
       borderRadius: 5,
       paddingHorizontal: 8,
       flexDirection: 'row',
       alignItems: 'center',
       marginHorizontal: WP('2'),
-      paddingVertical: index % 2 == 0 ? 4 : 6,
-      backgroundColor: index % 2 == 0 ? colors.g5 : colors.white,
+      paddingVertical: even ? 4 : 6,
+      backgroundColor: even ? colors.g5 : colors.white,
     };
   },
   titleTxtStyle: {
@@ -211,6 +212,11 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
+  priceTxt:{
+    color: '#00A66C',
+    fontSize: size.tiny,
+    fontFamily: family.Gilroy_SemiBold,
+  }
 });
 
 export default styles;

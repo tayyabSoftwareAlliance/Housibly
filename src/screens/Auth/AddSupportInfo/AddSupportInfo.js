@@ -49,7 +49,7 @@ const AddSupportInfo = ({ navigation, route }) => {
     },
   ]);
   const dispatch = useDispatch(null);
-  console.log('userInfo', userInfo)
+
   //On Submit
   const onSubmit = async values => {
     const check = await checkConnected();
@@ -67,7 +67,6 @@ const AddSupportInfo = ({ navigation, route }) => {
           body.contacted_by_real_estate = 'No'
           body.user_type = 'neither'
           body.profile_type = params?.regPurpose
-          body.phone_number = '3000000000'
         }
         const addInfoSuccess = async () => {
           setTimeout(() => {

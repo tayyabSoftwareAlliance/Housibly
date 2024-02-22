@@ -1,9 +1,10 @@
 import * as TYPES from '../types';
 
 //Get All Chats
-export const get_all_chats = () => {
+export const get_all_chats = (onFinally) => {
   return {
     type: TYPES.GET_ALL_CHATS_REQUEST,
+    onFinally
   };
 };
 

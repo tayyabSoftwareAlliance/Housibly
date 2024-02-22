@@ -29,7 +29,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     isFocus && getUserProfile();
-  }, [isFocus, navigation]);
+  }, [isFocus]);
 
   const getUserProfile = () => {
     setIsLoading(true);
@@ -93,7 +93,7 @@ const Profile = ({navigation}) => {
           />
           <ProfileField
             title={'Phone Number'}
-            subtitle={`+${data?.country_code || ''}${data?.phone_number || ''}`}
+            subtitle={data?.phone_number ? `+${data?.country_code || ''}${data?.phone_number || ''}` : 'N/A'}
           />
         </View>
       </View>

@@ -43,7 +43,9 @@ import { useNavigation } from '@react-navigation/native'
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import { get_all_notifications } from '../../../redux/actions/notification-actions/notification-actions';
-import { requestNotificationPermission } from '../../../shared/utilities/helper';
+import { capitalizeFirstLetter, convertLocationToAddress, handleLocationPermission, requestNotificationPermission } from '../../../shared/utilities/helper';
+import { set_user_location_request } from '../../../redux/actions/auth-actions/auth-action';
+import Geolocation from '@react-native-community/geolocation';
 
 const Home = ({ navigation }) => {
 
@@ -56,7 +58,7 @@ const Home = ({ navigation }) => {
   const { userInfo } = useSelector(state => state?.auth);
   const { userProfile } = useSelector(state => state?.settings);
   const { my_preference, top_support_closers } = useSelector(state => state?.appReducer)
-  
+
   const hideItemClick = () => {
     setShowMenu(false);
   };
@@ -98,15 +100,37 @@ const Home = ({ navigation }) => {
     );
   };
 
+  const setUserCurrentLocation = async () => {
+    const result = await handleLocationPermission()
+    if (!result) return
+    Geolocation.getCurrentPosition(
+      async function (position) {
+        try {
+          const { latitude, longitude } = position.coords;
+          const address = await convertLocationToAddress(latitude, longitude);
+          const body = {
+            latitude, longitude, address
+          }
+          dispatch(set_user_location_request(body))
+        } catch (error) {
+          // console.log('error response ', error?.response);
+        }
+      },
+      (error) => console.log(error),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    )
+  }
+
   useEffect(() => {
-    dispatch(get_my_properties())
-    dispatch(get_top_support_closers())
-    dispatch(get_all_notifications())
-    setTimeout(requestNotificationPermission, 1000)
+      dispatch(get_my_properties())
+      dispatch(get_top_support_closers())
+      dispatch(get_all_notifications())
+      !userInfo?.user?.address && setUserCurrentLocation()
+      setTimeout(requestNotificationPermission, 1000)
   }, [])
 
   useEffect(() => {
-    dispatch(get_matched_properties(1))
+    userInfo && my_preference && dispatch(get_matched_properties(1))
   }, [my_preference])
 
   return (
@@ -127,18 +151,17 @@ const Home = ({ navigation }) => {
           <View style={styles.rowContainer}>
             <View>
               <Text style={styles.propertyTxtStyle}>Find a property</Text>
-              <View style={styles.innerRow}>
+              <TouchableOpacity style={styles.innerRow} onPress={() => navigation.navigate('AddAddress', { from: 'home' })}>
                 <Image source={appIcons.locIcon} style={styles.locIconStyle} />
-                <Text style={styles.locTxtStyle}>Location</Text>
+                <Text style={styles.locTxtStyle} numberOfLines={2} >{capitalizeFirstLetter(userInfo?.user?.address) || 'Location'}</Text>
                 <Icon
                   type={'feather'}
                   name={'chevron-down'}
                   size={16}
                   color={colors.g2}
-                  onPress={() => { }}
                   style={{ marginLeft: 5 }}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
             <Image source={appImages.personPh1} style={styles.phImgStyle} />
           </View>
@@ -219,7 +242,7 @@ const Home = ({ navigation }) => {
             borderColor={colors.p2}
             shadowColor={colors.white}
             textStyle={styles.btnTxtStyle}
-            onPress={() => navigation?.navigate('AddAddress',{from:'enter_address'})}
+            onPress={() => navigation?.navigate('AddAddress', { from: 'enter_address' })}
           />
           <View style={{ width: WP('3') }} />
           <AppButton

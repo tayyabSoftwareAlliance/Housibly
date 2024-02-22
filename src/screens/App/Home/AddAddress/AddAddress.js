@@ -2,6 +2,7 @@ import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import {
   AddressCard,
+  AppLoader,
   BackHeader,
   FilterInput,
 } from '../../../../components';
@@ -12,11 +13,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { set_address_request } from '../../../../redux/actions';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { set_user_location_request } from '../../../../redux/actions/auth-actions/auth-action';
 
 const AddAddress = ({ navigation, route }) => {
-  const { address } = useSelector(state => state?.appReducer);
+
+  const { address } = useSelector(state => state?.appReducer)
   const from = route.params?.from
-  const dispatch = useDispatch(null);
+  const dispatch = useDispatch(null)
+  const [loader, setLoader] = useState(false)
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <View style={spacing.my2}>
@@ -38,6 +43,13 @@ const AddAddress = ({ navigation, route }) => {
             if (from == 'create_property') {
               await AsyncStorage.setItem('address', JSON.stringify(addressObj))
               navigation.goBack()
+            } else if (from == 'home') {
+              setLoader(true)
+              const onSuccess = () => {
+                setLoader(false)
+                setTimeout(() => navigation.goBack(), 1000)
+              }
+              dispatch(set_user_location_request(addressObj, onSuccess))
             }
           }}
           query={{
@@ -83,6 +95,7 @@ const AddAddress = ({ navigation, route }) => {
           </>
         }
       </View>
+      <AppLoader loading={loader} />
     </SafeAreaView>
   );
 };

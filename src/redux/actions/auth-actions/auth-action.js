@@ -107,3 +107,11 @@ export const setSupportClosureRequest = (params, callBack) => {
     callBack,
   };
 };
+
+export const set_user_location_request = (params,onSuccess) => {
+  return {
+    type: TYPES.SET_USER_LOCATION_REQUEST,
+    params,
+    onSuccess
+  };
+};

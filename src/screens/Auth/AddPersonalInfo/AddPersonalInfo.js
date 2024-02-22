@@ -39,7 +39,7 @@ const AddPersonalInfo = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const { userInfo } = useSelector(state => state?.auth);
   const dispatch = useDispatch(null);
-  console.log('paramssss', JSON.stringify(params, null, 2))
+
   const onSubmit = async values => {
     const check = await checkConnected();
     if (check) {
@@ -57,7 +57,6 @@ const AddPersonalInfo = ({ navigation, route }) => {
         form.append('user[contacted_by_real_estate]', params?.item?.contacted || 'No');
         form.append('user[user_type]',params?.item?.userType ? params.item.userType.toLowerCase() : 'neither');
         form.append('user[profile_type]', params?.regPurpose);
-        form.append('user[phone_number]', '3000000000');
       }
       const addInfoSuccess = async res => {
         console.log('addInfoSuccess resss',res)

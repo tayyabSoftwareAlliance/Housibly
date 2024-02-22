@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createContext, useContext, useEffect } from 'react';
-import { appIcons, currency_list, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
+import { appIcons, currency_list, GOOGLE_MAP_KEY, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
 import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
@@ -530,3 +530,29 @@ export const requestNotificationPermission = async () => {
   }
   return flag;
 }
+
+export const formatNumber = (num) => {
+  if (!num) return ''
+  // Check if the number has a decimal part
+  if (num % 1 !== 0) {
+    // If it does, limit to two decimal places
+    return num.toFixed(2);
+  } else {
+    // If it's a whole number, return it as is
+    return num.toString();
+  }
+}
+
+export const convertLocationToAddress = async (latitude, longitude) => {
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAP_KEY}`
+    );
+    const data = await response.json();
+    if (data.results.length > 0) {
+      return data.results[0].formatted_address
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

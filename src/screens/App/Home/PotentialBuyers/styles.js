@@ -14,7 +14,7 @@ let hasNotch = DeviceInfo.hasNotch();
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: colors.g5,
+    backgroundColor: colors.white,
   },
   titleTxtStyle: {
     color: colors.b1,
@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingBottom: WP('6'),
     marginHorizontal: WP('4'),
-    backgroundColor: colors.g5,
   },
   imgStyle: {
     borderRadius: 15,
@@ -144,7 +143,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingBottom: platformOrientedCode(WP('16'), hasNotch ? 0 : WP('16')),
   },
   // flatlist style
   itemContainer: {
@@ -162,6 +160,7 @@ const styles = StyleSheet.create({
     width: WP('17.5'),
     height: WP('17.5'),
     borderRadius: 12,
+    backgroundColor:colors.g14
   },
   contentContainer: {
     paddingLeft: WP('3'),
@@ -171,11 +170,13 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.large,
     fontFamily: family.Gilroy_SemiBold,
+    width:WP(55),
   },
   txtStyle: {
     color: colors.g23,
     fontSize: size.tiny,
     fontFamily: family.Gilroy_Medium,
+    width:WP(55),
   },
   spanTxtStyle: {
     color: colors.s6,
@@ -196,6 +197,16 @@ const styles = StyleSheet.create({
     height: WP('11.5'),
     borderRadius: WP('11.5'),
   },
+  noDataContainer:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  noData:{
+    color: colors.g28,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Medium,
+  }
 });
 
 export default styles;

@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     color: colors.g2,
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_Medium,
+    maxWidth:WP(55)
   },
   phImgStyle: {
     width: WP('15'),

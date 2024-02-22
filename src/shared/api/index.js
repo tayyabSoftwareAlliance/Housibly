@@ -25,8 +25,10 @@ export const auth = {
   OTPVerify: data => requests.post(ENDPOINTS.VERIFY_OTP, data),
   resendOTP: data => requests.post(ENDPOINTS.RESEND_OTP, data),
   addInfo: data => requests.post(ENDPOINTS.INFO_CONST, data),
+  setUserLocation: data => requests.put(ENDPOINTS.SET_USER_LOCATION, data),
   resetPassword: (type, data) => requests.post(`${ENDPOINTS.RESET_PASS}/${type}`, data),
   logoutUser: (data) => requests.post(ENDPOINTS.LOGOUT,data),
+  deleteAccount: () => requests.delete(ENDPOINTS.DELETE_ACCOUNT),
 };
 
 export const setting = {
@@ -47,7 +49,8 @@ export const app = {
   getPropertiesInsideCircle: params => requests.get(`${ENDPOINTS.CIRCLE_PROPERTY}?${params}`),
   getPropertiesInsidePolygon: params => requests.get(`${ENDPOINTS.POLYGON_PROPERTY}?${params}`),
   getPropertiesAgainstZipCode: params => requests.get(`${ENDPOINTS.ZIPCODE_PROPERTY}?${params}`),
-  getPropertyDetail: id => requests.get(`${ENDPOINTS.GET_PROPERTY_DETAIL}?property_id=${id}`),
+  getPropertyDetail: id => requests.get(`${ENDPOINTS.GET_PROPERTY_DETAIL}/${id}`),
+  getPotentialBuyers: id => requests.get(`${ENDPOINTS.GET_POTENTIAL_BUYERS}?property_id=${id}&sort_criteria=newest`),
   createSavedLocation: data => requests.post(ENDPOINTS.SAVED_LOCATIONS, data),
   updateSavedLocation: (data, id) => requests.put(`${ENDPOINTS.SAVED_LOCATIONS}/${id}`, data),
   getSavedLocations: () => requests.get(ENDPOINTS.SAVED_LOCATIONS),

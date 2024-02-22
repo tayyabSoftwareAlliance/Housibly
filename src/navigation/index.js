@@ -53,6 +53,7 @@ import { add_notification, seen_notification } from '../redux/actions/notificati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HP } from '../shared/exporter';
 import { set_in_app_notification_to_show } from '../redux/actions/app-actions/app-actions';
+import DeleteAccount from '../screens/App/Profile/DeleteAccount';
 
 const AppStack = createNativeStackNavigator();
 
@@ -164,6 +165,7 @@ const MainAppNav = () => {
         <AppStack.Screen name={'Profile'} component={Profile} />
         <AppStack.Screen name={'EditProfile'} component={EditProfile} />
         <AppStack.Screen name={'Settings'} component={Settings} />
+        <AppStack.Screen name={'DeleteAccount'} component={DeleteAccount} />
         <AppStack.Screen name={'Notifications'} component={Notifications} />
         <AppStack.Screen name={'Terms'} component={Terms} />
         <AppStack.Screen name={'PrivacyPolicy'} component={PrivacyPolicy} />

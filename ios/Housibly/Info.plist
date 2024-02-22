@@ -53,9 +53,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Housibly wants to access your camera to capture photo</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Housibly wants to access your location to show your current location on map</string>
+	<string>Housibly wants this permission to access your current location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Housibly wants to access your location to show this on map</string>
+	<string>Housibly wants this permission to access your current location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Housibly wants to access your photo library to pick photos</string>
 	<key>UIAppFonts</key>

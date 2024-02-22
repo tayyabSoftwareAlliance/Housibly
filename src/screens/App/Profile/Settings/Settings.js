@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { AppButton, AppHeader, BackHeader, Spacer } from '../../../../components';
-import { colors, settings, WP } from '../../../../shared/exporter';
+import { colors, HP, settings, WP } from '../../../../shared/exporter';
 import styles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from 'react-native-elements';
@@ -10,6 +10,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/routers';
 import { auth } from '../../../../shared/api';
+import { ScrollView } from 'react-native';
 
 const Settings = ({ navigation }) => {
   const dispatch = useDispatch(null);
@@ -42,6 +43,7 @@ const Settings = ({ navigation }) => {
       <AppHeader subtitle={'Settings'} />
       <BackHeader title={'Settings'} />
       <Spacer androidVal={WP('12')} iOSVal={WP('12')} />
+      <ScrollView showsVerticalScrollIndicator={false} >
       {settings?.map(item => {
         return (
           <TouchableOpacity
@@ -54,7 +56,7 @@ const Settings = ({ navigation }) => {
                 source={item.icon}
                 style={styles.iconStyle}
               />
-              <Text style={styles.txtStyle}>{item.title}</Text>
+              <Text style={[styles.txtStyle, item.textColor && { color: item.textColor }]}>{item.title}</Text>
             </View>
             <Icon
               name={'right'}
@@ -65,6 +67,8 @@ const Settings = ({ navigation }) => {
           </TouchableOpacity>
         );
       })}
+      <View style={{height:HP(15)}} />
+      </ScrollView>
       <View style={styles.bottomView}>
         <AppButton
           bgColor={colors.r3}

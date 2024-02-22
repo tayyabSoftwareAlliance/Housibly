@@ -8,8 +8,7 @@ import { Alert } from 'react-native';
 export function* getAllChatsRequest() {
   yield takeLatest(types.GET_ALL_CHATS_REQUEST, getAllChats);
 }
-function* getAllChats() {
-  console.log('all chats')
+function* getAllChats(params) {
   try {
     const res = yield app.getAllChats()
     if (res?.status == 200) {
@@ -23,9 +22,7 @@ function* getAllChats() {
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {
-    yield put({
-      type: types.GET_ALL_CHATS_FINALLY
-    });
+    params?.onFinally?.()
   }
 }
 

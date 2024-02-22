@@ -10,11 +10,13 @@ const ENDPOINTS = {
   FORGOT_PASS: 'forgot_password',
   RESET_PASS: 'reset_password',
   LOGOUT: 'logout',
+  DELETE_ACCOUNT: 'delete_account',
   ACCESS_TOKEN: 'get_access_token',
   VERIFY_OTP: 'verify_otp.json',
   INFO_CONST: 'register_user',
   RESEND_OTP: 'verify_otp/email_resend_otp',
   RESEND_OTP: 'verify_otp/resend_otp',
+  SET_USER_LOCATION:'update_location',
 
   //setting
   GET_PROFILE: 'show_profile',
@@ -31,7 +33,8 @@ const ENDPOINTS = {
   CIRCLE_PROPERTY: 'properties/find_in_circle',
   POLYGON_PROPERTY: 'properties/find_in_polygon',
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
-  GET_PROPERTY_DETAIL: 'properties/details_by_property_id',
+  GET_PROPERTY_DETAIL: 'properties',
+  GET_POTENTIAL_BUYERS: 'user_preferences/potential_buyers',
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
   GET_OTHER_USER_PROFILE: 'show_other_user_profile',

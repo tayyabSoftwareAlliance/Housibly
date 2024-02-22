@@ -187,6 +187,16 @@ const authReducer = (state = initialState, actions) => {
         support_info: payload,
       };
 
+    // Set User Location Success
+    case TYPES.SET_USER_LOCATION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        isFailure: false,
+        userInfo: state?.userInfo?.user ? { ...state.userInfo, user: { ...state.userInfo.user, ...payload } } : { user: payload },
+      };
+
     //************Walkthrough Sates*************
 
     case TYPES.USER_TYPE_SUCCESS:

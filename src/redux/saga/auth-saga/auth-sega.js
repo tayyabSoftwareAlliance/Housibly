@@ -2,6 +2,8 @@ import { takeLatest, put } from 'redux-saga/effects';
 import { responseValidator } from '../../../shared/exporter';
 import * as types from '../../actions/types';
 import { auth, setAuthToken } from '../../../shared/api';
+import { handleLocationPermission } from '../../../shared/utilities/helper';
+import Geolocation from '@react-native-community/geolocation';
 
 // *************Login Sega**************
 export function* loginRequest() {
@@ -10,8 +12,8 @@ export function* loginRequest() {
 function* login(params) {
   try {
     const res = yield auth.login(params?.params);
-    console.log('ressssss',res.status)
-    console.log('ressssss',res.data)
+    console.log('ressssss', res.status)
+    console.log('ressssss', res.data)
     if (res?.status == 200) {
       yield put({
         type: types.LOGIN_REQUEST_SUCCESS,
@@ -21,7 +23,7 @@ function* login(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log('login error ',error);
+    console.log('login error ', error);
     yield put({
       type: types.LOGIN_REQUEST_FAILURE,
       payload: null,
@@ -54,13 +56,13 @@ function* socialLoginUser(params) {
       params?.cbFailure(res?.data);
     }
   } catch (error) {
-    console.log(JSON.stringify(error?.response,null,2));
+    console.log(JSON.stringify(error?.response, null, 2));
     yield put({
       type: types.SOCIAL_LOGIN_REQUEST_FAILURE,
       payload: null,
     });
     let msg = responseValidator(error?.response?.status);
-    params?.cbFailure(msg);
+    params?.cbFailure(error?.response?.data?.message || msg);
   }
 }
 
@@ -239,6 +241,36 @@ function* add_info(params) {
     });
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     params?.cbFailure(msg);
+  }
+}
+
+
+// *************Set User Current Location Sega**************
+export function* setUserLocationRequestSega() {
+  yield takeLatest(types.SET_USER_LOCATION_REQUEST, set_location);
+}
+
+function* set_location(params) {
+  try {
+    const { latitude, longitude, address } = params.params
+    const formData = new FormData()
+    formData.append('user[latitude]', latitude)
+    formData.append('user[longitude]', longitude)
+    formData.append('user[address]', address)
+    const res = yield auth.setUserLocation(formData);
+    if (res?.status == 200) {
+      yield put({
+        type: types.SET_USER_LOCATION_SUCCESS,
+        payload: {
+          latitude,
+          longitude,
+          address,
+        },
+      });
+      params.onSuccess?.()
+    }
+  } catch (error) {
+    // console.log('set_location error ', error);
   }
 }
 

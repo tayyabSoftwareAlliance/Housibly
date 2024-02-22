@@ -96,7 +96,7 @@ const renderItem = (item, index, userId) => {
 const PersonChat = ({ navigation, route }) => {
 
   const params = route.params
-  console.log('paramssssss',params)
+  console.log('paramssssss', params)
   const dispatch = useDispatch()
   const [conversationId, setConversationId] = useState(params?.conversation_id);
   const [avatar, setAvatar] = useState(decodeURIComponent(params?.avatar));
@@ -107,7 +107,7 @@ const PersonChat = ({ navigation, route }) => {
   const [allMessages, setAllMessages] = useState([]);
   const [loader, setLoader] = useState(true)
   const [sendLoader, setSendLoader] = useState(false)
-  const [blockCheckLoader, setBlockCheckLoaderLoader] = useState(false)
+  const [blockCheckLoader, setBlockCheckLoader] = useState(false)
   const [createConversationLoader, setCreateConversationLoader] = useState(false)
   const [useEffectRecallFlag, setUseEffectRecallFlag] = useState(false)
   const [optionsModal, setOptionsModal] = useState(false)
@@ -161,7 +161,7 @@ const PersonChat = ({ navigation, route }) => {
 
   const checkIsConversationBlocked = async () => {
     try {
-      setBlockCheckLoaderLoader(true)
+      setBlockCheckLoader(true)
       const formData = new FormData()
       formData.append('conversation_id', conversationId)
       const res = await app.checkIsConversationBlocked(formData);
@@ -171,7 +171,7 @@ const PersonChat = ({ navigation, route }) => {
     } catch (error) {
       console.log('checkIsConversationBlocked Error: ', error)
     } finally {
-      setBlockCheckLoaderLoader(false)
+      setBlockCheckLoader(false)
     }
   }
 
@@ -240,9 +240,10 @@ const PersonChat = ({ navigation, route }) => {
       // console.log('formmmm', formData)
       const res = await app.sendMessage(formData);
       // console.log('resresresres', res?.data)
-      setUseEffectRecallFlag(prev => !prev)
-      // if (res?.status == 200) {
-      // }
+      if (res?.status == 200) {
+        // setUseEffectRecallFlag(prev => !prev)
+        dispatch(read_chat_messages(conversationId))
+      }
     } catch (error) {
       console.log(error);
       // let msg = responseValidator(error?.response?.status, error?.response?.data);
@@ -265,7 +266,7 @@ const PersonChat = ({ navigation, route }) => {
     if (await handleCameraPermission()) {
       setTimeout(() => {
         ImagePicker.openCamera(image_options).then(image => {
-          console.log('imageeee', image)
+          // console.log('imageeee', image)
           onSend(image)
         }).catch(error => console.log('error ', error))
       }, 400);
@@ -295,8 +296,8 @@ const PersonChat = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-  setConversationId(params?.conversation_id)
-  setAvatar(decodeURIComponent(params?.avatar))
+    setConversationId(params?.conversation_id)
+    setAvatar(decodeURIComponent(params?.avatar))
     setAllMessages([])
     createChannel({
       connected: () => {

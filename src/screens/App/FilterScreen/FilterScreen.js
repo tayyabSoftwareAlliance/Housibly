@@ -83,7 +83,7 @@ const FilterScreen = ({ navigation, route }) => {
   const [data, setData] = useState({ ...INITIAL_DATA, ...formatPreferenceData(my_preference) })
   const [showAdvance, setShowAdvance] = useState(false)
   const dispatch = useDispatch()
-  console.log('thisss', data)
+  console.log('thisss', JSON.stringify(my_preference,null,2))
   const setValue = (type, value) => {
     console.log(type,(typeof value)+' thiss '+value)
     setData(prev => {

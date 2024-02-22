@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, SafeAreaView, Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
 import {
   AppButton,
   AppHeader,
@@ -15,14 +15,14 @@ import {
   ResetPasswordVS,
 } from '../../../shared/exporter';
 import styles from './styles';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
-import {useDispatch, useSelector} from 'react-redux';
-import {resetPassRequest} from '../../../redux/actions';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPassRequest } from '../../../redux/actions';
 
-const ResetPassword = ({navigation, route}) => {
+const ResetPassword = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
-  const {forgotPassRes} = useSelector(state => state.auth);
+  const { forgotPassRes } = useSelector(state => state.auth);
 
   const dispatch = useDispatch(null);
 
@@ -38,9 +38,9 @@ const ResetPassword = ({navigation, route}) => {
       );
       form.append('user[password]', values?.password);
       const resetSuccess = async res => {
-        console.log(res);
-        navigation?.replace('Login');
         setLoading(false);
+        await new Promise(res => setTimeout(res, 1000))
+        navigation?.replace('App');
       };
       const resetFailure = async res => {
         setLoading(false);
