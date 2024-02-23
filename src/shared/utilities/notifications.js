@@ -35,7 +35,7 @@ export const navigateFromNotifi = (notification) => {
     if (notification?.type == 'message') {
         Linking.openURL(`housibly://PersonChat/${notification?.data?.sender_id}/${notification.image ? encodeURIComponent(notification?.image) : 'avatar'}/${notification?.data?.sender_name}/message_notification/${notification?.data?.conversation_id}`)
     } else if (notification?.type == 'buy_property') {
-        Linking.openURL(`housibly://PropertyDetail/${notification?.data?.property_id}`)
+        Linking.openURL(`housibly://PropertyDetail/${notification?.data?.property_id}/property_detail`)
     } else if (notification?.type == 'sell_property') {
         Linking.openURL(`housibly://PersonChat/${notification?.data?.property_owner_id}/${notification.image ? encodeURIComponent(notification?.image) : 'avatar'}/${notification?.data?.property_owner_name}/not_chats`)
     }

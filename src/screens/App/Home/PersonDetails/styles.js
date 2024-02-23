@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: colors.g5,
-    paddingTop: platformOrientedCode(WP('6'), 0),
   },
   headTxtStyle: {
     color: colors.b1,

@@ -122,11 +122,13 @@ const Home = ({ navigation }) => {
   }
 
   useEffect(() => {
+    if(userInfo){
       dispatch(get_my_properties())
       dispatch(get_top_support_closers())
       dispatch(get_all_notifications())
       !userInfo?.user?.address && setUserCurrentLocation()
       setTimeout(requestNotificationPermission, 1000)
+    }
   }, [])
 
   useEffect(() => {

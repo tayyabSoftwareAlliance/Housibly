@@ -62,18 +62,12 @@ const AddSupportInfo = ({ navigation, route }) => {
           profession: filteredProfessionList,
           hourly_rate: values?.hourly_rate,
         };
-        if (!params?.profile_complete) {
-          body.licensed_realtor = 'No'
-          body.contacted_by_real_estate = 'No'
-          body.user_type = 'neither'
-          body.profile_type = params?.regPurpose
-        }
         const addInfoSuccess = async () => {
           setTimeout(() => {
             navigation?.navigate('UploadDocuments');
           }, 500);
         };
-        dispatch(setSupportClosureRequest(body, addInfoSuccess));
+        dispatch(setSupportClosureRequest({...body}, addInfoSuccess));
       } else {
         Alert.alert('Error', 'At least one profession required!');
       }

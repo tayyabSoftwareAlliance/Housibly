@@ -113,6 +113,7 @@ const HomeSupportCloser = ({ navigation }) => {
 
   const dispatch = useDispatch(null);
   const { userProfile } = useSelector(state => state?.settings);
+  const { userInfo } = useSelector(state => state?.auth);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showFulldescription, setShowFullDescription] = useState(false)
@@ -129,7 +130,7 @@ const HomeSupportCloser = ({ navigation }) => {
   }
 
   const getReviews = async () => {
-    const res = await app.getSupportCloserReviews(userProfile?.id, 'all', 1)
+    const res = await app.getSupportCloserReviews(userInfo?.id, 'all', 1)
     if (res?.status == 200)
       setReviews(res.data)
   }
@@ -151,13 +152,15 @@ const HomeSupportCloser = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (isFocus)
+    if (isFocus && userInfo)
       getUserProfile()
   }, [isFocus])
 
   useEffect(() => {
+    if(userInfo){
     setTimeout(requestNotificationPermission, 1000)
     dispatch(get_all_notifications())
+    }
   }, [])
 
   return (
@@ -241,7 +244,7 @@ const HomeSupportCloser = ({ navigation }) => {
             />
             <ProfileField
               title={'Phone Number'}
-              subtitle={`+${data?.country_code || ''}${data?.phone_number || ''}`}
+              subtitle={data?.phone_number ? `+${data.country_code || ''}${data.phone_number || ''}` : 'N/A'}
               containerStyle={{ marginBottom: 0 }}
             />
           </View>
@@ -326,7 +329,7 @@ const HomeSupportCloser = ({ navigation }) => {
             borderColor={colors.p2}
             title="View all Reviews"
             textStyle={{ fontSize: size.tiny }}
-            onPress={() => navigation.navigate('Reviews', { id: userProfile?.id, from: 'SUPPORT_CLOSER_HOME' })}
+            onPress={() => navigation.navigate('Reviews', { id: userInfo?.id, from: 'SUPPORT_CLOSER_HOME' })}
           />
         </View>
         {/* <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }} /> */}

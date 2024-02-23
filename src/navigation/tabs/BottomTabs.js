@@ -23,10 +23,10 @@ export default BottomTabs = ({ }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getSublists())
+    userInfo && dispatch(getSublists())
   }, [])
 
-  return (
+  return userInfo && (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,

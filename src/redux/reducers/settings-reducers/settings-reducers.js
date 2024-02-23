@@ -217,6 +217,27 @@ const settingsReducers = (state = initialState, actions) => {
         pay_with_social: null,
       };
 
+    //************Social Login Sates*************
+
+    case TYPES.SOCIAL_LOGIN_REQUEST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        isFailure: false,
+        userProfile: payload,
+      };
+
+    //************Logout Sates*************
+    case TYPES.LOGOUT_REQUEST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        isFailure: false,
+        userProfile: null,
+      };
+
     default:
       return state;
   }

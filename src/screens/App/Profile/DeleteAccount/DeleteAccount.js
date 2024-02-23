@@ -19,10 +19,10 @@ const DeleteModal = ({ isVisible, onPressHide, onConfirm }) => {
         <Text style={[styles.txtStyle, { marginVertical: HP(2), width: WP(55) }]}>Please enter the word “DELETE” before we delete your account.</Text>
         <TextInput value={text} onChangeText={(e) => setText(e)} autoFocus style={styles.modalInputStyle} />
         <View style={styles.modalBtnsContainer} >
-          <TouchableOpacity onPress={onPressHide}>
+          <TouchableOpacity style={{padding:WP(5),paddingVertical:WP(1)}} onPress={onPressHide}>
             <Text style={styles.modalBtnTxtStyle}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => text.trim().toLowerCase() == 'delete' && onConfirm()}>
+          <TouchableOpacity style={{padding:WP(5),paddingVertical:WP(1)}} onPress={() => text.trim().toLowerCase() == 'delete' && onConfirm()}>
             <Text style={styles.modalBtnTxtStyle}>OK</Text>
           </TouchableOpacity>
         </View>

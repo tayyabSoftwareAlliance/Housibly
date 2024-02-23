@@ -54,7 +54,7 @@ const PersonDetails = ({ navigation, route }) => {
     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     return () => navigation.getParent()?.setOptions({ tabBarStyle: undefined });
   }, [isFocus]);
-  console.log('itemmmmmm', JSON.stringify(route?.params?.item, null, 2))
+
   useLayoutEffect(() => {
     let type = route?.params?.property_type;
     if (type === 'House') {
@@ -98,7 +98,6 @@ const PersonDetails = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar backgroundColor={colors.g5} />
-      <Spacer androidVal={WP('5')} iOSVal={WP('0')} />
       <BackHeader
         title="Buyer’s Preference"
         txtCenter
@@ -163,7 +162,7 @@ const PersonDetails = ({ navigation, route }) => {
           title="Send Message"
           borderColor={colors.p2}
           textStyle={styles.btnTxtStyle}
-          onPress={() => navigation.navigate('PersonChat')}
+          onPress={() => navigation.navigate('PersonChat', { recipient_id: data?.user?.id, avatar: data?.user?.avatar, full_name: data?.user?.full_name, from: 'not_chats' })}
         />
       </View>
     </SafeAreaView>

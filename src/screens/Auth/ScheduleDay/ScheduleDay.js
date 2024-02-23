@@ -21,8 +21,6 @@ const ScheduleDay = ({ navigation }) => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
-  console.log('support_info', support_info)
-
   const dispatch = useDispatch(null);
 
   //On Submit
@@ -66,6 +64,10 @@ const ScheduleDay = ({ navigation }) => {
       })
       form.append('user[schedule_attributes][starting_time]', moment(startTime).format('LT'));
       form.append('user[schedule_attributes][ending_time]', moment(endTime).format('LT'));
+      form.append('user[licensed_realtor]', 'No');
+      form.append('user[contacted_by_real_estate]', 'No');
+      form.append('user[user_type]', 'neither');
+      form.append('user[profile_type]', 'support_closer');
       console.log('forrmmm', form)
       const addInfoSuccess = async res => {
         console.log(res);
@@ -126,7 +128,7 @@ const ScheduleDay = ({ navigation }) => {
                 onDateChange={date => {
                   setStartTime(date);
                 }}
-                minTime={new Date()}
+                // minTime={new Date()}
               />
             </View>
             <View>

@@ -47,7 +47,7 @@ const PropertySuggestionInAppNotification = () => {
             style={styles.buttonStyle}
             onPress={() => {
               dispatch(set_in_app_notification_to_show(null))
-              Linking.openURL(`housibly://PropertyDetail/${showed_in_app_notification?.data?.property_id}`)
+              Linking.openURL(`housibly://PropertyDetail/${showed_in_app_notification?.data?.property_id}/property_detail`)
             }}
           >
             <Text style={styles.btnTxtStyle}>{showed_in_app_notification?.type == 'sell_property' ? 'View Property' : 'View Detail'}</Text>
