@@ -22,7 +22,7 @@ const DeleteModal = ({ isVisible, onPressHide, onConfirm }) => {
           <TouchableOpacity onPress={onPressHide}>
             <Text style={styles.modalBtnTxtStyle}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => text.toLowerCase() == 'delete' && onConfirm()}>
+          <TouchableOpacity onPress={() => text.trim().toLowerCase() == 'delete' && onConfirm()}>
             <Text style={styles.modalBtnTxtStyle}>OK</Text>
           </TouchableOpacity>
         </View>

@@ -48,7 +48,7 @@ const EditProfile = ({ navigation, route }) => {
     callingCode: ['1'],
   });
   const [cca2, setcca2] = useState('US');
-console.log('country',country)
+
   const setCountryValue = val => {
     setcca2(val.cca2);
     setcountry(val);
@@ -58,6 +58,7 @@ console.log('country',country)
   const [data, setData] = useState(route?.params?.item);
   const [oldImage, setOldImage] = useState(profile_uri);
   const [userImage, setUserImage] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [professionList, setprofessionList] = useState([
     {
       title: '',
@@ -99,7 +100,9 @@ console.log('country',country)
         mediaType: 'photo',
       }).then(image => {
         setUserImage(image);
-      });
+      }).catch((error) => {
+        console.log('Error ', error)
+      })
     }, 400);
   };
 
@@ -116,6 +119,7 @@ console.log('country',country)
   }
 
   const handleUpdateProfile = values => {
+    console.log('thisssssssss')
     if (from == 'SUPPORT_CLOSER_HOME' && !professionList.filter(item => item.title).length > 0) {
       Alert.alert('Error', 'At least one profession required!');
       return
@@ -171,7 +175,7 @@ console.log('country',country)
       }
     })
     const updateProfileSuccess = async res => {
-      // Alert.alert('Success', 'Profile Updated Successfully!');
+      Alert.alert('Success', 'Profile Updated Successfully!');
       navigation.goBack();
       setIsLoading(false);
     };
@@ -180,7 +184,6 @@ console.log('country',country)
       Alert.alert('Error', err);
       setIsLoading(false);
     };
-    console.log('data', data)
     dispatch(
       updateProfileRequest(data, updateProfileSuccess, updateProfileFailure),
     );
@@ -195,15 +198,15 @@ console.log('country',country)
         <Formik
           initialValues={editFormFields}
           onSubmit={values => {
+            if (!isValidPhoneNumber(values.phone, cca2)) {
+              setPhoneError('Invalid phone number')
+              return
+            }
+            setPhoneError('')
             handleUpdateProfile(values);
           }}
-          validate={(values) => {
-            const errors = {}
-            if (!isValidPhoneNumber(values.phone, cca2))
-              errors.phone = 'Invalid phone number'
-            return errors
-          }}
-          validationSchema={from == 'SUPPORT_CLOSER_HOME' ? supportCloserEditProfileFieldsVS : editProfileFieldsVS}>
+          validationSchema={from == 'SUPPORT_CLOSER_HOME' ? supportCloserEditProfileFieldsVS : editProfileFieldsVS}
+        >
           {({
             values,
             handleChange,
@@ -226,6 +229,7 @@ console.log('country',country)
               setFieldValue('hourly_rate', data?.hourly_rate);
               setImageArray(data?.images || [])
             }, [data]);
+
             return (
               <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.inputContainer}>
@@ -240,10 +244,7 @@ console.log('country',country)
                           uri:
                             userImage === ''
                               ? oldImage
-                              : platformOrientedCode(
-                                userImage?.path,
-                                userImage?.sourceURL,
-                              ),
+                              : userImage?.path
                         }}
                       />
                     </View>
@@ -278,7 +279,14 @@ console.log('country',country)
                   />
 
                   <AppInput
-                    onChangeText={handleChange('phone')}
+                    onChangeText={(text) => {
+                      handleChange('phone')(text)
+                      if (text && !isValidPhoneNumber(text, cca2)) {
+                        setPhoneError('Invalid phone number')
+                      } else {
+                        setPhoneError('')
+                      }
+                    }}
                     renderErrorMessage={true}
                     placeholder={data?.phone_number}
                     // placeholder={`+${country?.callingCode[0]}23 456 789`}
@@ -288,7 +296,7 @@ console.log('country',country)
                     disableFullscreenUI={true}
                     autoCapitalize="none"
                     touched={touched.phone}
-                    errorMessage={errors.phone}
+                    errorMessage={errors.phone || phoneError}
                     title={'Phone Number'}
                     keyboardType={'phone-pad'}
                     rightIcon={
