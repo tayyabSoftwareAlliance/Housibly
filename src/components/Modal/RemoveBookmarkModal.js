@@ -4,14 +4,9 @@ import Modal from 'react-native-modal';
 import { colors, WP, family, size, appIcons, property_image } from '../../shared/exporter';
 import { useDispatch, useSelector } from 'react-redux';
 
-export const RemoveBookmarkModal = ({ item, show, onPressHide }) => {
+export const RemoveBookmarkModal = ({ item, show, onPressHide,onRemovePress }) => {
 
   const dispatch = useDispatch()
-  const { loading } = useSelector(state => state.appReducer)
-
-  const deleteProperty = () => {
-
-  }
 
   return (
     <Modal onBackdropPress={onPressHide} isVisible={show}>
@@ -26,8 +21,8 @@ export const RemoveBookmarkModal = ({ item, show, onPressHide }) => {
             style={styles.crossIconStyle}
           />
         </TouchableOpacity>
-        <Image source={{ uri: item?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
-        <Text style={styles.nameTxtStyle}>{item?.title}</Text>
+        <Image source={{ uri: item?.property?.image || property_image }} style={styles.imgStyle} />
+        <Text style={styles.nameTxtStyle}>{item?.property?.title || 'N/A'}</Text>
         {item?.type == 'support_closer' ?
           <>
             <Text style={[styles.smallTxtStyle, { textAlign: 'center', marginTop: WP(1) }]}>{item?.company || 'N/A'}</Text>
@@ -35,26 +30,29 @@ export const RemoveBookmarkModal = ({ item, show, onPressHide }) => {
           </>
           :
           <View style={styles.rowContainer}>
-            <Text style={styles.smallTxtStyle}>{`${item?.currency_type} ${item?.price} | `}</Text>
+            <Text style={styles.smallTxtStyle}>{`${item?.currency_type || '$'} ${item?.property?.price || 0} | `}</Text>
             <Image
               resizeMode="contain"
               source={appIcons.bedIcon}
               style={styles.bedIconStyle}
             />
-            <Text style={styles.smallTxtStyle}>{item?.bed_rooms || 0}</Text>
+            <Text style={styles.smallTxtStyle}>{item?.property?.bed_rooms || 0}</Text>
             <Image source={appIcons.bathIcon} style={styles.bathIconStyle} />
-            <Text resizeMode="contain" style={styles.smallTxtStyle}>{item?.bath_rooms || 0}</Text>
+            <Text resizeMode="contain" style={styles.smallTxtStyle}>{item?.property?.bath_rooms || 0}</Text>
           </View>
         }
         <Text style={styles.removeTxtStyle}>Remove From Bookmarks?</Text>
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.buttonStyle}
-          onPress={deleteProperty}>
-          {loading ?
-            <ActivityIndicator color={colors.white} /> :
+          onPress={() => {
+            onPressHide()
+            setTimeout(() => onRemovePress(item?.id),1500)
+          }}>
+          {/* {loading ? */}
+            {/* <ActivityIndicator color={colors.white} /> : */}
             <Text style={styles.btnTxtStyle}>Remove</Text>
-          }
+          {/* } */}
         </TouchableOpacity>
       </View>
     </Modal>
@@ -93,6 +91,7 @@ const styles = StyleSheet.create({
     height: WP('25'),
     borderRadius: 15,
     alignSelf: 'center',
+    backgroundColor: colors.g14,
   },
   nameTxtStyle: {
     color: colors.b1,

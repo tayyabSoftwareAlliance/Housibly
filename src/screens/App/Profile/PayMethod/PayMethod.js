@@ -1,5 +1,5 @@
-import {useIsFocused} from '@react-navigation/core';
-import React, {useEffect, useState} from 'react';
+import { useIsFocused } from '@react-navigation/core';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -7,10 +7,11 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {AppButton, AppHeader, BackHeader, Spacer} from '../../../../components';
-import {get_default_card_request} from '../../../../redux/actions';
+import { useDispatch } from 'react-redux';
+import { AppButton, AppHeader, BackHeader, Spacer } from '../../../../components';
+import { get_default_card_request } from '../../../../redux/actions';
 import {
   appIcons,
   checkConnected,
@@ -20,7 +21,7 @@ import {
 } from '../../../../shared/exporter';
 import styles from './styles';
 
-const PayMethod = ({navigation}) => {
+const PayMethod = ({ navigation }) => {
   const [method, setMethod] = useState('cards');
   const [loading, setLoading] = useState(false);
   const [currentCard, setcurrentCard] = useState(null);
@@ -67,9 +68,9 @@ const PayMethod = ({navigation}) => {
       <BackHeader
         // isBox={true}
         title={'Payment Method'}
-        // boxIcon={
-        //   <Icon name={'plus'} type={'entypo'} size={22} color={colors.white} />
-        // }
+      // boxIcon={
+      //   <Icon name={'plus'} type={'entypo'} size={22} color={colors.white} />
+      // }
       />
       <Spacer androidVal={WP('5.5')} iOSVal={WP('5.5')} />
       <View style={styles.contentContainer}>
@@ -102,48 +103,50 @@ const PayMethod = ({navigation}) => {
             style={styles.iconStyle}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.itemContainer}
-          onPress={() => setMethod('apple')}>
-          <View style={styles.innerRow}>
+        {Platform.OS == 'ios' ?
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.itemContainer}
+            onPress={() => setMethod('apple')}>
+            <View style={styles.innerRow}>
+              <Image
+                resizeMode="contain"
+                source={appIcons.apple}
+                style={styles.iconStyle}
+              />
+              <View>
+                <Text style={styles.titleTxtStyle}>Apple Pay</Text>
+                <Text style={styles.valTxtStyle}>myemail.com</Text>
+              </View>
+            </View>
             <Image
               resizeMode="contain"
-              source={appIcons.apple}
+              source={method === 'apple' ? appIcons.checked : appIcons.unchecked}
               style={styles.iconStyle}
             />
-            <View>
-              <Text style={styles.titleTxtStyle}>Apple Pay</Text>
-              <Text style={styles.valTxtStyle}>myemail.com</Text>
+          </TouchableOpacity> :
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.itemContainer}
+            onPress={() => setMethod('google')}>
+            <View style={styles.innerRow}>
+              <Image
+                resizeMode="contain"
+                source={appIcons.cards}
+                style={styles.iconStyle}
+              />
+              <View>
+                <Text style={styles.titleTxtStyle}>Google Wallet</Text>
+                <Text style={styles.valTxtStyle}>myemail.com</Text>
+              </View>
             </View>
-          </View>
-          <Image
-            resizeMode="contain"
-            source={method === 'apple' ? appIcons.checked : appIcons.unchecked}
-            style={styles.iconStyle}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.itemContainer}
-          onPress={() => setMethod('google')}>
-          <View style={styles.innerRow}>
             <Image
               resizeMode="contain"
-              source={appIcons.cards}
+              source={method === 'google' ? appIcons.checked : appIcons.unchecked}
               style={styles.iconStyle}
             />
-            <View>
-              <Text style={styles.titleTxtStyle}>Google Wallet</Text>
-              <Text style={styles.valTxtStyle}>myemail.com</Text>
-            </View>
-          </View>
-          <Image
-            resizeMode="contain"
-            source={method === 'google' ? appIcons.checked : appIcons.unchecked}
-            style={styles.iconStyle}
-          />
-        </TouchableOpacity>
+          </TouchableOpacity>
+        }
       </View>
       {method === 'cards' && (
         <View style={styles.bottomView}>

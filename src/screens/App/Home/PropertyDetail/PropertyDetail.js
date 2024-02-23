@@ -94,7 +94,7 @@ const PropertyDetail = ({ navigation, route }) => {
         setData(res.data)
       }
     } catch (error) {
-      console.log('getPropertyDetail error ',error)
+      console.log('getPropertyDetail error ', error)
       let msg = responseValidator(error?.response?.status, error?.response?.data);
       Alert.alert('Error', msg || 'Something went wrong!');
     } finally {
@@ -103,8 +103,28 @@ const PropertyDetail = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    !propertyData && getPropertyDetail()
+    // !propertyData && getPropertyDetail()
+    getPropertyDetail()
   }, [])
+
+  const onBookmarkPress = async () => {
+    try {
+      setLoader(true)
+        const formData = new FormData()
+        formData.append('bookmark[bookmark_type]', 'property_bookmark')
+        formData.append('bookmark[property_id]', id)
+        const res = await app.createBookmark(formData)
+      if (res?.status == 200) {
+        setData(prev => ({ ...prev, is_bookmarked: true }))
+      }
+    } catch (error) {
+      console.log('onBookmarkPress error ', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoader(false)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -127,6 +147,9 @@ const PropertyDetail = ({ navigation, route }) => {
                   ? data?.images?.[imgSelectedIndex]?.url
                   : data?.images?.[imgSelectedIndex]?.path
               }
+              isBookmarked={data?.is_bookmarked}
+              onBookmarkPress={onBookmarkPress}
+              showBookmarkIcon={data?.user?.id && data.user.id != userInfo?.user?.id}
             />
             <View>
               <FlatList

@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import {
   capitalizeFirstLetter,
@@ -7,8 +7,9 @@ import {
   size,
   WP,
 } from '../../shared/exporter';
+import { Icon } from 'react-native-elements';
 
-export const PreviewImageCover = ({ uri, h1, h2 }) => {
+export const PreviewImageCover = ({ uri, h1, h2, isBookmarked, onBookmarkPress, showBookmarkIcon }) => {
   return (
     <ImageBackground
       style={styles.imgCon}
@@ -18,6 +19,16 @@ export const PreviewImageCover = ({ uri, h1, h2 }) => {
       }}>
       <Text style={styles.imgh1}>{capitalizeFirstLetter(h1) || ''} </Text>
       <Text style={styles.imgh2}>{capitalizeFirstLetter(h2) || ''}</Text>
+      {h1 && showBookmarkIcon &&
+        <TouchableOpacity onPress={onBookmarkPress} style={styles.bookMarkIcon} disabled={isBookmarked}>
+          <Icon
+            type={'MaterialIcons'}
+            name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
+            color={colors.white}
+            size={30}
+          />
+        </TouchableOpacity>
+      }
     </ImageBackground>
   );
 };
@@ -50,4 +61,9 @@ const styles = StyleSheet.create({
     paddingLeft: WP('3'),
     paddingBottom: 10,
   },
+  bookMarkIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10
+  }
 });

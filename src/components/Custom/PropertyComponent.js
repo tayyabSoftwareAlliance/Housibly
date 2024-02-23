@@ -36,7 +36,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 </View>
                 <View style={styles.simpleRow}>
                     <Text style={styles.smallTxtStyle}>
-                        {`${item?.currency_type} ${item?.price || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
+                        {`${item?.currency_type || '$'} ${item?.price || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
                     </Text>
                     {item?.property_type != 'vacant_land' &&
                         <>

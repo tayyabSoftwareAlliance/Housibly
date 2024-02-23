@@ -238,12 +238,12 @@ const filter_bookmarks_list = [
     source: appIcons.all
   },
   {
-    key: 'property',
+    key: 'property_bookmark',
     value: 'Properties',
     source: appIcons.property
   },
   {
-    key: 'support_closer',
+    key: 'support_closer_bookmark',
     value: 'Support Closers',
     source: appIcons.support_closer
   }

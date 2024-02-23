@@ -35,6 +35,7 @@ const ENDPOINTS = {
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',
   GET_PROPERTY_DETAIL: 'properties',
   GET_POTENTIAL_BUYERS: 'user_preferences/potential_buyers',
+  GET_BOOKMARKS:'bookmarks',
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
   GET_OTHER_USER_PROFILE: 'show_other_user_profile',

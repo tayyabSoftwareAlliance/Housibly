@@ -7,7 +7,7 @@ import PropertyComponent from './PropertyComponent'
 import SupportCloserComponent from './SearchSupportCloserComponent'
 import { RemoveBookmarkModal } from '../Modal/RemoveBookmarkModal'
 
-const BookmarksList = ({ data = [], scrollEnabled = true }) => {
+const BookmarksList = ({ data = [], scrollEnabled = true, onRemovePress }) => {
 
     const [item, setItem] = useState('');
     const [showModal, setShowModal] = useState(false);
@@ -56,7 +56,7 @@ const BookmarksList = ({ data = [], scrollEnabled = true }) => {
                 data={data}
                 scrollEnabled={scrollEnabled}
                 disableRightSwipe={true}
-                renderItem={({ item }) => item.type == 'support_closer' ? <SupportCloserComponent item={item} /> : <PropertyComponent item={item} />}
+                renderItem={({ item }) => item.type == 'support_closer' ? <SupportCloserComponent item={item} /> : <PropertyComponent item={item?.property && { ...item.property, images: [{ url: item.property?.image }] }} />}
                 renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap)}
                 rightOpenValue={-120}
                 previewOpenValue={-40}
@@ -77,6 +77,7 @@ const BookmarksList = ({ data = [], scrollEnabled = true }) => {
                 item={item}
                 show={showModal}
                 onPressHide={() => setShowModal(false)}
+                onRemovePress={onRemovePress}
             />
         </>
     )
@@ -97,8 +98,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: 100,
         right: 0,
-        borderTopLeftRadius:15,
-        borderBottomLeftRadius:15,
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
         backgroundColor: colors.r1,
         alignItems: 'center',
         position: 'absolute',
