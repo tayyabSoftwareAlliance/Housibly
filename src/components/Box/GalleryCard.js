@@ -48,11 +48,9 @@ export const GalleryCard = ({
 
   //Camra Handlers
   const openCamera = async () => {
-    if (await handleCameraPermission()) {
       setShow(false);
       setTimeout(() => {
         ImagePicker.openCamera(image_options).then(image => {
-          console.log('imageeee', image)
           var array3 = imageArray.concat(image);
           // this line filters out the same size images that are more than one
           // const distinctItems = [
@@ -62,7 +60,6 @@ export const GalleryCard = ({
           setShow(false);
         }).catch(error => console.log('error ', error))
       }, 400);
-    }
   };
 
   return (

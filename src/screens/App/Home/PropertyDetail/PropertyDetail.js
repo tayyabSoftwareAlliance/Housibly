@@ -103,17 +103,16 @@ const PropertyDetail = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    // !propertyData && getPropertyDetail()
-    getPropertyDetail()
+    from == 'property_detail' && getPropertyDetail()
   }, [])
 
   const onBookmarkPress = async () => {
     try {
       setLoader(true)
-        const formData = new FormData()
-        formData.append('bookmark[bookmark_type]', 'property_bookmark')
-        formData.append('bookmark[property_id]', id)
-        const res = await app.createBookmark(formData)
+      const formData = new FormData()
+      formData.append('bookmark[bookmark_type]', 'property_bookmark')
+      formData.append('bookmark[property_id]', id)
+      const res = await app.createBookmark(formData)
       if (res?.status == 200) {
         setData(prev => ({ ...prev, is_bookmarked: true }))
       }

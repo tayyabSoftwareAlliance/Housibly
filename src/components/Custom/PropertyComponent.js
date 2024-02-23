@@ -55,7 +55,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 </View>
                 {myProperty ?
                     <View style={[styles.simpleRow, { paddingTop: 2 }]}>
-                        {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
+                        {/* {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
                             return (
                                 index < 4 && (
                                     <Image
@@ -71,7 +71,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                                     +{[1, 2, 3, 4, 5, 6]?.length - 4}
                                 </Text>
                             </View>
-                        )}
+                        )} */}
                     </View> :
                     <>
                         <View style={[styles.simpleRow, { paddingTop: 0 }]}>
