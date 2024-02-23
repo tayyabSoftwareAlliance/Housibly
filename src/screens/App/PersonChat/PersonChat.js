@@ -263,14 +263,12 @@ const PersonChat = ({ navigation, route }) => {
 
   //Camra Handlers
   const openCamera = async () => {
-    if (await handleCameraPermission()) {
       setTimeout(() => {
         ImagePicker.openCamera(image_options).then(image => {
           // console.log('imageeee', image)
           onSend(image)
         }).catch(error => console.log('error ', error))
       }, 400);
-    }
   };
   // console.log('allMessages', JSON.stringify(allMessages, null, 2))
 

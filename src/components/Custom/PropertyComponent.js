@@ -54,25 +54,27 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                     }
                 </View>
                 {myProperty ?
-                    <View style={[styles.simpleRow, { paddingTop: 2 }]}>
-                        {/* {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
-                            return (
-                                index < 4 && (
-                                    <Image
-                                        source={appImages.personPh}
-                                        style={styles.personImgStyle(index)}
-                                    />
-                                )
-                            );
-                        })}
-                        {[1, 2, 3, 4, 5, 6, 7].length > 4 && (
-                            <View style={styles.countContainer}>
-                                <Text style={styles.countTxtStyle}>
-                                    +{[1, 2, 3, 4, 5, 6]?.length - 4}
-                                </Text>
-                            </View>
-                        )} */}
-                    </View> :
+                    // <View style={[styles.simpleRow, { paddingTop: 2 }]}>
+                    //     {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
+                    //         return (
+                    //             index < 4 && (
+                    //                 <Image
+                    //                     source={appImages.personPh}
+                    //                     style={styles.personImgStyle(index)}
+                    //                 />
+                    //             )
+                    //         );
+                    //     })}
+                    //     {[1, 2, 3, 4, 5, 6, 7].length > 4 && (
+                    //         <View style={styles.countContainer}>
+                    //             <Text style={styles.countTxtStyle}>
+                    //                 +{[1, 2, 3, 4, 5, 6]?.length - 4}
+                    //             </Text>
+                    //         </View>
+                    //     )}
+                    // </View> 
+                    null
+                    :
                     <>
                         <View style={[styles.simpleRow, { paddingTop: 0 }]}>
                             <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />
