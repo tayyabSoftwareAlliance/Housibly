@@ -115,7 +115,6 @@ const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmitEditing }) => {
           placeholder='Postal Code'
           placeholderTextColor={colors.white}
           onSubmitEditing={(e) => onSubmitEditing(e.nativeEvent.text)}
-          keyboardType='numeric'
           maxLength={10}
         />
       </Pressable>
