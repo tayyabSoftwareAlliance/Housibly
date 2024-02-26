@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   WP,
   colors,
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     height: WP('13'),
     marginRight: WP('2'),
     borderRadius: WP('12.5'),
+    backgroundColor:colors.g14
   },
   nameTxtStyle: {
     color: colors.b7,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   inputStyles: {
     width: '88%',
     paddingRight: 5,
-    color: colors.p8,
+    color: colors.b1,
     alignSelf: 'center',
     fontSize: size.xsmall,
     textAlignVertical: 'top',
@@ -90,11 +91,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   noRecords: {
-    marginRight: 17,
-    color: colors.p1,
-    fontSize: size.large,
-    fontFamily: family.Gilroy_Bold,
+    color: colors.g19,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Regular,
   },
+  msgImageContainer:{
+    padding:WP(2),
+    backgroundColor:colors.g1,
+    borderRadius:10,
+    alignSelf:'flex-start',
+    marginTop:WP(2)
+  },
+  msgImage:{
+    height:WP(10),
+    width:WP(10),
+    borderRadius:10
+  }
 });
 
 export default styles;

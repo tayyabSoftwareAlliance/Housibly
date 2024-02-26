@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, View, Alert } from 'react-native';
 import { AppHeader, AppLoader, BackHeader, Spacer } from '../../../components';
-import { WP, colors, filter_bookmarks_list, responseValidator, spacing } from '../../../shared/exporter';
+import { WP, colors, family, filter_bookmarks_list, responseValidator, spacing } from '../../../shared/exporter';
 import styles from './styles';
 import PropertyList from '../../../components/Custom/PropertyList';
 import FilterComponent from '../../../components/Custom/FilterComponent';
@@ -194,7 +194,7 @@ const Bookmarks = () => {
       {bookmarks?.length > 0 ?
         <BookmarksList data={bookmarks} onRemovePress={onRemovePress} /> :
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-          <Text style={{ color: colors.g19 }} >No Data Found Yet!</Text>
+          <Text style={{ color: colors.g19, fontFamily: family.Gilroy_Medium }} >No Data Found Yet!</Text>
         </View>
       }
       <AppLoader loading={loader} />

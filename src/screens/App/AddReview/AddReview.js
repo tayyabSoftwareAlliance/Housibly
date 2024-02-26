@@ -50,7 +50,7 @@ const AddReview = ({ navigation, route }) => {
       const res = await app.createReview(formData);
       console.log('resresresres', res?.data)
       if (res?.status == 200) {
-        Alert.alert('Review Posted Successfully!')
+        Alert.alert('Success','Review Posted Successfully!')
         setRating(0)
         setReview('')
         setTimeout(() => navigation.goBack(), 500)

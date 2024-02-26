@@ -81,4 +81,9 @@ export const app = {
   setDefaultCard: (id) => requests.put(`${ENDPOINTS.SET_DEFAULT_CARD}?payment[id]=${id}`),
   getNotificationSetting: () => requests.get(`${ENDPOINTS.GET_NOTIFICATION_SETTING}`),
   updateNotificationSetting: (data) => requests.put(`${ENDPOINTS.UPDATE_NOTIFICATION_SETTING}`,data),
+  createSupportTicket: (data) => requests.post(`${ENDPOINTS.SUPPORT_TICKET}`,data),
+  getSupportTickets: () => requests.get(`${ENDPOINTS.SUPPORT_TICKET}`),
+  createSupportMessage: (data) => requests.post(`${ENDPOINTS.CREATE_SUPPORT_MESSAGE}`,data),
+  getSupportMessages: (data) => requests.post(`${ENDPOINTS.GET_SUPPORT_MESSAGES}`,data),
+  getPackages: () => requests.get(`${ENDPOINTS.GET_PACKAGES}`),
 };

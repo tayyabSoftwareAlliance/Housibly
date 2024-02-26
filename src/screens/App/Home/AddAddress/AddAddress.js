@@ -73,6 +73,9 @@ const AddAddress = ({ navigation, route }) => {
             },
             textInput: {
               color: colors.b1
+            },
+            description:{
+              color:'#777'
             }
           }}
         />

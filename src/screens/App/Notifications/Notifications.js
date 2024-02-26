@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, capitalizeFirstLetter, colors } from '../../../shared/exporter';
+import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, capitalizeFirstLetter, colors, family } from '../../../shared/exporter';
 import styles from './styles';
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -53,13 +53,10 @@ const Notifications = () => {
   }, [isFocused])
 
   const onNotificationPress = (item) => {
-    notificationSeen(item.id)
-    {
-      if (item.type == 'buy_property' || item.type == 'sell_property') {
-        dispatch(set_in_app_notification_to_show(item))
-      } else
-        navigateFromNotifi(item)
-    }
+    if (item.type == 'buy_property' || item.type == 'sell_property') {
+      dispatch(set_in_app_notification_to_show(item))
+    } else
+      navigateFromNotifi(item)
   }
 
   return (
@@ -75,7 +72,7 @@ const Notifications = () => {
           ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
         /> :
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-          <Text style={{ color: colors.g19 }} >No Notifications Found Yet!</Text>
+          <Text style={{ color: colors.g19, fontFamily: family.Gilroy_Medium }} >No Notifications Found Yet!</Text>
         </View>
       }
       <AppLoader loading={!(all_notifications.length > 0) && loading} />

@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_SemiBold,
   },
-  statusTxtStyle: index => {
+  statusTxtStyle: status => {
     return {
       fontSize: size.tiny,
       fontFamily: family.Gilroy_Medium,
-      color: index == 2 ? colors.s7 : colors.s8,
+      color: status == 'closed' ? colors.s7 : colors.s8,
     };
   },
   infoTxtStyle: {
@@ -66,10 +66,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   noRecords: {
-    marginRight: 17,
-    color: colors.p1,
-    fontSize: size.large,
-    fontFamily: family.Gilroy_Bold,
+    color: colors.g19,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Regular,
   },
   bottomView: {
     bottom: 20,

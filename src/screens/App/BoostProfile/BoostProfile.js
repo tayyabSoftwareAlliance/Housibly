@@ -1,11 +1,13 @@
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
-import { appIcons, colors } from '../../../shared/exporter'
+import { Alert, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { appIcons, appImages, colors, responseValidator } from '../../../shared/exporter'
 import styles from './styles'
 import { SafeAreaView } from 'react-native'
-import { BackHeader } from '../../../components'
+import { AppLoader, BackHeader } from '../../../components'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
+import { app } from '../../../shared/api'
 
 const packages_data = [
     {
@@ -25,9 +27,32 @@ const packages_data = [
     },
 ]
 
-const BoostProfile = ({navigation}) => {
+const BoostProfile = ({ navigation }) => {
 
-    const [packages, setPackages] = useState(packages_data)
+    const [packages, setPackages] = useState([])
+    const [loader, setLoader] = useState(false)
+    const isFocused = useIsFocused()
+
+    const fetchData = async () => {
+        try {
+            setLoader(true)
+            const res = await app.getPackages()
+            if (res?.status == 200) {
+                console.log('resssss', res.data)
+                setPackages(res.data || [])
+            }
+        } catch (error) {
+            console.log('error', error)
+            let msg = responseValidator(error?.response?.status, error?.response?.data);
+            Alert.alert('Error', msg || 'Something went wrong!');
+        } finally {
+            setLoader(false)
+        }
+    }
+
+    useEffect(() => {
+        isFocused && fetchData()
+    }, [isFocused])
 
     return (
         <SafeAreaView style={styles.rootContainer}>
@@ -47,35 +72,26 @@ const BoostProfile = ({navigation}) => {
                 <Text style={styles.subtitle}>
                     To get more clients easily, you can boost your account and get noticed by potential buyers.
                 </Text>
-                {packages.map((item, index) => (
-                    <TouchableOpacity onPress={() => {
-                        setPackages(prev => prev.map((it, ind) => {
-                        if (ind == index)
-                            it.selected = true
-                        else
-                            it.selected = false
-                        return { ...it }
-
-                    }))
-                    navigation.navigate('BoostProfileDetail',{package:item})
-                    }} >
+                {packages.slice(0,3).map((item, index) => (
+                    <TouchableOpacity onPress={() => navigation.navigate('BoostProfileDetail', { package: item })} >
                         <LinearGradient
                             key={index}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 0 }}
-                            colors={item.selected ? ['#FD4E4E', '#9F51DC'] : ['#DEDEDE', '#DEDEDE']}
+                            colors={index == 0 ? ['#FD4E4E', '#9F51DC'] : ['#DEDEDE', '#DEDEDE']}
                             style={styles.btnCon}
                         >
                             <Text style={styles.btnTxt}>
-                                {`$${item.price}/${item.duration}`}
+                                {`$${item.price}/${item.name}`}
                             </Text>
                         </LinearGradient>
                     </TouchableOpacity>
                 ))}
-                <Text style={styles.footerTxt} >
-                    Access to all features. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat. Velit officia consequat.
-                </Text>
+                <View style={styles.boostIconContainer}>
+                <Image source={appImages.boost} style={styles.boostIcon} resizeMode='contain' />
+                </View>
             </View>
+            <AppLoader loading={loader} />
         </SafeAreaView>
     )
 }

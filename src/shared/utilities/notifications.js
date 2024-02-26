@@ -27,7 +27,11 @@ export const notificationFormater = (notification) => {
                         property_owner_id: notification?.data?.sender_id,
                         property_owner_name: notification?.notification?.title,
                     } :
-                    {}
+                    notification?.data?.type == 'support_message' ?
+                        {
+                            conversation_id: notification?.data?.conversation_id
+                        } :
+                        {}
     }
 }
 export const navigateFromNotifi = (notification) => {
@@ -38,5 +42,7 @@ export const navigateFromNotifi = (notification) => {
         Linking.openURL(`housibly://PropertyDetail/${notification?.data?.property_id}/property_detail`)
     } else if (notification?.type == 'sell_property') {
         Linking.openURL(`housibly://PersonChat/${notification?.data?.property_owner_id}/${notification.image ? encodeURIComponent(notification?.image) : 'avatar'}/${notification?.data?.property_owner_name}/not_chats`)
+    } else if (notification?.type == 'support_message') {
+        Linking.openURL(`housibly://SupportChat/${notification?.data?.conversation_id}`)
     }
 }

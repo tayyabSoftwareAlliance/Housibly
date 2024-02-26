@@ -1,25 +1,28 @@
-import React, {useState} from 'react';
-import {Text, View, Image, SafeAreaView, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import {
   TextBox,
   AppButton,
   AppHeader,
   BackHeader,
   ImagePickerModal,
+  AppLoader,
 } from '../../../../components';
 import ImagePicker from 'react-native-image-crop-picker';
 import {
   appIcons,
   colors,
-  platformOrientedCode,
+  responseValidator,
   size,
 } from '../../../../shared/exporter';
 import styles from './styles';
+import { app } from '../../../../shared/api';
 
-const SupportQuery = ({navigation}) => {
+const SupportQuery = ({ navigation }) => {
   const [query, setQuery] = useState('');
-  const [queryImage, setQueryImage] = useState('');
+  const [queryImage, setQueryImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   //Gallery Handlers
   const showGallery = () => {
@@ -47,7 +50,38 @@ const SupportQuery = ({navigation}) => {
     }, 400);
   };
 
-  const submitQuery = () => {};
+  const submitQuery = async () => {
+    if (!query) {
+      Alert.alert('Error', 'Please enter description')
+      return
+    }
+    try {
+      setLoader(true)
+      const formData = new FormData()
+      formData.append('support[description]', query)
+      if (queryImage) {
+        const imgObj = {
+          name: queryImage.filename || 'image',
+          uri: queryImage.path,
+          type: queryImage.mime,
+        };
+        formData.append('support[image]', imgObj)
+      }
+      const res = await app.createSupportTicket(formData);
+      if (res?.status == 200) {
+        setQuery('')
+        setQueryImage(null)
+        setLoader(false)
+        setTimeout(() => navigation.navigate('SupportChat', { conversation_id: res?.data?.ticket?.id }), 1000)
+      }
+    } catch (error) {
+      console.log('submitQuery error ', error);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoader(false)
+    }
+  };
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -66,16 +100,7 @@ const SupportQuery = ({navigation}) => {
             setShowModal(true);
           }}>
           <Image
-            source={
-              queryImage === ''
-                ? appIcons.cameraIcon
-                : {
-                    uri: platformOrientedCode(
-                      queryImage?.path,
-                      queryImage?.sourceURL,
-                    ),
-                  }
-            }
+            source={queryImage ? { uri: queryImage.path } : appIcons.cameraIcon}
             style={styles.imgStyle(queryImage)}
           />
         </TouchableOpacity>
@@ -102,6 +127,7 @@ const SupportQuery = ({navigation}) => {
           }}
         />
       )}
+      <AppLoader loading={loader} />
     </SafeAreaView>
   );
 };

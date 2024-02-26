@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, colors, responseValidator } from '../../../shared/exporter';
+import { PADDING_BOTTOM_FOR_TAB_BAR_SCREENS, WP, appIcons, appImages, colors, family, responseValidator } from '../../../shared/exporter';
 import styles from './styles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useNavigation } from '@react-navigation/native'
@@ -197,7 +197,7 @@ const AllChats = () => {
           ListFooterComponentStyle={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }}
         /> :
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-          <Text style={{ color: colors.g19 }} >No Conversations Found Yet!</Text>
+          <Text style={{ color: colors.g19, fontFamily: family.Gilroy_Medium }} >No Conversations Found Yet!</Text>
         </View>
       }
       <ChatPopupModal

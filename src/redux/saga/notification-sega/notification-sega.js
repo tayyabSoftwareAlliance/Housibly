@@ -31,6 +31,8 @@ function* getAllNotifications() {
             property_id: item.property_id,
             property_owner_id: item.sender_id,
             property_owner_name: item.title,
+          } : item.type == 'support_message' ? {
+            conversation_id: item.conversation_id
           } : {}
         }
       })
@@ -40,7 +42,7 @@ function* getAllNotifications() {
       });
     }
   } catch (error) {
-    console.log('Get notifications error ',error?.response)
+    console.log('Get notifications error ', error?.response)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     // Alert.alert('Error', msg || 'Something went wrong!');
   } finally {

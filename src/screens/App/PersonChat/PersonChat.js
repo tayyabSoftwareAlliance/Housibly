@@ -96,14 +96,12 @@ const renderItem = (item, index, userId) => {
 const PersonChat = ({ navigation, route }) => {
 
   const params = route.params
-  console.log('paramssssss', params)
   const dispatch = useDispatch()
   const [conversationId, setConversationId] = useState(params?.conversation_id);
   const [avatar, setAvatar] = useState(decodeURIComponent(params?.avatar));
   const [isBlocked, setIsBlocked] = useState(params?.is_blocked);
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
-  const [visibility, setVisibility] = useState(false);
   const [allMessages, setAllMessages] = useState([]);
   const [loader, setLoader] = useState(true)
   const [sendLoader, setSendLoader] = useState(false)
@@ -223,10 +221,10 @@ const PersonChat = ({ navigation, route }) => {
         name: image?.fileName || 'image'
       }
     }
-    if (!message && !image) return
+    if (message.trim() == '' && !image) return
     const msg = {
       user_id: userId,
-      body: image ? '' : message,
+      body: image ? '' : message.trim(),
       image: image?.uri
     }
     setAllMessages(previousMessages => ([msg, ...previousMessages]))
@@ -263,12 +261,12 @@ const PersonChat = ({ navigation, route }) => {
 
   //Camra Handlers
   const openCamera = async () => {
-      setTimeout(() => {
-        ImagePicker.openCamera(image_options).then(image => {
-          // console.log('imageeee', image)
-          onSend(image)
-        }).catch(error => console.log('error ', error))
-      }, 400);
+    setTimeout(() => {
+      ImagePicker.openCamera(image_options).then(image => {
+        // console.log('imageeee', image)
+        onSend(image)
+      }).catch(error => console.log('error ', error))
+    }, 400);
   };
   // console.log('allMessages', JSON.stringify(allMessages, null, 2))
 
@@ -367,7 +365,7 @@ const PersonChat = ({ navigation, route }) => {
         />
       ) : (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-          <Text style={{ color: colors.g19 }} >No Messages Found Yet!</Text>
+          <Text style={{ color: colors.g19, fontFamily: family.Gilroy_Medium }} >No Messages Found Yet!</Text>
         </View>
       )}
       {!isBlocked &&
@@ -385,7 +383,7 @@ const PersonChat = ({ navigation, route }) => {
                 placeholderTextColor={colors.g40}
                 style={styles.inputStyles}
               />
-              {visibility ? (
+              {sendLoader ? (
                 <ActivityIndicator
                   animating
                   size={'small'}
@@ -419,7 +417,7 @@ const PersonChat = ({ navigation, route }) => {
           </View>
         </KeyboardAvoidingView>
       }
-      <AppLoader loading={createConversationLoader || blockCheckLoader} />
+      <AppLoader loading={createConversationLoader || blockCheckLoader || loader} />
       <ChatPopupModal
         image={avatar}
         title={params?.full_name}

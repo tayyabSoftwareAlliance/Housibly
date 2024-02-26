@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {WP, colors, size, family} from '../../../../shared/exporter';
+import { StyleSheet } from 'react-native';
+import { WP, colors, size, family } from '../../../../shared/exporter';
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -18,14 +18,13 @@ const styles = StyleSheet.create({
     fontFamily: family.Gilroy_SemiBold,
   },
   imgStyle: image => {
-    if (image === '') {
+    if (image) {
       return {
         borderRadius: 7,
         width: WP('12'),
         height: WP('12'),
         marginTop: WP('4'),
         alignSelf: 'center',
-        tintColor: colors.s7,
       };
     } else {
       return {
@@ -34,6 +33,7 @@ const styles = StyleSheet.create({
         height: WP('12'),
         marginTop: WP('4'),
         alignSelf: 'center',
+        tintColor: colors.s7,
       };
     }
   },

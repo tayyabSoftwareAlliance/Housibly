@@ -50,6 +50,7 @@ const ENDPOINTS = {
   SET_DEFAULT_CARD: 'set_default_card',
   GET_NOTIFICATION_SETTING:'show_current_user_setting',
   UPDATE_NOTIFICATION_SETTING:'update_current_user_setting',
+  GET_PACKAGES:'get_packages',
   
   //chat
   CONVERSATIONS: 'conversations',
@@ -67,6 +68,11 @@ const ENDPOINTS = {
   SEARCH_SUPPORT_CLOSER:'search_support_closers',
   GET_SUPPORT_CLOSER_REVIEWS:'reviews/get_reviews',
   GET_VISITORS:'profile_visitor_list',
+
+  //support chat
+  SUPPORT_TICKET:'tickets',
+  CREATE_SUPPORT_MESSAGE:'support_conversations/create_message',
+  GET_SUPPORT_MESSAGES:'support_conversations/get_messages',
 
 };
 

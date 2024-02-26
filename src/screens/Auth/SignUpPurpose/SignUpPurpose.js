@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,32 @@ import {
 import { AppButton, BackHeader, SignUpModal, Spacer } from '../../../components';
 import { appIcons, appImages, colors, WP } from '../../../shared/exporter';
 import styles from './styles';
+import Animated, { FadeInLeft, FadeInRight, FadeInUp } from 'react-native-reanimated';
+
+const TopContainer = memo(({ navigation }) => {
+  const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground)
+  return (
+    <AnimatedImageBackground entering={FadeInUp.duration(500)} source={appImages.homeImg} style={styles.bgImgStyle}>
+      {navigation?.canGoBack() &&
+        <TouchableOpacity
+          onPress={() => {
+            navigation?.goBack();
+          }}
+          style={styles.btnCon}>
+          <Image
+            resizeMode="contain"
+            source={appIcons.backArrow}
+            style={[styles.iconStyle1]}
+          />
+        </TouchableOpacity>
+      }
+      <Animated.Text entering={FadeInLeft.duration(500)} style={styles.helloTxtStyle}>Hello, roberto</Animated.Text>
+      <Animated.Text entering={FadeInRight.duration(500)} style={styles.chooseTxtStyle}>
+        Choose, What do you want to do?{' '}
+      </Animated.Text>
+    </AnimatedImageBackground>
+  )
+})
 
 const SignUpPurpose = ({ navigation, route }) => {
   const login_type = route.params?.login_type
@@ -59,25 +85,7 @@ const SignUpPurpose = ({ navigation, route }) => {
   return (
     <View style={styles.rootContainer}>
       <StatusBar backgroundColor={'transparent'} translucent={true} />
-      <ImageBackground source={appImages.homeImg} style={styles.bgImgStyle}>
-        {navigation?.canGoBack() &&
-          <TouchableOpacity
-            onPress={() => {
-              navigation?.goBack();
-            }}
-            style={styles.btnCon}>
-            <Image
-              resizeMode="contain"
-              source={appIcons.backArrow}
-              style={[styles.iconStyle1]}
-            />
-          </TouchableOpacity>
-        }
-        <Text style={styles.helloTxtStyle}>Hello, roberto</Text>
-        <Text style={styles.chooseTxtStyle}>
-          Choose, What do you want to do?{' '}
-        </Text>
-      </ImageBackground>
+      <TopContainer navigation={navigation} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}>

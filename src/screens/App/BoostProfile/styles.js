@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     alignSelf:'center',
   },
   boostIcon:{
-    width:HP(30),
-    height:HP(30),
+    width:HP(25),
+    height:HP(25),
   },
 });
 

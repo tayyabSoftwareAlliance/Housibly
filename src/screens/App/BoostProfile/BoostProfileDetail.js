@@ -32,7 +32,7 @@ const BoostProfileDetail = ({ route }) => {
                 <BackHeader tintColor={colors.white} containerStyle={{ marginTop: top }} />
                 <View style={styles.packageDetailTitleContainer}>
                     <Text style={styles.packageDetailTitle}>
-                        {`$${packageDetail?.price}/${packageDetail?.duration}`}
+                        {`$${packageDetail?.price}/${packageDetail?.name}`}
                     </Text>
                     <Text style={[styles.packageDetailSubtitle, subscribed && { opacity: 1 }]}>
                         Subscribed
