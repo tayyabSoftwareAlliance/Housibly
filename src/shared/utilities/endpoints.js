@@ -38,6 +38,7 @@ const ENDPOINTS = {
   GET_BOOKMARKS:'bookmarks',
   USER_PREFERENCE: 'user_preferences',
   SAVED_LOCATIONS: 'saved_searches',
+  DREAM_ADDRESS: 'dream_addresses',
   GET_OTHER_USER_PROFILE: 'show_other_user_profile',
   CREATE_REVIEW:'reviews',
   BLOCK_UNLBLOCK_USER:'block_unblock_user',
@@ -51,6 +52,7 @@ const ENDPOINTS = {
   GET_NOTIFICATION_SETTING:'show_current_user_setting',
   UPDATE_NOTIFICATION_SETTING:'update_current_user_setting',
   GET_PACKAGES:'get_packages',
+  SEARCHED_THIS_LOCATION:'searched_addresses',
   
   //chat
   CONVERSATIONS: 'conversations',

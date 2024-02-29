@@ -194,10 +194,10 @@ const styles = StyleSheet.create({
     height: 0.5,
     backgroundColor: colors.g18,
   },
-  inputStyle: {
-    height: WP('15'),
-    color: colors.b1,
+  startTypingTxt: {
+    color: colors.g19,
     paddingHorizontal: 2,
+    paddingVertical: WP(4),
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_Medium,
   },
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: index % 2 == 0 ? 4 : 6,
       backgroundColor: index % 2 == 0 ? colors.g5 : colors.white,
+      marginTop:WP(1)
     };
   },
   addrsTxtStyle: {

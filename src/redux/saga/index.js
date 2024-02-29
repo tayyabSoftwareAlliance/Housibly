@@ -10,6 +10,9 @@ import {
   getMyPreferenceRequest,
   getMatchedPropertiesRequest,
   getTopSupportClosersRequest,
+  getDreamAddressesRequest,
+  deleteDreamAddressRequest,
+  createDreamAddressRequest,
 } from './app-sega/app-sega';
 
 import {
@@ -80,6 +83,11 @@ export function* rootSaga() {
   //Preference
   yield fork(getMyPreferenceRequest);
   yield fork(updateMyPreferenceRequest);
+
+  //Dream Address
+  yield fork(createDreamAddressRequest);
+  yield fork(getDreamAddressesRequest);
+  yield fork(deleteDreamAddressRequest);
 
   //Matched Properties
   yield fork(getMatchedPropertiesRequest);

@@ -10,6 +10,7 @@ const initialState = {
   address: '',
   all_properties: [],
   my_preference: { property_type: 'house', currency_type: currency_list[0] },
+  dream_addresses: [],
   matched_properties: { lastPage: 0, data: [] },
   top_support_closers: [],
   conversation_opened_id: -1,
@@ -137,6 +138,58 @@ const appReducers = (state = initialState, actions) => {
         my_preference: { ...payload }
       };
     case TYPES.UPDATE_MY_PREFERENCE_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    //************ Create Dream Address states*************
+    case TYPES.CREATE_DREAM_ADDRESS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.CREATE_DREAM_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        dream_addresses: [...state.dream_addresses,payload]
+      };
+    case TYPES.CREATE_DREAM_ADDRESS_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
+
+      //************ Get Dream Addresses states*************
+      case TYPES.GET_DREAM_ADDRESSES_REQUEST:
+        return {
+          ...state,
+          loading: true,
+        };
+      case TYPES.GET_DREAM_ADDRESSES_SUCCESS:
+        return {
+          ...state,
+          dream_addresses: payload
+        };
+      case TYPES.GET_DREAM_ADDRESSES_FINALLY:
+        return {
+          ...state,
+          loading: false,
+        };
+
+    //************ Delete Dream Address states*************
+    case TYPES.DELETE_DREAM_ADDRESS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.DELETE_DREAM_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        dream_addresses: state.dream_addresses.filter(item => item.id != payload?.id),
+      };
+    case TYPES.DELETE_DREAM_ADDRESS_FINALLY:
       return {
         ...state,
         loading: false,

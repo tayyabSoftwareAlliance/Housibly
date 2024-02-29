@@ -35,8 +35,8 @@ function* createMyProp(action) {
   try {
     console.log('createeeeee')
     const res = yield app.createProperty(action.payload)
-    console.log('status',res.status)
-    console.log('data',res.data)
+    console.log('status', res.status)
+    console.log('data', res.data)
     if (res?.status == 200) {
       yield put({
         type: types.CREATE_MY_PROPERTY_SUCCESS,
@@ -45,7 +45,7 @@ function* createMyProp(action) {
       action.onSuccess()
     }
   } catch (error) {
-    console.log('error',error)
+    console.log('error', error)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {
@@ -69,7 +69,7 @@ function* getMyProp() {
       });
     }
   } catch (error) {
-    console.log('get my properties error ',error)
+    console.log('get my properties error ', error)
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {
@@ -179,6 +179,84 @@ function* updateMyPreference(action) {
   }
 }
 
+//Create dream address
+export function* createDreamAddressRequest() {
+  yield takeLatest(types.CREATE_DREAM_ADDRESS_REQUEST, createDreamAddress);
+}
+function* createDreamAddress(action) {
+  try {
+    const res = yield app.createDreamAddress(action.payload)
+    if (res?.status == 200) {
+      console.log('ressss', res?.data)
+      yield put({
+        type: types.CREATE_DREAM_ADDRESS_SUCCESS,
+        payload: res?.data,
+      });
+      action.onSuccess?.()
+    }
+  } catch (error) {
+    console.log('error', error?.response?.data)
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.CREATE_DREAM_ADDRESS_FINALLY
+    });
+    action.onFinally?.()
+  }
+}
+
+//Get dream addresses
+export function* getDreamAddressesRequest() {
+  yield takeLatest(types.GET_DREAM_ADDRESSES_REQUEST, getDreamAddresses);
+}
+function* getDreamAddresses() {
+  try {
+    const res = yield app.getDreamAddresses()
+    if (res?.status == 200) {
+      yield put({
+        type: types.GET_DREAM_ADDRESSES_SUCCESS,
+        payload: res?.data || [],
+      });
+    }
+  } catch (error) {
+    console.log('error', error?.response?.data)
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.GET_DREAM_ADDRESSES_FINALLY
+    });
+  }
+}
+
+//Delete dream address
+export function* deleteDreamAddressRequest() {
+  yield takeLatest(types.DELETE_DREAM_ADDRESS_REQUEST, deleteDreamAddress);
+}
+function* deleteDreamAddress(action) {
+  try {
+    const res = yield app.deleteDreamAddress(action.payload.id)
+    if (res?.status == 200) {
+      yield put({
+        type: types.DELETE_DREAM_ADDRESS_SUCCESS,
+        payload: action.payload,
+      });
+      action.onSuccess?.()
+    } else {
+      Alert.alert('Error', res?.data?.message || 'Something went wrong!');
+    }
+  } catch (error) {
+    console.log('error', error?.response?.data)
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    yield put({
+      type: types.DELETE_DREAM_ADDRESS_FINALLY
+    });
+    action.onFinally?.()
+  }
+}
 
 //Get matched properties
 export function* getMatchedPropertiesRequest() {

@@ -31,7 +31,7 @@ export const set_address_request = (params, cbSuccess) => {
 };
 
 //Create My Property
-export const create_my_property = (payload,onSuccess) => {
+export const create_my_property = (payload, onSuccess) => {
   return {
     type: TYPES.CREATE_MY_PROPERTY_REQUEST,
     payload,
@@ -47,7 +47,7 @@ export const get_my_properties = () => {
 };
 
 //Update My Property
-export const update_my_property = (payload,onSuccess) => {
+export const update_my_property = (payload, onSuccess) => {
   return {
     type: TYPES.UPDATE_MY_PROPERTY_REQUEST,
     payload,
@@ -56,7 +56,7 @@ export const update_my_property = (payload,onSuccess) => {
 };
 
 //Delete My Property
-export const delete_my_property = (payload,onSuccess) => {
+export const delete_my_property = (payload, onSuccess) => {
   return {
     type: TYPES.DELETE_MY_PROPERTY_REQUEST,
     payload,
@@ -73,7 +73,7 @@ export const get_my_preference = (onSuccess) => {
 };
 
 //Update My Preference
-export const update_my_preference = (payload,onSuccess) => {
+export const update_my_preference = (payload, onSuccess) => {
   return {
     type: TYPES.UPDATE_MY_PREFERENCE_REQUEST,
     payload,
@@ -81,11 +81,38 @@ export const update_my_preference = (payload,onSuccess) => {
   };
 };
 
+//Create dream address
+export const create_dream_address = (payload, onSuccess, onFinally) => {
+  return {
+    type: TYPES.CREATE_DREAM_ADDRESS_REQUEST,
+    payload,
+    onSuccess,
+    onFinally
+  };
+};
+
+//Get dream addresses
+export const get_dream_addresses = () => {
+  return {
+    type: TYPES.GET_DREAM_ADDRESSES_REQUEST,
+  };
+};
+
+//Delete dream address
+export const delete_dream_address = (payload, onSuccess, onFinally) => {
+  return {
+    type: TYPES.DELETE_DREAM_ADDRESS_REQUEST,
+    payload,
+    onSuccess,
+    onFinally
+  };
+};
+
 //Get Matched Properties
-export const get_matched_properties = (page,onFinally) => {
+export const get_matched_properties = (page, onFinally) => {
   return {
     type: TYPES.GET_MATCHED_PROPERTIES_REQUEST,
-    payload:{page},
+    payload: { page },
     onFinally
   };
 };
@@ -100,13 +127,13 @@ export const get_top_support_closers = () => {
 export const set_conversation_opened_id = (id) => {
   return {
     type: TYPES.SET_CONVERSATION_OPENED_ID,
-    payload:{id}
+    payload: { id }
   };
 };
 
 export const set_in_app_notification_to_show = (notification) => {
   return {
     type: TYPES.SET_IN_APP_NOTIFICATION_TO_SHOW,
-    payload:{notification}
+    payload: { notification }
   };
 };

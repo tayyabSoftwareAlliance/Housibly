@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import {
   AddressCard,
@@ -6,7 +6,7 @@ import {
   BackHeader,
   FilterInput,
 } from '../../../../components';
-import { GOOGLE_MAP_KEY, colors, family, size, spacing } from '../../../../shared/exporter';
+import { GOOGLE_MAP_KEY, WP, colors, family, responseValidator, size, spacing } from '../../../../shared/exporter';
 import styles from './styles';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,10 @@ import { set_address_request } from '../../../../redux/actions';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { set_user_location_request } from '../../../../redux/actions/auth-actions/auth-action';
+import { app } from '../../../../shared/api';
+import { create_dream_address } from '../../../../redux/actions/app-actions/app-actions';
+
+let page = 1;
 
 const AddAddress = ({ navigation, route }) => {
 
@@ -21,6 +25,39 @@ const AddAddress = ({ navigation, route }) => {
   const from = route.params?.from
   const dispatch = useDispatch(null)
   const [loader, setLoader] = useState(false)
+  const [users, setUsers] = useState([])
+  const [count, setCount] = useState(0)
+  const [locationObj, setLocationObj] = useState(null)
+  const [refreshLoader, setRefreshLoader] = useState(false)
+
+  const fetchData = async (locationObj, from) => {
+    if (loader || refreshLoader || !locationObj) return
+    if (from == 'refresh') {
+      page = 1
+      setRefreshLoader(true)
+    } else
+      setLoader(true)
+    try {
+      console.log('thisssssss')
+      const res = await app.getPeopleWhoSearchedThisLocation(locationObj?.latitude, locationObj?.longitude, page)
+      console.log(res.data)
+      if (res?.status == 200) {
+        if (page == 1)
+          setCount(res.data?.total_user_count || 0)
+        if (page == 1)
+          setUsers(res.data?.users || [])
+        else if (res.data?.users?.length > 0)
+          setUsers(prev => [...prev, ...res.data?.users])
+        page++
+      }
+    } catch (error) {
+      console.log('error', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      from == 'refresh' ? setRefreshLoader(false) : setLoader(false)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -35,13 +72,13 @@ const AddAddress = ({ navigation, route }) => {
           fetchDetails
           onPress={async (data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            const addressObj = {
+            const locationObj = {
               address: details?.formatted_address,
               latitude: details?.geometry?.location?.lat,
               longitude: details?.geometry?.location?.lng,
             }
             if (from == 'create_property') {
-              await AsyncStorage.setItem('address', JSON.stringify(addressObj))
+              await AsyncStorage.setItem('address', JSON.stringify(locationObj))
               navigation.goBack()
             } else if (from == 'home') {
               setLoader(true)
@@ -49,7 +86,29 @@ const AddAddress = ({ navigation, route }) => {
                 setLoader(false)
                 setTimeout(() => navigation.goBack(), 1000)
               }
-              dispatch(set_user_location_request(addressObj, onSuccess))
+              dispatch(set_user_location_request(locationObj, onSuccess))
+            } else if (from == 'enter_address') {
+              setLocationObj(locationObj)
+              fetchData(locationObj, 'refresh')
+              const formData = new FormData()
+              formData.append('searched_address[address]', locationObj.address)
+              formData.append('searched_address[latitude]', locationObj.latitude)
+              formData.append('searched_address[longitude]', locationObj.longitude)
+              app.addSearchedAddress(formData)
+            } else if (from == 'dream_address') {
+              setLoader(true)
+              const formData = new FormData()
+              formData.append('dream_address[address]', locationObj.address)
+              formData.append('dream_address[latitude]', locationObj.latitude)
+              formData.append('dream_address[longitude]', locationObj.longitude)
+              const onSuccess = () => {
+                setLoader(false)
+                setTimeout(() => navigation.goBack(), 1000)
+              }
+              const onFinally = () => {
+                setLoader(false)
+              }
+              dispatch(create_dream_address(formData, onSuccess,onFinally))
             }
           }}
           query={{
@@ -74,8 +133,8 @@ const AddAddress = ({ navigation, route }) => {
             textInput: {
               color: colors.b1
             },
-            description:{
-              color:'#777'
+            description: {
+              color: '#777'
             }
           }}
         />
@@ -83,22 +142,29 @@ const AddAddress = ({ navigation, route }) => {
         {from == 'enter_address' &&
           <>
             <Text style={styles.h1}>People who searched this address</Text>
+            {count ? <Text style={styles.countText}>{`${count} entries`}</Text> : null}
             <View style={{ flex: 1 }}>
               <FlatList
-                data={[1, 2, 3, 4, 5]}
-                renderItem={() => {
-                  return (
-                    <View>
-                      <AddressCard />
-                    </View>
-                  );
+                data={users}
+                keyExtractor={(_, index) => index}
+                refreshing={refreshLoader}
+                onRefresh={() => fetchData(locationObj, 'refresh')}
+                onEndReached={() => fetchData(locationObj)}
+                onEndReachedThreshold={0.5}
+                renderItem={({ item }) => {
+                  return <AddressCard item={item} />
                 }}
+                ListFooterComponent={
+                  <View style={styles.footerComponent} >
+                    {!refreshLoader && loader && <ActivityIndicator size={WP(6)} color={colors.bl1} />}
+                  </View>
+                }
               />
             </View>
           </>
         }
       </View>
-      <AppLoader loading={loader} />
+      {from != 'enter_address' && <AppLoader loading={loader} />}
     </SafeAreaView>
   );
 };

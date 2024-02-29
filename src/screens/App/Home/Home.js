@@ -122,7 +122,7 @@ const Home = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if(userInfo){
+    if (userInfo) {
       dispatch(get_my_properties())
       dispatch(get_top_support_closers())
       dispatch(get_all_notifications())
@@ -256,6 +256,18 @@ const Home = ({ navigation }) => {
             borderColor={colors.p2}
             title="List A New Property"
             textStyle={styles.btnTxtStyle}
+          />
+        </View>
+      }
+      {
+        selected == 'buy' &&
+        <View style={styles.bottomView}>
+          <AppButton
+            width={'43%'}
+            borderColor={colors.p2}
+            title="Edit Buyer Preference"
+            textStyle={{ fontSize: size.tiny }}
+            onPress={() => navigation.navigate('FilterScreen')}
           />
         </View>
       }

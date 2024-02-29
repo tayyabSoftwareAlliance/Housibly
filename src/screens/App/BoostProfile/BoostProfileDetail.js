@@ -1,4 +1,4 @@
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import styles from './styles'
 import { AppButton, BackHeader } from '../../../components'
@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { HP, appImages, colors, size } from '../../../shared/exporter'
 import Animated, { Easing, FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import { confirmPlatformPayPayment, isPlatformPaySupported } from '@stripe/stripe-react-native'
 
 const BoostProfileDetail = ({ route }) => {
 
@@ -19,6 +20,55 @@ const BoostProfileDetail = ({ route }) => {
             transform: [{ translateY: -animatedValue.value }]
         }
     })
+
+    const pay = async () => {
+        if (await isPlatformPaySupported({ googlePay: { testEnv: true } })) {
+            const clientSecret = "pi_3OolgXIJekvJVXYP0SOpGQzn_secret_bSEXR2jhidkk4Kgf7DXDCmqkz"
+            const { error } = await confirmPlatformPayPayment(
+                clientSecret,
+                {
+                    applePay: {
+                        cartItems: [
+                            {
+                                label: `${packageDetail?.name} Subscription`?.toString().toUpperCase(),
+                                amount: Number(packageDetail?.price || '00.00').toFixed(2),
+                                paymentType: 'Immediate',
+                            },
+                        ],
+                        merchantCountryCode: 'US',
+                        currencyCode: 'USD',
+                        //   requiredShippingAddressFields: [
+                        //     PlatformPay.ContactField.PostalAddress,
+                        //   ],
+                        //   requiredBillingContactFields: [PlatformPay.ContactField.PhoneNumber],
+                    },
+                    googlePay: {
+                        testEnv: true,
+                        merchantName: 'My merchant name',
+                        merchantCountryCode: 'US',
+                        currencyCode: 'USD',
+                        // billingAddressConfig: {
+                        //     format: PlatformPay.BillingAddressFormat.Full,
+                        //     isPhoneNumberRequired: true,
+                        //     isRequired: true,
+                        // },
+                    },
+                }
+            );
+            if (error) {
+                // handle error
+                console.log('Error ', error)
+                console.log('Error response ', error?.response)
+            } else {
+                Alert.alert('Success', 'Check the logs for payment intent details.');
+                setSubscribed(true)
+                animatedValue.value = withTiming(HP(10), { duration: 1000 })
+
+            }
+        } else {
+            Alert.alert('Error', 'Apple Pay does not supported on your device!')
+        }
+    }
 
     return (
         <View style={[styles.rootContainer, { alignItems: 'center' }]}>
@@ -55,10 +105,7 @@ const BoostProfileDetail = ({ route }) => {
                             borderColor={colors.p2}
                             title="Proceed to payment"
                             textStyle={{ fontSize: size.tiny }}
-                            onPress={() => {
-                                setSubscribed(true)
-                                animatedValue.value = withTiming(HP(10), { duration: 1000 })
-                            }}
+                            onPress={pay}
                             marginVertical={HP(3)}
                         />
                     </Animated.View>

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   HP,
   WP,
@@ -22,7 +22,20 @@ const styles = StyleSheet.create({
     fontSize: size.large,
     color: colors.b1,
     fontFamily: family.Gilroy_Bold,
-    marginVertical: 10,
+    marginTop: 10,
+  },
+  countText: {
+    fontSize: size.small,
+    color: colors.p1,
+    fontFamily: family.Gilroy_Medium,
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  footerComponent: {
+    height: WP(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%'
   },
 });
 

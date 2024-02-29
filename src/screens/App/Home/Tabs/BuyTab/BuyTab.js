@@ -8,7 +8,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { AddressModal, AppButton, Spacer } from '../../../../../components';
+import { AddressModal, AppButton, AppLoader, Spacer } from '../../../../../components';
 import {
   WP,
   colors,
@@ -24,7 +24,7 @@ import {
 } from '../../../../../shared/utilities/constant';
 import styles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { get_my_preference } from '../../../../../redux/actions/app-actions/app-actions';
+import { delete_dream_address, get_dream_addresses, get_my_preference } from '../../../../../redux/actions/app-actions/app-actions';
 
 const RenderRow = ({ title, text, list, odd, textStyle }) => {
 
@@ -46,22 +46,30 @@ const RenderRow = ({ title, text, list, odd, textStyle }) => {
 const BuyTab = ({ navigation }) => {
 
   const dispatch = useDispatch()
-  const { my_preference, sublists } = useSelector(state => state?.appReducer)
+  const { my_preference,dream_addresses, sublists } = useSelector(state => state?.appReducer)
   const [address, setAddress] = useState('');
   const [showAdvance, setShowAdvance] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const AddressesRow = ({ item, index }) => {
+    const deleteAddress = () => {
+      setLoader(true)
+      dispatch(delete_dream_address({id:item?.id},() => setLoader(false),() => setLoader(false)))
+    }
     return (
       <View style={styles.addressItemRow(index)}>
         <Text style={styles.addrsTxtStyle}>{item?.address}</Text>
+        <TouchableOpacity style={{padding:WP(2)}} onPress={deleteAddress} >
         <Image source={appIcons.cross} style={styles.crossIconStyle} />
+        </TouchableOpacity>
       </View>
     );
   };
 
   useEffect(() => {
     dispatch(get_my_preference())
+    dispatch(get_dream_addresses())
   }, [])
 
   return (
@@ -170,30 +178,25 @@ const BuyTab = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.dividerView} />
-        <TextInput
+        {/* <TextInput
           value={address}
           style={styles.inputStyle}
           placeholder="Start typing..."
           placeholderTextColor={colors.g19}
           onChangeText={txt => setAddress(txt)}
-        />
+        /> */}
+        <Text style={styles.startTypingTxt} onPress={() => navigation?.navigate('AddAddress', { from: 'dream_address' })} >Start typing...</Text>
         <View style={[styles.dividerView, { marginBottom: WP('4') }]} />
-        {addresses.map((item, index) => {
+        {dream_addresses.map((item, index) => {
           return <AddressesRow key={index} item={item} index={index} />;
         })}
       </View >
-      <Spacer androidVal={WP('2')} iOSVal={WP('2')} />
-      <AppButton
-        width={'43%'}
-        borderColor={colors.p2}
-        title="Edit Buyer Preference"
-        textStyle={{ fontSize: size.tiny }}
-        onPress={() => navigation.navigate('FilterScreen')}
-      />
+      <Spacer androidVal={WP('12')} iOSVal={WP('12')} />
       <AddressModal
         show={showAddressModal}
         onPressHide={() => setShowAddressModal(false)}
       />
+      <AppLoader loading={loader} />
     </>
   );
 };

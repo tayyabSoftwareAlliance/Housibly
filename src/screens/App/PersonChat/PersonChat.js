@@ -103,7 +103,7 @@ const PersonChat = ({ navigation, route }) => {
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
   const [allMessages, setAllMessages] = useState([]);
-  const [loader, setLoader] = useState(true)
+  const [loader, setLoader] = useState(false)
   const [sendLoader, setSendLoader] = useState(false)
   const [blockCheckLoader, setBlockCheckLoader] = useState(false)
   const [createConversationLoader, setCreateConversationLoader] = useState(false)

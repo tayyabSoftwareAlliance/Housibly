@@ -39,7 +39,7 @@ const settingsReducers = (state = initialState, actions) => {
         loading: false,
         isSuccess: true,
         isFailure: false,
-        userProfile: payload,
+        userProfile: state.userProfile ? { ...state.userProfile, user: payload } : { user: payload },
       };
     case TYPES.UPDATE_PROFILE_FAILURE:
       return {
@@ -47,7 +47,6 @@ const settingsReducers = (state = initialState, actions) => {
         loading: false,
         isSuccess: false,
         isFailure: true,
-        userProfile: null,
       };
     // Add Support Info Success
     case TYPES.ADD_SUPPORT_INFO_SUCCESS:
