@@ -115,3 +115,13 @@ export const set_user_location_request = (params,onSuccess) => {
     onSuccess
   };
 };
+
+
+export const update_user_setting_request = (params,onFailure,onFinally) => {
+  return {
+    type: TYPES.UPDATE_USER_SETTING_REQUEST,
+    params,
+    onFailure,
+    onFinally
+  };
+};

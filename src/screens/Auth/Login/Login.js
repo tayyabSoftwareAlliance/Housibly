@@ -52,7 +52,7 @@ const Login = ({ navigation }) => {
     const socialLoginSuccess = async res => {
       setIsLoading(false);
       await new Promise(res => setTimeout(res, 1000))
-      console.log('ressssssss', JSON.stringify(res, null, 2))
+      console.log('socialLoginSuccess ressssssss', JSON.stringify(res, null, 2))
       // setTimeout(() => {
       //   if (!res?.user?.profile_complete) {
       //     navigation?.replace('SignUpPurpose', { from: 'social_login' });
@@ -80,7 +80,7 @@ const Login = ({ navigation }) => {
     };
     const socialLoginFailure = async err => {
       console.log('Err is ==> ', err);
-      Alert.alert('Error', err);
+      Alert.alert('Error', err || 'Something went wrong!');
       setIsLoading(false);
     };
     const fcmToken = await messaging().getToken();

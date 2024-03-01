@@ -9,58 +9,58 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { AppButton, AppHeader, BackHeader, Spacer } from '../../../../components';
-import { get_default_card_request } from '../../../../redux/actions';
+import { AppButton, AppHeader, AppLoader, BackHeader, Spacer } from '../../../../components';
 import {
   appIcons,
   checkConnected,
   colors,
   networkText,
+  responseValidator,
   WP,
 } from '../../../../shared/exporter';
 import styles from './styles';
+import { app } from '../../../../shared/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { update_user_setting_request } from '../../../../redux/actions/auth-actions/auth-action';
 
 const PayMethod = ({ navigation }) => {
-  const [method, setMethod] = useState('cards');
-  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch()
+  const { userInfo } = useSelector(state => state?.auth);
+  const [method, setMethod] = useState('credit_card');
+  const [loader, setLoader] = useState(false);
   const [currentCard, setcurrentCard] = useState(null);
-
-  const dispatch = useDispatch(null);
   const isFocus = useIsFocused(null);
-
-  useEffect(() => {
-    if (isFocus) {
-      // getDefaultCard();
-    }
-  }, [isFocus]);
 
   //Get Default Card
   const getDefaultCard = async () => {
-    const check = await checkConnected();
-    if (check) {
-      try {
-        setLoading(true);
-        const onSuccess = res => {
-          setLoading(false);
-          setcurrentCard(res);
-          console.log('On Default Card Success', res);
-        };
-        const onFailure = res => {
-          setLoading(false);
-          Alert.alert('Error', res);
-          console.log('On Default Card Failure', res);
-        };
-        dispatch(get_default_card_request(onSuccess, onFailure));
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
+    try {
+      setLoader(true)
+      const isConnected = await checkConnected();
+      if (isConnected) {
+        const res = await app.getDefaultCard()
+        if (res.status == 200) {
+          setcurrentCard(res.data)
+        }
+      } else {
+        Alert.alert('Error', networkText);
       }
-    } else {
-      setLoading(false);
-      Alert.alert('Error', networkText);
+    } catch (error) {
+      console.log('getDefaultCard error ', error)
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert('Error', msg || 'Something went wrong!');
+    } finally {
+      setLoader(false)
     }
   };
+
+  useEffect(() => {
+    isFocus && getDefaultCard()
+  }, [isFocus])
+
+  useEffect(() => {
+    setMethod(userInfo?.user?.payment_method || 'credit_card')
+  }, [userInfo])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -81,7 +81,22 @@ const PayMethod = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.itemContainer}
-          onPress={() => setMethod('cards')}>
+          onPress={() => {
+            if (method == 'credit_card') return
+            setMethod('credit_card')
+            setLoader(true)
+            const formData = new FormData()
+            formData.append('user_setting[payment_method]', 'credit_card')
+            const onFailure = (msg) => {
+              setMethod(method)
+              Alert.alert('Error', msg || 'Something went wrong!')
+            }
+            const onFinally = () => {
+              setLoader(false)
+            }
+            dispatch(update_user_setting_request(formData, onFailure, onFinally))
+          }}
+        >
           <View style={styles.innerRow}>
             <Image
               resizeMode="contain"
@@ -99,7 +114,7 @@ const PayMethod = ({ navigation }) => {
           </View>
           <Image
             resizeMode="contain"
-            source={method === 'cards' ? appIcons.checked : appIcons.unchecked}
+            source={method == 'credit_card' ? appIcons.checked : appIcons.unchecked}
             style={styles.iconStyle}
           />
         </TouchableOpacity>
@@ -107,7 +122,22 @@ const PayMethod = ({ navigation }) => {
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.itemContainer}
-            onPress={() => setMethod('apple')}>
+            onPress={() => {
+              if (method == 'apple_pay') return
+              setMethod('apple_pay')
+              setLoader(true)
+              const formData = new FormData()
+              formData.append('user_setting[payment_method]', 'apple_pay')
+              const onFailure = (msg) => {
+                setMethod(method)
+                Alert.alert('Error', msg || 'Something went wrong!')
+              }
+              const onFinally = () => {
+                setLoader(false)
+              }
+              dispatch(update_user_setting_request(formData, onFailure, onFinally))
+            }}
+          >
             <View style={styles.innerRow}>
               <Image
                 resizeMode="contain"
@@ -116,19 +146,33 @@ const PayMethod = ({ navigation }) => {
               />
               <View>
                 <Text style={styles.titleTxtStyle}>Apple Pay</Text>
-                <Text style={styles.valTxtStyle}>myemail.com</Text>
+                <Text style={styles.valTxtStyle}>{userInfo?.user?.email || 'myemail.com'}</Text>
               </View>
             </View>
             <Image
               resizeMode="contain"
-              source={method === 'apple' ? appIcons.checked : appIcons.unchecked}
+              source={method != 'credit_card' ? appIcons.checked : appIcons.unchecked}
               style={styles.iconStyle}
             />
           </TouchableOpacity> :
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.itemContainer}
-            onPress={() => setMethod('google')}>
+            onPress={() => {
+              if (method == 'google_wallet') return
+              setMethod('google_wallet')
+              setLoader(true)
+              const formData = new FormData()
+              formData.append('user_setting[payment_method]', 'google_wallet')
+              const onFailure = (msg) => {
+                setMethod(method)
+                Alert.alert('Error', msg || 'Something went wrong!')
+              }
+              const onFinally = () => {
+                setLoader(false)
+              }
+              dispatch(update_user_setting_request(formData, onFailure, onFinally))
+            }}            >
             <View style={styles.innerRow}>
               <Image
                 resizeMode="contain"
@@ -137,18 +181,18 @@ const PayMethod = ({ navigation }) => {
               />
               <View>
                 <Text style={styles.titleTxtStyle}>Google Wallet</Text>
-                <Text style={styles.valTxtStyle}>myemail.com</Text>
+                <Text style={styles.valTxtStyle}>{userInfo?.user?.email || 'myemail.com'}</Text>
               </View>
             </View>
             <Image
               resizeMode="contain"
-              source={method === 'google' ? appIcons.checked : appIcons.unchecked}
+              source={method != 'credit_card' ? appIcons.checked : appIcons.unchecked}
               style={styles.iconStyle}
             />
           </TouchableOpacity>
         }
       </View>
-      {method === 'cards' && (
+      {method == 'credit_card' && (
         <View style={styles.bottomView}>
           <AppButton
             title="Continue"
@@ -158,6 +202,7 @@ const PayMethod = ({ navigation }) => {
           />
         </View>
       )}
+      <AppLoader loading={loader} />
     </SafeAreaView>
   );
 };

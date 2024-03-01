@@ -1,7 +1,7 @@
 import { takeLatest, put } from 'redux-saga/effects';
 import { responseValidator } from '../../../shared/exporter';
 import * as types from '../../actions/types';
-import { auth, setAuthToken } from '../../../shared/api';
+import { auth, setAuthToken, setting } from '../../../shared/api';
 import { handleLocationPermission } from '../../../shared/utilities/helper';
 import Geolocation from '@react-native-community/geolocation';
 
@@ -12,8 +12,6 @@ export function* loginRequest() {
 function* login(params) {
   try {
     const res = yield auth.login(params?.params);
-    console.log('ressssss', res.status)
-    console.log('ressssss', res.data)
     if (res?.status == 200) {
       yield put({
         type: types.LOGIN_REQUEST_SUCCESS,
@@ -46,6 +44,7 @@ function* socialLoginUser(params) {
         type: types.SOCIAL_LOGIN_REQUEST_SUCCESS,
         payload: res.data,
       });
+      console.log('social authtokennn',res.data?.user?.auth_token)
       setAuthToken(res.data?.user?.auth_token)
       params?.cbSuccess(res.data);
     } else {
@@ -226,6 +225,8 @@ export function* addInfoRequestSega() {
 function* add_info(params) {
   try {
     const res = yield auth.addInfo(params?.params);
+    console.log('resssssss status',res.status)
+    console.log('resssssss dataaa',res.data)
     if (res?.status == 200) {
       yield put({
         type: types.ADD_ADDITIONAL_INFO_SUCCESS,
@@ -234,7 +235,7 @@ function* add_info(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    // console.log('error response ',error?.response);
+    console.log('error response ',error?.response);
     yield put({
       type: types.ADD_ADDITIONAL_INFO_FAILURE,
       payload: null,
@@ -314,5 +315,30 @@ function* add_support_info(params) {
     });
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     params?.cbFailure(msg);
+  }
+}
+
+// *************Update User Setting Request**************
+export function* updateUserSettingRequest() {
+  yield takeLatest(types.UPDATE_USER_SETTING_REQUEST, updateUserSetting);
+}
+
+function* updateUserSetting(params) {
+  try {
+    const res = yield setting.updateUserSetting(params?.params);
+    if (res?.status == 200) {
+      yield put({
+        type: types.UPDATE_USER_SETTING_SUCCESS,
+        payload: res.data || {},
+      });
+    } else {
+      params?.onFailure(res?.data?.message);
+    }
+  } catch (error) {
+    console.log('updateUserSetting error ',error);
+    let msg = responseValidator(error?.response?.status);
+    params?.onFailure(msg);
+  } finally{
+    params?.onFinally()
   }
 }

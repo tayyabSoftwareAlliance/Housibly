@@ -150,21 +150,11 @@ const authReducer = (state = initialState, actions) => {
         resetPassRes: null,
       };
 
-    //************User Update Profile states*************
-    case TYPES.UPDATE_PROFILE_SUCCESS:
+    //************Update User Setting states*************
+    case TYPES.UPDATE_USER_SETTING_SUCCESS:
       return {
         ...state,
-        loading: false,
-        isSuccess: true,
-        isFailure: false,
-        userInfo: state.userInfo ? { ...state.userInfo, user: payload } : { user: payload },
-      };
-    case TYPES.UPDATE_PROFILE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        isSuccess: false,
-        isFailure: true,
+        userInfo: state.userInfo?.user ? { ...state.userInfo, user: {...state.userInfo.user,...payload} } : { user: payload },
       };
 
     //************Logout Sates*************

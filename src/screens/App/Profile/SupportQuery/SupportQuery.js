@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, Image, SafeAreaView, TouchableOpacity, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
 import {
   TextBox,
   AppButton,
@@ -17,6 +17,7 @@ import {
 } from '../../../../shared/exporter';
 import styles from './styles';
 import { app } from '../../../../shared/api';
+import { TouchableWithoutFeedback } from 'react-native';
 
 const SupportQuery = ({ navigation }) => {
   const [query, setQuery] = useState('');
@@ -84,51 +85,53 @@ const SupportQuery = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <AppHeader subtitle={'Support'} />
-      <BackHeader title={'Support'} />
-      <View style={styles.contentContainer}>
-        <Text style={styles.h1Style}>Your Message</Text>
-        <TextBox
-          value={query}
-          onChangeText={txt => setQuery(txt)}
-          placeholder={'Write something here ...'}
-        />
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => {
-            setShowModal(true);
-          }}>
-          <Image
-            source={queryImage ? { uri: queryImage.path } : appIcons.cameraIcon}
-            style={styles.imgStyle(queryImage)}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+      <SafeAreaView style={styles.rootContainer}>
+        <AppHeader subtitle={'Support'} />
+        <BackHeader title={'Support'} />
+        <View style={styles.contentContainer}>
+          <Text style={styles.h1Style}>Your Message</Text>
+          <TextBox
+            value={query}
+            onChangeText={txt => setQuery(txt)}
+            placeholder={'Write something here ...'}
           />
-        </TouchableOpacity>
-        <Text style={styles.descTxtStyle}>Attach Image or Proof</Text>
-      </View>
-      <View style={styles.bottomView}>
-        <AppButton
-          title="Send Message"
-          fontSize={size.tiny}
-          shadowColor={colors.white}
-          borderColor={colors.white}
-          onPress={() => submitQuery()}
-        />
-      </View>
-      {showModal && (
-        <ImagePickerModal
-          show={showModal}
-          onPressHide={() => setShowModal(false)}
-          onPressGallery={() => {
-            showGallery();
-          }}
-          onPressCamera={() => {
-            showCamera();
-          }}
-        />
-      )}
-      <AppLoader loading={loader} />
-    </SafeAreaView>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              setShowModal(true);
+            }}>
+            <Image
+              source={queryImage ? { uri: queryImage.path } : appIcons.cameraIcon}
+              style={styles.imgStyle(queryImage)}
+            />
+          </TouchableOpacity>
+          <Text style={styles.descTxtStyle}>Attach Image or Proof</Text>
+        </View>
+        <View style={styles.bottomView}>
+          <AppButton
+            title="Send Message"
+            fontSize={size.tiny}
+            shadowColor={colors.white}
+            borderColor={colors.white}
+            onPress={() => submitQuery()}
+          />
+        </View>
+        {showModal && (
+          <ImagePickerModal
+            show={showModal}
+            onPressHide={() => setShowModal(false)}
+            onPressGallery={() => {
+              showGallery();
+            }}
+            onPressCamera={() => {
+              showCamera();
+            }}
+          />
+        )}
+        <AppLoader loading={loader} />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

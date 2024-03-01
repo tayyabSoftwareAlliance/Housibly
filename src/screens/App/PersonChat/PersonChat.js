@@ -37,6 +37,8 @@ import { Menu, MenuItem } from 'react-native-material-menu';
 import { read_chat_messages } from '../../../redux/actions/chat-actions/chat-actions';
 import { set_conversation_opened_id } from '../../../redux/actions/app-actions/app-actions';
 
+const formatImageUri = (uri) => decodeURIComponent(uri)?.replace(/%3A/g,':').replace(/%2F/g,'/').replace(/%2E/g,'.')
+
 const OptionsMenu = ({ isVisible, onPressHide, onPressBlock }) => {
   return (
     <View style={styles.menuContainer}>
@@ -98,7 +100,7 @@ const PersonChat = ({ navigation, route }) => {
   const params = route.params
   const dispatch = useDispatch()
   const [conversationId, setConversationId] = useState(params?.conversation_id);
-  const [avatar, setAvatar] = useState(decodeURIComponent(params?.avatar));
+  const [avatar, setAvatar] = useState(formatImageUri(params?.avatar));
   const [isBlocked, setIsBlocked] = useState(params?.is_blocked);
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
@@ -293,7 +295,7 @@ const PersonChat = ({ navigation, route }) => {
 
   useEffect(() => {
     setConversationId(params?.conversation_id)
-    setAvatar(decodeURIComponent(params?.avatar))
+    setAvatar(formatImageUri(params?.avatar))
     setAllMessages([])
     createChannel({
       connected: () => {

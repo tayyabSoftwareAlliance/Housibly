@@ -29,6 +29,7 @@ import {
   setSupportInfoSega,
   addSupportInfoRequestSega,
   setUserLocationRequestSega,
+  updateUserSettingRequest,
 } from './auth-saga/auth-sega';
 
 import {
@@ -62,6 +63,7 @@ export function* rootSaga() {
   yield fork(addSupportInfoRequestSega);
   yield fork(getTopSupportClosersRequest);
   yield fork(setUserLocationRequestSega);
+  yield fork(updateUserSettingRequest);
 
   //Payments
   yield fork(addcardRequest);

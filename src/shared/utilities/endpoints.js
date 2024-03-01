@@ -21,6 +21,7 @@ const ENDPOINTS = {
   //setting
   GET_PROFILE: 'show_profile',
   UPDATE_PROFILE: 'update_profile.json',
+  UPDATE_SETTING: 'update_current_user_setting',
   CARD_CONST: 'card',
   CARDS_CONST: 'cards',
   EDIT_CARD_CONST: 'update_card',
@@ -49,6 +50,7 @@ const ENDPOINTS = {
   GET_CARD_DETAIL:'get_card',
   DELETE_CARD: 'delete_card',
   SET_DEFAULT_CARD: 'set_default_card',
+  GET_DEFAULT_CARD: 'get_default_card',
   GET_NOTIFICATION_SETTING:'show_current_user_setting',
   UPDATE_NOTIFICATION_SETTING:'update_current_user_setting',
   GET_PACKAGES:'get_packages',

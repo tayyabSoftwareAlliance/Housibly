@@ -48,7 +48,6 @@ const EditProfile = ({ navigation, route }) => {
     callingCode: ['1'],
   });
   const [cca2, setcca2] = useState('US');
-
   const setCountryValue = val => {
     setcca2(val.cca2);
     setcountry(val);
@@ -119,7 +118,6 @@ const EditProfile = ({ navigation, route }) => {
   }
 
   const handleUpdateProfile = values => {
-    console.log('thisssssssss')
     if (from == 'SUPPORT_CLOSER_HOME' && !professionList.filter(item => item.title).length > 0) {
       Alert.alert('Error', 'At least one profession required!');
       return
@@ -148,8 +146,7 @@ const EditProfile = ({ navigation, route }) => {
     data.append('user[hourly_rate]', values?.hourly_rate);
     data.append('user[description]', values?.bio);
     data.append('user[country_name]', cca2);
-    data.append('user[country_code]', country?.callingCode[0]);
-
+    data.append('user[country_code]', country?.callingCode?.[0]);
     if (userImage === '') {
       console.log("Don't send the old image.");
     } else {
@@ -224,7 +221,7 @@ const EditProfile = ({ navigation, route }) => {
               setFieldValue('bio', data?.description);
               setFieldValue('phone', data?.phone_number);
               setcca2(data?.country_name || 'US');
-              setcountry({ callingCode: [data?.country_code] || ['1'] });
+              setcountry({ callingCode: data?.country_code ? [data?.country_code] : ['1'] });
               data?.professions?.length > 0 && setprofessionList(data.professions);
               setFieldValue('hourly_rate', data?.hourly_rate);
               setImageArray(data?.images || [])

@@ -22,7 +22,7 @@ const renderItem = (item, index, onPress) => {
         style={styles.imgStyle}
       />
       <View>
-        <Text style={styles.notificationTitle} numberOfLines={1}>{item.title}</Text>
+        <Text style={styles.notificationTitle} numberOfLines={1}>{item.title || 'Housibly'}</Text>
         <Text style={styles.notificationBody} numberOfLines={2}>{capitalizeFirstLetter(item.body)}</Text>
         <Text style={styles.notificationTime} numberOfLines={1}>{moment(item.time).fromNow()}</Text>
       </View>

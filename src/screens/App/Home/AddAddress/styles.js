@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%'
   },
+  noData:{
+    color: colors.g28,
+    fontSize: size.small,
+    fontFamily: family.Gilroy_Medium,
+  }
 });
 
 export default styles;

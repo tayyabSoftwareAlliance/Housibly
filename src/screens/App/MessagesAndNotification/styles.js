@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     fontFamily: family.Gilroy_Medium,
   },
   badge: {
-    paddingHorizontal:6,
+    paddingHorizontal:4,
     paddingVertical:1,
-    borderRadius: 9,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.r1,

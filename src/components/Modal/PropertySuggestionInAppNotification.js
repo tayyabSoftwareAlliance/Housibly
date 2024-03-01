@@ -14,60 +14,62 @@ import { navigateFromNotifi } from '../../shared/utilities/notifications';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux'
 import { set_in_app_notification_to_show } from '../../redux/actions/app-actions/app-actions';
+import { TouchableWithoutFeedback } from 'react-native';
 
 const PropertySuggestionInAppNotification = () => {
 
   const { showed_in_app_notification } = useSelector(state => state?.appReducer)
   const dispatch = useDispatch()
+  const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
   return showed_in_app_notification && (
-    // <Modal onBackdropPress={onPressHide} isVisible={show}>
-    <Pressable style={styles.container} >
-      <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.modalContainer}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.crossIconView}
-          onPress={() => dispatch(set_in_app_notification_to_show(null))}>
-          <Image
-            resizeMode="contain"
-            source={appIcons.crossIcon}
-            style={styles.crossIconStyle}
-          />
-        </TouchableOpacity>
-        <Image
-          // resizeMode="contain"
-          source={{ uri: showed_in_app_notification?.image }}
-          style={styles.imgStyle}
-        />
-        <Text style={styles.nameTxtStyle}>{showed_in_app_notification?.title || 'N/A'}</Text>
-        <Text style={styles.skillTxtStyle}>{capitalizeFirstLetter(showed_in_app_notification?.body) || 'N/A'}</Text>
-        <View style={styles.buttonsContainerStyle}>
+    <TouchableWithoutFeedback onPress={() => dispatch(set_in_app_notification_to_show(null))} >
+      <View style={styles.container}>
+        <AnimatedPressable entering={FadeIn} exiting={FadeOut} style={styles.modalContainer}>
           <TouchableOpacity
             activeOpacity={0.7}
-            style={styles.buttonStyle}
-            onPress={() => {
-              dispatch(set_in_app_notification_to_show(null))
-              Linking.openURL(`housibly://PropertyDetail/${showed_in_app_notification?.data?.property_id}/property_detail`)
-            }}
-          >
-            <Text style={styles.btnTxtStyle}>{showed_in_app_notification?.type == 'sell_property' ? 'View Property' : 'View Detail'}</Text>
+            style={styles.crossIconView}
+            onPress={() => dispatch(set_in_app_notification_to_show(null))}>
+            <Image
+              resizeMode="contain"
+              source={appIcons.crossIcon}
+              style={styles.crossIconStyle}
+            />
           </TouchableOpacity>
-          {showed_in_app_notification?.type == 'sell_property' &&
+          <Image
+            // resizeMode="contain"
+            source={{ uri: showed_in_app_notification?.image }}
+            style={styles.imgStyle}
+          />
+          <Text style={styles.nameTxtStyle}>{showed_in_app_notification?.title || 'N/A'}</Text>
+          <Text style={styles.skillTxtStyle}>{capitalizeFirstLetter(showed_in_app_notification?.body) || 'N/A'}</Text>
+          <View style={styles.buttonsContainerStyle}>
             <TouchableOpacity
               activeOpacity={0.7}
-              style={[styles.buttonStyle, { marginLeft: WP(3) }]}
+              style={styles.buttonStyle}
               onPress={() => {
                 dispatch(set_in_app_notification_to_show(null))
-                navigateFromNotifi(showed_in_app_notification)
+                Linking.openURL(`housibly://PropertyDetail/${showed_in_app_notification?.data?.property_id}/property_detail`)
               }}
             >
-              <Text style={styles.btnTxtStyle}>Contact Person</Text>
+              <Text style={styles.btnTxtStyle}>{showed_in_app_notification?.type == 'sell_property' ? 'View Property' : 'View Detail'}</Text>
             </TouchableOpacity>
-          }
-        </View>
-      </Animated.View>
-    </Pressable>
-    // </Modal>
+            {showed_in_app_notification?.type == 'sell_property' &&
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[styles.buttonStyle, { marginLeft: WP(3) }]}
+                onPress={() => {
+                  dispatch(set_in_app_notification_to_show(null))
+                  navigateFromNotifi(showed_in_app_notification)
+                }}
+              >
+                <Text style={styles.btnTxtStyle}>Contact Person</Text>
+              </TouchableOpacity>
+            }
+          </View>
+        </AnimatedPressable>
+      </View>
+    </TouchableWithoutFeedback>
   )
 };
 
@@ -86,10 +88,10 @@ const styles = StyleSheet.create({
     width: WP(80),
     alignItems: 'center',
     borderRadius: 8,
-    paddingTop: WP('3.5'),
     backgroundColor: 'white',
     marginHorizontal: WP('5'),
     paddingHorizontal: WP('3.5'),
+    paddingTop: WP('7'),
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -98,14 +100,14 @@ const styles = StyleSheet.create({
     zIndex: 1
   },
   crossIconView: {
-    width: WP('5'),
-    height: WP('5'),
-    alignSelf: 'flex-end',
+    position:'absolute',
+    top:0,
+    right:0,
+    padding:WP(3),
   },
   crossIconStyle: {
     width: WP('2'),
     height: WP('4'),
-    alignSelf: 'flex-end',
   },
   imgStyle: {
     width: WP('25'),

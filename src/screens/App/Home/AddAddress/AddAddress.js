@@ -10,7 +10,6 @@ import { GOOGLE_MAP_KEY, WP, colors, family, responseValidator, size, spacing } 
 import styles from './styles';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
 import { useDispatch, useSelector } from 'react-redux';
-import { set_address_request } from '../../../../redux/actions';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { set_user_location_request } from '../../../../redux/actions/auth-actions/auth-action';
@@ -38,9 +37,7 @@ const AddAddress = ({ navigation, route }) => {
     } else
       setLoader(true)
     try {
-      console.log('thisssssss')
       const res = await app.getPeopleWhoSearchedThisLocation(locationObj?.latitude, locationObj?.longitude, page)
-      console.log(res.data)
       if (res?.status == 200) {
         if (page == 1)
           setCount(res.data?.total_user_count || 0)
@@ -51,7 +48,7 @@ const AddAddress = ({ navigation, route }) => {
         page++
       }
     } catch (error) {
-      console.log('error', error)
+      console.log('AddAdress fetchData error ', error)
       let msg = responseValidator(error?.response?.status, error?.response?.data);
       Alert.alert('Error', msg || 'Something went wrong!');
     } finally {
@@ -108,7 +105,7 @@ const AddAddress = ({ navigation, route }) => {
               const onFinally = () => {
                 setLoader(false)
               }
-              dispatch(create_dream_address(formData, onSuccess,onFinally))
+              dispatch(create_dream_address(formData, onSuccess, onFinally))
             }
           }}
           query={{
@@ -143,28 +140,33 @@ const AddAddress = ({ navigation, route }) => {
           <>
             <Text style={styles.h1}>People who searched this address</Text>
             {count ? <Text style={styles.countText}>{`${count} entries`}</Text> : null}
-            <View style={{ flex: 1 }}>
-              <FlatList
-                data={users}
-                keyExtractor={(_, index) => index}
-                refreshing={refreshLoader}
-                onRefresh={() => fetchData(locationObj, 'refresh')}
-                onEndReached={() => fetchData(locationObj)}
-                onEndReachedThreshold={0.5}
-                renderItem={({ item }) => {
-                  return <AddressCard item={item} />
-                }}
-                ListFooterComponent={
-                  <View style={styles.footerComponent} >
-                    {!refreshLoader && loader && <ActivityIndicator size={WP(6)} color={colors.bl1} />}
-                  </View>
-                }
-              />
-            </View>
+            {users.length > 0 ?
+              <View style={{ flex: 1 }}>
+                <FlatList
+                  data={users}
+                  keyExtractor={(_, index) => index}
+                  refreshing={refreshLoader}
+                  onRefresh={() => fetchData(locationObj, 'refresh')}
+                  onEndReached={() => fetchData(locationObj)}
+                  onEndReachedThreshold={0.5}
+                  renderItem={({ item }) => {
+                    return <AddressCard item={item} />
+                  }}
+                  ListFooterComponent={
+                    <View style={styles.footerComponent} >
+                      {!refreshLoader && loader && <ActivityIndicator size={WP(6)} color={colors.bl1} />}
+                    </View>
+                  }
+                />
+              </View> :
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+                <Text style={styles.noData} >{locationObj && !refreshLoader && 'No users found agaist this address'}</Text>
+              </View>
+            }
           </>
         }
       </View>
-      {from != 'enter_address' && <AppLoader loading={loader} />}
+      <AppLoader loading={!(users.length > 0) && (loader || refreshLoader)} />
     </SafeAreaView>
   );
 };

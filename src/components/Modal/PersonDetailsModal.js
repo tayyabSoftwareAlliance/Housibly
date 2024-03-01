@@ -44,7 +44,7 @@ export const PersonDetailsModal = ({ show, onPressHide, data }) => {
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.buttonStyle}
-          onPress={() => { onPressHide(); navigation.navigate('SupportCloserDetail', { id: data?.id }) }}>
+          onPress={() => { onPressHide(); setTimeout(() => navigation.navigate('SupportCloserDetail', { id: data?.id }), 1000) }}>
           <Text style={styles.btnTxtStyle}>View Profile</Text>
         </TouchableOpacity>
       </View>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     width: WP('25'),
     height: WP('25'),
     alignSelf: 'center',
-    borderRadius:15,
+    borderRadius: 15,
     backgroundColor: colors.g14
   },
   nameTxtStyle: {

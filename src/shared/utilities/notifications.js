@@ -10,7 +10,7 @@ export const notificationFormater = (notification) => {
         image: notification?.data?.type == 'message' ? notification?.data?.avatar : notification?.data?.type == 'buy_property' ? notification?.data?.property_image : notification?.data?.type == 'sell_property' ? notification?.data?.sender_avatar : '',
         type: notification?.data?.type,
         seen: false,
-        time: new Date(notification.sentTime),
+        time: notification.sentTime ? new Date(notification.sentTime) : new Date(),
         data: notification?.data?.type == 'message' ?
             {
                 conversation_id: notification?.data?.conversation_id,

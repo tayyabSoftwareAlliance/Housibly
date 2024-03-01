@@ -60,12 +60,13 @@ const AppStack = createNativeStackNavigator();
 const MainAppNav = () => {
 
   const { userInfo } = useSelector(state => state?.auth);
-  const { conversation_opened_id,showed_in_app_notification } = useSelector(state => state?.appReducer)
+  const { conversation_opened_id, showed_in_app_notification } = useSelector(state => state?.appReducer)
   const dispatch = useDispatch()
   const { top } = useSafeAreaInsets()
 
   const addToRedux = (notification) => {
-    dispatch(add_notification(notification))
+    if (notification.type == 'buy_property' || notification.type == 'sell_property' || notification.type == 'message')
+      dispatch(add_notification(notification))
   }
 
   const onMessageCallback = async remoteMessage => {
@@ -140,6 +141,7 @@ const MainAppNav = () => {
   }
 
   useEffect(() => {
+    console.log('thissssss ====>>>>>', userInfo?.user?.auth_token)
     setAuthToken(userInfo?.user?.auth_token)
   }, [userInfo])
 
@@ -149,7 +151,7 @@ const MainAppNav = () => {
       unsubscribe && unsubscribe()
       appStateListener && appStateListener.remove()
     }
-  }, [conversation_opened_id,showed_in_app_notification])
+  }, [conversation_opened_id, showed_in_app_notification])
 
   return (
     <NavigationContainer linking={linking}>

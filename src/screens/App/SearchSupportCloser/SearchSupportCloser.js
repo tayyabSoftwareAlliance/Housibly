@@ -74,7 +74,7 @@ const SearchSupportCloser = ({ navigation }) => {
         txtSize={size.xsmall}
         txtFamily={family.Gilroy_SemiBold}
       />
-      <Text style={styles.titleTxtStyle}>Recent</Text>
+      <Text style={styles.titleTxtStyle}>Near you</Text>
       <AppInput
         onChangeText={setSearch}
         renderErrorMessage={true}

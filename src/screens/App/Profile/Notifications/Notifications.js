@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View, Switch, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, View, Switch, TouchableOpacity, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { AppHeader, BackHeader, Spacer } from '../../../../components';
+import { AppHeader, AppLoader, BackHeader, Spacer } from '../../../../components';
 import { colors, WP } from '../../../../shared/exporter';
 import styles from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { update_user_setting_request } from '../../../../redux/actions/auth-actions/auth-action';
 
 const Notifications = ({ navigation }) => {
-  const [isEnabled, setIsEnabled] = useState(true);
 
-  const toggleSwitch = async () => {
-    setIsEnabled(previousState => !previousState);
-    await AsyncStorage.setItem('notification_vibration', isEnabled ? 'false' : 'true')
-  };
-
-  const getNotificationVibrationValue = async () => {
-    const value = await AsyncStorage.getItem('notification_vibration')
-    setIsEnabled(value == 'true' ? true : false)
-  }
+  const dispatch = useDispatch()
+  const { userInfo } = useSelector(state => state?.auth);
+  const [vibration, setVibration] = useState(true);
+  const [loader, setLoader] = useState(false)
 
   useEffect(() => {
-    getNotificationVibrationValue()
-  }, [])
+    setVibration(userInfo?.user?.vibration)
+  }, [userInfo])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -53,14 +48,28 @@ const Notifications = ({ navigation }) => {
         <View style={styles.rowContainer}>
           <Text style={styles.txtStyle}>Enable App Vibrations</Text>
           <Switch
+            value={vibration}
+            onValueChange={() => {
+              setVibration(!vibration)
+              setLoader(true)
+              const formData = new FormData()
+              formData.append('user_setting[vibration]', !vibration)
+              const onFailure = (msg) => {
+                setPushNotificationToggle(vibration)
+                Alert.alert('Error', msg || 'Something went wrong!')
+              }
+              const onFinally = () => {
+                setLoader(false)
+              }
+              dispatch(update_user_setting_request(formData, onFailure, onFinally))
+            }}
             trackColor={{ false: colors.g1, true: colors.p1 }}
             thumbColor={colors.white}
             ios_backgroundColor={colors.g4}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
           />
         </View>
       </View>
+      <AppLoader loading={loader} />
     </SafeAreaView>
   );
 };

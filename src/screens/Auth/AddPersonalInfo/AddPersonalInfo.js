@@ -64,6 +64,7 @@ const AddPersonalInfo = ({ navigation, route }) => {
         navigation?.navigate('AuthPrivacyPolicy');
       };
       const addInfoFailure = async res => {
+        console.log('errrrrrrr',res)
         setLoading(false);
         Alert.alert('Error', res);
       };
