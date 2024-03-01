@@ -44,7 +44,6 @@ function* socialLoginUser(params) {
         type: types.SOCIAL_LOGIN_REQUEST_SUCCESS,
         payload: res.data,
       });
-      console.log('social authtokennn',res.data?.user?.auth_token)
       setAuthToken(res.data?.user?.auth_token)
       params?.cbSuccess(res.data);
     } else {

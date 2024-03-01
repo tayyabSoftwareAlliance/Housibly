@@ -141,7 +141,6 @@ const MainAppNav = () => {
   }
 
   useEffect(() => {
-    console.log('thissssss ====>>>>>', userInfo?.user?.auth_token)
     setAuthToken(userInfo?.user?.auth_token)
   }, [userInfo])
 
