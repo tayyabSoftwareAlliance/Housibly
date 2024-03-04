@@ -20,9 +20,7 @@ const styles = StyleSheet.create({
   },
   scrollViewStyle: {
     flexGrow:1,
-  },
-  innerViewStyle: {
-    paddingTop: WP('5'),
+    paddingTop: WP('7'),
   },
   rowContainer: {
     flexDirection: 'row',
@@ -135,13 +133,14 @@ const styles = StyleSheet.create({
   },
   paddingView: {
     paddingHorizontal: WP('4.1'),
+    backgroundColor:colors.white
   },
   tabsContainer: {
     borderRadius: 13,
     marginTop: WP('3.5'),
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: WP('5.4'),
+    marginBottom: WP('3.4'),
     backgroundColor: colors.g5,
     justifyContent: 'space-between',
   },

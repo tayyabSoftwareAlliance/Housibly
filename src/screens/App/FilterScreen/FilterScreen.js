@@ -1,5 +1,6 @@
 import {
   Alert,
+  Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -42,8 +43,8 @@ import { update_my_preference } from '../../../redux/actions/app-actions/app-act
 const INITIAL_DATA = {
   property_type: 'house',
   currency_type: currency_list[0],
-  min_price: 0,
-  max_price: 1000000,
+  min_price: '0',
+  max_price: '1000000',
   min_lot_frontage: 0,
   min_lot_size: 0,
   min_lot_frontage_unit: lot_unit_list[0],
@@ -83,9 +84,8 @@ const FilterScreen = ({ navigation, route }) => {
   const [data, setData] = useState({ ...INITIAL_DATA, ...formatPreferenceData(my_preference) })
   const [showAdvance, setShowAdvance] = useState(false)
   const dispatch = useDispatch()
-  console.log('thisss', JSON.stringify(my_preference,null,2))
+
   const setValue = (type, value) => {
-    console.log(type,(typeof value)+' thiss '+value)
     setData(prev => {
       prev[type] = value
       return { ...prev }
@@ -93,6 +93,7 @@ const FilterScreen = ({ navigation, route }) => {
   }
 
   const onSubmit = async () => {
+    Keyboard.dismiss()
     const onSuccess = () => {
       navigation.navigate('Home');
       Alert.alert('Success', 'Preference Updated Successfully!');
@@ -100,7 +101,6 @@ const FilterScreen = ({ navigation, route }) => {
     const check = await checkConnected();
     if (check) {
       const formdata = filterFormData(data);
-      console.log('form data ', formdata)
       dispatch(update_my_preference(formdata, onSuccess));
     } else {
       Alert.alert('Error', networkText);
@@ -114,7 +114,9 @@ const FilterScreen = ({ navigation, route }) => {
       </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: WP('2') }}>
+        contentContainerStyle={{ paddingBottom: WP('2') }}
+        keyboardShouldPersistTaps={'handled'}
+        >
         <View style={styles.contentContainer}>
           <View style={styles.inputCon}>
             <Divider color={colors.g18} />
@@ -134,9 +136,9 @@ const FilterScreen = ({ navigation, route }) => {
               dropDown={true}
               inputs
               valueFrom={data.min_price}
-              onChangeTextFrom={text => setValue('min_price', text)}
+              onChangeTextFrom={text => setValue('min_price', Number(text)?.toString())}
               valueTo={data.max_price}
-              onChangeTextTo={text => setValue('max_price', text)}
+              onChangeTextTo={text => setValue('max_price', Number(text)?.toString())}
             />
             {data.property_type != 'vacant_land' &&
               <>

@@ -6,8 +6,9 @@ import {
   View,
   FlatList,
   Alert,
+  Keyboard,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppButton,
   BackHeader,
@@ -27,16 +28,16 @@ import {
   spacing,
   WP,
 } from '../../../../shared/exporter';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Divider} from 'react-native-elements/dist/divider/Divider';
-import {saveCreatePropertyData} from '../../../../redux/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Divider } from 'react-native-elements/dist/divider/Divider';
+import { saveCreatePropertyData } from '../../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 
-const AddMorePropertyDetails = ({navigation, route}) => {
-  const {propertyData, from} = route.params;
+const AddMorePropertyDetails = ({ navigation, route }) => {
+  const { propertyData, from } = route.params;
   const dispatch = useDispatch(null);
-  const {saved_create_property_data, sublists} = useSelector(
+  const { saved_create_property_data, sublists } = useSelector(
     state => state?.appReducer,
   );
   const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)));
@@ -48,6 +49,7 @@ const AddMorePropertyDetails = ({navigation, route}) => {
   }, [saved_create_property_data]);
 
   const onNext = () => {
+    Keyboard.dismiss()
     if (data.property_type == 'house' && !data.house_type) {
       Alert.alert('Error', 'House Type is Required');
     } else if (data.property_type == 'house' && !data.house_style) {
@@ -65,7 +67,7 @@ const AddMorePropertyDetails = ({navigation, route}) => {
     } else if (!(data.air_conditioner?.length > 0)) {
       Alert.alert('Error', 'Please Select Air Conditioner Type');
     } else {
-      navigation?.navigate('AddPropertyDesc', {propertyData: data, from});
+      navigation?.navigate('AddPropertyDesc', { propertyData: data, from });
     }
   };
 
@@ -76,7 +78,7 @@ const AddMorePropertyDetails = ({navigation, route}) => {
   const setValue = (type, value) => {
     setData(prev => {
       prev[type] = value;
-      return {...prev};
+      return { ...prev };
     });
   };
 
@@ -87,7 +89,8 @@ const AddMorePropertyDetails = ({navigation, route}) => {
       </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: WP('2')}}>
+        contentContainerStyle={{ paddingBottom: WP('2') }}
+        keyboardShouldPersistTaps={'handled'}>
         <View style={styles.contentContainer}>
           {data.property_type == 'condo' ? (
             <>
@@ -365,7 +368,7 @@ const AddMorePropertyDetails = ({navigation, route}) => {
           <View
             style={[
               styles.spacRow,
-              from == 'edit' && {justifyContent: 'flex-end'},
+              from == 'edit' && { justifyContent: 'flex-end' },
             ]}>
             {from != 'edit' && (
               <AppButton

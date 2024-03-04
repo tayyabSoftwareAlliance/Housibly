@@ -1,5 +1,6 @@
 import {
   Alert,
+  Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -61,6 +62,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
   }, [saved_create_property_data])
 
   const onNext = async () => {
+    Keyboard.dismiss()
     if (data.rooms?.filter(item => !item?.deleted)?.length != data.total_number_of_rooms) {
       Alert.alert('Error', `Rooms Details should be equal to Number of Rooms: ${data.total_number_of_rooms} as you entered in previous screen`)
     } else {
@@ -128,7 +130,8 @@ const AddPropertyDetails = ({ navigation, route }) => {
       </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: WP(2) }}>
+        contentContainerStyle={{ paddingBottom: WP(2) }}
+        keyboardShouldPersistTaps={'handled'}>
         <View style={styles.contentContainer}>
           <View style={styles.inputCon}>
             <Text style={[styles.h1, { marginBottom: HP(2) }]}>{'Enter Room Info'}</Text>

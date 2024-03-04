@@ -1,5 +1,6 @@
 import {
   Alert,
+  Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -121,6 +122,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const isFocused = useIsFocused()
 
   const onNext = async () => {
+    Keyboard.dismiss()
     if (!data.property_type) {
       Alert.alert('Error', 'Property Type is Required');
     } else if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
@@ -188,7 +190,8 @@ const AddPropertyDetails = ({ navigation, route }) => {
       </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: WP('2') }}>
+        contentContainerStyle={{ paddingBottom: WP('2') }}
+        keyboardShouldPersistTaps={'handled'}>
         <View style={styles.contentContainer}>
           <View style={styles.inputCon}>
             <Divider color={colors.g18} />
@@ -241,7 +244,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
             <Divider color={colors.g18} />
             <TouchableOpacity
               onPress={() => {
-                navigation?.navigate('AddAddress',{from:'create_property'});
+                navigation?.navigate('AddAddress', { from: 'create_property' });
               }}
             >
               <Text

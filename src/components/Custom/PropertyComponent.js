@@ -15,7 +15,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 if (myProperty)
                     navigation.navigate('PotentialBuyers', { item })
                 else
-                    navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id })
+                    navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id,from:'property_detail' })
             }}
         >
             <Image

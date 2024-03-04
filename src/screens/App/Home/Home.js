@@ -145,93 +145,96 @@ const Home = ({ navigation }) => {
         img={userProfile?.user?.avatar || userInfo?.user?.avatar}
         from={'home'}
       />
-      <Spacer androidVal={WP('4')} iOSVal={WP('4')} />
+      {/* <Spacer androidVal={WP('4')} iOSVal={WP('4')} /> */}
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewStyle}>
-        <View style={styles.innerViewStyle}>
-          <View style={styles.rowContainer}>
-            <View>
-              <Text style={styles.propertyTxtStyle}>Find a property</Text>
-              <TouchableOpacity style={styles.innerRow} onPress={() => navigation.navigate('AddAddress', { from: 'home' })}>
-                <Image source={appIcons.locIcon} style={styles.locIconStyle} />
-                <Text style={styles.locTxtStyle} numberOfLines={2} >{capitalizeFirstLetter(userInfo?.user?.address) || 'Location'}</Text>
-                <Icon
-                  type={'feather'}
-                  name={'chevron-down'}
-                  size={16}
-                  color={colors.g2}
-                  style={{ marginLeft: 5 }}
-                />
-              </TouchableOpacity>
-            </View>
-            <Image source={appImages.personPh1} style={styles.phImgStyle} />
+        contentContainerStyle={styles.scrollViewStyle}
+        stickyHeaderIndices={[3]}
+        >
+        <View style={styles.rowContainer}>
+          <View>
+            <Text style={styles.propertyTxtStyle}>Find a property</Text>
+            <TouchableOpacity style={styles.innerRow} onPress={() => navigation.navigate('AddAddress', { from: 'home' })}>
+              <Image source={appIcons.locIcon} style={styles.locIconStyle} />
+              <Text style={styles.locTxtStyle} numberOfLines={2} >{capitalizeFirstLetter(userInfo?.user?.address) || 'Location'}</Text>
+              <Icon
+                type={'feather'}
+                name={'chevron-down'}
+                size={16}
+                color={colors.g2}
+                style={{ marginLeft: 5 }}
+              />
+            </TouchableOpacity>
           </View>
-          {top_support_closers?.length > 0 && (
-            <Carousel
-              ref={carouselRef}
-              sliderWidth={scrWidth}
-              sliderHeight={scrHeight}
-              itemWidth={scrWidth / 1.15}
-              data={top_support_closers}
-              renderItem={({ item, index }) => renderItem(item, index, (data) => { setSelectedPerson(data); setPersonDetailModal(true) })}
-            />
-          )}
-          <View style={styles.menuContainer}>
-            <Menu
-              visible={showMenu}
-              style={styles.menuStyle}
-              onRequestClose={() => setShowMenu(false)}>
-              {/* <MenuItem
+          <Image source={appImages.personPh1} style={styles.phImgStyle} />
+        </View>
+        <View>
+        {top_support_closers?.length > 0 && (
+          <Carousel
+            ref={carouselRef}
+            sliderWidth={scrWidth}
+            sliderHeight={scrHeight}
+            itemWidth={scrWidth / 1.15}
+            data={top_support_closers}
+            renderItem={({ item, index }) => renderItem(item, index, (data) => { setSelectedPerson(data); setPersonDetailModal(true) })}
+          />
+        )}
+        </View>
+        <View style={styles.menuContainer}>
+          <Menu
+            visible={showMenu}
+            style={styles.menuStyle}
+            onRequestClose={() => setShowMenu(false)}>
+            {/* <MenuItem
                 style={styles.menuItemStyle}
                 textStyle={styles.menuTxtStyle}
                 onPress={() => hideItemClick()}>
                 Hide this ad
               </MenuItem> */}
-              <MenuItem
-                style={styles.menuItemStyle}
-                textStyle={styles.menuTxtStyle}
-                onPress={() => seeAllItemClick()}>
-                See All
-              </MenuItem>
-            </Menu>
-          </View>
-          <View style={styles.paddingView}>
-            <View style={styles.tabsContainer}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setSelected('buy')}
-                style={styles.tabStyle(selected === 'buy')}>
-                <Text style={styles.tabTxtStyle(selected === 'buy')}>
-                  I Want To Buy
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setSelected('matches')}
-                style={styles.tabStyle(selected === 'matches')}>
-                <Text style={styles.tabTxtStyle(selected === 'matches')}>
-                  My Matches
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setSelected('sell');
-                }}
-                style={styles.tabStyle(selected === 'sell')}>
-                <Text style={styles.tabTxtStyle(selected === 'sell')}>
-                  I Want To Sell
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {selected === 'buy' && <BuyTab navigation={navigation} />}
-          {selected === 'matches' && <MatchesTab navigation={navigation} />}
-          {selected === 'sell' && (
-            <SellTab navigation={navigation} />
-          )}
+            <MenuItem
+              style={styles.menuItemStyle}
+              textStyle={styles.menuTxtStyle}
+              onPress={() => seeAllItemClick()}>
+              See All
+            </MenuItem>
+          </Menu>
         </View>
+        <View style={styles.paddingView}>
+          <View style={styles.tabsContainer}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setSelected('buy')}
+              style={styles.tabStyle(selected === 'buy')}>
+              <Text style={styles.tabTxtStyle(selected === 'buy')}>
+                I Want To Buy
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setSelected('matches')}
+              style={styles.tabStyle(selected === 'matches')}>
+              <Text style={styles.tabTxtStyle(selected === 'matches')}>
+                My Matches
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                setSelected('sell');
+              }}
+              style={styles.tabStyle(selected === 'sell')}>
+              <Text style={styles.tabTxtStyle(selected === 'sell')}>
+                I Want To Sell
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{height:WP(2)}} />
+        {selected === 'buy' && <BuyTab navigation={navigation} />}
+        {selected === 'matches' && <MatchesTab navigation={navigation} />}
+        {selected === 'sell' && (
+          <SellTab navigation={navigation} />
+        )}
         <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + HP(5) }} />
       </KeyboardAwareScrollView>
       {

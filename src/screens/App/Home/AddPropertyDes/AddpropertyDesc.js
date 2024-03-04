@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Keyboard, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -24,6 +24,7 @@ const AddpropertyDesc = ({ navigation, route }) => {
   }, [saved_create_property_data])
 
   const onNext = async () => {
+    Keyboard.dismiss()
     if (!data.property_description) {
       Alert.alert('Error', 'Description is Required');
     } else {
@@ -53,7 +54,8 @@ const AddpropertyDesc = ({ navigation, route }) => {
       </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.inputCon}>
+        contentContainerStyle={styles.inputCon}
+        keyboardShouldPersistTaps={'handled'}>
         <View style={styles.contentContainer}>
           <Divider color={colors.g18} />
           <Textarea

@@ -121,7 +121,7 @@ export const PriceInput = ({
       {inputs ? (
         <View style={styles.aiRow1}>
           <TextInput
-            placeholder={placeholder1 || '1,000,000'}
+            placeholder={placeholder1 || '0'}
             placeholderTextColor={'rgba(0, 0, 0, 0.20)'}
             style={styles.inputStyle}
             keyboardType={'numeric'}
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     height: 20,
-    width: '40%',
+    width: '30%',
     borderLeftWidth: 1,
     borderLeftColor: colors.p2,
     color: colors.g19,
