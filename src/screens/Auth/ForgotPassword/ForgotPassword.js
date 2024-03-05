@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, SafeAreaView, Alert} from 'react-native';
+import {Text, View, SafeAreaView, Alert, Keyboard} from 'react-native';
 import {
   AppButton,
   AppInput,
@@ -26,6 +26,7 @@ const ForgotPassword = ({navigation}) => {
 
   //On Submit
   const onSubmit = async (values, resetForm) => {
+    Keyboard.dismiss()
     const check = await checkConnected();
     if (check) {
       setLoading(true);
@@ -76,7 +77,9 @@ const ForgotPassword = ({navigation}) => {
         }) => (
           <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.contentContainer}>
+            contentContainerStyle={styles.contentContainer}
+            keyboardShouldPersistTaps={'handled'}
+            >
             <View style={styles.inputContainer}>
               <AppInput
                 onChangeText={handleChange('email')}

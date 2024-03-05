@@ -396,7 +396,7 @@ const PropertyDetail = ({ navigation, route }) => {
                       multiple
                     />
                     <PreviewField
-                      title={'Laundary'}
+                      title={'Laundry'}
                       list={sublists.sewer}
                       subtitle={data.laundry}
                       source={appIcons.loundry}

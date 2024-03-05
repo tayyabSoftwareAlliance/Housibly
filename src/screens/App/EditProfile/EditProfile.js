@@ -173,8 +173,8 @@ const EditProfile = ({ navigation, route }) => {
     })
     const updateProfileSuccess = async res => {
       Alert.alert('Success', 'Profile Updated Successfully!');
-      navigation.goBack();
       setIsLoading(false);
+      setTimeout(() => navigation.goBack(), 1000)
     };
     const updateProfileFailure = async err => {
       console.log('Err is ==> ', err);

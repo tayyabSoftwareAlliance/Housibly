@@ -25,6 +25,7 @@ import {
 import styles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { delete_dream_address, get_dream_addresses, get_my_preference } from '../../../../../redux/actions/app-actions/app-actions';
+import { formatNumber } from '../../../../../shared/utilities/helper';
 
 const RenderRow = ({ title, text, list, odd, textStyle }) => {
 
@@ -46,7 +47,7 @@ const RenderRow = ({ title, text, list, odd, textStyle }) => {
 const BuyTab = ({ navigation }) => {
 
   const dispatch = useDispatch()
-  const { my_preference,dream_addresses, sublists } = useSelector(state => state?.appReducer)
+  const { my_preference, dream_addresses, sublists } = useSelector(state => state?.appReducer)
   const [address, setAddress] = useState('');
   const [showAdvance, setShowAdvance] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
@@ -55,13 +56,13 @@ const BuyTab = ({ navigation }) => {
   const AddressesRow = ({ item, index }) => {
     const deleteAddress = () => {
       setLoader(true)
-      dispatch(delete_dream_address({id:item?.id},() => setLoader(false),() => setLoader(false)))
+      dispatch(delete_dream_address({ id: item?.id }, () => setLoader(false), () => setLoader(false)))
     }
     return (
       <View style={styles.addressItemRow(index)}>
         <Text style={styles.addrsTxtStyle}>{item?.address}</Text>
-        <TouchableOpacity style={{padding:WP(2)}} onPress={deleteAddress} >
-        <Image source={appIcons.cross} style={styles.crossIconStyle} />
+        <TouchableOpacity style={{ padding: WP(2) }} onPress={deleteAddress} >
+          <Image source={appIcons.cross} style={styles.crossIconStyle} />
         </TouchableOpacity>
       </View>
     );
@@ -82,7 +83,7 @@ const BuyTab = ({ navigation }) => {
           return <RenderRow key={index} item={item} index={index} />;
         })} */}
         <RenderRow title={'Property Type'} text={my_preference.property_type} />
-        <RenderRow title={'Price'} text={`${my_preference.currency_type || currency_list[0]} ${my_preference.price?.min || 0} to ${my_preference.price?.max || 'Any'}`} odd={true} textStyle={{ textTransform: 'none' }} />
+        <RenderRow title={'Price'} text={`${my_preference.currency_type || currency_list[0]} ${formatNumber(my_preference.price?.min) || 0} to ${my_preference.price?.max ? formatNumber(my_preference.price.max) : 'Any'}`} odd={true} textStyle={{ textTransform: 'none' }} />
         {my_preference.property_type != 'vacant_land' &&
           <>
             <RenderRow title={'Min No. of Bedrooms'} text={my_preference.bed_rooms?.min || 0} />
@@ -145,7 +146,7 @@ const BuyTab = ({ navigation }) => {
                 <RenderRow title={'Heat Source'} text={my_preference.heat_source} list={sublists.heat_source} odd={true} />
                 <RenderRow title={'Heat Type'} text={my_preference.heat_type} list={sublists.heat_type} />
                 <RenderRow title={'Air Conditioner'} text={my_preference.air_conditioner} list={sublists.air_conditioner} odd={true} />
-                <RenderRow title={'Laundary'} text={my_preference.laundry} list={sublists.laundry} />
+                <RenderRow title={'Laundry'} text={my_preference.laundry} list={sublists.laundry} />
                 <RenderRow title={'Fireplace'} text={my_preference.fireplace} list={sublists.fireplace} odd={true} />
                 <RenderRow title={'Central Vacuum'} text={my_preference.central_vacuum ? 'true' : 'false'} />
                 <RenderRow title={'Pool'} text={my_preference.pool} list={sublists.pool} odd={true} />

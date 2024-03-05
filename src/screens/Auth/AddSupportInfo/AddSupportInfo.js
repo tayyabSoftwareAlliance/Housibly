@@ -9,6 +9,7 @@ import {
   Alert,
   FlatList,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import {
   AppButton,
@@ -52,6 +53,7 @@ const AddSupportInfo = ({ navigation, route }) => {
 
   //On Submit
   const onSubmit = async values => {
+    Keyboard.dismiss()
     const check = await checkConnected();
     if (check) {
       const filteredProfessionList = professionList.filter(item => item?.title)
@@ -67,7 +69,7 @@ const AddSupportInfo = ({ navigation, route }) => {
             navigation?.navigate('UploadDocuments');
           }, 500);
         };
-        dispatch(setSupportClosureRequest({...body}, addInfoSuccess));
+        dispatch(setSupportClosureRequest({ ...body }, addInfoSuccess));
       } else {
         Alert.alert('Error', 'At least one profession required!');
       }
@@ -128,7 +130,7 @@ const AddSupportInfo = ({ navigation, route }) => {
           };
           return (
             <View style={styles.contentContainer}>
-              <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'}>
                 <View style={styles.inputContainer}>
                   <View style={styles.imgCon}>
                     <TouchableOpacity

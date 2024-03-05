@@ -1,8 +1,8 @@
-import { Platform, StyleSheet, Text, TextInput, View, Image } from 'react-native';
-import React, { useState } from 'react';
-import SelectDropdown from 'react-native-select-dropdown';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import React from 'react';
 import { WP, colors, family, size } from '../../shared/exporter';
 import CheckBox from '../Custom/CheckBox';
+import { TouchableOpacity } from 'react-native';
 
 export const CheckBoxInput = ({
     checked,
@@ -17,12 +17,9 @@ export const CheckBoxInput = ({
     tintColor,
     onPress
 }) => {
-
-    const [open, setOpen] = useState(false)
-
     return (
-        <View
-            style={[styles.container, { justifyContent: !inputs && 'space-between' }]}>
+        <TouchableOpacity
+            style={[styles.container, { justifyContent: !inputs && 'space-between' }]} onPress={onPress}>
             <View style={styles.aiRow}>
                 <View style={[styles.headStyle]}>
                     {source && (
@@ -48,7 +45,7 @@ export const CheckBoxInput = ({
                 checked={checked}
                 onPress={onPress}
             />
-        </View>
+        </TouchableOpacity>
     );
 };
 

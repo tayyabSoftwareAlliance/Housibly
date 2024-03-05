@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { Alert, Keyboard, SafeAreaView, StatusBar, Text, View } from 'react-native';
 import styles from './styles';
 import {
   checkConnected,
@@ -38,6 +38,7 @@ const Signup = ({ navigation, route }) => {
 
   //Handle Signup
   const handleSignUp = async values => {
+    Keyboard.dismiss()
     const check = await checkConnected();
     if (check) {
       let phone = '';
@@ -133,7 +134,8 @@ const Signup = ({ navigation, route }) => {
               contentContainerStyle={{
                 flex: 1,
                 justifyContent: 'space-between',
-              }}>
+              }}
+              keyboardShouldPersistTaps={'handled'}>
               <View style={styles.inputCon}>
                 <AppInput
                   onChangeText={handleChange('fullname')}

@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { WP, appIcons, appImages, colors, family, property_image, size } from '../../shared/exporter'
+import { formatNumber } from '../../shared/utilities/helper'
 
 const PropertyComponent = ({ item, myProperty = false }) => {
 
@@ -36,7 +37,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 </View>
                 <View style={styles.simpleRow}>
                     <Text style={styles.smallTxtStyle}>
-                        {`${item?.currency_type || '$'} ${item?.price || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
+                        {`${item?.currency_type || '$'} ${formatNumber(item?.price) || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
                     </Text>
                     {item?.property_type != 'vacant_land' &&
                         <>

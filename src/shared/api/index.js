@@ -91,6 +91,8 @@ export const app = {
   createSupportMessage: (data) => requests.post(`${ENDPOINTS.CREATE_SUPPORT_MESSAGE}`, data),
   getSupportMessages: (data) => requests.post(`${ENDPOINTS.GET_SUPPORT_MESSAGES}`, data),
   getPackages: () => requests.get(`${ENDPOINTS.GET_PACKAGES}`),
+  createSubscriptionWithPlatformPay: (data) => requests.post(`${ENDPOINTS.CREATE_SUBSCRIPTION_WITH_PLATFORM_PAY}`,data),
+  createSubscriptionWithCard: (data) => requests.post(`${ENDPOINTS.CREATE_SUBSCRIPTION_WITH_CARD}`,data),
   addSearchedAddress: (data) => requests.post(`${ENDPOINTS.SEARCHED_THIS_LOCATION}`,data),
   getPeopleWhoSearchedThisLocation: (lat, lng, page) => requests.get(`${ENDPOINTS.SEARCHED_THIS_LOCATION}/get_users?searched_address[latitude]=${lat}&searched_address[longitude]=${lng}&page=${page}`),
 };

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import {
   AppButton,
@@ -41,6 +42,7 @@ const AddPersonalInfo = ({ navigation, route }) => {
   const dispatch = useDispatch(null);
 
   const onSubmit = async values => {
+    Keyboard.dismiss()
     const check = await checkConnected();
     if (check) {
       setLoading(true);
@@ -55,16 +57,16 @@ const AddPersonalInfo = ({ navigation, route }) => {
       if (!params?.profile_complete) {
         form.append('user[licensed_realtor]', params?.item?.licensed || 'No');
         form.append('user[contacted_by_real_estate]', params?.item?.contacted || 'No');
-        form.append('user[user_type]',params?.item?.userType ? params.item.userType.toLowerCase() : 'neither');
+        form.append('user[user_type]', params?.item?.userType ? params.item.userType.toLowerCase() : 'neither');
         form.append('user[profile_type]', params?.regPurpose);
       }
       const addInfoSuccess = async res => {
-        console.log('addInfoSuccess resss',res)
+        console.log('addInfoSuccess resss', res)
         setLoading(false);
         navigation?.navigate('AuthPrivacyPolicy');
       };
       const addInfoFailure = async res => {
-        console.log('errrrrrrr',res)
+        console.log('errrrrrrr', res)
         setLoading(false);
         Alert.alert('Error', res);
       };
@@ -130,7 +132,7 @@ const AddPersonalInfo = ({ navigation, route }) => {
           };
           return (
             <View style={styles.contentContainer}>
-              <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'} >
                 <View style={styles.inputContainer}>
                   <View style={styles.imgCon}>
                     <TouchableOpacity

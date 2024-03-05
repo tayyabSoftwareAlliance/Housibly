@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
     fontFamily: family.Gilroy_Bold,
     textTransform: 'uppercase'
   },
+  subscribedTxt: {
+    fontSize: size.tiny,
+    color: colors.white,
+    fontFamily: family.Gilroy_Bold,
+    textTransform: 'uppercase'
+  },
   footerTxt: {
     fontSize: size.tiny,
     color: '#717171',
@@ -85,10 +91,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
     opacity: 0
   },
-  packageDetailBottomContainer:{
-    width:WP(80),
+  packageDetailBottomContainer: {
+    width: WP(80),
     marginTop: HP(15),
-    flex:1
+    flex: 1
   },
   packageDetailH5: {
     fontSize: size.h6,
@@ -103,14 +109,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: HP(2),
   },
-  boostIconContainer:{
-    position:'absolute',
-    bottom:-HP(10),
-    alignSelf:'center',
+  boostIconContainer: {
+    position: 'absolute',
+    bottom: -HP(10),
+    alignSelf: 'center',
   },
-  boostIcon:{
-    width:HP(25),
-    height:HP(25),
+  boostIcon: {
+    width: HP(25),
+    height: HP(25),
   },
 });
 

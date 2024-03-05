@@ -322,7 +322,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
           />
           <Divider color={colors.g18} />
           <FilterButton
-            title={'Laundary'}
+            title={'Laundry'}
             list={sublists.laundry}
             selected={data.laundry}
             onPressTick={val => setValue('laundry', val)}

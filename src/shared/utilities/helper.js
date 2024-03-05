@@ -531,16 +531,21 @@ export const requestNotificationPermission = async () => {
   return flag;
 }
 
+// export const formatNumber = (num) => {
+//   if (!num) return ''
+//   // Check if the number has a decimal part
+//   if (num % 1 !== 0) {
+//     // If it does, limit to two decimal places
+//     return num.toFixed(2);
+//   } else {
+//     // If it's a whole number, return it as is
+//     return num.toString();
+//   }
+// }
+
 export const formatNumber = (num) => {
-  if (!num) return ''
-  // Check if the number has a decimal part
-  if (num % 1 !== 0) {
-    // If it does, limit to two decimal places
-    return num.toFixed(2);
-  } else {
-    // If it's a whole number, return it as is
-    return num.toString();
-  }
+  if(typeof num === 'null' || typeof num === 'undefined') return
+  return Number(num).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
 
 export const convertLocationToAddress = async (latitude, longitude) => {

@@ -8,6 +8,7 @@ import {
   Platform,
   SafeAreaView,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import {
   AppButton,
@@ -166,6 +167,7 @@ const Login = ({ navigation }) => {
   }
 
   const onSubmit = async values => {
+    Keyboard.dismiss()
     const check = await checkConnected();
     if (check) {
       setIsLoading(true);
@@ -244,7 +246,7 @@ const Login = ({ navigation }) => {
             handleSubmit,
             handleReset,
           }) => (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'}>
               <View style={styles.imageCon}>
                 <Image source={appLogos.appLogo} style={styles.imgStyle} />
                 <Text style={styles.textStyle}>Housibly</Text>

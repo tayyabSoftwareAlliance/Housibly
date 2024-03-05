@@ -54,6 +54,8 @@ const ENDPOINTS = {
   GET_NOTIFICATION_SETTING:'show_current_user_setting',
   UPDATE_NOTIFICATION_SETTING:'update_current_user_setting',
   GET_PACKAGES:'get_packages',
+  CREATE_SUBSCRIPTION_WITH_PLATFORM_PAY:'create_subscription_on_digital_wallet',
+  CREATE_SUBSCRIPTION_WITH_CARD:'create_subscription_on_card',
   SEARCHED_THIS_LOCATION:'searched_addresses',
   
   //chat

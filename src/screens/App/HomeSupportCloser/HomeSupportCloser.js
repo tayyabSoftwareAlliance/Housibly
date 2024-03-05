@@ -157,9 +157,9 @@ const HomeSupportCloser = ({ navigation }) => {
   }, [isFocus])
 
   useEffect(() => {
-    if(userInfo){
-    setTimeout(requestNotificationPermission, 1000)
-    dispatch(get_all_notifications())
+    if (userInfo) {
+      setTimeout(requestNotificationPermission, 1000)
+      dispatch(get_all_notifications())
     }
   }, [])
 
@@ -293,7 +293,7 @@ const HomeSupportCloser = ({ navigation }) => {
                 </Pressable>
               )}
             />
-            {!data?.has_subscription && false &&
+            {!data?.is_subscribed &&
               <BlurView
                 style={{ ...StyleSheet.absoluteFill }}
                 blurType="light"

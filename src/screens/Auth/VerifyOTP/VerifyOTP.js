@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, SafeAreaView, StatusBar, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AppButton, AppHeader, AppLoader, BackHeader } from '../../../components';
 import {
@@ -35,6 +35,7 @@ const VerifyOTP = ({ navigation, route }) => {
   const ref = useRef();
 
   const onSubmit = async values => {
+    Keyboard.dismiss()
     const check = await checkConnected();
     if (check) {
       setLoading(true);
@@ -134,7 +135,7 @@ const VerifyOTP = ({ navigation, route }) => {
             handleSubmit,
             handleReset,
           }) => (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'}>
               <View style={styles.inputContainer}>
                 <CodeField
                   ref={ref}

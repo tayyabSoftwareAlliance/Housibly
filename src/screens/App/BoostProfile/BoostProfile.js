@@ -1,5 +1,5 @@
 import { Alert, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { appIcons, appImages, colors, responseValidator } from '../../../shared/exporter'
 import styles from './styles'
 import { SafeAreaView } from 'react-native'
@@ -8,6 +8,8 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { app } from '../../../shared/api'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
 
 const packages_data = [
     {
@@ -29,10 +31,15 @@ const packages_data = [
 
 const BoostProfile = ({ navigation }) => {
 
+    const { userInfo } = useSelector(state => state?.auth);
+    const { userProfile } = useSelector(state => state?.settings);
+
     const [packages, setPackages] = useState([])
+    const [subcribedPackage, setSubcribedPackage] = useState(null)
     const [loader, setLoader] = useState(false)
     const isFocused = useIsFocused()
-
+console.log('thissssssss userInfo',userInfo?.user?.is_subscribed)
+console.log('thissssssss userProfile',userProfile?.user?.is_subscribed)
     const fetchData = async () => {
         try {
             setLoader(true)
@@ -40,6 +47,7 @@ const BoostProfile = ({ navigation }) => {
             if (res?.status == 200) {
                 console.log('resssss', res.data)
                 setPackages(res.data || [])
+                setSubcribedPackage(res.data?.find(item => item?.is_subscribed))
             }
         } catch (error) {
             console.log('error', error)
@@ -72,8 +80,13 @@ const BoostProfile = ({ navigation }) => {
                 <Text style={styles.subtitle}>
                     To get more clients easily, you can boost your account and get noticed by potential buyers.
                 </Text>
-                {packages.slice(0,3).map((item, index) => (
-                    <TouchableOpacity onPress={() => navigation.navigate('BoostProfileDetail', { package: item })} >
+                {packages.map((item, index) => (
+                    <TouchableOpacity onPress={() => {
+                        if (subcribedPackage)
+                            Alert.alert('Alert', `You already subscribed to ${subcribedPackage?.name} package. Subscription ends in ${moment(subcribedPackage?.current_period_end?.toString().split(' ')[0]).diff(new Date(), 'days')} days.`)
+                        else
+                            navigation.navigate('BoostProfileDetail', { package: item })
+                    }} >
                         <LinearGradient
                             key={index}
                             start={{ x: 0, y: 0 }}
@@ -82,13 +95,14 @@ const BoostProfile = ({ navigation }) => {
                             style={styles.btnCon}
                         >
                             <Text style={styles.btnTxt}>
-                                {`$${item.price}/${item.name}`}
+                                {`$${item.price_amount / 100}/${item.name}`}
                             </Text>
+                            {item.is_subscribed && <Text style={styles.subscribedTxt}>(Subscribed)</Text>}
                         </LinearGradient>
                     </TouchableOpacity>
                 ))}
                 <View style={styles.boostIconContainer}>
-                <Image source={appImages.boost} style={styles.boostIcon} resizeMode='contain' />
+                    <Image source={appImages.boost} style={styles.boostIcon} resizeMode='contain' />
                 </View>
             </View>
             <AppLoader loading={loader} />

@@ -154,7 +154,7 @@ const authReducer = (state = initialState, actions) => {
     case TYPES.UPDATE_USER_SETTING_SUCCESS:
       return {
         ...state,
-        userInfo: state.userInfo?.user ? { ...state.userInfo, user: {...state.userInfo.user,...payload} } : { user: payload },
+        userInfo: state.userInfo?.user ? { ...state.userInfo, user: { ...state.userInfo.user, ...payload } } : { user: payload },
       };
 
     //************Logout Sates*************
@@ -192,6 +192,13 @@ const authReducer = (state = initialState, actions) => {
         ...state,
         loading: false,
         support_info: payload,
+      };
+
+    //************User Get Profile states*************
+    case TYPES.GET_PROFILE_SUCCESS:
+      return {
+        ...state,
+        userInfo: state?.userInfo?.user ? { ...state.userInfo, user: { ...state.userInfo.user, ...payload } } : { user: payload },
       };
 
     // Set User Location Success

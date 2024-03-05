@@ -136,9 +136,9 @@ const FilterScreen = ({ navigation, route }) => {
               dropDown={true}
               inputs
               valueFrom={data.min_price}
-              onChangeTextFrom={text => setValue('min_price', Number(text)?.toString())}
+              onChangeTextFrom={text => setValue('min_price', text)}
               valueTo={data.max_price}
-              onChangeTextTo={text => setValue('max_price', Number(text)?.toString())}
+              onChangeTextTo={text => setValue('max_price', text)}
             />
             {data.property_type != 'vacant_land' &&
               <>
@@ -406,7 +406,7 @@ const FilterScreen = ({ navigation, route }) => {
                     />
                     <Divider color={colors.g18} />
                     <FilterButton
-                      title={'Laundary'}
+                      title={'Laundry'}
                       list={sublists.laundry}
                       selected={data.laundry}
                       onPressTick={val => setValue('laundry', val)}
