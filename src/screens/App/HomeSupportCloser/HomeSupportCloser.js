@@ -11,6 +11,7 @@ import {
   StatusBar,
   Pressable,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import styles from './styles';
 import {
@@ -29,12 +30,12 @@ import Document from '../../../components/Custom/Document';
 import { ScrollView } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import Review from '../../../components/Custom/Review';
-import { extractFileType, requestNotificationPermission } from '../../../shared/utilities/helper';
+import { extractFileType, formatNumber, requestNotificationPermission } from '../../../shared/utilities/helper';
 import { app } from '../../../shared/api';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native'
 import moment from 'moment';
-import { BlurView } from "@react-native-community/blur";
+// import { BlurView } from "@react-native-community/blur";
 import { get_all_notifications } from '../../../redux/actions/notification-actions/notification-actions';
 
 const VisitorDetailModal = ({ isVisible, data, onPressHide }) => {
@@ -215,7 +216,7 @@ const HomeSupportCloser = ({ navigation }) => {
             </TouchableOpacity>
             <View >
               <Text style={styles.ratingText} >Rating</Text>
-              <Text style={styles.ratingNumber}>{data?.average_rating}</Text>
+              <Text style={styles.ratingNumber}>{formatNumber(data?.average_rating) || 0}</Text>
             </View>
           </View>
           <View style={spacing.mt6}>
@@ -288,18 +289,28 @@ const HomeSupportCloser = ({ navigation }) => {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <Pressable onPress={() => { setSelectedVisitor(item); setVisitorDetailModal(true) }} >
-                  <Image style={styles.peoplesImage} source={{ uri: item.avatar }} />
+                <Pressable
+                  disabled={!data?.is_subscribed}
+                  onPress={() => {
+                    setSelectedVisitor(item)
+                    setVisitorDetailModal(true)
+                  }}
+                >
+                  <Image
+                    style={styles.peoplesImage}
+                    source={{ uri: item.avatar }}
+                    blurRadius={!data?.is_subscribed ? 30 : 0}
+                  />
                 </Pressable>
               )}
             />
-            {!data?.is_subscribed &&
+            {/* {!data?.is_subscribed &&
               <BlurView
                 style={{ ...StyleSheet.absoluteFill }}
                 blurType="light"
                 blurAmount={5}
               />
-            }
+            } */}
           </View>
         </View>
         <View style={styles.peoplesContainer} >
