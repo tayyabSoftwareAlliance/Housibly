@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import {
   AppButton,
@@ -122,6 +123,7 @@ const EditProfile = ({ navigation, route }) => {
       Alert.alert('Error', 'At least one profession required!');
       return
     }
+    Keyboard.dismiss()
     setIsLoading(true);
     const data = new FormData();
     let phone = '';
@@ -228,7 +230,7 @@ const EditProfile = ({ navigation, route }) => {
             }, [data]);
 
             return (
-              <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'}>
                 <View style={styles.inputContainer}>
                   <TouchableOpacity
                     activeOpacity={0.7}
