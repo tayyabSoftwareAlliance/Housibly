@@ -51,7 +51,7 @@ const renderItem = (item, userData) => {
 
 const SupportChat = ({ navigation, route }) => {
   const conversation_id = route.params?.conversation_id
-  const userData = useSelector(state => state.auth)
+  const userData = useSelector(state => state?.auth)
   const [fresh, setFresh] = useState(true);
   const [message, setMessage] = useState('');
   const [sendLoader, setSendLoader] = useState(false);

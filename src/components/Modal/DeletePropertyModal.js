@@ -8,7 +8,7 @@ import { delete_my_property } from '../../redux/actions/app-actions/app-actions'
 export const DeletePropertyModal = ({ item, show, onPressHide }) => {
 
   const dispatch = useDispatch()
-  const { loading } = useSelector(state => state.appReducer)
+  const { loading } = useSelector(state => state?.appReducer)
 
   const deleteProperty = () => {
     dispatch(delete_my_property(item?.id, onPressHide))

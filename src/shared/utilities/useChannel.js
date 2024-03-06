@@ -8,7 +8,7 @@ let actionCable, cable;
 
 const useChannel = () => {
 
-    const userData = useSelector(state => state.auth)
+    const userData = useSelector(state => state?.auth)
 
     const createChannel = (callbacks = {}) => {
         actionCable = ActionCable.createConsumer(`ws://16.171.63.250:3000/cable/api/v1/messages?HTTP_AUTH_TOKEN=${userData?.userInfo?.user?.auth_token}`)

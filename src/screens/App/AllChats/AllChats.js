@@ -137,8 +137,8 @@ const AllChats = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedChat, setSelectedChat] = useState(null)
   const isFocused = useIsFocused()
-  const userData = useSelector(state => state.auth)
-  const { delete_loader, all_chats } = useSelector(state => state.chat)
+  const userData = useSelector(state => state?.auth)
+  const { delete_loader, all_chats } = useSelector(state => state?.chat)
   const [loader, setLoader] = useState(false)
   const userId = userData?.userInfo?.user?.id
 

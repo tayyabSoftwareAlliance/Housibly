@@ -22,7 +22,7 @@ import { resetPassRequest } from '../../../redux/actions';
 
 const ResetPassword = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
-  const { forgotPassRes } = useSelector(state => state.auth);
+  const { forgotPassRes } = useSelector(state => state?.auth);
 
   const dispatch = useDispatch(null);
 

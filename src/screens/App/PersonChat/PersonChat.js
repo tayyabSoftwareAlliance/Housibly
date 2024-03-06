@@ -114,7 +114,7 @@ const PersonChat = ({ navigation, route }) => {
   const [blockModal, setBlockModal] = useState(false)
   const [blockLoader, setBlockLoader] = useState(false)
   const isFocused = useIsFocused()
-  const userData = useSelector(state => state.auth)
+  const userData = useSelector(state => state?.auth)
   const userId = userData?.userInfo?.user?.id
   const { createChannel, removeChannel } = useChannel()
 
