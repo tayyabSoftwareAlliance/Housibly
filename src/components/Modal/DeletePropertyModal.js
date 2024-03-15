@@ -8,7 +8,7 @@ import { delete_my_property } from '../../redux/actions/app-actions/app-actions'
 export const DeletePropertyModal = ({ item, show, onPressHide }) => {
 
   const dispatch = useDispatch()
-  const { loading } = useSelector(state => state?.appReducer)
+  const { loading, sublists } = useSelector(state => state?.appReducer)
 
   const deleteProperty = () => {
     dispatch(delete_my_property(item?.id, onPressHide))
@@ -30,7 +30,7 @@ export const DeletePropertyModal = ({ item, show, onPressHide }) => {
         <Image source={{ uri: item?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
         <Text style={styles.nameTxtStyle}>{item?.title}</Text>
         <View style={styles.rowContainer}>
-          <Text style={styles.smallTxtStyle}>{`${item?.currency_type} ${item?.price} | `}</Text>
+          <Text style={styles.smallTxtStyle}>{`${sublists.currency_type?.[item?.currency_type]} ${item?.price} | `}</Text>
           <Image
             resizeMode="contain"
             source={appIcons.bedIcon}

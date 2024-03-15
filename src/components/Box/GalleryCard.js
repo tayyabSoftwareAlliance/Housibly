@@ -40,7 +40,7 @@ export const GalleryCard = ({
         // const distinctItems = [
         //   ...new Map(array3.map(item => [item['size'], item])).values(),
         // ];
-        onSelect(array3);
+        onSelect(array3.slice(0,30));
         setShow(false);
       });
     }, 400);

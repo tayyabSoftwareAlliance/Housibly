@@ -45,11 +45,12 @@ import {
 } from '../../../../redux/actions';
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PriceInputWithCurrency } from '../../../../components/Inputs/PriceInputWithCurrency';
 
 const INITIAL_DATA = {
   property_type: 'house',
   title: '',
-  currency_type: currency_list[0],
+  currency_type: '',
   images: [],
   price: 0,
   year_built: 0,
@@ -107,7 +108,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
 
   const { propertyData, from } = route.params
   const dispatch = useDispatch(null);
-  const { saved_create_property_data } = useSelector(
+  const { saved_create_property_data, sublists } = useSelector(
     state => state?.appReducer,
   );
 
@@ -116,7 +117,11 @@ const AddPropertyDetails = ({ navigation, route }) => {
       (from == 'edit' ?
         propertyData :
         saved_create_property_data)
-      || INITIAL_DATA
+      ||
+      {
+        ...INITIAL_DATA,
+        currency_type: Object.entries(sublists.currency_type || {})[0]?.[0],
+      }
     ))
   )
   const isFocused = useIsFocused()
@@ -219,12 +224,12 @@ const AddPropertyDetails = ({ navigation, route }) => {
               keyboardType={'default'}
             />
             <Divider color={colors.g18} />
-            <PriceInput
+            <PriceInputWithCurrency
               defaultValue={data.currency_type}
               onSelect={val => setValue('currency_type', val)}
               simpleInputPlaceHolder={'e.g 21.00'}
               title={'Price'}
-              list={currency_list}
+              list={sublists.currency_type}
               dropDown={true}
               value={data.price}
               onChangeText={text => setValue('price', text)}
@@ -333,7 +338,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
               value={data.property_tax}
               simpleInputPlaceHolder={'00.00'}
               title={'Property Taxes '}
-              subtitle={`(${data.currency_type})`}
+              subtitle={`(${sublists.currency_type?.[data.currency_type]})`}
             />
             {data.property_type == 'condo' && (
               <>

@@ -4,9 +4,10 @@ import Modal from 'react-native-modal';
 import { colors, WP, family, size, appIcons, property_image } from '../../shared/exporter';
 import { useDispatch, useSelector } from 'react-redux';
 
-export const RemoveBookmarkModal = ({ item, show, onPressHide,onRemovePress }) => {
+export const RemoveBookmarkModal = ({ item, show, onPressHide, onRemovePress }) => {
 
   const dispatch = useDispatch()
+  const { sublists } = useSelector(state => state?.appReducer)
 
   return (
     <Modal onBackdropPress={onPressHide} isVisible={show}>
@@ -30,7 +31,7 @@ export const RemoveBookmarkModal = ({ item, show, onPressHide,onRemovePress }) =
           </>
           :
           <View style={styles.rowContainer}>
-            <Text style={styles.smallTxtStyle}>{`${item?.currency_type || '$'} ${item?.property?.price || 0} | `}</Text>
+            <Text style={styles.smallTxtStyle}>{`${sublists.currency_type?.[item?.property?.currency_type]} ${item?.property?.price || 0} | `}</Text>
             <Image
               resizeMode="contain"
               source={appIcons.bedIcon}
@@ -47,11 +48,11 @@ export const RemoveBookmarkModal = ({ item, show, onPressHide,onRemovePress }) =
           style={styles.buttonStyle}
           onPress={() => {
             onPressHide()
-            setTimeout(() => onRemovePress(item?.id),1500)
+            setTimeout(() => onRemovePress(item?.id), 1500)
           }}>
           {/* {loading ? */}
-            {/* <ActivityIndicator color={colors.white} /> : */}
-            <Text style={styles.btnTxtStyle}>Remove</Text>
+          {/* <ActivityIndicator color={colors.white} /> : */}
+          <Text style={styles.btnTxtStyle}>Remove</Text>
           {/* } */}
         </TouchableOpacity>
       </View>

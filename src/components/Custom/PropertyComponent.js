@@ -3,10 +3,12 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { WP, appIcons, appImages, colors, family, property_image, size } from '../../shared/exporter'
 import { formatNumber } from '../../shared/utilities/helper'
+import { useSelector } from 'react-redux';
 
 const PropertyComponent = ({ item, myProperty = false }) => {
 
     const navigation = useNavigation()
+    const { sublists } = useSelector(state => state?.appReducer);
 
     return (
         <TouchableOpacity
@@ -16,7 +18,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 if (myProperty)
                     navigation.navigate('PotentialBuyers', { item })
                 else
-                    navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id,from:'property_detail' })
+                    navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id, from: 'property_detail' })
             }}
         >
             <Image
@@ -37,7 +39,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 </View>
                 <View style={styles.simpleRow}>
                     <Text style={styles.smallTxtStyle}>
-                        {`${item?.currency_type || '$'} ${formatNumber(item?.price) || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
+                        {`${sublists.currency_type?.[item?.currency_type]} ${formatNumber(item?.price) || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
                     </Text>
                     {item?.property_type != 'vacant_land' &&
                         <>

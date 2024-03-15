@@ -111,7 +111,7 @@ const PersonDetails = ({ navigation, route }) => {
           <>
             <RenderRow
               title={'Budget'}
-              value={<Text><Text style={styles.priceTxt} >{'$' + (formatNumber(data?.price?.value?.min) || 0)}</Text> to <Text style={styles.priceTxt} >{data?.price?.value?.max ? '$' + formatNumber(data?.price?.value?.max) : 'any'}</Text></Text>}
+              value={<Text><Text style={styles.priceTxt} >{`${sublists.currency_type?.[data.currency_type]} ${(formatNumber(data?.price?.value?.min) || 0)}`}</Text> to <Text style={styles.priceTxt} >{data?.price?.value?.max ? formatNumber(data?.price?.value?.max) : 'any'}</Text></Text>}
               matched={data?.price?.matched}
             />
             <RenderRow title={'Min No. of Rooms'} value={data?.total_number_of_rooms?.value?.min || 0} matched={data?.total_number_of_rooms?.matched} />
@@ -129,7 +129,7 @@ const PersonDetails = ({ navigation, route }) => {
             <>
               <RenderRow
                 title={'Budget'}
-                value={<Text><Text style={styles.priceTxt} >{'$' + (formatNumber(data?.price?.value?.min) || 0)}</Text> to <Text style={styles.priceTxt} >{data?.price?.value?.max ? '$' + formatNumber(data?.price?.value?.max) : 'any'}</Text></Text>}
+                value={<Text><Text style={styles.priceTxt} >{`${sublists.currency_type?.[data.currency_type]} ${(formatNumber(data?.price?.value?.min) || 0)}`}</Text> to <Text style={styles.priceTxt} >{data?.price?.value?.max ? formatNumber(data?.price?.value?.max) : 'any'}</Text></Text>}
                 matched={data?.price?.matched}
               />
               <RenderRow title={'Min No. of Rooms'} value={data?.total_number_of_rooms?.value?.min || 0} matched={data?.total_number_of_rooms?.matched} />
@@ -147,7 +147,7 @@ const PersonDetails = ({ navigation, route }) => {
             <>
               <RenderRow
                 title={'Budget'}
-                value={<Text><Text style={styles.priceTxt} >{'$' + (formatNumber(data?.price?.value?.min) || 0)}</Text> to <Text style={styles.priceTxt} >{data?.price?.value?.max ? '$' + formatNumber(data?.price?.value?.max) : 'any'}</Text></Text>}
+                value={<Text><Text style={styles.priceTxt} >{`${sublists.currency_type?.[data.currency_type]} ${(formatNumber(data?.price?.value?.min) || 0)}`}</Text> to <Text style={styles.priceTxt} >{data?.price?.value?.max ? formatNumber(data?.price?.value?.max) : 'any'}</Text></Text>}
                 matched={data?.price?.matched}
               />
               <RenderRow title={'Min Lot Frontage'} value={(formatNumber(data?.lot_frontage?.value?.min) || 0) + ' ' + data?.lot_frontage_unit} matched={data?.lot_frontage?.matched} />

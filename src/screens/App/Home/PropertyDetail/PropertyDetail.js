@@ -178,7 +178,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 <PreviewInfoCard
                   item={{
                     h1: 'Price',
-                    h2: `${data.currency_type} ${data.price || 0
+                    h2: `${sublists.currency_type?.[data.currency_type]} ${data.price || 0
                       }`,
                     icon: appIcons.priceTag,
                   }}
@@ -226,7 +226,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 </>
               )}
               <PreviewField
-                title={`Property Taxes (${data.currency_type})`}
+                title={`Property Taxes (${sublists.currency_type?.[data.currency_type]})`}
                 subtitle={data.property_tax || 0}
               />
               <PreviewField

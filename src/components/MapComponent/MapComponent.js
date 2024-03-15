@@ -25,6 +25,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native';
 import { AppButton } from '../AppButton/AppButton';
 import { BlurView } from "@react-native-community/blur";
 import { AppInput } from '../Inputs/AppInput';
+import { useSelector } from 'react-redux';
 
 const DragMarker = () => (
   <View style={styles.dragMarker} />
@@ -39,6 +40,7 @@ let hideSelectedPropertyTimeout;
 const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) => {
 
   const params = useRoute().params
+  const { sublists } = useSelector(state => state?.appReducer)
 
   return (
     <Modal
@@ -61,7 +63,7 @@ const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) =
           </View>
           <View style={styles.simpleRow}>
             <Text style={styles.smallTxtStyle}>
-              {`${data?.currency_type} ${data?.price || 0} ${data?.property_type != 'vacant_land' ? '| ' : ''}`}
+              {`${sublists.currency_type?.[data?.currency_type]} ${data?.price || 0} ${data?.property_type != 'vacant_land' ? '| ' : ''}`}
             </Text>
             {data?.property_type != 'vacant_land' &&
               <>

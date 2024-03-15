@@ -9,7 +9,7 @@ const initialState = {
   sublists: {},
   address: '',
   all_properties: [],
-  my_preference: { property_type: 'house', currency_type: currency_list[0] },
+  my_preference: { property_type: 'house', currency_type: 'USD' },
   dream_addresses: [],
   matched_properties: { lastPage: 0, data: [] },
   top_support_closers: [],

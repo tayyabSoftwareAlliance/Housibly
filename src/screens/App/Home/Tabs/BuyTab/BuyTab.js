@@ -83,7 +83,7 @@ const BuyTab = ({ navigation }) => {
           return <RenderRow key={index} item={item} index={index} />;
         })} */}
         <RenderRow title={'Property Type'} text={my_preference.property_type} />
-        <RenderRow title={'Price'} text={`${my_preference.currency_type || currency_list[0]} ${formatNumber(my_preference.price?.min) || 0} to ${my_preference.price?.max ? formatNumber(my_preference.price.max) : 'Any'}`} odd={true} textStyle={{ textTransform: 'none' }} />
+        <RenderRow title={'Price'} text={`${sublists.currency_type?.[my_preference.currency_type]} ${formatNumber(my_preference.price?.min) || 0} to ${my_preference.price?.max ? formatNumber(my_preference.price.max) : 'Any'}`} odd={true} textStyle={{ textTransform: 'none' }} />
         {my_preference.property_type != 'vacant_land' &&
           <>
             <RenderRow title={'Min No. of Bedrooms'} text={my_preference.bed_rooms?.min || 0} />

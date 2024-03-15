@@ -356,7 +356,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             <>
               <Divider color={colors.g18} />
               <PriceInput
-                title={`Condo/HOA fees (${data.currency_type}/per month)`}
+                title={`Condo/HOA fees (${sublists.currency_type?.[data.currency_type]}/per month)`}
                 simpleInputPlaceHolder={'0'}
                 value={data.condo_fees}
                 onChangeText={text => setValue('condo_fees', text)}

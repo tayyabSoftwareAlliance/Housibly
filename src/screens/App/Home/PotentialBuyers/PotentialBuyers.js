@@ -23,11 +23,13 @@ import {
 import styles from './styles';
 import { app } from '../../../../shared/api';
 import { formatNumber } from '../../../../shared/utilities/helper';
+import { useSelector } from 'react-redux';
 
 const PotentialBuyers = ({ navigation, route }) => {
 
   const { item } = route.params
   const property_type = item?.property_type
+  const { sublists } = useSelector(state => state?.appReducer)
   const isFocus = useIsFocused();
   const [masterData, setMasterData] = useState([]);
   const [data, setData] = useState([]);
@@ -100,7 +102,7 @@ const PotentialBuyers = ({ navigation, route }) => {
           </Text>
           <View style={styles.simpleRow}>
             <Text style={styles.smallTxtStyle}>
-              {`$${item?.price}`} |{' '}
+              {`${sublists.currency_type?.[item.currency_type]} ${item?.price}`} |{' '}
             </Text>
             <Image
               resizeMode="contain"
@@ -146,8 +148,8 @@ const PotentialBuyers = ({ navigation, route }) => {
           <View style={styles.contentContainer}>
             <Text numberOfLines={1} style={styles.nameStyle}>{item?.user?.full_name || 'N/A'}</Text>
             <Text numberOfLines={2} style={styles.txtStyle}>
-              Budget: <Text style={styles.spanTxtStyle}>${formatNumber(item?.price?.value?.min) || 0}</Text> to{' '}
-              <Text style={styles.spanTxtStyle}>{item?.price?.value?.max ? `$${formatNumber(item.price.value.max)}` : 'any'}</Text>
+              Budget: <Text style={styles.spanTxtStyle}>{`${sublists.currency_type?.[item.currency_type]} ${formatNumber(item?.price?.value?.min) || 0}`}</Text> to{' '}
+              <Text style={styles.spanTxtStyle}>{item?.price?.value?.max ? `${formatNumber(item.price.value.max)}` : 'any'}</Text>
             </Text>
             <View style={styles.iconRow}>
               <Icon

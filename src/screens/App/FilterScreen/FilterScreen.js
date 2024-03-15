@@ -39,10 +39,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useDispatch, useSelector } from 'react-redux';
 import { checkConnected, filterFormData, formatPreferenceData } from '../../../shared/utilities/helper';
 import { update_my_preference } from '../../../redux/actions/app-actions/app-actions';
+import { PriceInputWithCurrency } from '../../../components/Inputs/PriceInputWithCurrency';
 
 const INITIAL_DATA = {
   property_type: 'house',
-  currency_type: currency_list[0],
+  currency_type: '',
   min_price: '0',
   max_price: '1000000',
   min_lot_frontage: 0,
@@ -81,7 +82,11 @@ const INITIAL_DATA = {
 const FilterScreen = ({ navigation, route }) => {
 
   const { my_preference, sublists, loading } = useSelector(state => state?.appReducer)
-  const [data, setData] = useState({ ...INITIAL_DATA, ...formatPreferenceData(my_preference) })
+  const [data, setData] = useState(
+    { ...INITIAL_DATA,
+      currency_type:Object.entries(sublists.currency_type || {})[0]?.[0], 
+      ...formatPreferenceData(my_preference) 
+    })
   const [showAdvance, setShowAdvance] = useState(false)
   const dispatch = useDispatch()
 
@@ -127,12 +132,12 @@ const FilterScreen = ({ navigation, route }) => {
               onPressTick={val => setValue('property_type', val)}
             />
             <Divider color={colors.g18} />
-            <PriceInput
+            <PriceInputWithCurrency
               defaultValue={data.currency_type}
               onSelect={val => setValue('currency_type', val)}
               simpleInputPlaceHolder={'e.g 21.00'}
               title={'Price'}
-              list={currency_list}
+              list={sublists.currency_type}
               dropDown={true}
               inputs
               valueFrom={data.min_price}
