@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     height: WP('15'),
   },
   itemContainer: {
-    padding: 6,
+    padding: WP(1.5),
     borderRadius: 20,
     marginTop: WP('4'),
     flexDirection: 'row',

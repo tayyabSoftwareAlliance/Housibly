@@ -39,13 +39,16 @@ import SellTab from './Tabs/SellTab/SellTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_my_properties } from '../../../redux/actions';
 import { get_matched_properties, get_top_support_closers } from '../../../redux/actions/app-actions/app-actions';
-import { useNavigation } from '@react-navigation/native'
-import moment from 'moment';
-import Modal from 'react-native-modal';
+// import { useNavigation } from '@react-navigation/native'
+// import moment from 'moment';
+// import Modal from 'react-native-modal';
 import { get_all_notifications } from '../../../redux/actions/notification-actions/notification-actions';
 import { capitalizeFirstLetter, convertLocationToAddress, handleLocationPermission, requestNotificationPermission } from '../../../shared/utilities/helper';
 import { set_user_location_request } from '../../../redux/actions/auth-actions/auth-action';
 import Geolocation from '@react-native-community/geolocation';
+import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+
+const TOTAL_CAROUSEL_HEIGHT = WP(29)
 
 const Home = ({ navigation }) => {
 
@@ -58,6 +61,21 @@ const Home = ({ navigation }) => {
   const { userInfo } = useSelector(state => state?.auth);
   const { userProfile } = useSelector(state => state?.settings);
   const { my_preference, top_support_closers } = useSelector(state => state?.appReducer)
+  const carouselHeight = useSharedValue(0)
+
+  const showCarousel = () => {
+    carouselHeight.value = withTiming(TOTAL_CAROUSEL_HEIGHT)
+  }
+
+  const hideCarousel = () => {
+    carouselHeight.value = withTiming(0)
+  }
+
+  const carouselAnimatedStyle = useAnimatedStyle(() => ({
+    height: carouselHeight.value,
+    opacity: interpolate(carouselHeight.value, [0, TOTAL_CAROUSEL_HEIGHT], [0, 1], Extrapolation.CLAMP),
+    overflow: 'hidden'
+  }))
 
   const hideItemClick = () => {
     setShowMenu(false);
@@ -135,6 +153,10 @@ const Home = ({ navigation }) => {
     userInfo && my_preference && dispatch(get_matched_properties(1))
   }, [my_preference])
 
+  useEffect(() => {
+    top_support_closers?.length > 0 && selected == 'buy' && showCarousel()
+  },[top_support_closers])
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <AppHeader
@@ -150,7 +172,7 @@ const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewStyle}
         stickyHeaderIndices={[3]}
-        >
+      >
         <View style={styles.rowContainer}>
           <View>
             <Text style={styles.propertyTxtStyle}>Find a property</Text>
@@ -168,18 +190,16 @@ const Home = ({ navigation }) => {
           </View>
           <Image source={appImages.personPh1} style={styles.phImgStyle} />
         </View>
-        <View>
-        {top_support_closers?.length > 0 && (
+        <Animated.View style={carouselAnimatedStyle}>
           <Carousel
             ref={carouselRef}
             sliderWidth={scrWidth}
-            sliderHeight={scrHeight}
+            // sliderHeight={TOTAL_CAROUSEL_HEIGHT}
             itemWidth={scrWidth / 1.15}
             data={top_support_closers}
             renderItem={({ item, index }) => renderItem(item, index, (data) => { setSelectedPerson(data); setPersonDetailModal(true) })}
           />
-        )}
-        </View>
+        </Animated.View>
         <View style={styles.menuContainer}>
           <Menu
             visible={showMenu}
@@ -203,7 +223,10 @@ const Home = ({ navigation }) => {
           <View style={styles.tabsContainer}>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => setSelected('buy')}
+              onPress={() => {
+                setSelected('buy')
+                top_support_closers?.length > 0 && showCarousel()
+              }}
               style={styles.tabStyle(selected === 'buy')}>
               <Text style={styles.tabTxtStyle(selected === 'buy')}>
                 I Want To Buy
@@ -211,7 +234,10 @@ const Home = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => setSelected('matches')}
+              onPress={() => {
+                setSelected('matches')
+                hideCarousel()
+              }}
               style={styles.tabStyle(selected === 'matches')}>
               <Text style={styles.tabTxtStyle(selected === 'matches')}>
                 My Matches
@@ -220,7 +246,8 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => {
-                setSelected('sell');
+                setSelected('sell')
+                hideCarousel()
               }}
               style={styles.tabStyle(selected === 'sell')}>
               <Text style={styles.tabTxtStyle(selected === 'sell')}>
@@ -229,7 +256,7 @@ const Home = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{height:WP(2)}} />
+        <View style={{ height: WP(2) }} />
         {selected === 'buy' && <BuyTab navigation={navigation} />}
         {selected === 'matches' && <MatchesTab navigation={navigation} />}
         {selected === 'sell' && (
