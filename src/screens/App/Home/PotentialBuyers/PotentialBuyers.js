@@ -102,7 +102,7 @@ const PotentialBuyers = ({ navigation, route }) => {
           </Text>
           <View style={styles.simpleRow}>
             <Text style={styles.smallTxtStyle}>
-              {`${sublists.currency_type?.[item.currency_type]} ${item?.price}`} |{' '}
+              {`${sublists.currency_type?.[item.currency_type]} ${formatNumber(item?.price) || 0}`} |{' '}
             </Text>
             <Image
               resizeMode="contain"

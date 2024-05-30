@@ -543,6 +543,8 @@ export const requestNotificationPermission = async () => {
 //   }
 // }
 
+export const removeNonDigitCharFromString = (text) => text.replace(/[^0-9.]/g, '')
+
 export const formatNumber = (num) => {
   if(typeof num === 'null' || typeof num === 'undefined') return
   return Number(num).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });

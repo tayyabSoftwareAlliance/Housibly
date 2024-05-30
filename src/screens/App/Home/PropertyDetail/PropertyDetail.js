@@ -48,6 +48,7 @@ import {
 } from '../../../../redux/actions/app-actions/app-actions';
 import { ChatPopupModal } from '../../../../components/Modal/ChatPopupModal';
 import { app } from '../../../../shared/api';
+import { formatNumber } from '../../../../shared/utilities/helper';
 
 const PropertyDetail = ({ navigation, route }) => {
   const { propertyData, id, from } = route.params;
@@ -178,8 +179,7 @@ const PropertyDetail = ({ navigation, route }) => {
                 <PreviewInfoCard
                   item={{
                     h1: 'Price',
-                    h2: `${sublists.currency_type?.[data.currency_type]} ${data.price || 0
-                      }`,
+                    h2: `${sublists.currency_type?.[data.currency_type]} ${formatNumber(data.price) || 0}`,
                     icon: appIcons.priceTag,
                   }}
                 />
@@ -227,7 +227,7 @@ const PropertyDetail = ({ navigation, route }) => {
               )}
               <PreviewField
                 title={`Property Taxes (${sublists.currency_type?.[data.currency_type]})`}
-                subtitle={data.property_tax || 0}
+                subtitle={formatNumber(data.property_tax) || 0}
               />
               <PreviewField
                 title={'Tax Year'}

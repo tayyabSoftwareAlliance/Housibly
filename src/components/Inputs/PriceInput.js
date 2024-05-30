@@ -1,8 +1,9 @@
 import { Platform, StyleSheet, Text, TextInput, View, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import { WP, colors, family, size } from '../../shared/exporter';
 import { Icon } from 'react-native-elements';
+import { Pressable } from 'react-native';
 
 export const PriceInput = ({
   onSelect,
@@ -36,10 +37,13 @@ export const PriceInput = ({
   simpleInputPlaceHolder,
 }) => {
   const [open, setOpen] = useState(false);
+  const inputRef = useRef()
 
   return (
-    <View
-      style={[styles.container, !inputs && { justifyContent: 'space-between' }]}>
+    <Pressable
+      style={[styles.container, !inputs && { justifyContent: 'space-between' }]}
+      onPress={() => inputRef.current?.focus()}
+    >
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
@@ -141,6 +145,7 @@ export const PriceInput = ({
       ) : (
         <View style={{ marginRight: marginRight }}>
           <TextInput
+            ref={inputRef}
             onSubmitEditing={onSubmitEditing}
             onChangeText={onChangeText}
             value={value && `${value}`}
@@ -153,7 +158,7 @@ export const PriceInput = ({
           />
         </View>
       )}
-    </View>
+    </Pressable>
   );
 };
 
@@ -220,8 +225,8 @@ const styles = StyleSheet.create({
   inputStyle: {
     // height: 20,
     // width: '30%',
-    width:WP(15),
-    paddingVertical:5,
+    width: WP(15),
+    paddingVertical: 5,
     // borderLeftWidth: 1,
     // borderLeftColor: colors.p2,
     color: colors.g19,
@@ -231,7 +236,7 @@ const styles = StyleSheet.create({
     // height: 50,
     minWidth: WP(10),
     maxWidth: WP(20),
-    paddingVertical:5,
+    paddingVertical: 5,
     color: colors.g19,
     padding: 0,
     textAlign: 'right',

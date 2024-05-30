@@ -86,12 +86,16 @@ const PropertyComponentModal = ({ isVisible, data, onBackdropPress, onPress }) =
   )
 }
 
-const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmitEditing }) => {
+const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmit }) => {
 
   const inputRef = useRef()
+  const [zipCode, setZipCode] = useState('')
 
   useEffect(() => {
-    isVisible && setTimeout(() => inputRef.current?.focus(), 1000)
+    if (isVisible)
+      setTimeout(() => inputRef.current?.focus(), 1000)
+    else
+      zipCode && onSubmit(zipCode)
   }, [isVisible])
 
   return (
@@ -116,7 +120,8 @@ const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmitEditing }) => {
           style={styles.zipCodeInput}
           placeholder='Postal Code'
           placeholderTextColor={colors.white}
-          onSubmitEditing={(e) => onSubmitEditing(e.nativeEvent.text)}
+          onChangeText={setZipCode}
+          onSubmitEditing={onBackdropPress}
           maxLength={10}
         />
       </Pressable>
@@ -255,16 +260,17 @@ export const MapComponent = () => {
     }
   }
 
-  const getPropertiesAgainstZipCode = async (zipCode) => {
+  const getPropertiesAgainstZipCode = async (newZipCode) => {
     try {
-      setZipCode(zipCode)
+      if (!newZipCode || newZipCode == zipCode) return
+      setZipCode(newZipCode)
       setZipCodeModal(false)
       setPolygonCoords([])
       setCircleCoords([])
       setProperties([])
       await new Promise(res => setTimeout(res, 1000))
       setIsLoading(true)
-      const params = `search[zip_code]=${zipCode}`
+      const params = `search[zip_code]=${newZipCode}`
       const res = await app.getPropertiesAgainstZipCode(params);
       if (res?.status == 200) {
         setProperties(res.data || [])
@@ -705,7 +711,7 @@ export const MapComponent = () => {
       <ZipCodeModal
         isVisible={zipCodeModal}
         onBackdropPress={() => setZipCodeModal(false)}
-        onSubmitEditing={(zipCode) => getPropertiesAgainstZipCode(zipCode)}
+        onSubmit={(zipCode) => getPropertiesAgainstZipCode(zipCode)}
       />
       <SaveLocationTitleModal
         isVisible={saveLocationTitleModal}

@@ -46,6 +46,7 @@ import {
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PriceInputWithCurrency } from '../../../../components/Inputs/PriceInputWithCurrency';
+import { formatNumber, removeNonDigitCharFromString } from '../../../../shared/utilities/helper';
 
 const INITIAL_DATA = {
   property_type: 'house',
@@ -266,11 +267,12 @@ const AddPropertyDetails = ({ navigation, route }) => {
             {data.property_type != 'vacant_land' && (
               <>
                 <Divider color={colors.g18} />
-                <HomeInput
-                  onChangeText={text => setValue('unit', text)}
+                <PriceInput
+                  title={'Unit'}
+                  subtitle={' (if applicable)'}
+                  simpleInputPlaceHolder={'0'}
                   value={data.unit}
-                  h1={'Unit'}
-                  h2={'(if applicable)'}
+                  onChangeText={text => setValue('unit', text)}
                 />
               </>
             )}
@@ -334,8 +336,8 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
             <PriceInput
-              onChangeText={text => setValue('property_tax', text)}
-              value={data.property_tax}
+              value={data.property_tax && formatNumber(data.property_tax)}
+              onChangeText={text => setValue('property_tax', removeNonDigitCharFromString(text))}
               simpleInputPlaceHolder={'00.00'}
               title={'Property Taxes '}
               subtitle={`(${sublists.currency_type?.[data.currency_type]})`}

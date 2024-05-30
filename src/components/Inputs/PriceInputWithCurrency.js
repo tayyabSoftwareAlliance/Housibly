@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import { WP, colors, family, size } from '../../shared/exporter';
 import { Icon } from 'react-native-elements';
+import { formatNumber, removeNonDigitCharFromString } from '../../shared/utilities/helper';
 
 export const PriceInputWithCurrency = ({
   onSelect,
@@ -35,11 +36,12 @@ export const PriceInputWithCurrency = ({
   tintColor,
   simpleInputPlaceHolder,
 }) => {
+  
   const [open, setOpen] = useState(false);
-console.log('thisssss',defaultValue)
+
   return (
     <View
-      style={[styles.container, !inputs && { justifyContent: 'space-between' }]}>
+      style={styles.container}>
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
@@ -125,8 +127,8 @@ console.log('thisssss',defaultValue)
             placeholderTextColor={'rgba(0, 0, 0, 0.20)'}
             style={styles.inputStyle}
             keyboardType={'numeric'}
-            value={valueFrom && `${valueFrom}`}
-            onChangeText={onChangeTextFrom}
+            value={valueFrom && `${formatNumber(valueFrom)}`}
+            onChangeText={(val) => onChangeTextFrom(removeNonDigitCharFromString(val))}
           />
           <Text style={styles.to}>to</Text>
           <TextInput
@@ -134,16 +136,16 @@ console.log('thisssss',defaultValue)
             placeholderTextColor={'rgba(0, 0, 0, 0.20)'}
             placeholder={placeholder2 || '1,500,000'}
             keyboardType={'numeric'}
-            value={valueTo && `${valueTo}`}
-            onChangeText={onChangeTextTo}
+            value={valueTo && `${formatNumber(valueTo)}`}
+            onChangeText={(val) => onChangeTextTo(removeNonDigitCharFromString(val))}
           />
         </View>
       ) : (
         <View style={{ marginRight: marginRight }}>
           <TextInput
             onSubmitEditing={onSubmitEditing}
-            onChangeText={onChangeText}
-            value={value && `${value}`}
+            value={value && `${formatNumber(value)}`}
+            onChangeText={(val) => onChangeText(removeNonDigitCharFromString(val))}
             placeholder={simpleInputPlaceHolder}
             placeholderTextColor={colors.g19}
             style={styles.simpleInputStyle}
@@ -161,7 +163,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
-    height: 60,
+    justifyContent: 'space-between',
+    height: 60
   },
   subStyle: {
     fontSize: size.xsmall,
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   btnStyle: {
-    width: '50%',
+    width: WP(25),
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
@@ -220,7 +223,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     // height: 20,
     // width: '30%',
-    width: WP(15),
+    maxWidth: WP(25),
     paddingVertical: 5,
     // borderLeftWidth: 1,
     // borderLeftColor: colors.p2,
@@ -230,7 +233,7 @@ const styles = StyleSheet.create({
   simpleInputStyle: {
     // height: 50,
     minWidth: WP(10),
-    maxWidth: WP(20),
+    maxWidth: WP(40),
     paddingVertical: 5,
     color: colors.g19,
     padding: 0,
@@ -245,7 +248,8 @@ const styles = StyleSheet.create({
   aiRow1: {
     flexDirection: 'row',
     height: '100%',
-    width: '50%',
+    width: WP(60),
     alignItems: 'center',
+    justifyContent:'flex-end'
   },
 });

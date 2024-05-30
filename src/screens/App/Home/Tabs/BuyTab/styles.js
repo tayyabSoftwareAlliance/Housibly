@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
   iconRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: WP('2'),
-    marginBottom: WP('3.5'),
+    paddingTop: WP('2'),
+    paddingBottom: WP('3.5'),
   },
   advanceTxtStyle: {
     paddingLeft: 8,

@@ -83,9 +83,10 @@ const FilterScreen = ({ navigation, route }) => {
 
   const { my_preference, sublists, loading } = useSelector(state => state?.appReducer)
   const [data, setData] = useState(
-    { ...INITIAL_DATA,
-      currency_type:Object.entries(sublists.currency_type || {})[0]?.[0], 
-      ...formatPreferenceData(my_preference) 
+    {
+      ...INITIAL_DATA,
+      currency_type: Object.entries(sublists.currency_type || {})[0]?.[0],
+      ...formatPreferenceData(my_preference)
     })
   const [showAdvance, setShowAdvance] = useState(false)
   const dispatch = useDispatch()
@@ -121,7 +122,7 @@ const FilterScreen = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: WP('2') }}
         keyboardShouldPersistTaps={'handled'}
-        >
+      >
         <View style={styles.contentContainer}>
           <View style={styles.inputCon}>
             <Divider color={colors.g18} />
@@ -176,17 +177,6 @@ const FilterScreen = ({ navigation, route }) => {
               <>
                 <Divider color={colors.g18} />
                 <PriceInput
-                  defaultValue={data.min_lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
-                  onSelect={val => setValue('min_lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
-                  simpleInputPlaceHolder={'0'}
-                  title={'Min Lot Size'}
-                  value={data.min_lot_size}
-                  onChangeText={text => setValue('min_lot_size', text)}
-                  list={lot_area_unit_list}
-                  dropDown={true}
-                />
-                <Divider color={colors.g18} />
-                <PriceInput
                   onSelect={val => setValue('min_lot_frontage_unit', val)}
                   defaultValue={data.min_lot_frontage_unit}
                   simpleInputPlaceHolder={'0'}
@@ -197,11 +187,22 @@ const FilterScreen = ({ navigation, route }) => {
                   onChangeText={text => setValue('min_lot_frontage', text)}
                 />
                 <Divider color={colors.g18} />
+                <PriceInput
+                  defaultValue={data.min_lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
+                  onSelect={val => setValue('min_lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
+                  simpleInputPlaceHolder={'0'}
+                  title={'Min Lot Size'}
+                  value={data.min_lot_size}
+                  onChangeText={text => setValue('min_lot_size', text)}
+                  list={lot_area_unit_list}
+                  dropDown={true}
+                />
+                {/* <Divider color={colors.g18} />
                 <CheckBoxInput
                   title={'Is Lot Irregular'}
                   checked={data.is_lot_irregular}
                   onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
-                />
+                /> */}
               </>
             }
             <Divider color={colors.g18} />
