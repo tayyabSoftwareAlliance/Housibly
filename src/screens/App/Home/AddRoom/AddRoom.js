@@ -63,11 +63,11 @@ const AddPropertyDetails = ({ navigation, route }) => {
 
   const onNext = async () => {
     Keyboard.dismiss()
-    if (data.rooms?.filter(item => !item?.deleted)?.length != data.total_number_of_rooms) {
-      Alert.alert('Error', `Rooms Details should be equal to Number of Rooms: ${data.total_number_of_rooms} as you entered in previous screen`)
-    } else {
-      navigation.navigate('PropertyDetail', { propertyData: data, id: data?.id, from })
-    }
+    // if (data.rooms?.filter(item => !item?.deleted)?.length != data.total_number_of_rooms) {
+    //   Alert.alert('Error', `Rooms Details should be equal to Number of Rooms: ${data.total_number_of_rooms} as you entered in previous screen`)
+    // } else {
+    navigation.navigate('PropertyDetail', { propertyData: data, id: data?.id, from })
+    // }
   };
 
   const onSave = async () => {

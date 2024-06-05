@@ -165,7 +165,7 @@ const BuyTab = ({ navigation }) => {
             }}>
             <Image source={appIcons.addressIcon} style={styles.iconStyle} />
           </TouchableOpacity>
-          <Text style={styles.addressTxtStyle}>Last Updated: None</Text>
+          <Text style={styles.addressTxtStyle}>Press Here to Open Map</Text>
         </ImageBackground>
         <TouchableOpacity style={styles.savedLocationContainer} onPress={() => navigation.navigate('SavedLocations')} >
           <Text style={styles.savedLocationText}>Saved Locations</Text>

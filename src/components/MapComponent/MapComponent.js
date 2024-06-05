@@ -339,7 +339,7 @@ export const MapComponent = () => {
     }));
     setPolygonCoords(polygon)
 
-    if (!(await AsyncStorage.getItem('IS_MAP_POLYGON_GUIDE_SHOWED')))
+    if (!(await AsyncStorage.getItem('DONT_SHOW_MAP_POLYGON_GUIDE')))
       setPolygonGuideModal(true)
   }, [polygonCoords, region])
 
@@ -363,7 +363,7 @@ export const MapComponent = () => {
         longitude: region.longitude
       }
     ])
-    if (!(await AsyncStorage.getItem('IS_MAP_CIRCLE_GUIDE_SHOWED')))
+    if (!(await AsyncStorage.getItem('DONT_SHOW_MAP_CIRCLE_GUIDE')))
       setCircleGuideModal(true)
   }, [circleCoords, region])
 
@@ -467,6 +467,10 @@ export const MapComponent = () => {
         setSaveLocationTitleModal(false)
         from != 'savedLocation' && setSaveLocationTitle('')
         Alert.alert(`Location ${from == 'savedLocation' ? 'Updated' : 'Saved'} Successfully!`)
+        if (from == 'savedLocation')
+          navigation.goBack()
+        else
+          navigation.navigate('App', { screen: 'Home' })
         console.log('resss', res?.data)
       } else {
         Alert.alert('Failed to Save Location!')
@@ -499,7 +503,7 @@ export const MapComponent = () => {
       <View style={styles.itemCon}>
         <TouchableOpacity
           style={[styles.btnCon, {
-            backgroundColor: polygonCoords.length > 0 ? colors.bl2 : colors.g28
+            backgroundColor: polygonCoords.length > 0 ? colors.p1 : colors.g28
           }]}
           onPress={handlePolygon}>
           <Image
@@ -510,7 +514,7 @@ export const MapComponent = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btnCon, {
-            backgroundColor: circleCoords.length > 0 ? colors.bl2 : colors.g28
+            backgroundColor: circleCoords.length > 0 ? colors.p1 : colors.g28
           }]}
           onPress={handleCircle}>
           <Image
@@ -556,7 +560,6 @@ export const MapComponent = () => {
           />
         </TouchableOpacity> */}
       </View>
-
       <MapView
         ref={mapRef}
         provider={'google'}
@@ -564,7 +567,7 @@ export const MapComponent = () => {
         showsUserLocation={true}
         initialRegion={region}
         onRegionChangeComplete={region => setRegion(region)}
-        customMapStyle={customStyle}
+        // customMapStyle={customStyle}
         style={[styles.container]}
         showsMyLocationButton={false}
         onMapReady={() => {
@@ -585,6 +588,7 @@ export const MapComponent = () => {
             draggable
             onDragEnd={(e) => onPolygonMarkerDragEnd(e, index)}
             anchor={{ x: 0.5, y: 0.5 }}
+            tracksViewChanges={false}
           >
             <DragMarker />
           </Marker>
@@ -596,6 +600,7 @@ export const MapComponent = () => {
             draggable
             onDragEnd={onCircleMarkerDragEnd}
             anchor={{ x: 0.5, y: 0.5 }}
+            tracksViewChanges={false}
           >
             <DragMarker />
           </Marker>
@@ -603,7 +608,7 @@ export const MapComponent = () => {
         {polygonCoords.length > 0 &&
           <Polygon
             coordinates={polygonCoords}
-            strokeColor={colors.white}
+            strokeColor={colors.b7}
             strokeWidth={2}
             fillColor={'transparent'}
           />
@@ -612,8 +617,8 @@ export const MapComponent = () => {
           <Circle
             center={circleCoords[0]}
             radius={haversineDistance(circleCoords[0].latitude, circleCoords[0].longitude, circleCoords[1].latitude, circleCoords[1].longitude)}
-            strokeColor={colors.white}
-            strokeWidth={3}
+            strokeColor={colors.b7}
+            strokeWidth={2}
           />
         }
         {/* properties markers */}
@@ -625,7 +630,8 @@ export const MapComponent = () => {
               setSelectedPropertyData(item)
               setSelectedPropertyDataModal(true)
             }}
-          // anchor={{ x: 0.5, y: 0.5 }}
+            // anchor={{ x: 0.5, y: 0.5 }}
+            tracksViewChanges={false}
           >
             <PropertyMarker />
           </Marker>

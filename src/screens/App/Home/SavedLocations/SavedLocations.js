@@ -29,10 +29,15 @@ const renderItem = (item, index, navigation) => {
       onPress={() => {
         navigation.navigate('MapScreen', { savedLocation: item, from: 'savedLocation' })
       }}>
-      <View style={{ paddingVertical: 5 }}>
+      <View style={{ paddingVertical: 5,flexDirection:'row',justifyContent:'space-between',alignItems:'center' }}>
+        <View>
         <Text numberOfLines={1} style={[styles.nameTxtStyle, { textTransform: 'capitalize' }]}>{item?.title}</Text>
         <Text numberOfLines={1} style={[styles.smallTxtStyle, { paddingTop: 13, paddingBottom: 6 }]}>{item?.display_address || 'N/A'}</Text>
         <Text numberOfLines={1} style={styles.timeTxtStyle}>Saved Last {renderDate(item?.updated_at)}</Text>
+        </View>
+        <TouchableOpacity style={{padding:WP(2)}} >
+        <Image source={require('../../../../assets/icons/delete.png')} style={{height:WP(5),width:WP(5)}} />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );

@@ -25,15 +25,15 @@ const AddpropertyDesc = ({ navigation, route }) => {
 
   const onNext = async () => {
     Keyboard.dismiss()
-    if (!data.property_description) {
-      Alert.alert('Error', 'Description is Required');
+    // if (!data.property_description) {
+    //   Alert.alert('Error', 'Description is Required');
+    // } else {
+    if (data.property_type == 'vacant_land') {
+      navigation.navigate('PropertyDetail', { propertyData: data, id: data?.id, from });
     } else {
-      if (data.property_type == 'vacant_land') {
-        navigation.navigate('PropertyDetail', { propertyData: data, id: data?.id, from });
-      } else {
-        navigation.navigate('AddRoom', { propertyData: data, from });
-      }
+      navigation.navigate('AddRoom', { propertyData: data, from });
     }
+    // }
   }
 
   const onSave = async () => {

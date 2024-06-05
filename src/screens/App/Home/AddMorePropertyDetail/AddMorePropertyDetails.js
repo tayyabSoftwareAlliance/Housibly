@@ -50,22 +50,23 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
 
   const onNext = () => {
     Keyboard.dismiss()
-    if (data.property_type == 'house' && !data.house_type) {
-      Alert.alert('Error', 'House Type is Required');
-    } else if (data.property_type == 'house' && !data.house_style) {
-      Alert.alert('Error', 'House Style is Required');
-    } else if (data.property_type == 'condo' && !data.condo_type) {
-      Alert.alert('Error', 'Condo Type is Required');
-    } else if (data.property_type == 'condo' && !data.condo_style) {
-      Alert.alert('Error', 'Condo Style is Required');
-    } else if (!(data.bed_rooms > 0)) {
+    // if (data.property_type == 'house' && !data.house_type) {
+    //   Alert.alert('Error', 'House Type is Required');
+    // } else if (data.property_type == 'house' && !data.house_style) {
+    //   Alert.alert('Error', 'House Style is Required');
+    // } else if (data.property_type == 'condo' && !data.condo_type) {
+    //   Alert.alert('Error', 'Condo Type is Required');
+    // } else if (data.property_type == 'condo' && !data.condo_style) {
+    //   Alert.alert('Error', 'Condo Style is Required');
+    // } else 
+    if (!(data.bed_rooms > 0)) {
       Alert.alert('Error', 'Bed Rooms Number is Required');
     } else if (!(data.bath_rooms > 0)) {
       Alert.alert('Error', 'Bath Rooms Number is Required');
     } else if (!(data.total_number_of_rooms > 0)) {
       Alert.alert('Error', 'Number of Rooms is Required');
-    } else if (!(data.air_conditioner?.length > 0)) {
-      Alert.alert('Error', 'Please Select Air Conditioner Type');
+    // } else if (!(data.air_conditioner?.length > 0)) {
+    //   Alert.alert('Error', 'Please Select Air Conditioner Type');
     } else {
       navigation?.navigate('AddPropertyDesc', { propertyData: data, from });
     }

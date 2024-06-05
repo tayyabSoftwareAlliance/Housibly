@@ -171,11 +171,11 @@ const Home = ({ navigation }) => {
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewStyle}
-        stickyHeaderIndices={[3]}
+        stickyHeaderIndices={[2]}
       >
         <View style={styles.rowContainer}>
           <View>
-            <Text style={styles.propertyTxtStyle}>Find a property</Text>
+            <Text style={styles.propertyTxtStyle}>{selected === 'sell' ? 'Find A Buyer' : 'Find A Seller' }</Text>
             <TouchableOpacity style={styles.innerRow} onPress={() => navigation.navigate('AddAddress', { from: 'home' })}>
               <Image source={appIcons.locIcon} style={styles.locIconStyle} />
               <Text style={styles.locTxtStyle} numberOfLines={2} >{capitalizeFirstLetter(userInfo?.user?.address) || 'Location'}</Text>
@@ -190,7 +190,7 @@ const Home = ({ navigation }) => {
           </View>
           <Image source={appImages.personPh1} style={styles.phImgStyle} />
         </View>
-        <Animated.View style={carouselAnimatedStyle}>
+        {/* <Animated.View style={carouselAnimatedStyle}>
           <Carousel
             ref={carouselRef}
             sliderWidth={scrWidth}
@@ -199,7 +199,7 @@ const Home = ({ navigation }) => {
             data={top_support_closers}
             renderItem={({ item, index }) => renderItem(item, index, (data) => { setSelectedPerson(data); setPersonDetailModal(true) })}
           />
-        </Animated.View>
+        </Animated.View> */}
         <View style={styles.menuContainer}>
           <Menu
             visible={showMenu}
@@ -221,15 +221,15 @@ const Home = ({ navigation }) => {
         </View>
         <View style={styles.paddingView}>
           <View style={styles.tabsContainer}>
-            <TouchableOpacity
+          <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => {
-                setSelected('buy')
-                top_support_closers?.length > 0 && showCarousel()
+                setSelected('sell')
+                hideCarousel()
               }}
-              style={styles.tabStyle(selected === 'buy')}>
-              <Text style={styles.tabTxtStyle(selected === 'buy')}>
-                I Want To Buy
+              style={styles.tabStyle(selected === 'sell')}>
+              <Text style={styles.tabTxtStyle(selected === 'sell')}>
+                I Want To Sell
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -246,12 +246,12 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => {
-                setSelected('sell')
-                hideCarousel()
+                setSelected('buy')
+                top_support_closers?.length > 0 && showCarousel()
               }}
-              style={styles.tabStyle(selected === 'sell')}>
-              <Text style={styles.tabTxtStyle(selected === 'sell')}>
-                I Want To Sell
+              style={styles.tabStyle(selected === 'buy')}>
+              <Text style={styles.tabTxtStyle(selected === 'buy')}>
+                I Want To Buy
               </Text>
             </TouchableOpacity>
           </View>

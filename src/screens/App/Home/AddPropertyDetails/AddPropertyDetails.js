@@ -131,18 +131,18 @@ const AddPropertyDetails = ({ navigation, route }) => {
     Keyboard.dismiss()
     if (!data.property_type) {
       Alert.alert('Error', 'Property Type is Required');
-    } else if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
-      Alert.alert('Error', 'At Least One Image is Required');
+    // } else if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
+    //   Alert.alert('Error', 'At Least One Image is Required');
     } else if (!data.title) {
       Alert.alert('Error', 'Title is Required');
     } else if (!(data.price > 0)) {
       Alert.alert('Error', 'Price is Required');
-    } else if (data.property_type != 'condo' && !data.lot_frontage_unit) {
-      Alert.alert('Error', 'Please select Lot frontage Unit');
-    } else if (data.property_type != 'condo' && !data.lot_frontage) {
-      Alert.alert('Error', 'Lot frontage is Required');
-    } else if (data.property_type != 'condo' && !data.lot_depth) {
-      Alert.alert('Error', 'Lot Depth is Required');
+    // } else if (data.property_type != 'condo' && !data.lot_frontage_unit) {
+    //   Alert.alert('Error', 'Please select Lot frontage Unit');
+    // } else if (data.property_type != 'condo' && !data.lot_frontage) {
+    //   Alert.alert('Error', 'Lot frontage is Required');
+    // } else if (data.property_type != 'condo' && !data.lot_depth) {
+    //   Alert.alert('Error', 'Lot Depth is Required');
     } else {
       if (data.property_type == 'vacant_land') {
         navigation?.navigate('AddPropertyDesc', { propertyData: data, from });

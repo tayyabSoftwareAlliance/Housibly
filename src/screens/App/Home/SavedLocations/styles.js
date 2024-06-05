@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: WP('4'),
   },
   nameTxtStyle: {
-    width: WP(90),
+    width: WP(85),
     color: colors.b1,
     fontSize: size.large,
     fontFamily: family.Gilroy_SemiBold,

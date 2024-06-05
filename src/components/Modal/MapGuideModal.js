@@ -40,9 +40,22 @@ const MapGuideModal = ({ type, show, onPressHide }) => {
                                     <View style={styles.focusedLine} />
                                     <View style={styles.line} />
                                 </View>
-                                <TouchableOpacity onPress={() => scrollRef.current?.scrollToEnd()} style={styles.btn} >
-                                    <Text style={styles.btnTxt} >NEXT</Text>
-                                </TouchableOpacity>
+                                <View style={{flexDirection:'row',alignItems:'center'}} >
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            if (type == 'polygon')
+                                                AsyncStorage.setItem('DONT_SHOW_MAP_POLYGON_GUIDE', 'true')
+                                            else
+                                                AsyncStorage.setItem('DONT_SHOW_MAP_CIRCLE_GUIDE', 'true')
+                                            onPressHide()
+                                        }}
+                                        style={[styles.btn,{marginRight:WP(1)}]} >
+                                        <Text style={styles.btnTxt} >Don't Show</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => scrollRef.current?.scrollToEnd()} style={styles.btn} >
+                                        <Text style={styles.btnTxt} >NEXT</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -69,13 +82,7 @@ const MapGuideModal = ({ type, show, onPressHide }) => {
                                     <View style={styles.focusedLine} />
                                 </View>
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        if (type == 'polygon')
-                                            AsyncStorage.setItem('IS_MAP_POLYGON_GUIDE_SHOWED','true')
-                                        else
-                                            AsyncStorage.setItem('IS_MAP_CIRCLE_GUIDE_SHOWED','true')
-                                        onPressHide()
-                                    }}
+                                    onPress={onPressHide}
                                     style={styles.btn} >
                                     <Text style={styles.btnTxt} >DONE</Text>
                                 </TouchableOpacity>

@@ -21,7 +21,7 @@ const MapScreen = ({route}) => {
 
   return (
     <View style={styles.rootContainer}>
-      <View style={[styles.headerStyle,{paddingTop:top}]}>
+      <View style={[styles.headerStyle,{paddingTop:top || 16}]}>
         <BackHeader tintColor={colors.white} title={route.params?.savedLocation?.title} txtColor={colors.white} />
       </View>
       <MapComponent />

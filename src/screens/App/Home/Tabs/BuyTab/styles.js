@@ -223,15 +223,15 @@ const styles = StyleSheet.create({
   },
   savedLocationContainer:{
     backgroundColor: colors.g5,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     borderRadius:5,
     marginBottom: WP('2.5'),
   },
   savedLocationText:{
     color: colors.p1,
     fontSize: size.tiny,
-    fontFamily: family.Gilroy_Regular,
+    fontFamily: family.Gilroy_Medium,
     textDecorationLine:'underline',
   }
 });
