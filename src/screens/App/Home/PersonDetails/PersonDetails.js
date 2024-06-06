@@ -123,7 +123,7 @@ const PersonDetails = ({ navigation, route }) => {
             <RenderRow title={'Min Lot Size'} value={(formatNumber(data?.lot_size?.value?.min) || 0) + ' ' + data?.lot_size_unit} matched={data?.lot_size?.matched} />
             <RenderRow title={'Min Total Parking Spaces'} value={data?.total_parking_spaces?.value?.min || 0} matched={data?.total_parking_spaces?.matched} />
             <RenderRow title={'Min Garage Spaces'} value={data?.garage_spaces?.value?.min || 0} matched={data?.garage_spaces?.matched} />
-            <RenderRow title={'Max Age'} value={data?.max_age?.value || 'Any'} matched={data?.max_age?.matched} />
+            <RenderRow title={'Max Age (years)'} value={data?.max_age?.value || 'Any'} matched={data?.max_age?.matched} />
           </> :
           property_type == 'condo' ?
             <>
@@ -142,7 +142,7 @@ const PersonDetails = ({ navigation, route }) => {
               <RenderRow title={'Balcony'} value={data?.balcony?.value?.map(item => sublists.balcony[item]).join(', ') || "Doesn't Matter"} matched={data?.balcony?.matched} />
               <RenderRow title={'Security'} value={data?.security?.value?.map(item => sublists.security[item]).join(', ') || "Doesn't Matter"} matched={data?.security?.matched} />
               <RenderRow title={'Laundry'} value={data?.laundry?.value?.map(item => sublists.laundry[item]).join(', ') || "Doesn't Matter"} matched={data?.laundry?.matched} />
-              <RenderRow title={'Max Age'} value={data?.max_age?.value || 'Any'} matched={data?.max_age?.matched} />
+              <RenderRow title={'Max Age (years)'} value={data?.max_age?.value || 'Any'} matched={data?.max_age?.matched} />
             </> :
             <>
               <RenderRow

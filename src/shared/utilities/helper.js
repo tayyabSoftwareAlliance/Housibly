@@ -360,7 +360,7 @@ export const filterFormData = (data = {}) => {
         lot_area_unit_list[0] :
         lot_area_unit_list[1]
     );
-    formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
+    // formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
   } else if (data.property_type == 'house') {
     formdata.append('preference[lot_frontage][min]', data.min_lot_frontage);
     formdata.append('preference[lot_frontage_unit]', data.min_lot_frontage_unit);
@@ -375,7 +375,7 @@ export const filterFormData = (data = {}) => {
     formdata.append('preference[total_number_of_rooms][min]', data.min_total_number_of_rooms);
     formdata.append('preference[total_parking_spaces][min]', data.min_total_parking_spaces);
     formdata.append('preference[garage_spaces][min]', data.min_garage_spaces);
-    formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
+    // formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
     formdata.append('preference[central_vacuum]', data.central_vacuum);
     data.max_age && formdata.append('preference[max_age]', data.max_age);
     data.house_type?.forEach((item) => {

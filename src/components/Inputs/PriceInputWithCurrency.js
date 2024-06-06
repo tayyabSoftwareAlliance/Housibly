@@ -17,7 +17,7 @@ export const PriceInputWithCurrency = ({
   inputs,
   text,
   title,
-  list={},
+  list = {},
   defaultValue,
   dropDown,
   subtitle,
@@ -35,13 +35,14 @@ export const PriceInputWithCurrency = ({
   returnKeyType,
   tintColor,
   simpleInputPlaceHolder,
+  required
 }) => {
-  
+
   const [open, setOpen] = useState(false);
 
   return (
     <View
-      style={styles.container}>
+      style={[styles.container, { height: inputs ? 100 : 60 }]}>
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
@@ -59,7 +60,10 @@ export const PriceInputWithCurrency = ({
               }}
             />
           )}
-          <Text style={[styles.h1]}>{title || 'Price'}</Text>
+          <View style={{flexDirection:'row'}} >
+          <Text style={styles.h1}>{title || 'Price'}</Text>
+          {required && <Text style={{ color: colors.r1 }} >*</Text>}
+          </View>
           {subtitle && <Text style={styles.subStyle}>{subtitle}</Text>}
         </View>
         {dropDown && (
@@ -164,7 +168,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 60
   },
   subStyle: {
     fontSize: size.xsmall,
@@ -223,7 +226,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     // height: 20,
     // width: '30%',
-    maxWidth: WP(25),
+    maxWidth: WP(60),
     paddingVertical: 5,
     // borderLeftWidth: 1,
     // borderLeftColor: colors.p2,
@@ -233,7 +236,7 @@ const styles = StyleSheet.create({
   simpleInputStyle: {
     // height: 50,
     minWidth: WP(10),
-    maxWidth: WP(40),
+    maxWidth: WP(60),
     paddingVertical: 5,
     color: colors.g19,
     padding: 0,
@@ -246,10 +249,9 @@ const styles = StyleSheet.create({
     fontSize: size.xsmall,
   },
   aiRow1: {
-    flexDirection: 'row',
-    height: '100%',
-    width: WP(60),
-    alignItems: 'center',
-    justifyContent:'flex-end'
+    // flexDirection: 'row',
+    // height: '100%',
+    // width: WP(60),
+    alignItems: 'center'
   },
 });

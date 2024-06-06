@@ -49,7 +49,7 @@ const INITIAL_DATA = {
   min_lot_frontage: 0,
   min_lot_size: 0,
   min_lot_frontage_unit: lot_unit_list[0],
-  is_lot_irregular: false,
+  // is_lot_irregular: false,
   min_bed_rooms: 0,
   min_bath_rooms: 0,
   min_total_number_of_rooms: 0,
@@ -173,38 +173,6 @@ const FilterScreen = ({ navigation, route }) => {
                 />
               </>
             }
-            {data.property_type != 'condo' &&
-              <>
-                <Divider color={colors.g18} />
-                <PriceInput
-                  onSelect={val => setValue('min_lot_frontage_unit', val)}
-                  defaultValue={data.min_lot_frontage_unit}
-                  simpleInputPlaceHolder={'0'}
-                  title={'Min Lot Frontage'}
-                  list={lot_unit_list}
-                  dropDown={true}
-                  value={data.min_lot_frontage}
-                  onChangeText={text => setValue('min_lot_frontage', text)}
-                />
-                <Divider color={colors.g18} />
-                <PriceInput
-                  defaultValue={data.min_lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
-                  onSelect={val => setValue('min_lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
-                  simpleInputPlaceHolder={'0'}
-                  title={'Min Lot Size'}
-                  value={data.min_lot_size}
-                  onChangeText={text => setValue('min_lot_size', text)}
-                  list={lot_area_unit_list}
-                  dropDown={true}
-                />
-                {/* <Divider color={colors.g18} />
-                <CheckBoxInput
-                  title={'Is Lot Irregular'}
-                  checked={data.is_lot_irregular}
-                  onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
-                /> */}
-              </>
-            }
             <Divider color={colors.g18} />
             {(data.property_type == 'condo' || data.property_type == 'house') &&
               <>
@@ -264,11 +232,43 @@ const FilterScreen = ({ navigation, route }) => {
                     }
                     <Divider color={colors.g18} />
                     <PriceInput
-                      title={'Max Age'}
+                      title={'Max Age (years)'}
                       simpleInputPlaceHolder={'0'}
                       value={data.max_age}
                       onChangeText={text => setValue('max_age', text)}
                     />
+                    {data.property_type != 'condo' &&
+                      <>
+                        <Divider color={colors.g18} />
+                        <PriceInput
+                          onSelect={val => setValue('min_lot_frontage_unit', val)}
+                          defaultValue={data.min_lot_frontage_unit}
+                          simpleInputPlaceHolder={'0'}
+                          title={'Min Lot Frontage'}
+                          list={lot_unit_list}
+                          dropDown={true}
+                          value={data.min_lot_frontage}
+                          onChangeText={text => setValue('min_lot_frontage', text)}
+                        />
+                        <Divider color={colors.g18} />
+                        <PriceInput
+                          defaultValue={data.min_lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
+                          onSelect={val => setValue('min_lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
+                          simpleInputPlaceHolder={'0'}
+                          title={'Min Lot Size'}
+                          value={data.min_lot_size}
+                          onChangeText={text => setValue('min_lot_size', text)}
+                          list={lot_area_unit_list}
+                          dropDown={true}
+                        />
+                        {/* <Divider color={colors.g18} />
+                        <CheckBoxInput
+                          title={'Is Lot Irregular'}
+                          checked={data.is_lot_irregular}
+                          onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
+                        /> */}
+                      </>
+                    }
                     <Divider color={colors.g18} />
                     <FilterButton
                       title={'Exterior'}

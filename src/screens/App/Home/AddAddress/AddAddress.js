@@ -64,7 +64,13 @@ const AddAddress = ({ navigation, route }) => {
       <View style={styles.contentContainer}>
         <Divider style={{ marginBottom: 5 }} color={colors.g13} />
         <GooglePlacesAutocomplete
-          placeholder='Search'
+          placeholder={
+            from == 'enter_address' ?
+              'Enter Property Address You Are Selling Here' :
+              from == 'create_property' ?
+                'Click here to Enter Property Address' :
+                'Search'
+          }
           onFail={(error) => console.log('errr', error)}
           fetchDetails
           onPress={async (data, details = null) => {

@@ -61,7 +61,7 @@ const BuyTab = ({ navigation }) => {
     return (
       <View style={styles.addressItemRow(index)}>
         <Text style={styles.addrsTxtStyle}>{item?.address}</Text>
-        <TouchableOpacity style={{ padding: WP(2) }} onPress={deleteAddress} >
+        <TouchableOpacity style={{ padding: WP(3), paddingHorizontal: WP(2) }} onPress={deleteAddress} >
           <Image source={appIcons.cross} style={styles.crossIconStyle} />
         </TouchableOpacity>
       </View>
@@ -91,13 +91,6 @@ const BuyTab = ({ navigation }) => {
             <RenderRow title={'Min No. of Rooms'} text={my_preference.total_number_of_rooms?.min || 0} />
           </>
         }
-        {my_preference.property_type != 'condo' &&
-          <>
-            <RenderRow title={'Min Lot Size'} text={`${my_preference.lot_size?.min || 0} ${my_preference.lot_size_unit == lot_area_unit_list[1] ? lot_area_unit_list[1] : lot_area_unit_list[0]}`} odd={true} />
-            <RenderRow title={'Min Lot Frontage'} text={`${my_preference.lot_frontage?.min || 0} ${my_preference.lot_frontage_unit || lot_unit_list[0]}`} />
-            <RenderRow title={'Is Lot Irregular'} text={my_preference.is_lot_irregular ? 'true' : 'false'} />
-          </>
-        }
         {(my_preference.property_type == 'condo' || my_preference.property_type == 'house') ?
           <>
             <TouchableOpacity
@@ -124,7 +117,14 @@ const BuyTab = ({ navigation }) => {
                     <RenderRow title={'House Style'} text={my_preference.house_style} list={sublists.house_style} odd={true} />
                   </>
                 }
-                <RenderRow title={'Max Age'} text={my_preference.max_age || 'any'} />
+                <RenderRow title={'Max Age (years)'} text={my_preference.max_age || 'any'} />
+                {my_preference.property_type != 'condo' &&
+                  <>
+                    <RenderRow title={'Min Lot Size'} text={`${my_preference.lot_size?.min || 0} ${my_preference.lot_size_unit == lot_area_unit_list[1] ? lot_area_unit_list[1] : lot_area_unit_list[0]}`} odd={true} />
+                    <RenderRow title={'Min Lot Frontage'} text={`${my_preference.lot_frontage?.min || 0} ${my_preference.lot_frontage_unit || lot_unit_list[0]}`} />
+                    {/* <RenderRow title={'Is Lot Irregular'} text={my_preference.is_lot_irregular ? 'true' : 'false'} /> */}
+                  </>
+                }
                 <RenderRow title={'Exterior'} text={my_preference.exterior} list={sublists.exterior} odd={true} />
                 {my_preference.property_type == 'condo' &&
                   <>

@@ -35,6 +35,7 @@ export const PriceInput = ({
   returnKeyType,
   tintColor,
   simpleInputPlaceHolder,
+  required
 }) => {
   const [open, setOpen] = useState(false);
   const inputRef = useRef()
@@ -61,7 +62,10 @@ export const PriceInput = ({
               }}
             />
           )}
-          <Text style={[styles.h1]}>{title || 'Price'}</Text>
+          <View style={{ flexDirection: 'row' }} >
+            <Text numberOfLines={2} style={styles.h1}>{title || 'Price'}</Text>
+            {required && <Text style={{ color: colors.r1 }} >*</Text>}
+          </View>
           {subtitle && <Text style={styles.subStyle}>{subtitle}</Text>}
         </View>
         {dropDown && (
@@ -185,6 +189,7 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_Medium,
+    maxWidth:WP(50)
   },
   rowTextStyle: {
     fontSize: size.xsmall,

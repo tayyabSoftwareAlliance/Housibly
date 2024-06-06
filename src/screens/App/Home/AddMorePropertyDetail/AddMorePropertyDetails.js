@@ -65,8 +65,8 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
       Alert.alert('Error', 'Bath Rooms Number is Required');
     } else if (!(data.total_number_of_rooms > 0)) {
       Alert.alert('Error', 'Number of Rooms is Required');
-    // } else if (!(data.air_conditioner?.length > 0)) {
-    //   Alert.alert('Error', 'Please Select Air Conditioner Type');
+      // } else if (!(data.air_conditioner?.length > 0)) {
+      //   Alert.alert('Error', 'Please Select Air Conditioner Type');
     } else {
       navigation?.navigate('AddPropertyDesc', { propertyData: data, from });
     }
@@ -130,17 +130,43 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onPressTick={val => setValue('house_style', val)}
                 source={appIcons.HouseStyle}
               />
-              <Divider color={colors.g18} />
+              {/* <Divider color={colors.g18} />
               <PriceInput
                 title={'Min Lot Frontage'}
                 simpleInputPlaceHolder={'0'}
                 value={data.min_lot_frontage}
                 onChangeText={text => setValue('min_lot_frontage', text)}
-              />
+              /> */}
             </>
           )}
-
           <Divider color={colors.g18} />
+          <PriceInput
+            title={'Bed Rooms'}
+            simpleInputPlaceHolder={'0'}
+            value={data.bed_rooms}
+            onChangeText={text => setValue('bed_rooms', text)}
+            source={appIcons.bed}
+            required
+          />
+          <Divider color={colors.g18} />
+          <PriceInput
+            title={'Bath Rooms'}
+            simpleInputPlaceHolder={'0'}
+            value={data.bath_rooms}
+            onChangeText={text => setValue('bath_rooms', text)}
+            source={appIcons.bath}
+            required
+          />
+          <Divider color={colors.g18} />
+          <PriceInput
+            title={'Total Number of Rooms'}
+            simpleInputPlaceHolder={'0'}
+            value={data.total_number_of_rooms}
+            onChangeText={text => setValue('total_number_of_rooms', text)}
+            source={appIcons.living_space}
+            required
+          />
+          {/* <Divider color={colors.g18} />
           <CheckBoxInput
             title={'Parking Spot Required'}
             checked={data.parking_spot_req}
@@ -151,8 +177,8 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
             title={'Garage Spot Required'}
             checked={data.garage_spot_req}
             onPress={() => setValue('garage_spot_req', !data.garage_spot_req)}
-          />
-          {data.property_type == 'house' && (
+          /> */}
+          {/* {data.property_type == 'house' && (
             <>
               <Divider color={colors.g18} />
               <PriceInput
@@ -162,7 +188,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onChangeText={text => setValue('max_age', text)}
               />
             </>
-          )}
+          )} */}
           <Divider color={colors.g18} />
           <FilterButton
             title={'Exterior'}
@@ -217,30 +243,6 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
               />
             </>
           )}
-          <Divider color={colors.g18} />
-          <PriceInput
-            title={'Bed Rooms'}
-            simpleInputPlaceHolder={'0'}
-            value={data.bed_rooms}
-            onChangeText={text => setValue('bed_rooms', text)}
-            source={appIcons.bed}
-          />
-          <Divider color={colors.g18} />
-          <PriceInput
-            title={'Bath Rooms'}
-            simpleInputPlaceHolder={'0'}
-            value={data.bath_rooms}
-            onChangeText={text => setValue('bath_rooms', text)}
-            source={appIcons.bath}
-          />
-          <Divider color={colors.g18} />
-          <PriceInput
-            title={'Total Number of Rooms'}
-            simpleInputPlaceHolder={'0'}
-            value={data.total_number_of_rooms}
-            onChangeText={text => setValue('total_number_of_rooms', text)}
-            source={appIcons.living_space}
-          />
           <Divider color={colors.g18} />
           <FilterButton
             title={'Basement'}

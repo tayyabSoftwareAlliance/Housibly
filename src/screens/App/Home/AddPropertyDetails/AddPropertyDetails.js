@@ -73,10 +73,10 @@ const INITIAL_DATA = {
   house_style: '',
   condo_type: '',
   condo_style: '',
-  min_lot_frontage: 0,
-  parking_spot_req: false,
-  garage_spot_req: false,
-  max_age: 0,
+  // min_lot_frontage: 0,
+  // parking_spot_req: false,
+  // garage_spot_req: false,
+  // max_age: 0,
   exterior: [],
   balcony: '',
   exposure: '',
@@ -131,18 +131,18 @@ const AddPropertyDetails = ({ navigation, route }) => {
     Keyboard.dismiss()
     if (!data.property_type) {
       Alert.alert('Error', 'Property Type is Required');
-    // } else if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
-    //   Alert.alert('Error', 'At Least One Image is Required');
+      // } else if (!(data.images?.filter(item => !item?.deleted)?.length > 0)) {
+      //   Alert.alert('Error', 'At Least One Image is Required');
     } else if (!data.title) {
       Alert.alert('Error', 'Title is Required');
     } else if (!(data.price > 0)) {
       Alert.alert('Error', 'Price is Required');
-    // } else if (data.property_type != 'condo' && !data.lot_frontage_unit) {
-    //   Alert.alert('Error', 'Please select Lot frontage Unit');
-    // } else if (data.property_type != 'condo' && !data.lot_frontage) {
-    //   Alert.alert('Error', 'Lot frontage is Required');
-    // } else if (data.property_type != 'condo' && !data.lot_depth) {
-    //   Alert.alert('Error', 'Lot Depth is Required');
+      // } else if (data.property_type != 'condo' && !data.lot_frontage_unit) {
+      //   Alert.alert('Error', 'Please select Lot frontage Unit');
+      // } else if (data.property_type != 'condo' && !data.lot_frontage) {
+      //   Alert.alert('Error', 'Lot frontage is Required');
+      // } else if (data.property_type != 'condo' && !data.lot_depth) {
+      //   Alert.alert('Error', 'Lot Depth is Required');
     } else {
       if (data.property_type == 'vacant_land') {
         navigation?.navigate('AddPropertyDesc', { propertyData: data, from });
@@ -206,6 +206,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
               list={property_type_list}
               selected={data.property_type}
               onPressTick={val => setValue('property_type', val)}
+              required
             />
             <Divider color={colors.g18} />
             <GalleryCard
@@ -215,38 +216,6 @@ const AddPropertyDetails = ({ navigation, route }) => {
               onSelect={arr => setValue('images', arr)}
               onRemove={onImageRemove}
             />
-            <Divider color={colors.g18} />
-            <FilterInput
-              placeholder={'Title'}
-              onChangeText={text => {
-                setValue('title', text);
-              }}
-              value={data.title}
-              keyboardType={'default'}
-            />
-            <Divider color={colors.g18} />
-            <PriceInputWithCurrency
-              defaultValue={data.currency_type}
-              onSelect={val => setValue('currency_type', val)}
-              simpleInputPlaceHolder={'e.g 21.00'}
-              title={'Price'}
-              list={sublists.currency_type}
-              dropDown={true}
-              value={data.price}
-              onChangeText={text => setValue('price', text)}
-            />
-            {data.property_type != 'vacant_land' && (
-              <>
-                <Divider color={colors.g18} />
-                <PriceInput
-                  title={'Year Built'}
-                  subtitle={' (e.g 1994)'}
-                  simpleInputPlaceHolder={'e.g 1994'}
-                  onChangeText={text => setValue('year_built', text)}
-                  value={data.year_built}
-                />
-              </>
-            )}
             <Divider color={colors.g18} />
             <TouchableOpacity
               onPress={() => {
@@ -264,6 +233,40 @@ const AddPropertyDetails = ({ navigation, route }) => {
                 {data.address || 'Street Address'}
               </Text>
             </TouchableOpacity>
+            <Divider color={colors.g18} />
+            <FilterInput
+              placeholder={'Title'}
+              onChangeText={text => {
+                setValue('title', text);
+              }}
+              value={data.title}
+              keyboardType={'default'}
+              required
+            />
+            <Divider color={colors.g18} />
+            <PriceInputWithCurrency
+              defaultValue={data.currency_type}
+              onSelect={val => setValue('currency_type', val)}
+              simpleInputPlaceHolder={'e.g 21.00'}
+              title={'Price'}
+              list={sublists.currency_type}
+              dropDown={true}
+              value={data.price}
+              onChangeText={text => setValue('price', text)}
+              required
+            />
+            {data.property_type != 'vacant_land' && (
+              <>
+                <Divider color={colors.g18} />
+                <PriceInput
+                  title={'Year Built'}
+                  subtitle={' (e.g 1994)'}
+                  simpleInputPlaceHolder={'e.g 1994'}
+                  onChangeText={text => setValue('year_built', text)}
+                  value={data.year_built}
+                />
+              </>
+            )}
             {data.property_type != 'vacant_land' && (
               <>
                 <Divider color={colors.g18} />
@@ -359,7 +362,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
                 />
               </>
             )}
-            {data.property_type != 'condo' &&
+            {/* {data.property_type != 'condo' &&
               <>
                 <Divider color={colors.g18} />
                 <Textarea
@@ -372,7 +375,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
                   onChangeText={text => setValue('lot_description', text)}
                 />
               </>
-            }
+            } */}
             <Divider color={colors.g18} />
           </View>
           <View style={[styles.spacRow, from == 'edit' && { justifyContent: 'flex-end' }]}>

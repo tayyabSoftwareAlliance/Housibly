@@ -6,7 +6,7 @@ import { ListModal } from '../Modal/ListModal';
 
 export const FilterButton = ({
   title,
-  list={},
+  list = {},
   onPressTick,
   source,
   marginRight,
@@ -16,7 +16,8 @@ export const FilterButton = ({
   textColor,
   selected,
   multiselect = false,
-  tintColor
+  tintColor,
+  required
 }) => {
 
   const ref = useRef()
@@ -54,9 +55,12 @@ export const FilterButton = ({
             />
           )}
           <View style={{ flex: 1 }} >
-            <Text numberOfLines={1} style={[styles.title, textColor && { color: textColor }]}>
-              {title}
-            </Text>
+            <View style={{ flexDirection: 'row' }} >
+              <Text numberOfLines={2} style={[styles.title, textColor && { color: textColor }]}>
+                {title}
+              </Text>
+              {required && <Text style={{ color: colors.r1 }} >*</Text>}
+            </View>
             {renderSubtitle}
           </View>
         </View>
@@ -92,7 +96,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   title: {
-    width: '100%',
     fontSize: size.xsmall,
     color: colors.b1,
     fontFamily: family.Gilroy_Medium,
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: size.xsmall,
     color: colors.g19,
     fontFamily: family.Gilroy_Medium,
-    textTransform:'capitalize'
+    textTransform: 'capitalize'
   },
   btnCon: {
     alignItems: 'center',

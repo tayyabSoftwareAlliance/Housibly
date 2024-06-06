@@ -59,19 +59,20 @@ const AddpropertyDesc = ({ navigation, route }) => {
         <View style={styles.contentContainer}>
           <Divider color={colors.g18} />
           <Textarea
-            containerStyle={[styles.textareaContainer]}
+            containerStyle={[styles.textareaContainer,{paddingBottom:20}]}
             style={styles.textarea}
             placeholder={'Property description'}
             placeholderTextColor={colors.g19}
             underlineColorAndroid={'transparent'}
             value={data.property_description}
             onChangeText={text => setValue('property_description', text)}
+            maxLength={1000}
           />
           {data.property_type != 'vacant_land' && (
             <>
               <Divider color={colors.g18} />
               <Textarea
-                containerStyle={[styles.textareaContainer]}
+                containerStyle={styles.textareaContainer}
                 style={styles.textarea}
                 placeholder={'Appliances & Other Items'}
                 placeholderTextColor={colors.g19}
