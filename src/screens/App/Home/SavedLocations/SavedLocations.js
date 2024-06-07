@@ -7,9 +7,10 @@ import {
   SafeAreaView,
   TouchableOpacity,
   StatusBar,
+  Alert,
 } from 'react-native';
 import { AppLoader, BackHeader } from '../../../../components';
-import { appIcons, colors, family, size, WP } from '../../../../shared/exporter';
+import { appIcons, colors, family, responseValidator, size, WP } from '../../../../shared/exporter';
 import { filter_property_type_list, months, property_image } from '../../../../shared/utilities/constant';
 import styles from './styles';
 import FilterComponent from '../../../../components/Custom/FilterComponent';
@@ -21,7 +22,8 @@ const renderDate = (date) => {
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
 }
 
-const renderItem = (item, index, navigation) => {
+const renderItem = (item, index, navigation, deleteLocation) => {
+
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -29,14 +31,14 @@ const renderItem = (item, index, navigation) => {
       onPress={() => {
         navigation.navigate('MapScreen', { savedLocation: item, from: 'savedLocation' })
       }}>
-      <View style={{ paddingVertical: 5,flexDirection:'row',justifyContent:'space-between',alignItems:'center' }}>
+      <View style={{ paddingVertical: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View>
-        <Text numberOfLines={1} style={[styles.nameTxtStyle, { textTransform: 'capitalize' }]}>{item?.title}</Text>
-        <Text numberOfLines={1} style={[styles.smallTxtStyle, { paddingTop: 13, paddingBottom: 6 }]}>{item?.display_address || 'N/A'}</Text>
-        <Text numberOfLines={1} style={styles.timeTxtStyle}>Saved Last {renderDate(item?.updated_at)}</Text>
+          <Text numberOfLines={1} style={[styles.nameTxtStyle, { textTransform: 'capitalize' }]}>{item?.title}</Text>
+          <Text numberOfLines={1} style={[styles.smallTxtStyle, { paddingTop: 13, paddingBottom: 6 }]}>{item?.display_address || 'N/A'}</Text>
+          <Text numberOfLines={1} style={styles.timeTxtStyle}>Saved Last {renderDate(item?.updated_at)}</Text>
         </View>
-        <TouchableOpacity style={{padding:WP(2)}} >
-        <Image source={require('../../../../assets/icons/delete.png')} style={{height:WP(4),width:WP(4)}} />
+        <TouchableOpacity style={{ padding: WP(2) }} onPress={() => deleteLocation(item?.id)}>
+          <Image source={require('../../../../assets/icons/delete.png')} style={{ height: WP(4), width: WP(4) }} />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -70,6 +72,24 @@ const SavedLocations = ({ navigation }) => {
     isFocused && fetchSavedLocations()
   }, [isFocused])
 
+  const deleteLocation = async (id) => {
+    try {
+      setLoader(true)
+      const res = await app.deleteSavedLocation(id);
+      if (res?.status == 200) {
+        setData(data.filter(item => item.id != id))
+      } else {
+        Alert.alert('Failed to Delete Location!')
+      }
+    } catch (error) {
+      console.log(error.response);
+      let msg = responseValidator(error?.response?.status, error?.response?.data);
+      Alert.alert(msg || 'Failed to Delete Location!')
+    } finally {
+      setLoader(false)
+    }
+  }
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <StatusBar
@@ -87,7 +107,7 @@ const SavedLocations = ({ navigation }) => {
       {data.length > 0 ?
         <FlatList
           data={data}
-          renderItem={({ item, index }) => renderItem(item, index, navigation)}
+          renderItem={({ item, index }) => renderItem(item, index, navigation, deleteLocation)}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flStyle}
