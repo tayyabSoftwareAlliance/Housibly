@@ -36,7 +36,7 @@ const renderItem = (item, index, navigation) => {
         <Text numberOfLines={1} style={styles.timeTxtStyle}>Saved Last {renderDate(item?.updated_at)}</Text>
         </View>
         <TouchableOpacity style={{padding:WP(2)}} >
-        <Image source={require('../../../../assets/icons/delete.png')} style={{height:WP(5),width:WP(5)}} />
+        <Image source={require('../../../../assets/icons/delete.png')} style={{height:WP(4),width:WP(4)}} />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>

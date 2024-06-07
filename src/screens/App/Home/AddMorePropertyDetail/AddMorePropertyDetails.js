@@ -278,10 +278,6 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 onPressTick={val => setValue('driveway', val)}
                 source={appIcons.driveway}
               />
-            </>
-          )}
-          {data.property_type == 'condo' &&
-            <>
               <Divider color={colors.g18} />
               <FilterButton
                 title={'Water'}
@@ -291,7 +287,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
                 source={appIcons.water}
               />
             </>
-          }
+          )}
           <Divider color={colors.g18} />
           <FilterButton
             title={'Sewer'}

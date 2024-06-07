@@ -363,10 +363,6 @@ const FilterScreen = ({ navigation, route }) => {
                           source={appIcons.driveway}
                           multiselect
                         />
-                      </>
-                    }
-                    {data.property_type == 'condo' &&
-                      <>
                         <Divider color={colors.g18} />
                         <FilterButton
                           title={'Water'}

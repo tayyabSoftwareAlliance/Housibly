@@ -259,7 +259,7 @@ export const propertyFormData = (data = {}) => {
     formdata.append('property[total_parking_spaces]', data.total_parking_spaces);
     formdata.append('property[garage_spaces]', data.garage_spaces);
     formdata.append('property[driveway]', data.driveway);
-    // formdata.append('property[water]', data.water);
+    formdata.append('property[water]', data.water);
     formdata.append('property[sewer]', data.sewer);
     formdata.append('property[laundry]', data.laundry);
     formdata.append('property[central_vacuum]', data.central_vacuum);
@@ -298,7 +298,7 @@ export const propertyFormData = (data = {}) => {
     formdata.append('property[exposure]', data.exposure);
     formdata.append('property[security]', data.security);
     formdata.append('property[pets_allowed]', data.pets_allowed);
-    formdata.append('property[water]', data.water);
+    // formdata.append('property[water]', data.water);
     formdata.append('property[sewer]', data.sewer);
     formdata.append('property[laundry]', data.laundry);
     formdata.append('property[central_vacuum]', data.central_vacuum);
@@ -387,9 +387,9 @@ export const filterFormData = (data = {}) => {
     data.driveway?.forEach((item) => {
       formdata.append('preference[driveway][]', item);
     })
-    // data.water?.forEach((item) => {
-    //   formdata.append('preference[water][]', item);
-    // })
+    data.water?.forEach((item) => {
+      formdata.append('preference[water][]', item);
+    })
     data.sewer?.forEach((item) => {
       formdata.append('preference[sewer][]', item);
     })
@@ -443,9 +443,9 @@ export const filterFormData = (data = {}) => {
     data.pets_allowed?.forEach((item) => {
       formdata.append('preference[pets_allowed][]', item);
     })
-    data.water?.forEach((item) => {
-      formdata.append('preference[water][]', item);
-    })
+    // data.water?.forEach((item) => {
+    //   formdata.append('preference[water][]', item);
+    // })
     data.sewer?.forEach((item) => {
       formdata.append('preference[sewer][]', item);
     })

@@ -139,9 +139,11 @@ const BuyTab = ({ navigation }) => {
                 <RenderRow title={'Min Total Parking Spaces'} text={my_preference.total_parking_spaces?.min || 0} />
                 <RenderRow title={'Min Garage Spaces'} text={my_preference.garage_spaces?.min || 0} odd={true} />
                 {my_preference.property_type == 'house' &&
-                  <RenderRow title={'Driveway'} text={my_preference.driveway} list={sublists.driveway} />
+                  <>
+                    <RenderRow title={'Driveway'} text={my_preference.driveway} list={sublists.driveway} />
+                    <RenderRow title={'Water'} text={my_preference.water} list={sublists.water} odd={true} />
+                  </>
                 }
-                <RenderRow title={'Water'} text={my_preference.water} list={sublists.water} odd={true} />
                 <RenderRow title={'Sewer'} text={my_preference.sewer} list={sublists.sewer} />
                 <RenderRow title={'Heat Source'} text={my_preference.heat_source} list={sublists.heat_source} odd={true} />
                 <RenderRow title={'Heat Type'} text={my_preference.heat_type} list={sublists.heat_type} />

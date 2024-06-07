@@ -362,20 +362,20 @@ const PropertyDetail = ({ navigation, route }) => {
                       </>
                     )}
                     {data.property_type == 'house' && (
+                      <>
                       <PreviewField
                         title={'Driveway'}
                         list={sublists.driveway}
                         subtitle={data.driveway || 'N/A'}
                         source={appIcons.driveway}
                       />
-                    )}
-                    {data.property_type == 'condo' && (
                       <PreviewField
                         title={'Water'}
                         list={sublists.water}
                         subtitle={data.water || 'N/A'}
                         source={appIcons.water}
                       />
+                      </>
                     )}
                     <PreviewField
                       title={'Sewer'}
