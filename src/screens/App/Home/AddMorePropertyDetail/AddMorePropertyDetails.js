@@ -280,14 +280,18 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
               />
             </>
           )}
-          <Divider color={colors.g18} />
-          <FilterButton
-            title={'Water'}
-            list={sublists.water}
-            selected={data.water}
-            onPressTick={val => setValue('water', val)}
-            source={appIcons.water}
-          />
+          {data.property_type == 'condo' &&
+            <>
+              <Divider color={colors.g18} />
+              <FilterButton
+                title={'Water'}
+                list={sublists.water}
+                selected={data.water}
+                onPressTick={val => setValue('water', val)}
+                source={appIcons.water}
+              />
+            </>
+          }
           <Divider color={colors.g18} />
           <FilterButton
             title={'Sewer'}

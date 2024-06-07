@@ -251,7 +251,7 @@ const filter_bookmarks_list = [
 
 const level_list = {
   'Basement': 'Basement',
-  'Ground Floor': 'Ground Floor',
+  'Main Floor': 'Main Floor',
   'First Floor': 'First Floor',
   'Second Floor': 'Second Floor',
   'Third Floor': 'Third Floor',

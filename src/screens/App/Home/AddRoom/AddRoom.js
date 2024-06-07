@@ -101,7 +101,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
       } else {
         // for add
         setData(prev => {
-          prev['rooms'] = [{ ...roomDetail }, ...prev['rooms']]
+          prev['rooms'] = [...prev['rooms'], { ...roomDetail }]
           return { ...prev }
         })
       }
@@ -136,7 +136,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
           <View style={styles.inputCon}>
             <Text style={[styles.h1, { marginBottom: HP(2) }]}>{'Enter Room Info'}</Text>
             <FilterInput
-              placeholder={'Room Name'}
+              placeholder={'Click Here to Add Room Name'}
               onChangeText={text => setRoomValue('name', text)}
               value={roomDetail.name}
               keyboardType={'default'}

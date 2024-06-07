@@ -1,10 +1,23 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { colors, family, size } from '../../shared/exporter';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export const AddressCard = ({ item }) => {
+  const navigation = useNavigation()
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('PersonChat',
+          {
+            recipient_id: item?.id,
+            avatar: item?.avatar,
+            full_name: item?.full_name,
+            from: 'not_chats'
+          })
+      }}>
       <View style={styles.imgBox}>
         <Image
           style={styles.imgStyle}
@@ -18,7 +31,7 @@ export const AddressCard = ({ item }) => {
           <Text style={{ color: colors.gr1 }}> {`$${item?.budget?.min || 0} to ${item?.budget?.max ? '$' + item.budget.max : 'Any'}`}</Text>
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -39,7 +52,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: 15,
-    backgroundColor:colors.g14
+    backgroundColor: colors.g14
   },
   h1: {
     fontFamily: family.Gilroy_SemiBold,

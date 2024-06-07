@@ -92,10 +92,12 @@ const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmit }) => {
   const [zipCode, setZipCode] = useState('')
 
   useEffect(() => {
-    if (isVisible)
+    if (isVisible){
+      setZipCode('')
       setTimeout(() => inputRef.current?.focus(), 1000)
+    }
     else
-      zipCode && onSubmit(zipCode)
+      zipCode && onSubmit(zipCode.toUpperCase())
   }, [isVisible])
 
   return (
@@ -120,6 +122,8 @@ const ZipCodeModal = ({ isVisible, onBackdropPress, onSubmit }) => {
           style={styles.zipCodeInput}
           placeholder='Postal Code'
           placeholderTextColor={colors.white}
+          value={zipCode.toUpperCase()}
+          autoCapitalize='characters'
           onChangeText={setZipCode}
           onSubmitEditing={onBackdropPress}
           maxLength={10}

@@ -217,7 +217,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   <PreviewField
                     title={`Lot Size (${data.lot_frontage_unit == 'meter' ? 'sqm' : 'sft'
                       })`}
-                    subtitle={data.lot_size || '23'}
+                    subtitle={data.lot_size || '0'}
                   />
                   <PreviewField
                     title={'Is This Lot Irregular?'}
@@ -369,12 +369,14 @@ const PropertyDetail = ({ navigation, route }) => {
                         source={appIcons.driveway}
                       />
                     )}
-                    <PreviewField
-                      title={'Water'}
-                      list={sublists.water}
-                      subtitle={data.water || 'N/A'}
-                      source={appIcons.water}
-                    />
+                    {data.property_type == 'condo' && (
+                      <PreviewField
+                        title={'Water'}
+                        list={sublists.water}
+                        subtitle={data.water || 'N/A'}
+                        source={appIcons.water}
+                      />
+                    )}
                     <PreviewField
                       title={'Sewer'}
                       list={sublists.sewer}
