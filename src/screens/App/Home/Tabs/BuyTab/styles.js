@@ -184,8 +184,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoIconStyle: {
-    top: -5,
-    left: 7,
+    top: -6,
     width: WP('3'),
     height: WP('3'),
   },

@@ -40,6 +40,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkConnected, filterFormData, formatPreferenceData } from '../../../shared/utilities/helper';
 import { update_my_preference } from '../../../redux/actions/app-actions/app-actions';
 import { PriceInputWithCurrency } from '../../../components/Inputs/PriceInputWithCurrency';
+import { booleanList } from '../../../shared/utilities/constant';
 
 const INITIAL_DATA = {
   property_type: 'house',
@@ -55,11 +56,15 @@ const INITIAL_DATA = {
   min_total_number_of_rooms: 0,
   min_total_parking_spaces: 0,
   min_garage_spaces: 0,
-  house_type: [],
-  house_style: [],
+  // house_type: [],
+  // house_style: [],
+  // condo_type: [],
+  // condo_style: [],
+  house_type: '',
+  house_style: '',
+  condo_type: '',
+  condo_style: '',  // fix for single selection of house_type, house_style, condo_type and condo_style, intead of multiple
   max_age: 20,
-  condo_type: [],
-  condo_style: [],
   exterior: [],
   balcony: [],
   exposure: [],
@@ -173,6 +178,38 @@ const FilterScreen = ({ navigation, route }) => {
                 />
               </>
             }
+            {data.property_type == 'vacant_land' &&
+              <>
+                <Divider color={colors.g18} />
+                <PriceInput
+                  onSelect={val => setValue('min_lot_frontage_unit', val)}
+                  defaultValue={data.min_lot_frontage_unit}
+                  simpleInputPlaceHolder={'0'}
+                  title={'Min Lot Frontage'}
+                  list={lot_unit_list}
+                  dropDown={true}
+                  value={data.min_lot_frontage}
+                  onChangeText={text => setValue('min_lot_frontage', text)}
+                />
+                <Divider color={colors.g18} />
+                <PriceInput
+                  defaultValue={data.min_lot_frontage_unit == lot_unit_list[0] ? lot_area_unit_list[0] : lot_area_unit_list[1]}
+                  onSelect={val => setValue('min_lot_frontage_unit', val == lot_area_unit_list[0] ? lot_unit_list[0] : lot_unit_list[1])}
+                  simpleInputPlaceHolder={'0'}
+                  title={'Min Lot Size'}
+                  value={data.min_lot_size}
+                  onChangeText={text => setValue('min_lot_size', text)}
+                  list={lot_area_unit_list}
+                  dropDown={true}
+                />
+                {/* <Divider color={colors.g18} />
+                        <CheckBoxInput
+                          title={'Is Lot Irregular'}
+                          checked={data.is_lot_irregular}
+                          onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
+                        /> */}
+              </>
+            }
             <Divider color={colors.g18} />
             {(data.property_type == 'condo' || data.property_type == 'house') &&
               <>
@@ -197,7 +234,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.condo_type}
                           onPressTick={val => setValue('condo_type', val)}
                           source={appIcons.condoType}
-                          multiselect
+                          // multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -206,7 +243,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.condo_style}
                           onPressTick={val => setValue('condo_style', val)}
                           source={appIcons.condoStyle}
-                          multiselect
+                          // multiselect
                         />
                       </> :
                       <>
@@ -217,7 +254,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.house_type}
                           onPressTick={val => setValue('house_type', val)}
                           source={appIcons.HouseType}
-                          multiselect
+                          // multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -226,7 +263,7 @@ const FilterScreen = ({ navigation, route }) => {
                           selected={data.house_style}
                           onPressTick={val => setValue('house_style', val)}
                           source={appIcons.HouseStyle}
-                          multiselect
+                          // multiselect
                         />
                       </>
                     }
@@ -429,10 +466,11 @@ const FilterScreen = ({ navigation, route }) => {
                       multiselect
                     />
                     <Divider color={colors.g18} />
-                    <CheckBoxInput
+                    <FilterButton
                       title={'Central Vacuum'}
-                      checked={data.central_vacuum}
-                      onPress={() => setValue('central_vacuum', !data.central_vacuum)}
+                      list={booleanList}
+                      selected={data.central_vacuum ? 'yes' : 'no'}
+                      onPressTick={() => setValue('central_vacuum', !data.central_vacuum)}
                       source={appIcons.vacume}
                     />
                     <Divider color={colors.g18} />

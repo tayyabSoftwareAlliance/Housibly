@@ -39,7 +39,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
                 </View>
                 <View style={styles.simpleRow}>
                     <Text style={styles.smallTxtStyle}>
-                        {`${sublists.currency_type?.[item?.currency_type]} ${formatNumber(item?.price) || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
+                        {`${sublists.currency_type?.[item?.currency_type] || '$USD'} ${formatNumber(item?.price) || 0} ${item?.property_type != 'vacant_land' ? '| ' : ''}`}
                     </Text>
                     {item?.property_type != 'vacant_land' &&
                         <>

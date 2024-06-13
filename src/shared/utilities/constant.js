@@ -976,7 +976,7 @@ const settings = [
     title: 'Delete Account',
     screen: 'DeleteAccount',
     icon: appIcons.delete,
-    textColor:colors.r1
+    textColor: colors.r1
   },
 ];
 
@@ -1276,6 +1276,12 @@ const inputItems = [
     Img: appIcons.garage_space,
   },
 ];
+
+const booleanList = {
+  'yes': 'Yes',
+  'no': 'No'
+}
+
 const property_image = 'https://wallpaperaccess.com/full/1700222.jpg';
 const property_image2 = require('../../assets/images/property_image.jpeg');
 
@@ -1339,5 +1345,6 @@ export {
   property_image,
   property_image2,
   weekDays,
-  months
+  months,
+  booleanList
 };

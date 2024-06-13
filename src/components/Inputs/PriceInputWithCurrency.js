@@ -42,7 +42,7 @@ export const PriceInputWithCurrency = ({
 
   return (
     <View
-      style={[styles.container, { height: inputs ? 100 : 60 }]}>
+      style={[styles.container, { height: 60 }]}>
       <View style={styles.aiRow}>
         <View style={[styles.headStyle]}>
           {source && (
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     // height: 20,
     // width: '30%',
-    maxWidth: WP(60),
+    maxWidth: WP(25),
     paddingVertical: 5,
     // borderLeftWidth: 1,
     // borderLeftColor: colors.p2,
@@ -249,9 +249,7 @@ const styles = StyleSheet.create({
     fontSize: size.xsmall,
   },
   aiRow1: {
-    // flexDirection: 'row',
-    // height: '100%',
-    // width: WP(60),
+    flexDirection: 'row',
     alignItems: 'center'
   },
 });

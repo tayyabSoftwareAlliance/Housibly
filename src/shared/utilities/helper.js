@@ -378,12 +378,14 @@ export const filterFormData = (data = {}) => {
     // formdata.append('preference[is_lot_irregular]', data.is_lot_irregular);
     formdata.append('preference[central_vacuum]', data.central_vacuum);
     data.max_age && formdata.append('preference[max_age]', data.max_age);
-    data.house_type?.forEach((item) => {
-      formdata.append('preference[house_type][]', item);
-    })
-    data.house_style?.forEach((item) => {
-      formdata.append('preference[house_style][]', item);
-    })
+    // data.house_type?.forEach((item) => {
+    //   formdata.append('preference[house_type][]', item);
+    // })
+    // data.house_style?.forEach((item) => {
+    //   formdata.append('preference[house_style][]', item);
+    // })
+    formdata.append('preference[house_type][]', data.house_type);
+    formdata.append('preference[house_style][]', data.house_style);
     data.driveway?.forEach((item) => {
       formdata.append('preference[driveway][]', item);
     })
@@ -425,12 +427,14 @@ export const filterFormData = (data = {}) => {
     formdata.append('preference[garage_spaces][min]', data.min_garage_spaces);
     formdata.append('preference[central_vacuum]', data.central_vacuum);
     data.max_age && formdata.append('preference[max_age]', data.max_age);
-    data.condo_type?.forEach((item) => {
-      formdata.append('preference[condo_type][]', item);
-    })
-    data.condo_style?.forEach((item) => {
-      formdata.append('preference[condo_style][]', item);
-    })
+    // data.condo_type?.forEach((item) => {
+    //   formdata.append('preference[condo_type][]', item);
+    // })
+    // data.condo_style?.forEach((item) => {
+    //   formdata.append('preference[condo_style][]', item);
+    // })
+    formdata.append('preference[condo_type][]', data.condo_type);
+    formdata.append('preference[condo_style][]', data.condo_style);
     data.balcony?.forEach((item) => {
       formdata.append('preference[balcony][]', item);
     })
@@ -489,6 +493,11 @@ export const formatPreferenceData = (data) => {
     max_price: data?.price?.max || 0,
     min_lot_size: data?.lot_size?.min || 0,
     min_lot_frontage: data?.lot_frontage?.min || 0,
+    house_type: data?.house_type?.[0] || '',
+    house_style: data?.house_style?.[0] || '',
+    condo_type: data?.condo_type?.[0] || '',
+    condo_style: data?.condo_style?.[0] || '',  // fix for single selection of house_type, house_style, condo_type and condo_style, intead of multiple
+    max_age: 20,
     min_bed_rooms: data?.bed_rooms?.min || 0,
     min_bath_rooms: data?.bath_rooms?.min || 0,
     min_total_number_of_rooms: data?.total_number_of_rooms?.min || 0,
@@ -546,7 +555,7 @@ export const requestNotificationPermission = async () => {
 export const removeNonDigitCharFromString = (text) => text.replace(/[^0-9.]/g, '')
 
 export const formatNumber = (num) => {
-  if(typeof num === 'null' || typeof num === 'undefined') return
+  if (typeof num === 'null' || typeof num === 'undefined') return
   return Number(num).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
 

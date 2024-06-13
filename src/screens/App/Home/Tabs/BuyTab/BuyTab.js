@@ -21,11 +21,14 @@ import {
   currency_list,
   lot_area_unit_list,
   lot_unit_list,
+  property_type_list,
 } from '../../../../../shared/utilities/constant';
 import styles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { delete_dream_address, get_dream_addresses, get_my_preference } from '../../../../../redux/actions/app-actions/app-actions';
 import { formatNumber } from '../../../../../shared/utilities/helper';
+import { Pressable } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 const RenderRow = ({ title, text, list, odd, textStyle }) => {
 
@@ -52,6 +55,7 @@ const BuyTab = ({ navigation }) => {
   const [showAdvance, setShowAdvance] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [loader, setLoader] = useState(false);
+  const isFocused = useIsFocused()
 
   const AddressesRow = ({ item, index }) => {
     const deleteAddress = () => {
@@ -73,6 +77,10 @@ const BuyTab = ({ navigation }) => {
     dispatch(get_dream_addresses())
   }, [])
 
+  useEffect(() => {
+    showAdvance && setShowAdvance(false)
+  }, [isFocused])
+
   return (
     <>
       <View style={styles.paddingView}>
@@ -82,13 +90,20 @@ const BuyTab = ({ navigation }) => {
         {/* {buyerRef.map((item, index) => {
           return <RenderRow key={index} item={item} index={index} />;
         })} */}
-        <RenderRow title={'Property Type'} text={my_preference.property_type} />
-        <RenderRow title={'Price'} text={`${sublists.currency_type?.[my_preference.currency_type]} ${formatNumber(my_preference.price?.min) || 0} to ${my_preference.price?.max ? formatNumber(my_preference.price.max) : 'Any'}`} odd={true} textStyle={{ textTransform: 'none' }} />
+        <RenderRow title={'Property Type'} text={property_type_list[my_preference.property_type]} />
+        <RenderRow title={'Price'} text={`${sublists.currency_type?.[my_preference.currency_type] || '$USD'} ${formatNumber(my_preference.price?.min) || 0} to ${my_preference.price?.max ? formatNumber(my_preference.price.max) : 'Any'}`} odd={true} textStyle={{ textTransform: 'none' }} />
         {my_preference.property_type != 'vacant_land' &&
           <>
             <RenderRow title={'Min No. of Bedrooms'} text={my_preference.bed_rooms?.min || 0} />
             <RenderRow title={'Min No. of Bathrooms'} text={my_preference.bath_rooms?.min || 0} odd={true} />
             <RenderRow title={'Min No. of Rooms'} text={my_preference.total_number_of_rooms?.min || 0} />
+          </>
+        }
+        {my_preference.property_type == 'vacant_land' &&
+          <>
+            <RenderRow title={'Min Lot Frontage'} text={`${my_preference.lot_frontage?.min || 0} ${my_preference.lot_frontage_unit || lot_unit_list[0]}`} />
+            <RenderRow title={'Min Lot Size'} text={`${my_preference.lot_size?.min || 0} ${my_preference.lot_size_unit == lot_area_unit_list[1] ? lot_area_unit_list[1] : lot_area_unit_list[0]}`} odd={true} />
+            {/* <RenderRow title={'Is Lot Irregular'} text={my_preference.is_lot_irregular ? 'true' : 'false'} /> */}
           </>
         }
         {(my_preference.property_type == 'condo' || my_preference.property_type == 'house') ?
@@ -120,8 +135,8 @@ const BuyTab = ({ navigation }) => {
                 <RenderRow title={'Max Age (years)'} text={my_preference.max_age || 'any'} />
                 {my_preference.property_type != 'condo' &&
                   <>
-                    <RenderRow title={'Min Lot Size'} text={`${my_preference.lot_size?.min || 0} ${my_preference.lot_size_unit == lot_area_unit_list[1] ? lot_area_unit_list[1] : lot_area_unit_list[0]}`} odd={true} />
                     <RenderRow title={'Min Lot Frontage'} text={`${my_preference.lot_frontage?.min || 0} ${my_preference.lot_frontage_unit || lot_unit_list[0]}`} />
+                    <RenderRow title={'Min Lot Size'} text={`${my_preference.lot_size?.min || 0} ${my_preference.lot_size_unit == lot_area_unit_list[1] ? lot_area_unit_list[1] : lot_area_unit_list[0]}`} odd={true} />
                     {/* <RenderRow title={'Is Lot Irregular'} text={my_preference.is_lot_irregular ? 'true' : 'false'} /> */}
                   </>
                 }
@@ -150,25 +165,23 @@ const BuyTab = ({ navigation }) => {
                 <RenderRow title={'Air Conditioner'} text={my_preference.air_conditioner} list={sublists.air_conditioner} odd={true} />
                 <RenderRow title={'Laundry'} text={my_preference.laundry} list={sublists.laundry} />
                 <RenderRow title={'Fireplace'} text={my_preference.fireplace} list={sublists.fireplace} odd={true} />
-                <RenderRow title={'Central Vacuum'} text={my_preference.central_vacuum ? 'true' : 'false'} />
+                <RenderRow title={'Central Vacuum'} text={my_preference.central_vacuum ? 'Yes' : 'No'} />
                 <RenderRow title={'Pool'} text={my_preference.pool} list={sublists.pool} odd={true} />
               </>
             }
           </> :
           <View style={{ height: WP(5) }} />
         }
-        <ImageBackground
-          source={appImages.map}
-          style={styles.mapImgStyle}
-          imageStyle={{ borderRadius: 7 }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation?.navigate('MapScreen');
-            }}>
+        <Pressable onPress={() => navigation?.navigate('MapScreen')} >
+          <ImageBackground
+            source={appImages.map}
+            style={styles.mapImgStyle}
+            imageStyle={{ borderRadius: 7 }}
+          >
             <Image source={appIcons.addressIcon} style={styles.iconStyle} />
-          </TouchableOpacity>
-          <Text style={styles.addressTxtStyle}>Press Here to Open Map</Text>
-        </ImageBackground>
+            <Text style={styles.addressTxtStyle}>Press Here to Open Map</Text>
+          </ImageBackground>
+        </Pressable>
         <TouchableOpacity style={styles.savedLocationContainer} onPress={() => navigation.navigate('SavedLocations')} >
           <Text style={styles.savedLocationText}>Saved Locations</Text>
         </TouchableOpacity>
@@ -176,7 +189,8 @@ const BuyTab = ({ navigation }) => {
           <Text style={styles.propertyTxtStyle}>Dream Addresses</Text>
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => setShowAddressModal(true)}>
+            onPress={() => setShowAddressModal(true)}
+            style={{padding:4}}>
             <Image source={appIcons.infoIcon} style={styles.infoIconStyle} />
           </TouchableOpacity>
         </View>

@@ -15,7 +15,8 @@ export const AppLoader = ({loading, tagline = '', showTagLine = false}) => {
       avoidKeyboard={true}
       isVisible={loading}
       hasBackdrop={false}
-      style={styles.container}>
+      style={styles.container}
+      statusBarTranslucent>
       <View style={showTagLine ? styles.alertWithTagline : styles.alert}>
         <ActivityIndicator
           size={'large'}
