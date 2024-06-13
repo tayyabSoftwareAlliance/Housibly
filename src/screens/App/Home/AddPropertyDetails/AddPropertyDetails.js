@@ -47,6 +47,7 @@ import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PriceInputWithCurrency } from '../../../../components/Inputs/PriceInputWithCurrency';
 import { formatNumber, removeNonDigitCharFromString } from '../../../../shared/utilities/helper';
+import { booleanList } from '../../../../shared/utilities/constant';
 
 const INITIAL_DATA = {
   property_type: 'house',
@@ -322,10 +323,11 @@ const AddPropertyDetails = ({ navigation, route }) => {
                   editable={false}
                 />
                 <Divider color={colors.g18} />
-                <CheckBoxInput
+                <FilterButton
                   title={'Is Your Lot Irregular?'}
-                  checked={data.is_lot_irregular}
-                  onPress={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
+                  list={booleanList}
+                  selected={data.is_lot_irregular ? 'yes' : 'no'}
+                  onPressTick={() => setValue('is_lot_irregular', !data.is_lot_irregular)}
                 />
               </>
             )}
@@ -348,10 +350,11 @@ const AddPropertyDetails = ({ navigation, route }) => {
             {data.property_type == 'condo' && (
               <>
                 <Divider color={colors.g18} />
-                <CheckBoxInput
+                <FilterButton
                   title={'Locker?'}
-                  checked={data.locker}
-                  onPress={() => setValue('locker', !data.locker)}
+                  list={booleanList}
+                  selected={data.locker ? 'yes' : 'no'}
+                  onPressTick={() => setValue('locker', !data.locker)}
                 />
                 <Divider color={colors.g18} />
                 <FilterInput
