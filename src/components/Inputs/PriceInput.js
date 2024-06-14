@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     height: 60,
+    paddingHorizontal: WP('1'),
   },
   subStyle: {
     fontSize: size.xsmall,

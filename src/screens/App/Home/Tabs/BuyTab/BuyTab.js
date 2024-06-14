@@ -96,7 +96,7 @@ const BuyTab = ({ navigation }) => {
           <>
             <RenderRow title={'Min No. of Bedrooms'} text={my_preference.bed_rooms?.min || 0} />
             <RenderRow title={'Min No. of Bathrooms'} text={my_preference.bath_rooms?.min || 0} odd={true} />
-            <RenderRow title={'Min No. of Rooms'} text={my_preference.total_number_of_rooms?.min || 0} />
+            <RenderRow title={'Min No. of Kitchens'} text={my_preference.total_number_of_rooms?.min || 0} />
           </>
         }
         {my_preference.property_type == 'vacant_land' &&

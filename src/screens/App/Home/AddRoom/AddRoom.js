@@ -182,12 +182,12 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
           </View>
-          {(data.rooms?.filter(item => !item?.deleted)?.length < data.total_number_of_rooms ||
-            typeof roomDetail?.index == 'number') &&
+          {/* {(data.rooms?.filter(item => !item?.deleted)?.length < data.total_number_of_rooms ||
+            typeof roomDetail?.index == 'number') && */}
             <TouchableOpacity onPress={addOrEditRoom} >
               <Text style={styles.addBtn} >{typeof roomDetail?.index == 'number' ? 'Update' : 'Add'}</Text>
             </TouchableOpacity>
-          }
+          {/* } */}
           <RoomsBox data={data.rooms} onRemoveRoom={removeRoom} onEditRoom={onEditRoom} />
           <View style={[styles.spacRow, from == 'edit' && { justifyContent: 'flex-end' }]}>
             {from != 'edit' &&

@@ -171,10 +171,11 @@ const FilterScreen = ({ navigation, route }) => {
                 />
                 <Divider color={colors.g18} />
                 <PriceInput
-                  title={'Min No. of Rooms'}
+                  title={'Min No. of Kitchens'}
                   simpleInputPlaceHolder={'0'}
                   value={data.min_total_number_of_rooms}
                   onChangeText={text => setValue('min_total_number_of_rooms', text)}
+                  source={appIcons.kitchen}
                 />
               </>
             }

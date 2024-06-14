@@ -117,6 +117,7 @@ export const appIcons = {
   bath: require('../../assets/icons/Bath.png'),
   bed: require('../../assets/icons/Bed.png'),
   living_space: require('../../assets/icons/Living.png'),
+  kitchen: require('../../assets/icons/kitchen.png'),
   parking: require('../../assets/icons/Parking.png'),
   garage_space: require('../../assets/icons/Garage.png'),
   driveway: require('../../assets/icons/driveway.png'),

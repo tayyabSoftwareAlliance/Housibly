@@ -211,7 +211,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
             <GalleryCard
-              title={'Add Photo'}
+              title={'Add Photos'}
               subtitle={'Max 30 images'}
               imageArray={data.images}
               onSelect={arr => setValue('images', arr)}

@@ -264,9 +264,9 @@ const PropertyDetail = ({ navigation, route }) => {
                       source={appIcons.bath}
                     />
                     <PreviewField
-                      title={'Total Number of Rooms'}
+                      title={'Total Number of Kitchens'}
                       subtitle={data.total_number_of_rooms || 'N/A'}
-                      source={appIcons.living_space}
+                      source={appIcons.kitchen}
                     />
                     <PreviewField
                       title={'Total Parking Spaces'}

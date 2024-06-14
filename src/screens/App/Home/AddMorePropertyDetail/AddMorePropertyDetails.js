@@ -64,7 +64,7 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
     } else if (!(data.bath_rooms > 0)) {
       Alert.alert('Error', 'Bath Rooms Number is Required');
     } else if (!(data.total_number_of_rooms > 0)) {
-      Alert.alert('Error', 'Number of Rooms is Required');
+      Alert.alert('Error', 'Number of Kitchens is Required');
       // } else if (!(data.air_conditioner?.length > 0)) {
       //   Alert.alert('Error', 'Please Select Air Conditioner Type');
     } else {
@@ -159,11 +159,11 @@ const AddMorePropertyDetails = ({ navigation, route }) => {
           />
           <Divider color={colors.g18} />
           <PriceInput
-            title={'Total Number of Rooms'}
+            title={'Total Number of Kitchens'}
             simpleInputPlaceHolder={'0'}
             value={data.total_number_of_rooms}
             onChangeText={text => setValue('total_number_of_rooms', text)}
-            source={appIcons.living_space}
+            source={appIcons.kitchen}
             required
           />
           {/* <Divider color={colors.g18} />
