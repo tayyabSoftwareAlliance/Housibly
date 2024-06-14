@@ -61,7 +61,6 @@ export {
   filter_property_type_list,
   filter_bookmarks_list,
   level_list,
-  currency_list,
   beds_list,
   bath_list,
   lat_frontage_list,

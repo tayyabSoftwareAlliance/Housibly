@@ -1,4 +1,3 @@
-import { currency_list } from '../../../shared/exporter';
 import * as TYPES from '../../actions/types';
 
 const initialState = {

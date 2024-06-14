@@ -25,7 +25,6 @@ import {
   bath_list,
   beds_list,
   colors,
-  currency_list,
   lat_frontage_list,
   lot_area_unit_list,
   lot_unit_list,
@@ -117,7 +116,7 @@ const FilterScreen = ({ navigation, route }) => {
       Alert.alert('Error', networkText);
     }
   }
-
+console.log('my_preferenceeeeee',data.currency_type)
   return (
     <SafeAreaView style={styles.rootContainer}>
       <View style={spacing.my2}>

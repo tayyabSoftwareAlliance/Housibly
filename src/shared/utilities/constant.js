@@ -197,11 +197,6 @@ const lot_area_unit_list = [
   'sqm',
 ];
 
-const currency_list = [
-  '$USD',
-  // '$CDN',
-];
-
 const property_type_list = {
   'house': 'House',
   'condo': 'Condo',
@@ -1317,7 +1312,6 @@ export {
   addresses,
   lot_unit_list,
   lot_area_unit_list,
-  currency_list,
   property_type_list,
   filter_property_type_list,
   filter_bookmarks_list,

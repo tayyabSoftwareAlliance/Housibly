@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createContext, useContext, useEffect } from 'react';
-import { appIcons, currency_list, GOOGLE_MAP_KEY, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
+import { appIcons, GOOGLE_MAP_KEY, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
 import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
@@ -488,7 +488,7 @@ export const filterFormData = (data = {}) => {
 export const formatPreferenceData = (data) => {
   return {
     ...data,
-    currency_type: data?.currency_type || currency_list[0],
+    currency_type: data?.currency_type || 'USD',
     min_price: data?.price?.min || 0,
     max_price: data?.price?.max || 0,
     min_lot_size: data?.lot_size?.min || 0,

@@ -27,7 +27,6 @@ import styles from './styles';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
 import {
   colors,
-  currency_list,
   image_options,
   lot_unit_list,
   lot_area_unit_list,

@@ -18,7 +18,6 @@ import {
 } from '../../../../../shared/exporter';
 import {
   addresses,
-  currency_list,
   lot_area_unit_list,
   lot_unit_list,
   property_type_list,
