@@ -497,7 +497,7 @@ export const formatPreferenceData = (data) => {
     house_style: data?.house_style?.[0] || '',
     condo_type: data?.condo_type?.[0] || '',
     condo_style: data?.condo_style?.[0] || '',  // fix for single selection of house_type, house_style, condo_type and condo_style, intead of multiple
-    max_age: 20,
+    max_age: data?.max_age ? Number(data.max_age) : null,
     min_bed_rooms: data?.bed_rooms?.min || 0,
     min_bath_rooms: data?.bath_rooms?.min || 0,
     min_total_number_of_rooms: data?.total_number_of_rooms?.min || 0,

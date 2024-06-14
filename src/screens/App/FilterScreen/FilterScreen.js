@@ -64,7 +64,7 @@ const INITIAL_DATA = {
   house_style: '',
   condo_type: '',
   condo_style: '',  // fix for single selection of house_type, house_style, condo_type and condo_style, intead of multiple
-  max_age: 20,
+  max_age: null,
   exterior: [],
   balcony: [],
   exposure: [],
