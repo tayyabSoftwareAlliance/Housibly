@@ -27,7 +27,7 @@ export const DeletePropertyModal = ({ item, show, onPressHide }) => {
             style={styles.crossIconStyle}
           />
         </TouchableOpacity>
-        <Image source={{ uri: item?.images?.[0]?.url || property_image }} style={styles.imgStyle} />
+        <Image source={{ uri: item?.images?.[0]?.url }} style={styles.imgStyle} />
         <Text style={styles.nameTxtStyle}>{item?.title}</Text>
         <View style={styles.rowContainer}>
           <Text style={styles.smallTxtStyle}>{`${sublists.currency_type?.[item?.currency_type]} ${item?.price} | `}</Text>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     height: WP('25'),
     borderRadius: 15,
     alignSelf: 'center',
+    backgroundColor: colors.g14
   },
   nameTxtStyle: {
     color: colors.b1,

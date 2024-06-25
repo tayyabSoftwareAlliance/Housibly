@@ -14,6 +14,7 @@ import {colors, WP, family, appIcons} from '../../shared/exporter';
 import PropTypes from 'prop-types';
 
 export const ImagePickerModal = ({
+  from,
   show,
   onPressHide,
   onPressGallery,
@@ -37,7 +38,7 @@ export const ImagePickerModal = ({
               <Image source={appIcons.gallery} style={styles.imageStyle} />
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.btnText}>Pick Image from Gallery</Text>
+              <Text style={styles.btnText}>Pick {from == 'AddPropertyDetails' ? 'Image/Video' : 'Image'} from Gallery</Text>
             </View>
           </TouchableOpacity>
         </View>

@@ -9,6 +9,7 @@ import { Divider } from 'react-native-elements/dist/divider/Divider';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveCreatePropertyData } from '../../../../redux/actions';
 import { useIsFocused } from '@react-navigation/native'
+import TagInput from 'react-native-tags-input'
 
 const AddpropertyDesc = ({ navigation, route }) => {
 
@@ -17,6 +18,10 @@ const AddpropertyDesc = ({ navigation, route }) => {
   const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)))
   const isFocused = useIsFocused()
   const dispatch = useDispatch();
+  const [appliances, setAppliances] = useState({
+    tag: '',
+    tagsArray: propertyData?.appliances_and_other_items ? propertyData.appliances_and_other_items.split(',') : []
+  })
 
   useEffect(() => {
     if (!isFocused && saved_create_property_data && from != 'edit')
@@ -28,10 +33,11 @@ const AddpropertyDesc = ({ navigation, route }) => {
     // if (!data.property_description) {
     //   Alert.alert('Error', 'Description is Required');
     // } else {
+    const propertyData = data ? {...data,appliances_and_other_items:appliances.tagsArray.join(',')} : {}
     if (data.property_type == 'vacant_land') {
-      navigation.navigate('PropertyDetail', { propertyData: data, id: data?.id, from });
+      navigation.navigate('PropertyDetail', { propertyData, id: data?.id, from });
     } else {
-      navigation.navigate('AddRoom', { propertyData: data, from });
+      navigation.navigate('AddRoom', { propertyData, from });
     }
     // }
   }
@@ -39,7 +45,6 @@ const AddpropertyDesc = ({ navigation, route }) => {
   const onSave = async () => {
     dispatch(saveCreatePropertyData(data));
   }
-
   const setValue = (type, value) => {
     setData(prev => {
       prev[type] = value
@@ -59,8 +64,8 @@ const AddpropertyDesc = ({ navigation, route }) => {
         <View style={styles.contentContainer}>
           <Divider color={colors.g18} />
           <Textarea
-            containerStyle={[styles.textareaContainer,{paddingBottom:20}]}
-            style={styles.textarea}
+            containerStyle={[styles.textareaContainer, { paddingBottom: 20 }]}
+            style={[styles.textarea,{paddingHorizontal:WP(3)}]}
             placeholder={'Property description'}
             placeholderTextColor={colors.g19}
             underlineColorAndroid={'transparent'}
@@ -71,7 +76,7 @@ const AddpropertyDesc = ({ navigation, route }) => {
           {data.property_type != 'vacant_land' && (
             <>
               <Divider color={colors.g18} />
-              <Textarea
+              {/* <Textarea
                 containerStyle={styles.textareaContainer}
                 style={styles.textarea}
                 placeholder={'Appliances & Other Items'}
@@ -79,6 +84,14 @@ const AddpropertyDesc = ({ navigation, route }) => {
                 underlineColorAndroid={'transparent'}
                 value={data.appliances_and_other_items}
                 onChangeText={text => setValue('appliances_and_other_items', text)}
+              /> */}
+              <TagInput
+                containerStyle={styles.textareaContainer}
+                updateState={state => setAppliances(state)}
+                tags={appliances}
+                placeholder={'Appliances & Other Items (Press space to add)'}
+                placeholderTextColor={colors.g19}
+                inputStyle={styles.textarea}
               />
             </>
           )}

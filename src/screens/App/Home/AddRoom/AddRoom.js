@@ -22,6 +22,7 @@ import {
   colors,
   HP,
   level_list,
+  lot_unit_list,
   size,
   spacing,
   WP,
@@ -36,10 +37,9 @@ import RoomsBox from '../../../../components/Box/RoomsBox';
 
 const INITIAL_VALUE = {
   name: '',
-  length_in_feet: 0,
-  length_in_inch: 0,
-  width_in_feet: 0,
-  width_in_inch: 0,
+  room_measurement_unit: lot_unit_list[0],
+  room_length: 0,
+  room_width: 0,
   level: ''
 }
 
@@ -50,7 +50,6 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const { saved_create_property_data, address } = useSelector(
     state => state?.appReducer,
   );
-
   const [roomDetail, setRoomDetail] = useState({ ...INITIAL_VALUE })
   const [data, setData] = useState(JSON.parse(JSON.stringify(propertyData)))
   const isFocused = useIsFocused()
@@ -84,9 +83,9 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const addOrEditRoom = () => {
     if (!roomDetail.name) {
       Alert.alert('Error', 'Room Name is Required');
-    } else if (!(roomDetail.length_in_feet > 0)) {
+    } else if (!(roomDetail.room_length > 0)) {
       Alert.alert('Error', 'Room Length is Required');
-    } else if (!(roomDetail.width_in_feet > 0)) {
+    } else if (!(roomDetail.room_width > 0)) {
       Alert.alert('Error', 'Room Width is Required');
     } else if (!roomDetail.level) {
       Alert.alert('Error', 'Room Level is Required');
@@ -143,35 +142,25 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
             <PriceInput
+              onSelect={val => setRoomValue('room_measurement_unit', val)}
+              defaultValue={roomDetail.room_measurement_unit}
               simpleInputPlaceHolder={'0'}
               title={'Length'}
-              subtitle={' (ft)'}
-              value={roomDetail.length_in_feet}
-              onChangeText={text => setRoomValue('length_in_feet', text)}
+              list={lot_unit_list}
+              dropDown={true}
+              value={roomDetail.room_length}
+              onChangeText={text => setRoomValue('room_length', text)}
             />
             <Divider color={colors.g18} />
             <PriceInput
-              simpleInputPlaceHolder={'0'}
-              title={'Length'}
-              subtitle={' (in)'}
-              value={roomDetail.length_in_inch}
-              onChangeText={text => setRoomValue('length_in_inch', text)}
-            />
-            <Divider color={colors.g18} />
-            <PriceInput
+              onSelect={val => setRoomValue('room_measurement_unit', val)}
+              defaultValue={roomDetail.room_measurement_unit}
               simpleInputPlaceHolder={'0'}
               title={'Width'}
-              subtitle={' (ft)'}
-              value={roomDetail.width_in_feet}
-              onChangeText={text => setRoomValue('width_in_feet', text)}
-            />
-            <Divider color={colors.g18} />
-            <PriceInput
-              simpleInputPlaceHolder={'0'}
-              title={'Width'}
-              subtitle={' (in)'}
-              value={roomDetail.width_in_inch}
-              onChangeText={text => setRoomValue('width_in_inch', text)}
+              list={lot_unit_list}
+              dropDown={true}
+              value={roomDetail.room_width}
+              onChangeText={text => setRoomValue('room_width', text)}
             />
             <Divider color={colors.g18} />
             <FilterButton
@@ -184,9 +173,9 @@ const AddPropertyDetails = ({ navigation, route }) => {
           </View>
           {/* {(data.rooms?.filter(item => !item?.deleted)?.length < data.total_number_of_rooms ||
             typeof roomDetail?.index == 'number') && */}
-            <TouchableOpacity onPress={addOrEditRoom} >
-              <Text style={styles.addBtn} >{typeof roomDetail?.index == 'number' ? 'Update' : 'Add'}</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={addOrEditRoom} >
+            <Text style={styles.addBtn} >{typeof roomDetail?.index == 'number' ? 'Update' : 'Add'}</Text>
+          </TouchableOpacity>
           {/* } */}
           <RoomsBox data={data.rooms} onRemoveRoom={removeRoom} onEditRoom={onEditRoom} />
           <View style={[styles.spacRow, from == 'edit' && { justifyContent: 'flex-end' }]}>

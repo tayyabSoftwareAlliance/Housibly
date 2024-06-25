@@ -60,6 +60,15 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
+  videoLoadingUpperLayer: {
+    position: 'absolute',
+    height: 60,
+    width: 60,
+    zIndex: 1,
+    // backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 });
 
 export default styles;

@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     fontSize: size.xsmall,
     color: colors.b1,
     fontFamily: family.Gilroy_Medium,
+    paddingHorizontal:0,
   },
   spacRow: {
     flexDirection: 'row',

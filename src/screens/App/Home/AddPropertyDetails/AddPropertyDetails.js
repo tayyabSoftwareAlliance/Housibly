@@ -112,6 +112,7 @@ const AddPropertyDetails = ({ navigation, route }) => {
   const { saved_create_property_data, sublists } = useSelector(
     state => state?.appReducer,
   );
+  console.log('propertyData', JSON.stringify(propertyData, null, 2))
 
   const [data, setData] = useState(
     JSON.parse(JSON.stringify(
@@ -210,8 +211,9 @@ const AddPropertyDetails = ({ navigation, route }) => {
             />
             <Divider color={colors.g18} />
             <GalleryCard
-              title={'Add Photos'}
-              subtitle={'Max 30 images'}
+              from={'AddPropertyDetails'}
+              title={'Add Photos and Videos'}
+              subtitle={'Max 30'}
               imageArray={data.images}
               onSelect={arr => setValue('images', arr)}
               onRemove={onImageRemove}

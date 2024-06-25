@@ -93,7 +93,7 @@ const PotentialBuyers = ({ navigation, route }) => {
         style={styles.detailsContainer}
         onPress={() => navigation.navigate('PropertyDetail', { propertyData: item, id: item?.id })}>
         <Image
-          source={{ uri: item?.images?.[0]?.url || property_image }}
+          source={{ uri: item?.images?.[0]?.url }}
           style={styles.imgStyle}
         />
         <View>

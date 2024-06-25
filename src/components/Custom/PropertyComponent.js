@@ -22,7 +22,7 @@ const PropertyComponent = ({ item, myProperty = false }) => {
             }}
         >
             <Image
-                source={{ uri: item?.images?.[0]?.url || property_image }}
+                source={{ uri: item?.images?.[0]?.url }}
                 // source={{ uri: property_image }}
                 style={styles.imgStyle}
             />

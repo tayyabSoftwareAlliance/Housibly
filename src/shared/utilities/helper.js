@@ -334,10 +334,9 @@ export const propertyFormData = (data = {}) => {
     } else {
       item?.id && formdata.append(`property[rooms_attributes][${index}][id]`, item.id)
       formdata.append(`property[rooms_attributes][${index}][name]`, item?.name)
-      formdata.append(`property[rooms_attributes][${index}][length_in_feet]`, item?.length_in_feet)
-      formdata.append(`property[rooms_attributes][${index}][length_in_inch]`, item?.length_in_inch)
-      formdata.append(`property[rooms_attributes][${index}][width_in_feet]`, item?.width_in_feet)
-      formdata.append(`property[rooms_attributes][${index}][width_in_inch]`, item?.width_in_inch)
+      formdata.append(`property[rooms_attributes][${index}][room_length]`, item?.room_length)
+      formdata.append(`property[rooms_attributes][${index}][room_width]`, item?.room_width)
+      formdata.append(`property[rooms_attributes][${index}][room_measurement_unit]`, item?.room_measurement_unit)
       formdata.append(`property[rooms_attributes][${index}][level]`, item?.level)
     }
   })

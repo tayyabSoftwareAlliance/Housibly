@@ -1,6 +1,7 @@
 import {
   Alert,
   FlatList,
+  Pressable,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -32,7 +33,8 @@ import {
   spacing,
   WP,
   propertyFormData,
-  responseValidator
+  responseValidator,
+  family
 } from '../../../../shared/exporter';
 import styles from './styles';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
@@ -49,6 +51,8 @@ import {
 import { ChatPopupModal } from '../../../../components/Modal/ChatPopupModal';
 import { app } from '../../../../shared/api';
 import { formatNumber } from '../../../../shared/utilities/helper';
+import { Icon } from 'react-native-elements';
+import VideoOpenedModal from '../../../../components/Modal/VideoOpenedModal';
 
 const PropertyDetail = ({ navigation, route }) => {
   const { propertyData, id, from } = route.params;
@@ -59,7 +63,9 @@ const PropertyDetail = ({ navigation, route }) => {
   const [imgSelectedIndex, setImgSelectedIndex] = useState(0);
   const [contactSellerModal, setContactSellerModal] = useState(false);
   const dispatch = useDispatch();
-
+  const [videoModal, setVideoModal] = useState(false)
+  const [openedVideoURI, setOpenedVideoURI] = useState('')
+console.log('dataaaa',JSON.stringify(data,null,2))
   const onPost = async () => {
     const onSuccess = () => {
       if (from != 'edit') dispatch(removeCreatePropertyData(null));
@@ -159,9 +165,25 @@ const PropertyDetail = ({ navigation, route }) => {
                 renderItem={({ item, index }) => {
                   return (
                     <TouchableOpacity
+                      style={{ margin: 5 }}
                       onPress={() => {
-                        setImgSelectedIndex(index);
+                        if (item?.id ? item?.url?.includes('mp4') : item.mime?.includes('video')) {
+                          setOpenedVideoURI(item?.id ? item?.url : item?.path)
+                          setVideoModal(true)
+                        } else
+                          setImgSelectedIndex(index)
                       }}>
+                      {/* video upper layer */}
+                      {(item?.id ? item?.url?.includes('mp4') : item.mime?.includes('video')) &&
+                        <View style={styles.videoLoadingUpperLayer}  >
+                          <Icon
+                            type="ant-design"
+                            name={'play'}
+                            color={colors.white}
+                            size={20}
+                          />
+                        </View>
+                      }
                       <PreviewImageBox
                         uri={
                           (item?.id ? item?.url : item?.path) ||
@@ -193,7 +215,7 @@ const PropertyDetail = ({ navigation, route }) => {
                   />
                 )}
               </View>
-              {data?.property_type != 'condo' &&
+              {data?.property_type != 'condo' && data.lot_description &&
                 <Text numberOfLines={6} style={styles.desc}>
                   {data.lot_description}
                 </Text>
@@ -363,18 +385,18 @@ const PropertyDetail = ({ navigation, route }) => {
                     )}
                     {data.property_type == 'house' && (
                       <>
-                      <PreviewField
-                        title={'Driveway'}
-                        list={sublists.driveway}
-                        subtitle={data.driveway || 'N/A'}
-                        source={appIcons.driveway}
-                      />
-                      <PreviewField
-                        title={'Water'}
-                        list={sublists.water}
-                        subtitle={data.water || 'N/A'}
-                        source={appIcons.water}
-                      />
+                        <PreviewField
+                          title={'Driveway'}
+                          list={sublists.driveway}
+                          subtitle={data.driveway || 'N/A'}
+                          source={appIcons.driveway}
+                        />
+                        <PreviewField
+                          title={'Water'}
+                          list={sublists.water}
+                          subtitle={data.water || 'N/A'}
+                          source={appIcons.water}
+                        />
                       </>
                     )}
                     <PreviewField
@@ -432,10 +454,33 @@ const PropertyDetail = ({ navigation, route }) => {
                 {data?.property_type != 'vacant_land' && (
                   <>
                     <SmallHeading title={'Appliances and other Items'} />
-                    <SmallHeading
+                    {/* <SmallHeading
                       textColor={colors.g22}
                       title={data?.appliances_and_other_items || 'N/A'}
-                    />
+                    /> */}
+                    {data?.appliances_and_other_items ?
+                      <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }} >
+                        {
+                          data.appliances_and_other_items.split(',').map(item => {
+                            return (
+                              <View style={{ padding: WP(1), paddingHorizontal: WP(2), marginTop: WP(2), backgroundColor: colors.g17, marginRight: WP(1), borderRadius: WP(2) }} >
+                                <Text style={{
+                                  fontSize: size.xsmall,
+                                  color: colors.b7,
+                                  fontFamily: family.Gilroy_Medium,
+                                }} >
+                                  {item}
+                                </Text>
+                              </View>
+                            )
+                          })
+                        }
+                      </View> :
+                      <SmallHeading
+                        textColor={colors.g22}
+                        title={'N/A'}
+                      />
+                    }
                   </>
                 )}
               </View>
@@ -511,6 +556,13 @@ const PropertyDetail = ({ navigation, route }) => {
         buttonStyle={{ backgroundColor: colors.p1 }}
       />
       <AppLoader loading={loading || loader} />
+      {videoModal &&
+        <VideoOpenedModal
+          isVisible={videoModal}
+          setModal={setVideoModal}
+          uri={openedVideoURI}
+        />
+      }
     </SafeAreaView>
   );
 };

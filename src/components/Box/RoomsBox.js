@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { HP, WP, colors, family, size } from '../../shared/exporter'
+import { HP, WP, colors, family, lot_unit_list, size } from '../../shared/exporter'
 import { SmallHeading } from '../Headings/SmallHeading'
 import { Icon } from 'react-native-elements';
 
 const RoomsBox = ({ data, onEditRoom, onRemoveRoom }) => {
   return (
-    data?.length > 0 &&
+    data?.filter(item => !item?.deleted).length > 0 &&
     <View style={styles.descBox}>
       <SmallHeading title={'Rooms'} />
       {data.map((item, index) => {
@@ -14,7 +14,7 @@ const RoomsBox = ({ data, onEditRoom, onRemoveRoom }) => {
           <View key={index} style={styles.roomRow} >
             <Text style={styles.text} >{item?.name || 'N/A'}</Text>
             <Text style={styles.text} >{item?.level || 'N/A'}</Text>
-            <Text style={styles.text} >{`${item?.length_in_feet}'${item?.length_in_inch}" x ${item?.width_in_feet}'${item?.width_in_inch}"`}</Text>
+            <Text style={styles.text} >{`${item?.room_length} ${item?.room_measurement_unit || lot_unit_list[0]} x ${item?.room_width} ${item?.room_measurement_unit || lot_unit_list[0]}`}</Text>
             <View style={{ width: WP(23), flexDirection: "row", justifyContent: 'center', alignItems: 'center' }} >
               {onEditRoom &&
                 <Icon

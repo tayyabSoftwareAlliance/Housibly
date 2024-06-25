@@ -1,23 +1,20 @@
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import { colors } from '../../shared/exporter';
 
 export const PreviewImageBox = ({onPress, uri}) => {
   return (
-    <View style={styles.container}>
       <ImageBackground
         source={{
           uri: uri,
         }}
         style={styles.imgCon}
-        imageStyle={styles.imgStyle}></ImageBackground>
-    </View>
+        imageStyle={styles.imgStyle}>
+        </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 5,
-  },
   imgCon: {
     height: 60,
     width: 60,
@@ -25,5 +22,6 @@ const styles = StyleSheet.create({
   },
   imgStyle: {
     borderRadius: 10,
+    backgroundColor: colors.g13,
   },
 });
