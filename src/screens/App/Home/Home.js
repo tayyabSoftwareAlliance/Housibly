@@ -47,6 +47,7 @@ import { capitalizeFirstLetter, convertLocationToAddress, handleLocationPermissi
 import { set_user_location_request } from '../../../redux/actions/auth-actions/auth-action';
 import Geolocation from '@react-native-community/geolocation';
 import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import FloatingComponent from '../../../components/Custom/FloatingComponent';
 
 const TOTAL_CAROUSEL_HEIGHT = WP(29)
 
@@ -89,34 +90,33 @@ const Home = ({ navigation }) => {
     }, 500);
   };
 
-
-  const renderItem = (item, index, onPress) => {
-    return (
-      <Pressable style={styles.itemContainer} onPress={() => onPress(item)}>
-        <View style={styles.itemInnerRow}>
-          <Image source={{ uri: item?.avatar }} style={styles.personImgStyle} />
-          <View style={styles.txtContainer}>
-            <Text numberOfLines={1} style={styles.itemNameStyle}>{item?.full_name || 'N/A'}</Text>
-            {/* <Text style={styles.h1TxtStyle}>Corporate Home X</Text> */}
-            <Text numberOfLines={1} style={styles.h2TxtStyle}>{item?.professions?.map(item => item?.title)?.join(', ') || 'N/A'}</Text>
-          </View>
-        </View>
-        <View>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.iconContainer}
-            onPress={() => setShowMenu(true)}>
-            <Icon
-              type={'entypo'}
-              name={'dots-three-horizontal'}
-              size={16}
-              color={colors.white}
-            />
-          </TouchableOpacity>
-        </View>
-      </Pressable>
-    );
-  };
+  // const renderItem = (item, index, onPress) => {
+  //   return (
+  //     <Pressable style={styles.itemContainer} onPress={() => onPress(item)}>
+  //       <View style={styles.itemInnerRow}>
+  //         <Image source={{ uri: item?.avatar }} style={styles.personImgStyle} />
+  //         <View style={styles.txtContainer}>
+  //           <Text numberOfLines={1} style={styles.itemNameStyle}>{item?.full_name || 'N/A'}</Text>
+  //           {/* <Text style={styles.h1TxtStyle}>Corporate Home X</Text> */}
+  //           <Text numberOfLines={1} style={styles.h2TxtStyle}>{item?.professions?.map(item => item?.title)?.join(', ') || 'N/A'}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <TouchableOpacity
+  //           activeOpacity={0.7}
+  //           style={styles.iconContainer}
+  //           onPress={() => setShowMenu(true)}>
+  //           <Icon
+  //             type={'entypo'}
+  //             name={'dots-three-horizontal'}
+  //             size={16}
+  //             color={colors.white}
+  //           />
+  //         </TouchableOpacity>
+  //       </View>
+  //     </Pressable>
+  //   );
+  // };
 
   const setUserCurrentLocation = async () => {
     const result = await handleLocationPermission()
@@ -155,7 +155,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     top_support_closers?.length > 0 && selected == 'buy' && showCarousel()
-  },[top_support_closers])
+  }, [top_support_closers])
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -175,7 +175,7 @@ const Home = ({ navigation }) => {
       >
         <View style={styles.rowContainer}>
           <View>
-            <Text style={styles.propertyTxtStyle}>{selected === 'sell' ? 'Find A Buyer' : 'Find A Seller' }</Text>
+            <Text style={styles.propertyTxtStyle}>{selected === 'sell' ? 'Sell A Property' : selected == 'matches' ? 'Start Your Search' : 'Find A Property'}</Text>
             <TouchableOpacity style={styles.innerRow} onPress={() => navigation.navigate('AddAddress', { from: 'home' })}>
               <Image source={appIcons.locIcon} style={styles.locIconStyle} />
               <Text style={styles.locTxtStyle} numberOfLines={2} >{capitalizeFirstLetter(userInfo?.user?.address) || 'Location'}</Text>
@@ -219,49 +219,51 @@ const Home = ({ navigation }) => {
             </MenuItem>
           </Menu>
         </View>
-        <View style={styles.paddingView}>
-          <View style={styles.tabsContainer}>
-          <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => {
-                setSelected('sell')
-                hideCarousel()
-              }}
-              style={styles.tabStyle(selected === 'sell')}>
-              <Text style={styles.tabTxtStyle(selected === 'sell')}>
-                I Want To Sell
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => {
-                setSelected('matches')
-                hideCarousel()
-              }}
-              style={styles.tabStyle(selected === 'matches')}>
-              <Text style={styles.tabTxtStyle(selected === 'matches')}>
-                My Matches
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => {
-                setSelected('buy')
-                top_support_closers?.length > 0 && showCarousel()
-              }}
-              style={styles.tabStyle(selected === 'buy')}>
-              <Text style={styles.tabTxtStyle(selected === 'buy')}>
-                I Want To Buy
-              </Text>
-            </TouchableOpacity>
+        {/* Home main section start */}
+        {['buy', 'matches', 'sell'].includes(selected) &&
+          <View style={styles.paddingView}>
+            <View style={styles.tabsContainer}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setSelected('sell')
+                  hideCarousel()
+                }}
+                style={styles.tabStyle(selected === 'sell')}>
+                <Text style={styles.tabTxtStyle(selected === 'sell')}>
+                  I Want To Sell
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setSelected('matches')
+                  hideCarousel()
+                }}
+                style={styles.tabStyle(selected === 'matches')}>
+                <Text style={styles.tabTxtStyle(selected === 'matches')}>
+                  My Matches
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setSelected('buy')
+                  top_support_closers?.length > 0 && showCarousel()
+                }}
+                style={styles.tabStyle(selected === 'buy')}>
+                <Text style={styles.tabTxtStyle(selected === 'buy')}>
+                  I Want To Buy
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        }
         <View style={{ height: WP(2) }} />
-        {selected === 'buy' && <BuyTab navigation={navigation} />}
+        {['buy', 'preference', 'map', 'dreamAddress'].includes(selected) && <BuyTab navigation={navigation} selected={selected} setSelected={setSelected} />}
         {selected === 'matches' && <MatchesTab navigation={navigation} />}
-        {selected === 'sell' && (
-          <SellTab navigation={navigation} />
-        )}
+        {selected === 'sell' && <SellTab navigation={navigation} />}
+        {/* Home main section end */}
         <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + HP(5) }} />
       </KeyboardAwareScrollView>
       {
@@ -290,17 +292,50 @@ const Home = ({ navigation }) => {
         </View>
       }
       {
-        selected == 'buy' &&
-        <View style={styles.bottomView}>
-          <AppButton
-            width={'43%'}
-            borderColor={colors.p2}
-            title="Edit Buyer Preference"
-            textStyle={{ fontSize: size.tiny }}
-            onPress={() => navigation.navigate('FilterScreen')}
-          />
+        ['buy', 'preference', 'map', 'dreamAddress'].includes(selected) &&
+        <View style={[styles.bottomView, { flexDirection: 'column' }]}>
+          {selected == 'preference' &&
+            <AppButton
+              width={'43%'}
+              borderColor={colors.p2}
+              title="Edit Buyer Preference"
+              textStyle={{ fontSize: size.tiny }}
+              onPress={() => navigation.navigate('FilterScreen')}
+            />
+          }
+          <View style={[styles.bottomView, { position: 'relative', bottom: 0 }]}>
+            {selected != 'preference' &&
+              <FloatingComponent
+                title="Preferences"
+                icon={appIcons.filter}
+                onPress={() => setSelected('preference')}
+              />
+            }
+            {selected != 'map' &&
+              <FloatingComponent
+                title="Map"
+                icon={appIcons.map}
+                onPress={() => setSelected('map')}
+              />
+            }
+            {selected != 'dreamAddress' &&
+              <FloatingComponent
+                title="Dream Address"
+                icon={appIcons.dreamAddress}
+                onPress={() => setSelected('dreamAddress')}
+              />
+            }
+            {selected != 'supportCloser' &&
+              <FloatingComponent
+                title="Support Closer"
+                icon={appIcons.supportCloser}
+                onPress={() => { }}
+              />
+            }
+          </View>
         </View>
       }
+
       <PersonDetailsModal
         show={personDetailModal}
         onPressHide={() => setPersonDetailModal(false)}

@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     height: 8,
   },
   bottomView: {
-    bottom: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS,
+    bottom: BOTTOM_TAB_HEIGHT,
     width: '100%',
     alignSelf: 'center',
     alignItems: 'center',

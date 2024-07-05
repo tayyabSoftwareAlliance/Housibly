@@ -91,8 +91,9 @@ const SavedLocations = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <StatusBar
+    <View style={styles.rootContainer}>
+    {/* <SafeAreaView style={styles.rootContainer}> */}
+      {/* <StatusBar
         translucent={false}
         backgroundColor={colors.white}
         barStyle={'dark-content'}
@@ -102,8 +103,8 @@ const SavedLocations = ({ navigation }) => {
         txtCenter
         txtSize={size.xsmall}
         txtFamily={family.Gilroy_SemiBold}
-      />
-      <Text style={styles.titleTxtStyle}>Saved Lists</Text>
+      /> */}
+      {/* <Text style={styles.titleTxtStyle}>Saved Lists</Text> */}
       {data.length > 0 ?
         <FlatList
           data={data}
@@ -118,7 +119,8 @@ const SavedLocations = ({ navigation }) => {
           </View> : null
       }
       <AppLoader loading={loader} />
-    </SafeAreaView>
+    {/* </SafeAreaView> */}
+    </View>
   )
 }
 

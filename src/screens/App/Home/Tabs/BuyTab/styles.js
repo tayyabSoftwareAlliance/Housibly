@@ -3,10 +3,9 @@ import {WP, colors, size, family, scrWidth} from '../../../../../shared/exporter
 
 const styles = StyleSheet.create({
   propertyTxtStyle: {
-    color: colors.b1,
-    fontSize: size.h6,
-    paddingBottom: WP('3.6'),
-    fontFamily: family.Gilroy_Bold,
+    color: '#5C5C5C',
+    fontSize: size.xlarge,
+    fontFamily: family.Gilroy_Medium,
   },
   innerRow: {
     flexDirection: 'row',
@@ -184,7 +183,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoIconStyle: {
-    top: -6,
     width: WP('3'),
     height: WP('3'),
   },
@@ -202,24 +200,31 @@ const styles = StyleSheet.create({
   },
   addressItemRow: index => {
     return {
-      borderRadius: 5,
-      paddingHorizontal: 8,
+      borderRadius: 25,
+      padding: 8,
+      paddingHorizontal: 10,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      backgroundColor: index % 2 == 0 ? colors.g5 : colors.white,
-      marginTop:WP(1)
+      backgroundColor: index % 2 == 0 ? '#E3F5FF' : '#F3FBFF',
+      marginTop:WP(2)
     };
   },
   addrsTxtStyle: {
     color: colors.g16,
-    fontSize: size.tiny,
+    fontSize: size.xsmall,
     fontFamily: family.Gilroy_Medium,
-    width:WP(80)
+    width:WP(70)
+  },
+  locationIconStyle: {
+    width: WP(4),
+    height: WP(4),
+    objectFit:'contain'
   },
   crossIconStyle: {
-    width: 8,
-    height: 8,
+    width: WP(3),
+    height: WP(3),
+    objectFit:'contain'
   },
   savedLocationContainer:{
     backgroundColor: colors.g5,

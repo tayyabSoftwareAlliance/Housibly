@@ -93,6 +93,11 @@ export const appIcons = {
   default: require('../../assets/icons/default.png'),
   visa: require('../../assets/icons/visa.png'),
   masterCard: require('../../assets/icons/masterCard.png'),
+  filter: require('../../assets/icons/filter.png'),
+  dreamAddress: require('../../assets/icons/dream-address.png'),
+  map: require('../../assets/icons/map.png'),
+  supportCloser: require('../../assets/icons/support-closer.png'),
+  location: require('../../assets/icons/location.png'),
 
   //Home Icons
   type: require('../../assets/icons/Type.png'),

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
   WP,
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: colors.white,
-    // paddingTop: platformOrientedCode(WP('6'), 0),
+    paddingTop: platformOrientedCode(WP('6'), 0),
   },
   titleTxtStyle: {
     color: colors.b1,
@@ -82,53 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.g24,
   },
   flStyle: {
-    marginTop: WP('2.5'),
     paddingBottom: platformOrientedCode(WP('13'), hasNotch ? 0 : WP('13')),
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent:'space-between',
-    padding: WP(2),
-    backgroundColor: '#F3FBFF',
-    borderRadius:10,
-    marginBottom:WP(2)
-    // paddingHorizontal: WP('4'),
-  },
-  nameTxtStyle: {
-    width: WP(80),
-    color: colors.b1,
-    fontSize: size.large,
-    fontFamily: family.Gilroy_SemiBold,
-  },
-  txtContainer: {
-    width: WP('9'),
-    borderRadius: 5,
-    height: WP('4.4'),
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.r1,
-  },
-  newTxtStyle: {
-    left: 0.5,
-    color: colors.white,
-    fontSize: size.xxtiny,
-    fontFamily: family.Gilroy_Regular,
-  },
-  simpleRow: {
-    paddingTop: 13,
-    paddingBottom: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  smallTxtStyle: {
-    color: colors.g23,
-    fontSize: size.tiny,
-    fontFamily: family.Gilroy_Medium,
-  },
-  timeTxtStyle: {
-    color: colors.g17,
-    fontSize: size.tiny,
-    fontFamily: family.Gilroy_Medium,
   },
   bottomView: {
     bottom: 6,
@@ -141,22 +95,11 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
-  footerComponent: {
-    height: WP(10),
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%'
-  },
-  noDataContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  noData: {
-    color: colors.g17,
-    fontSize: size.small,
-    fontFamily: family.Gilroy_Regular,
-    textAlign: 'center'
+  footerComponent:{
+    height:WP(10),
+    justifyContent:'center',
+    alignItems:'center',
+    width:'100%'
   }
 });
 
