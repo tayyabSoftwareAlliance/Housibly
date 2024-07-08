@@ -11,6 +11,7 @@ const initialState = {
   my_preference: { property_type: 'house', currency_type: 'USD' },
   dream_addresses: [],
   matched_properties: { lastPage: 0, data: [] },
+  buy_properties: { lastPage: 0, data: [] },
   top_support_closers: [],
   conversation_opened_id: -1,
   showed_in_app_notification: null,
@@ -217,6 +218,29 @@ const appReducers = (state = initialState, actions) => {
         loading: false,
       };
 
+
+    //************ Get Buy Properties states*************
+    case TYPES.GET_BUY_PROPERTIES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPES.GET_BUY_PROPERTIES_SUCCESS:
+      return {
+        ...state,
+        buy_properties: {
+          lastPage: payload.data.length > 0 ? payload.page : state.buy_properties.lastPage,
+          data:
+            payload.page == 1 ?
+              payload.data :
+              [...state.buy_properties.data, ...payload.data]
+        }
+      };
+    case TYPES.GET_BUY_PROPERTIES_FINALLY:
+      return {
+        ...state,
+        loading: false,
+      };
 
     //************ Get Top Support Closers states*************
     case TYPES.GET_TOP_SUPPORT_CLOSERS_REQUEST:

@@ -117,6 +117,15 @@ export const get_matched_properties = (page, onFinally) => {
   };
 };
 
+//Get Buy Properties
+export const get_buy_properties = (page, onFinally) => {
+  return {
+    type: TYPES.GET_BUY_PROPERTIES_REQUEST,
+    payload: { page },
+    onFinally
+  };
+};
+
 //Get Top Support Closers
 export const get_top_support_closers = () => {
   return {

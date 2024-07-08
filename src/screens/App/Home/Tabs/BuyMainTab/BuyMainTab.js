@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const BuyMainTab = () => {
 
-  const { matched_properties, loading } = useSelector(state => state?.appReducer)
+  const { buy_properties, loading } = useSelector(state => state?.appReducer)
   const navigation = useNavigation()
 
   return (
@@ -23,12 +23,12 @@ const BuyMainTab = () => {
           </Text>
         </View>
       <FlatList
-        data={[matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0],matched_properties.data[0]]}
+        data={buy_properties.data.slice(0, 5)}
         renderItem={({ item, index }) => <PropertyComponent item={item} containerStyle={{paddingHorizontal:0}} />}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
       />
-      <AppLoader loading={!(matched_properties.data.length > 0) && loading} />
+      <AppLoader loading={!(buy_properties.data.length > 0) && loading} />
     </View>
   );
 };

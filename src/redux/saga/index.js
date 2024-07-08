@@ -13,6 +13,7 @@ import {
   getDreamAddressesRequest,
   deleteDreamAddressRequest,
   createDreamAddressRequest,
+  getBuyPropertiesRequest,
 } from './app-sega/app-sega';
 
 import {
@@ -93,6 +94,9 @@ export function* rootSaga() {
 
   //Matched Properties
   yield fork(getMatchedPropertiesRequest);
+
+  //Buy Properties
+  yield fork(getBuyPropertiesRequest);
 
   //Chats
   yield fork(getAllChatsRequest);

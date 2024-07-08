@@ -288,6 +288,36 @@ function* getMatchedProp(action) {
   }
 }
 
+//Get matched properties
+export function* getBuyPropertiesRequest() {
+  yield takeLatest(types.GET_BUY_PROPERTIES_REQUEST, getBuyProp);
+}
+function* getBuyProp(action) {
+  // console.log('matchedddd start', action.payload.page)
+  try {
+    const res = yield app.getBuyProperties(action.payload.page)
+    console.log('buy properties ', res.data)
+    if (res?.status == 200 && res?.data?.length > 0) {
+      yield put({
+        type: types.GET_BUY_PROPERTIES_SUCCESS,
+        payload: {
+          page: action.payload.page,
+          data: res?.data || []
+        },
+      });
+    }
+  } catch (error) {
+    console.log('error', error?.response?.data)
+    let msg = responseValidator(error?.response?.status, error?.response?.data);
+    Alert.alert('Error', msg || 'Something went wrong!');
+  } finally {
+    action.onFinally?.()
+    yield put({
+      type: types.GET_BUY_PROPERTIES_FINALLY
+    });
+  }
+}
+
 //Get top support closers
 export function* getTopSupportClosersRequest() {
   yield takeLatest(types.GET_TOP_SUPPORT_CLOSERS_REQUEST, getTopSupportClosers);

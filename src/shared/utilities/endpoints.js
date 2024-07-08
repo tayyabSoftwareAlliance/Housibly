@@ -31,6 +31,7 @@ const ENDPOINTS = {
   GET_SUBLISTS: 'properties/detail_options',
   PROPERTY: 'properties',
   MATCHED_PROPERTY: 'properties/matching_properties',
+  BUY_PROPERTY: 'properties/buy_properties_listing',
   CIRCLE_PROPERTY: 'properties/find_in_circle',
   POLYGON_PROPERTY: 'properties/find_in_polygon',
   ZIPCODE_PROPERTY: 'properties/find_by_zip_code',

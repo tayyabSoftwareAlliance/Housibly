@@ -38,7 +38,7 @@ import MatchesTab from './Tabs/MatchesTab/MatchesTab';
 import SellTab from './Tabs/SellTab/SellTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_my_properties } from '../../../redux/actions';
-import { get_matched_properties, get_top_support_closers } from '../../../redux/actions/app-actions/app-actions';
+import { get_buy_properties, get_matched_properties, get_top_support_closers } from '../../../redux/actions/app-actions/app-actions';
 // import { useNavigation } from '@react-navigation/native'
 // import moment from 'moment';
 // import Modal from 'react-native-modal';
@@ -151,6 +151,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     userInfo && my_preference && dispatch(get_matched_properties(1))
+    userInfo && my_preference && dispatch(get_buy_properties(1))
   }, [my_preference])
 
   useEffect(() => {

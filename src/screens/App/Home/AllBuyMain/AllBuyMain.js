@@ -21,7 +21,7 @@ import PropertyComponent from '../../../../components/Custom/PropertyComponent';
 const AllBuyMain = ({ navigation }) => {
 
   const dispatch = useDispatch()
-  const { matched_properties, loading } = useSelector(state => state?.appReducer)
+  const { buy_properties, loading } = useSelector(state => state?.appReducer)
   const [refreshLoader, setRefreshLoader] = useState(false)
   // const [showMenu, setShowMenu] = useState(false);
   // const [filterType, setFilterType] = useState('All');
@@ -102,9 +102,9 @@ const AllBuyMain = ({ navigation }) => {
           </MenuItem>
         </Menu>
       </View> */}
-      {matched_properties.data.length > 0 &&
+      {buy_properties.data.length > 0 &&
         <FlatList
-          data={matched_properties.data}
+          data={buy_properties.data}
           renderItem={({ item }) => <PropertyComponent item={item} />}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
@@ -119,7 +119,7 @@ const AllBuyMain = ({ navigation }) => {
           }}
           onEndReached={() => {
             if (!loading)
-              dispatch(get_matched_properties(matched_properties.lastPage + 1))
+              dispatch(get_matched_properties(buy_properties.lastPage + 1))
           }}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
@@ -138,7 +138,7 @@ const AllBuyMain = ({ navigation }) => {
           textStyle={styles.tabTxtStyle}
         />
       </View>
-      <AppLoader loading={!(matched_properties.data.length > 0) && loading} />
+      <AppLoader loading={!(buy_properties.data.length > 0) && loading} />
     </SafeAreaView>
   );
 };

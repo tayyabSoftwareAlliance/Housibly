@@ -42,6 +42,7 @@ export const app = {
   createProperty: data => requests.post(ENDPOINTS.PROPERTY, data),
   getMyProperties: () => requests.get(ENDPOINTS.PROPERTY),
   getMatchedProperties: (page) => requests.get(`${ENDPOINTS.MATCHED_PROPERTY}?page=${page}`),
+  getBuyProperties: (page) => requests.get(`${ENDPOINTS.BUY_PROPERTY}?page=${page}`),
   updateProperty: (data, id) => requests.put(`${ENDPOINTS.PROPERTY}/${id}`, data),
   deleteProperty: id => requests.delete(`${ENDPOINTS.PROPERTY}/${id}`),
   getPreference: () => requests.get(ENDPOINTS.USER_PREFERENCE),
