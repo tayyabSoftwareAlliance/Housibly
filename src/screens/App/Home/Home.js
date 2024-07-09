@@ -142,7 +142,7 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     if (userInfo) {
       dispatch(get_my_properties())
-      dispatch(get_top_support_closers())
+      // dispatch(get_top_support_closers())
       dispatch(get_all_notifications())
       !userInfo?.user?.address && setUserCurrentLocation()
       setTimeout(requestNotificationPermission, 1000)
@@ -152,7 +152,7 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     userInfo && my_preference && dispatch(get_matched_properties(1))
     userInfo && my_preference && dispatch(get_buy_properties(1))
-  }, [my_preference])
+  }, [])
 
   useEffect(() => {
     top_support_closers?.length > 0 && selected == 'buy' && showCarousel()

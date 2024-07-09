@@ -2,6 +2,8 @@ import * as TYPES from '../../actions/types';
 
 const initialState = {
   loading: false,
+  matched_properties_loading: false,
+  buy_properties_loading: false,
   isSuccess: false,
   isFailure: false,
   saved_create_property_data: null,
@@ -199,7 +201,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.GET_MATCHED_PROPERTIES_REQUEST:
       return {
         ...state,
-        loading: true,
+        matched_properties_loading: true,
       };
     case TYPES.GET_MATCHED_PROPERTIES_SUCCESS:
       return {
@@ -215,7 +217,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.GET_MATCHED_PROPERTIES_FINALLY:
       return {
         ...state,
-        loading: false,
+        matched_properties_loading: false,
       };
 
 
@@ -223,7 +225,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.GET_BUY_PROPERTIES_REQUEST:
       return {
         ...state,
-        loading: true,
+        buy_properties_loading: true,
       };
     case TYPES.GET_BUY_PROPERTIES_SUCCESS:
       return {
@@ -239,7 +241,7 @@ const appReducers = (state = initialState, actions) => {
     case TYPES.GET_BUY_PROPERTIES_FINALLY:
       return {
         ...state,
-        loading: false,
+        buy_properties_loading: false,
       };
 
     //************ Get Top Support Closers states*************

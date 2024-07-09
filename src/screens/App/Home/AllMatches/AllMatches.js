@@ -17,11 +17,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { get_matched_properties } from '../../../../redux/actions/app-actions/app-actions';
 import { ActivityIndicator } from 'react-native';
 import PropertyComponent from '../../../../components/Custom/PropertyComponent';
+import LoadingText from '../../../../components/LoadingText/LoadingText';
+import NoData from '../../../../components/NoData/NoData';
 
 const AllMatches = ({ navigation }) => {
 
   const dispatch = useDispatch()
-  const { matched_properties, loading } = useSelector(state => state?.appReducer)
+  const { matched_properties, matched_properties_loading } = useSelector(state => state?.appReducer)
   const [refreshLoader, setRefreshLoader] = useState(false)
   // const [showMenu, setShowMenu] = useState(false);
   // const [filterType, setFilterType] = useState('All');
@@ -102,43 +104,47 @@ const AllMatches = ({ navigation }) => {
           </MenuItem>
         </Menu>
       </View> */}
-      {matched_properties.data.length > 0 &&
-        <FlatList
-          data={matched_properties.data}
-          renderItem={({ item }) => <PropertyComponent item={item} />}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flStyle}
-          refreshing={refreshLoader}
-          onRefresh={() => {
-            if (!loading) {
-              const onFinally = () => setRefreshLoader(false)
-              setRefreshLoader(true)
-              dispatch(get_matched_properties(1, onFinally))
+      {matched_properties.data.length > 0 ?
+        <>
+          <FlatList
+            data={matched_properties.data}
+            renderItem={({ item }) => <PropertyComponent item={item} />}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flStyle}
+            refreshing={refreshLoader}
+            onRefresh={() => {
+              if (!matched_properties_loading) {
+                const onFinally = () => setRefreshLoader(false)
+                setRefreshLoader(true)
+                dispatch(get_matched_properties(1, onFinally))
+              }
+            }}
+            onEndReached={() => {
+              if (!matched_properties_loading)
+                dispatch(get_matched_properties(matched_properties.lastPage + 1))
+            }}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              <View style={styles.footerComponent} >
+                {!refreshLoader && matched_properties_loading && <ActivityIndicator size={WP(6)} color={colors.bl1} />}
+              </View>
             }
-          }}
-          onEndReached={() => {
-            if (!loading)
-              dispatch(get_matched_properties(matched_properties.lastPage + 1))
-          }}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            <View style={styles.footerComponent} >
-              {!refreshLoader && loading && <ActivityIndicator size={WP(6)} color={colors.bl1} />}
-            </View>
-          }
-        />
+          />
+          <View style={styles.bottomView}>
+            <AppButton
+              width="34.5%"
+              height={WP('10.3')}
+              title="View On Map"
+              borderColor={colors.p2}
+              textStyle={styles.tabTxtStyle}
+            />
+          </View>
+        </> :
+        matched_properties_loading ?
+          <LoadingText flex1 /> :
+          <NoData flex1 />
       }
-      <View style={styles.bottomView}>
-        <AppButton
-          width="34.5%"
-          height={WP('10.3')}
-          title="View On Map"
-          borderColor={colors.p2}
-          textStyle={styles.tabTxtStyle}
-        />
-      </View>
-      <AppLoader loading={!(matched_properties.data.length > 0) && loading} />
     </SafeAreaView>
   );
 };

@@ -37,7 +37,7 @@ import { Icon } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkConnected, filterFormData, formatPreferenceData } from '../../../shared/utilities/helper';
-import { update_my_preference } from '../../../redux/actions/app-actions/app-actions';
+import { get_buy_properties, get_matched_properties, update_my_preference } from '../../../redux/actions/app-actions/app-actions';
 import { PriceInputWithCurrency } from '../../../components/Inputs/PriceInputWithCurrency';
 import { booleanList } from '../../../shared/utilities/constant';
 
@@ -107,6 +107,8 @@ const FilterScreen = ({ navigation, route }) => {
     const onSuccess = () => {
       navigation.navigate('Home');
       Alert.alert('Success', 'Preference Updated Successfully!');
+      dispatch(get_matched_properties(1))
+      dispatch(get_buy_properties(1))
     };
     const check = await checkConnected();
     if (check) {
@@ -116,7 +118,7 @@ const FilterScreen = ({ navigation, route }) => {
       Alert.alert('Error', networkText);
     }
   }
-console.log('my_preferenceeeeee',data.currency_type)
+
   return (
     <SafeAreaView style={styles.rootContainer}>
       <View style={spacing.my2}>
@@ -234,7 +236,7 @@ console.log('my_preferenceeeeee',data.currency_type)
                           selected={data.condo_type}
                           onPressTick={val => setValue('condo_type', val)}
                           source={appIcons.condoType}
-                          // multiselect
+                        // multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -243,7 +245,7 @@ console.log('my_preferenceeeeee',data.currency_type)
                           selected={data.condo_style}
                           onPressTick={val => setValue('condo_style', val)}
                           source={appIcons.condoStyle}
-                          // multiselect
+                        // multiselect
                         />
                       </> :
                       <>
@@ -254,7 +256,7 @@ console.log('my_preferenceeeeee',data.currency_type)
                           selected={data.house_type}
                           onPressTick={val => setValue('house_type', val)}
                           source={appIcons.HouseType}
-                          // multiselect
+                        // multiselect
                         />
                         <Divider color={colors.g18} />
                         <FilterButton
@@ -263,7 +265,7 @@ console.log('my_preferenceeeeee',data.currency_type)
                           selected={data.house_style}
                           onPressTick={val => setValue('house_style', val)}
                           source={appIcons.HouseStyle}
-                          // multiselect
+                        // multiselect
                         />
                       </>
                     }

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
-import { appIcons, property_image } from '../../../../../shared/exporter';
 import styles from './styles';
-import { AppLoader } from '../../../../../components';
 import { useSelector } from 'react-redux';
 import PropertyComponent from '../../../../../components/Custom/PropertyComponent';
+import LoadingText from '../../../../../components/LoadingText/LoadingText';
+import NoData from '../../../../../components/NoData/NoData';
 
 const MatchesTab = ({ navigation }) => {
 
-  const { matched_properties, loading } = useSelector(state => state?.appReducer)
+  const { matched_properties, matched_properties_loading } = useSelector(state => state?.appReducer)
 
   return (
     <View>
@@ -22,13 +22,17 @@ const MatchesTab = ({ navigation }) => {
           </Text>
         </View>
       </View>
-      <FlatList
-        data={matched_properties.data.slice(0, 5)}
-        renderItem={({ item, index }) => <PropertyComponent item={item} />}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-      />
-      <AppLoader loading={!(matched_properties.data.length > 0) && loading} />
+      {matched_properties.data.length > 0 ?
+        <FlatList
+          data={matched_properties.data.slice(0, 5)}
+          renderItem={({ item, index }) => <PropertyComponent item={item} />}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+        /> :
+        matched_properties_loading ?
+          <LoadingText /> :
+          <NoData />
+      }
     </View>
   );
 };

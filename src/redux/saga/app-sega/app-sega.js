@@ -293,10 +293,10 @@ export function* getBuyPropertiesRequest() {
   yield takeLatest(types.GET_BUY_PROPERTIES_REQUEST, getBuyProp);
 }
 function* getBuyProp(action) {
-  // console.log('matchedddd start', action.payload.page)
+  // console.log('matchedddd start getBuyPropertiesRequest', action.payload.page)
   try {
     const res = yield app.getBuyProperties(action.payload.page)
-    console.log('buy properties ', res.data)
+    // console.log('buy properties ', res.data)
     if (res?.status == 200 && res?.data?.length > 0) {
       yield put({
         type: types.GET_BUY_PROPERTIES_SUCCESS,
