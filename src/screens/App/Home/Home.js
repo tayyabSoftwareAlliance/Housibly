@@ -172,7 +172,7 @@ const Home = ({ navigation }) => {
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewStyle}
-        stickyHeaderIndices={[2]}
+        stickyHeaderIndices={[1]}
       >
         <View style={styles.rowContainer}>
           <View>
@@ -201,25 +201,27 @@ const Home = ({ navigation }) => {
             renderItem={({ item, index }) => renderItem(item, index, (data) => { setSelectedPerson(data); setPersonDetailModal(true) })}
           />
         </Animated.View> */}
-        <View style={styles.menuContainer}>
-          <Menu
-            visible={showMenu}
-            style={styles.menuStyle}
-            onRequestClose={() => setShowMenu(false)}>
-            {/* <MenuItem
-                style={styles.menuItemStyle}
-                textStyle={styles.menuTxtStyle}
-                onPress={() => hideItemClick()}>
-                Hide this ad
-              </MenuItem> */}
-            <MenuItem
-              style={styles.menuItemStyle}
-              textStyle={styles.menuTxtStyle}
-              onPress={() => seeAllItemClick()}>
-              See All
-            </MenuItem>
-          </Menu>
-        </View>
+        {
+        // <View style={styles.menuContainer}>
+        //   <Menu
+        //     visible={showMenu}
+        //     style={styles.menuStyle}
+        //     onRequestClose={() => setShowMenu(false)}>
+        //     {/* <MenuItem
+        //         style={styles.menuItemStyle}
+        //         textStyle={styles.menuTxtStyle}
+        //         onPress={() => hideItemClick()}>
+        //         Hide this ad
+        //       </MenuItem> */}
+        //     <MenuItem
+        //       style={styles.menuItemStyle}
+        //       textStyle={styles.menuTxtStyle}
+        //       onPress={() => seeAllItemClick()}>
+        //       See All
+        //     </MenuItem>
+        //   </Menu>
+        // </View>
+}
         {/* Home main section start */}
         {['buy', 'matches', 'sell'].includes(selected) &&
           <View style={styles.paddingView}>
@@ -261,9 +263,11 @@ const Home = ({ navigation }) => {
           </View>
         }
         <View style={{ height: WP(2) }} />
+        <View style={{zIndex:-1}} >
         {['buy', 'preference', 'map', 'dreamAddress'].includes(selected) && <BuyTab navigation={navigation} selected={selected} setSelected={setSelected} />}
         {selected === 'matches' && <MatchesTab navigation={navigation} />}
         {selected === 'sell' && <SellTab navigation={navigation} />}
+        </View>
         {/* Home main section end */}
         <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + HP(5) }} />
       </KeyboardAwareScrollView>
@@ -330,7 +334,7 @@ const Home = ({ navigation }) => {
               <FloatingComponent
                 title="Support Closer"
                 icon={appIcons.supportCloser}
-                onPress={() => { }}
+                onPress={() => navigation.navigate('SearchSupportCloser')}
               />
             }
           </View>

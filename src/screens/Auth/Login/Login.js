@@ -97,7 +97,6 @@ const Login = ({ navigation }) => {
     } else {
       token && form.append('token', token);
     }
-    console.log('thisssss', form)
     dispatch(socialLoginRequest(form, socialLoginSuccess, socialLoginFailure));
   };
 
