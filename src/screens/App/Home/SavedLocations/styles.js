@@ -7,6 +7,7 @@ import {
   family,
   scrWidth,
   platformOrientedCode,
+  HP,
 } from '../../../../shared/exporter';
 
 let hasNotch = DeviceInfo.hasNotch();
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
   },
   noDataContainer: {
     flex: 1,
+    minHeight:HP(30),
     justifyContent: 'center',
     alignItems: 'center'
   },
