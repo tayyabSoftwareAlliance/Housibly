@@ -59,7 +59,6 @@ const PotentialBuyers = ({ navigation, route }) => {
     try {
       setLoader(true)
       const res = await app.getPotentialBuyers(item?.id)
-      console.log('ressssss', res.data)
       if (res?.status == 200) {
         setMasterData(res.data || [])
         setData(res.data || [])

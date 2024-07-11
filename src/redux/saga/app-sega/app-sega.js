@@ -272,7 +272,7 @@ function* getMatchedProp(action) {
         type: types.GET_MATCHED_PROPERTIES_SUCCESS,
         payload: {
           page: action.payload.page,
-          data: res?.data || []
+          data: res?.data?.sort((a, b) => b.percentage - a.percentage) || []
         },
       });
     }
@@ -302,7 +302,7 @@ function* getBuyProp(action) {
         type: types.GET_BUY_PROPERTIES_SUCCESS,
         payload: {
           page: action.payload.page,
-          data: res?.data || []
+          data: res?.data?.sort((a, b) => b.percentage - a.percentage) || []
         },
       });
     }
