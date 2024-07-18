@@ -75,5 +75,6 @@ const styles = StyleSheet.create({
     color: colors.b1,
     fontSize: size.xsmall,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
   },
 });

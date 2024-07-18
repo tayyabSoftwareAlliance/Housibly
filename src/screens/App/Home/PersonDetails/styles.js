@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
   WP,
@@ -116,12 +116,13 @@ const styles = StyleSheet.create({
     width: WP('26.3'),
     height: WP('24.1'),
     marginRight: WP('3'),
-    backgroundColor:colors.g14
+    backgroundColor: colors.g14
   },
   nameTxtStyle: {
     color: colors.b1,
     fontSize: size.h5,
     fontFamily: family.Gilroy_SemiBold,
+    textTransform: 'capitalize'
   },
   simpleRow: {
     paddingVertical: 8,
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
   },
-  priceTxt:{
+  priceTxt: {
     color: '#00A66C',
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,

@@ -26,6 +26,7 @@ import {
   appIcons,
   checkConnected,
   colors,
+  HP,
   networkText,
   spacing,
   WP,
@@ -130,7 +131,11 @@ const AddSupportInfo = ({ navigation, route }) => {
           };
           return (
             <View style={styles.contentContainer}>
-              <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'}>
+              <KeyboardAwareScrollView
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps={'handled'}
+                extraScrollHeight={HP(20)}
+              >
                 <View style={styles.inputContainer}>
                   <View style={styles.imgCon}>
                     <TouchableOpacity

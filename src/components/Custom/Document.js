@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { WP, appIcons, colors, family, size } from '../../shared/exporter'
 import { Image } from 'react-native'
 
-const Document = ({ data }) => {
+const Document = ({ data,onPress }) => {
     return (
-        <View style={styles.container} >
+        <Pressable style={styles.container} onPress={onPress} >
             <Image
                 source={appIcons.pdf}
                 style={styles.icon}
@@ -15,7 +15,7 @@ const Document = ({ data }) => {
                 <Text style={styles.h1} >{data?.name}</Text>
                 <Text style={styles.size} >{data?.size}</Text>
             </View>
-        </View>
+        </Pressable>
     )
 }
 
@@ -42,5 +42,6 @@ const styles = StyleSheet.create({
     icon: {
         width: WP(10),
         height: WP(10),
+        marginRight:WP(2)
     }
 })

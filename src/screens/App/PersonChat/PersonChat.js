@@ -37,7 +37,7 @@ import { Menu, MenuItem } from 'react-native-material-menu';
 import { read_chat_messages } from '../../../redux/actions/chat-actions/chat-actions';
 import { set_conversation_opened_id } from '../../../redux/actions/app-actions/app-actions';
 
-const formatImageUri = (uri) => decodeURIComponent(uri)?.replace(/%3A/g,':').replace(/%2F/g,'/').replace(/%2E/g,'.')
+const formatImageUri = (uri) => decodeURIComponent(uri)?.replace(/%3A/g, ':').replace(/%2F/g, '/').replace(/%2E/g, '.')
 
 const OptionsMenu = ({ isVisible, onPressHide, onPressBlock }) => {
   return (
@@ -79,6 +79,7 @@ const renderItem = (item, index, userId) => {
             {item.image && <Image source={{ uri: item.image }} style={styles.personImgStyle} />}
             {item.body && <Text style={styles.senderMsgStyles}>{item.body}</Text>}
           </View>
+          {item.loading && <ActivityIndicator size={'small'} color={colors.p1} />}
         </View>
       ) : (
         // Receiver Bubble
@@ -106,7 +107,7 @@ const PersonChat = ({ navigation, route }) => {
   const [message, setMessage] = useState('');
   const [allMessages, setAllMessages] = useState([]);
   const [loader, setLoader] = useState(false)
-  const [sendLoader, setSendLoader] = useState(false)
+  // const [sendLoader, setSendLoader] = useState(false)
   const [blockCheckLoader, setBlockCheckLoader] = useState(false)
   const [createConversationLoader, setCreateConversationLoader] = useState(false)
   const [useEffectRecallFlag, setUseEffectRecallFlag] = useState(false)
@@ -224,15 +225,17 @@ const PersonChat = ({ navigation, route }) => {
       }
     }
     if (message.trim() == '' && !image) return
+    const currentMessageIndex = allMessages.length
     const msg = {
       user_id: userId,
       body: image ? '' : message.trim(),
-      image: image?.uri
+      image: image?.uri,
+      loading: true
     }
     setAllMessages(previousMessages => ([msg, ...previousMessages]))
     setMessage('')
     try {
-      setSendLoader(true)
+      // setSendLoader(true)
       const formData = new FormData()
       formData.append('conversation_id', formConversationId)
       image && formData.append('message[image]', image)
@@ -248,7 +251,12 @@ const PersonChat = ({ navigation, route }) => {
       console.log(error);
       // let msg = responseValidator(error?.response?.status, error?.response?.data);
     } finally {
-      setSendLoader(false)
+      // setSendLoader(false)
+      msg.loading = false
+      setAllMessages(previousMessages => {
+        previousMessages[currentMessageIndex].loading=false
+        return [...previousMessages]
+      })
       setCreateConversationLoader(false)
     }
   }
@@ -385,14 +393,14 @@ const PersonChat = ({ navigation, route }) => {
                 placeholderTextColor={colors.g40}
                 style={styles.inputStyles}
               />
-              {sendLoader ? (
+              {/* {sendLoader ? (
                 <ActivityIndicator
                   animating
                   size={'small'}
                   color={colors.p1}
                   style={{ left: 3 }}
                 />
-              ) : (
+              ) : ( */}
                 <Icon
                   name={'send'}
                   type={'ionicons'}
@@ -400,7 +408,7 @@ const PersonChat = ({ navigation, route }) => {
                   color={colors.g16}
                   onPress={() => onSend()}
                 />
-              )}
+              {/* )} */}
             </View>
             <TouchableOpacity onPress={openGallery} >
               <Image

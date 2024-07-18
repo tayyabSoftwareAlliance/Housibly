@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     fontFamily: family.Gilroy_SemiBold,
     textAlign: 'center',
     marginTop: 10,
+    textTransform:'capitalize'
   },
   subtitle: {
     fontSize: size.xsmall,

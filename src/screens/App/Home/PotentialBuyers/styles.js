@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     fontSize: size.large,
     fontFamily: family.Gilroy_SemiBold,
     width:WP(55),
+    textTransform:'capitalize'
   },
   txtStyle: {
     color: colors.g23,

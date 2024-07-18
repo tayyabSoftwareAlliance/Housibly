@@ -117,7 +117,7 @@ const SignUpPurpose = ({ navigation, route }) => {
           <AppButton
             borderRadius={32}
             height={WP('16.4')}
-            title="I am a Support Closer"
+            title="I am a Support Closure"
             style={styles.iconStyle}
             borderColor={colors.white}
             shadowColor={colors.white}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Text,
   View,
@@ -37,6 +37,8 @@ import { useNavigation } from '@react-navigation/native'
 import moment from 'moment';
 // import { BlurView } from "@react-native-community/blur";
 import { get_all_notifications } from '../../../redux/actions/notification-actions/notification-actions';
+import ImageView from "react-native-image-viewing";
+// import PdfViewerModal from '../../../components/Modal/PdfViewerModal';
 
 const VisitorDetailModal = ({ isVisible, data, onPressHide }) => {
 
@@ -122,6 +124,10 @@ const HomeSupportCloser = ({ navigation }) => {
   const [visitors, setVisitors] = useState([]);
   const [visitorDetailModal, setVisitorDetailModal] = useState(false);
   const [selectedVisitor, setSelectedVisitor] = useState(null);
+  const [isImageViewerVisible, setImageViewerVisible] = useState(false);
+  const [imageViewerIndex, setImageViewerIndex] = useState(0);
+  // const [isPdfViewerVisible, setPdfViewerVisible] = useState(false);
+  // const [pdfViewerIndex, setPdfViewerIndex] = useState(0);
   const isFocus = useIsFocused(null);
 
   const getVisitors = async () => {
@@ -151,6 +157,10 @@ const HomeSupportCloser = ({ navigation }) => {
     };
     dispatch(getProfileRequest(getProfileSuccess, getProfileFailure));
   };
+
+  const imageViewerList = useMemo(() => {
+    return data?.images?.map(item => ({ uri: item.url })) || []
+  }, [data])
 
   useEffect(() => {
     if (isFocus && userInfo)
@@ -254,9 +264,15 @@ const HomeSupportCloser = ({ navigation }) => {
             <Text style={styles.subHeading} >Uploaded Photos</Text>
             <View style={styles.photoContainer} >
               {
-                data?.images?.map(item => {
+                data?.images?.map((item, index) => {
                   return (
-                    <Image key={item?.id} style={styles.photo} source={{ uri: item?.url }} />
+                    <Pressable
+                      onPress={() => {
+                        setImageViewerVisible(true)
+                        setImageViewerIndex(index)
+                      }}>
+                      <Image key={item?.id} style={styles.photo} source={{ uri: item?.url }} />
+                    </Pressable>
                   )
                 })
               }
@@ -264,7 +280,7 @@ const HomeSupportCloser = ({ navigation }) => {
           </View>
           <View style={spacing.mt6} >
             <Text style={styles.subHeading} >Uploaded Documents</Text>
-            {data?.certificates?.map(item => {
+            {data?.certificates?.map((item, index) => {
               const type = extractFileType(item.url)
               const data = {
                 name: 'Certificate',
@@ -275,6 +291,7 @@ const HomeSupportCloser = ({ navigation }) => {
                 <Document
                   key={item?.id}
                   data={data}
+                // onPress={() => {setPdfViewerIndex(index);setPdfViewerVisible(true)}}
                 />
               )
             })}
@@ -346,7 +363,14 @@ const HomeSupportCloser = ({ navigation }) => {
         {/* <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS }} /> */}
       </ScrollView>
       <AppLoader loading={isLoading} />
+      <ImageView
+        images={imageViewerList}
+        imageIndex={imageViewerIndex}
+        visible={isImageViewerVisible}
+        onRequestClose={() => setImageViewerVisible(false)}
+      />
       <VisitorDetailModal isVisible={visitorDetailModal} onPressHide={() => setVisitorDetailModal(false)} data={selectedVisitor} />
+      {/* <PdfViewerModal isVisible={isPdfViewerVisible} setModal={setPdfViewerVisible} uri={data?.certificates?.[pdfViewerIndex]?.url} /> */}
     </SafeAreaView>
   );
 };

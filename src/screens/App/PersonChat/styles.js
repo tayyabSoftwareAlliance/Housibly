@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     fontSize: size.h6,
     paddingVertical: WP('4'),
     fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
   },
   inputView: {
     padding: WP('4'),

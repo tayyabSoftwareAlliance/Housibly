@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Text,
   View,
@@ -10,6 +10,7 @@ import {
   FlatList,
   StatusBar,
   Linking,
+  Pressable,
 } from 'react-native';
 import styles from './styles';
 import {
@@ -30,6 +31,8 @@ import StarRating from 'react-native-star-rating';
 import Review from '../../../components/Custom/Review';
 import { app } from '../../../shared/api';
 import { extractFileType } from '../../../shared/utilities/helper';
+import ImageView from "react-native-image-viewing";
+// import PdfViewerModal from '../../../components/Modal/PdfViewerModal';
 
 const SupportCloserDetail = ({ navigation, route }) => {
 
@@ -39,6 +42,10 @@ const SupportCloserDetail = ({ navigation, route }) => {
   const [reviews, setReviews] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showFulldescription, setShowFullDescription] = useState(false)
+  const [isImageViewerVisible, setImageViewerVisible] = useState(false);
+  const [imageViewerIndex, setImageViewerIndex] = useState(0);
+  // const [isPdfViewerVisible, setPdfViewerVisible] = useState(false);
+  // const [pdfViewerIndex, setPdfViewerIndex] = useState(0);
   const isFocus = useIsFocused();
 
   const getReviews = async () => {
@@ -63,6 +70,10 @@ const SupportCloserDetail = ({ navigation, route }) => {
       setIsLoading(false)
     }
   }
+
+  const imageViewerList = useMemo(() => {
+    return data?.images?.map(item => ({ uri: item.url })) || []
+  }, [data])
 
   useEffect(() => {
     isFocus && getUserProfile()
@@ -151,9 +162,15 @@ const SupportCloserDetail = ({ navigation, route }) => {
             <Text style={styles.subHeading} >Uploaded Photos</Text>
             <View style={styles.photoContainer} >
               {
-                data?.images?.map(item => {
+                data?.images?.map((item,index) => {
                   return (
-                    <Image key={item?.id} style={styles.photo} source={{ uri: item?.url }} />
+                    <Pressable
+                      onPress={() => {
+                        setImageViewerVisible(true)
+                        setImageViewerIndex(index)
+                      }}>
+                      <Image key={item?.id} style={styles.photo} source={{ uri: item?.url }} />
+                    </Pressable>
                   )
                 })
               }
@@ -172,6 +189,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
                 <Document
                   key={item?.id}
                   data={data}
+                  // onPress={() => { setPdfViewerIndex(index); setPdfViewerVisible(true) }}
                 />
               )
             })}
@@ -209,6 +227,13 @@ const SupportCloserDetail = ({ navigation, route }) => {
         </View>
       </ScrollView>
       <AppLoader loading={isLoading} />
+      <ImageView
+        images={imageViewerList}
+        imageIndex={imageViewerIndex}
+        visible={isImageViewerVisible}
+        onRequestClose={() => setImageViewerVisible(false)}
+      />
+      {/* <PdfViewerModal isVisible={isPdfViewerVisible} setModal={setPdfViewerVisible} uri={data?.certificates?.[pdfViewerIndex]?.url} /> */}
     </SafeAreaView>
   );
 };

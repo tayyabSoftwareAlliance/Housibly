@@ -132,10 +132,12 @@ const Signup = ({ navigation, route }) => {
             <KeyboardAwareScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
-                flex: 1,
+                flexGrow: 1,
                 justifyContent: 'space-between',
               }}
-              keyboardShouldPersistTaps={'handled'}>
+              keyboardShouldPersistTaps={'handled'}
+              extraScrollHeight={20}
+              >
               <View style={styles.inputCon}>
                 <AppInput
                   onChangeText={handleChange('fullname')}

@@ -332,7 +332,7 @@ const Home = ({ navigation }) => {
             }
             {selected != 'supportCloser' &&
               <FloatingComponent
-                title="Support Closer"
+                title="Support Closure"
                 icon={appIcons.supportCloser}
                 onPress={() => navigation.navigate('SearchSupportCloser')}
               />

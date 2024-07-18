@@ -239,7 +239,7 @@ const filter_bookmarks_list = [
   },
   {
     key: 'support_closer_bookmark',
-    value: 'Support Closers',
+    value: 'Support Closures',
     source: appIcons.support_closer
   }
 ]

@@ -12,72 +12,72 @@ import CacheImage from 'react-native-image-cache-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { delete_chat, get_all_chats } from '../../../redux/actions/chat-actions/chat-actions';
 
-const AllChatsData = [
-  {
-    id: 1,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 2,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 3,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 4,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 5,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 6,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 7,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  },
-  {
-    id: 8,
-    user: {
-      name: 'Aspen Franci',
-      image: appImages.avatar
-    },
-    lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
-  }
-]
+// const AllChatsData = [
+//   {
+//     id: 1,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 2,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 3,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 4,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 5,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 6,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 7,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   },
+//   {
+//     id: 8,
+//     user: {
+//       name: 'Aspen Franci',
+//       image: appImages.avatar
+//     },
+//     lastMessage: 'Hey! How are you? What brought you to that how ufr rfr'
+//   }
+// ]
 
 const renderItem = (item, index, userId, navigation) => {
   return (
