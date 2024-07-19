@@ -3,8 +3,10 @@ import Modal from 'react-native-modal'
 import { Icon } from 'react-native-elements';
 import { colors, WP, HP } from '../../shared/exporter'
 import Pdf from 'react-native-pdf';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PdfViewerModal = ({ isVisible, setModal, uri }) => {
+    const {top} = useSafeAreaInsets()
     return (
         <Modal
             isVisible={isVisible}
@@ -13,7 +15,7 @@ const PdfViewerModal = ({ isVisible, setModal, uri }) => {
             style={{ margin: 0, backgroundColor: colors.white }}
         >
             {/* close button */}
-            <TouchableOpacity style={styles.iconCont} onPress={() => setModal(false)}>
+            <TouchableOpacity style={[styles.iconCont,{top:top+WP(2)}]} onPress={() => setModal(false)}>
                 <Icon
                     type='material'
                     name='close'
@@ -46,7 +48,6 @@ export default PdfViewerModal
 const styles = StyleSheet.create({
     iconCont: {
         position: 'absolute',
-        top: WP(2),
         right: WP(2),
         zIndex: 1,
         height: WP(7),

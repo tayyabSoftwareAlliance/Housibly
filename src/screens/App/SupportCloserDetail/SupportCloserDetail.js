@@ -32,7 +32,7 @@ import Review from '../../../components/Custom/Review';
 import { app } from '../../../shared/api';
 import { extractFileType } from '../../../shared/utilities/helper';
 import ImageView from "react-native-image-viewing";
-// import PdfViewerModal from '../../../components/Modal/PdfViewerModal';
+import PdfViewerModal from '../../../components/Modal/PdfViewerModal';
 
 const SupportCloserDetail = ({ navigation, route }) => {
 
@@ -44,8 +44,8 @@ const SupportCloserDetail = ({ navigation, route }) => {
   const [showFulldescription, setShowFullDescription] = useState(false)
   const [isImageViewerVisible, setImageViewerVisible] = useState(false);
   const [imageViewerIndex, setImageViewerIndex] = useState(0);
-  // const [isPdfViewerVisible, setPdfViewerVisible] = useState(false);
-  // const [pdfViewerIndex, setPdfViewerIndex] = useState(0);
+  const [isPdfViewerVisible, setPdfViewerVisible] = useState(false);
+  const [pdfViewerIndex, setPdfViewerIndex] = useState(0);
   const isFocus = useIsFocused();
 
   const getReviews = async () => {
@@ -178,7 +178,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
           </View>
           <View style={spacing.mt6} >
             <Text style={styles.subHeading} >Uploaded Documents</Text>
-            {data?.certificates?.map(item => {
+            {data?.certificates?.map((item,index) => {
               const type = extractFileType(item.url)
               const data = {
                 name: 'Certificate',
@@ -189,7 +189,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
                 <Document
                   key={item?.id}
                   data={data}
-                  // onPress={() => { setPdfViewerIndex(index); setPdfViewerVisible(true) }}
+                  onPress={() => { setPdfViewerIndex(index); setPdfViewerVisible(true) }}
                 />
               )
             })}
@@ -233,7 +233,7 @@ const SupportCloserDetail = ({ navigation, route }) => {
         visible={isImageViewerVisible}
         onRequestClose={() => setImageViewerVisible(false)}
       />
-      {/* <PdfViewerModal isVisible={isPdfViewerVisible} setModal={setPdfViewerVisible} uri={data?.certificates?.[pdfViewerIndex]?.url} /> */}
+      <PdfViewerModal isVisible={isPdfViewerVisible} setModal={setPdfViewerVisible} uri={data?.certificates?.[pdfViewerIndex]?.url} />
     </SafeAreaView>
   );
 };

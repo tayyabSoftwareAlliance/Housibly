@@ -38,7 +38,7 @@ import moment from 'moment';
 // import { BlurView } from "@react-native-community/blur";
 import { get_all_notifications } from '../../../redux/actions/notification-actions/notification-actions';
 import ImageView from "react-native-image-viewing";
-// import PdfViewerModal from '../../../components/Modal/PdfViewerModal';
+import PdfViewerModal from '../../../components/Modal/PdfViewerModal';
 
 const VisitorDetailModal = ({ isVisible, data, onPressHide }) => {
 
@@ -126,8 +126,8 @@ const HomeSupportCloser = ({ navigation }) => {
   const [selectedVisitor, setSelectedVisitor] = useState(null);
   const [isImageViewerVisible, setImageViewerVisible] = useState(false);
   const [imageViewerIndex, setImageViewerIndex] = useState(0);
-  // const [isPdfViewerVisible, setPdfViewerVisible] = useState(false);
-  // const [pdfViewerIndex, setPdfViewerIndex] = useState(0);
+  const [isPdfViewerVisible, setPdfViewerVisible] = useState(false);
+  const [pdfViewerIndex, setPdfViewerIndex] = useState(0);
   const isFocus = useIsFocused(null);
 
   const getVisitors = async () => {
@@ -291,7 +291,7 @@ const HomeSupportCloser = ({ navigation }) => {
                 <Document
                   key={item?.id}
                   data={data}
-                // onPress={() => {setPdfViewerIndex(index);setPdfViewerVisible(true)}}
+                  onPress={() => {setPdfViewerIndex(index);setPdfViewerVisible(true)}}
                 />
               )
             })}
@@ -370,7 +370,7 @@ const HomeSupportCloser = ({ navigation }) => {
         onRequestClose={() => setImageViewerVisible(false)}
       />
       <VisitorDetailModal isVisible={visitorDetailModal} onPressHide={() => setVisitorDetailModal(false)} data={selectedVisitor} />
-      {/* <PdfViewerModal isVisible={isPdfViewerVisible} setModal={setPdfViewerVisible} uri={data?.certificates?.[pdfViewerIndex]?.url} /> */}
+      <PdfViewerModal isVisible={isPdfViewerVisible} setModal={setPdfViewerVisible} uri={data?.certificates?.[pdfViewerIndex]?.url} />
     </SafeAreaView>
   );
 };

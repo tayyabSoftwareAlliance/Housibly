@@ -8,7 +8,7 @@ import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 import { useIsFocused } from '@react-navigation/native'
 import { app } from '../../../shared/api';
 import { AppLoader } from '../../../components';
-import CacheImage from 'react-native-image-cache-wrapper';
+// import CacheImage from 'react-native-image-cache-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { delete_chat, get_all_chats } from '../../../redux/actions/chat-actions/chat-actions';
 
@@ -94,7 +94,7 @@ const renderItem = (item, index, userId, navigation) => {
         }
       )}
     >
-      <CacheImage
+      <Image
         source={{ uri: item?.avatar }}
         style={styles.imgStyle}
       />

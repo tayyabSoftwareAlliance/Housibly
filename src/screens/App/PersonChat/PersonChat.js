@@ -30,7 +30,7 @@ import { app } from '../../../shared/api';
 import { useIsFocused } from '@react-navigation/native'
 import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import CacheImage from 'react-native-image-cache-wrapper';
+// import CacheImage from 'react-native-image-cache-wrapper';
 import useChannel from '../../../shared/utilities/useChannel';
 import { ChatPopupModal } from '../../../components/Modal/ChatPopupModal';
 import { Menu, MenuItem } from 'react-native-material-menu';

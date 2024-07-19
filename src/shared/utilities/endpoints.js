@@ -1,4 +1,5 @@
 const BASE_URL = 'http://16.171.63.250:3000/api/v1/';
+// const BASE_URL = 'https://housibly.appscorridor.com/api/v1/';
 
 const ENDPOINTS = {
 
