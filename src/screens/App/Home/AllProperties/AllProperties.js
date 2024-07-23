@@ -42,12 +42,12 @@ const AllProperties = ({ navigation, route }) => {
         txtSize={size.xsmall}
         txtFamily={family.Gilroy_SemiBold}
       />
-      <Text style={styles.titleTxtStyle}>Lists</Text>
+      <Text style={styles.titleTxtStyle}>Listing</Text>
       <FilterComponent list={filter_property_type_list} selected={filterType} setSelected={setFilterType} />
       {properties.length > 0 &&
         <FlatList
           data={properties}
-          renderItem={({ item, index }) => <PropertyComponent item={item} />}
+          renderItem={({ item, index }) => <PropertyComponent item={item} hidePercentage />}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flStyle}

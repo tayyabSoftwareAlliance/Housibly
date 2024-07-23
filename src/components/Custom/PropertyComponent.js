@@ -5,7 +5,7 @@ import { WP, appIcons, appImages, colors, family, property_image, size } from '.
 import { formatNumber } from '../../shared/utilities/helper'
 import { useSelector } from 'react-redux';
 
-const PropertyComponent = ({ item, myProperty = false,containerStyle }) => {
+const PropertyComponent = ({ item, myProperty = false, hidePercentage, containerStyle }) => {
 
     const navigation = useNavigation()
     const { sublists } = useSelector(state => state?.appReducer);
@@ -13,7 +13,7 @@ const PropertyComponent = ({ item, myProperty = false,containerStyle }) => {
     return (
         <TouchableOpacity
             activeOpacity={1}
-            style={[styles.itemContainer,containerStyle]}
+            style={[styles.itemContainer, containerStyle]}
             onPress={() => {
                 if (myProperty)
                     navigation.navigate('PotentialBuyers', { item })
@@ -79,10 +79,12 @@ const PropertyComponent = ({ item, myProperty = false,containerStyle }) => {
                     null
                     :
                     <>
-                        <View style={[styles.simpleRow, { paddingTop: 0 }]}>
-                            <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />
-                            <Text style={styles.heartTxtStyle}>{parseInt(item.percentage)}% match</Text>
-                        </View>
+                        {!hidePercentage &&
+                            <View style={[styles.simpleRow, { paddingTop: 0 }]}>
+                                <Image source={appIcons.heartIcon} style={styles.heartIconStyle} />
+                                <Text style={styles.heartTxtStyle}>{parseInt(item.percentage)}% match</Text>
+                            </View>
+                        }
                         <Text style={styles.timeTxtStyle}>Last active: 1 day ago</Text>
                     </>
                 }

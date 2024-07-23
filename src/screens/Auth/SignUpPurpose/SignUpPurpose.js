@@ -31,7 +31,7 @@ const TopContainer = memo(({ navigation }) => {
           />
         </TouchableOpacity>
       }
-      <Animated.Text entering={FadeInLeft.duration(500)} style={styles.helloTxtStyle}>Hello, roberto</Animated.Text>
+      <Animated.Text entering={FadeInLeft.duration(500)} style={styles.helloTxtStyle}>Hello</Animated.Text>
       <Animated.Text entering={FadeInRight.duration(500)} style={styles.chooseTxtStyle}>
         Choose, What do you want to do?{' '}
       </Animated.Text>
