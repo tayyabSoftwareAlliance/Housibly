@@ -1,4 +1,4 @@
-import { Alert, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, Platform, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import styles from './styles'
 import { AppButton, AppLoader, BackHeader } from '../../../components'
@@ -84,7 +84,8 @@ const BoostProfileDetail = ({ route }) => {
 
     const pay = async () => {
         console.log('userInfo?.user?.payment_method', userInfo?.user?.payment_method)
-        if (['apple_pay', 'google_wallet'].includes(userInfo?.user?.payment_method)) {
+        // if (['apple_pay', 'google_wallet'].includes(userInfo?.user?.payment_method)) {
+        if (['apple_pay', 'google_wallet'].includes(userInfo?.user?.payment_method) && Platform.OS != 'android') {
             if (await isPlatformPaySupported({ googlePay: { testEnv: true } })) {
                 const { error, paymentMethod } = await createPlatformPayPaymentMethod(
                     {

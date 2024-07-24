@@ -114,7 +114,8 @@ const PayMethod = ({ navigation }) => {
           </View>
           <Image
             resizeMode="contain"
-            source={method == 'credit_card' ? appIcons.checked : appIcons.unchecked}
+            // source={method == 'credit_card' ? appIcons.checked : appIcons.unchecked}
+            source={method == 'credit_card' || Platform.OS == 'android' ? appIcons.checked : appIcons.unchecked}
             style={styles.iconStyle}
           />
         </TouchableOpacity>
@@ -155,6 +156,7 @@ const PayMethod = ({ navigation }) => {
               style={styles.iconStyle}
             />
           </TouchableOpacity> :
+          // null
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.itemContainer}
