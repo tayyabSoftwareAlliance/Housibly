@@ -1,11 +1,12 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createContext, useContext, useEffect } from 'react';
-import { appIcons, GOOGLE_MAP_KEY, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
+import { appIcons, IOS, lot_area_unit_list, lot_unit_list, WP } from '../exporter';
 import moment from 'moment';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { Platform } from 'react-native';
 import { isLocationEnabled, promptForEnableLocationIfNeeded } from 'react-native-android-location-enabler';
 import messaging from '@react-native-firebase/messaging';
+import { GOOGLE_MAP_KEY } from '@env'
 
 export const checkConnected = () => {
   return NetInfo.fetch().then(state => {

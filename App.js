@@ -5,7 +5,7 @@ import MainNavigation from './src/navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import store, { persistor } from './src/redux/store';
-import { colors, stripe_publishableKey } from './src/shared/exporter';
+import { colors } from './src/shared/exporter';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import messaging from '@react-native-firebase/messaging';
@@ -13,16 +13,15 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 import Toast from 'react-native-toast-message';
 import PropertySuggestionInAppNotification from './src/components/Modal/PropertySuggestionInAppNotification';
 import { AppLoader } from './src/components';
+import {WEB_CLIENT_ID,STRIPE_PUBLISHABLE_KEY} from '@env'
 
 // ignore warnings
 LogBox.ignoreAllLogs();
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
-
 GoogleSignin.configure({
-  webClientId:
-    '859276342696-gm0lnsee2kjh5pvpj85gcm5enrkdgfr2.apps.googleusercontent.com',
+  webClientId: WEB_CLIENT_ID,
 });
 
 const App = () => {
@@ -43,7 +42,7 @@ const App = () => {
           backgroundColor={colors.white}
           barStyle={'dark-content'}
         />
-        <StripeProvider publishableKey={stripe_publishableKey} merchantIdentifier='merchant.com.housibly'>
+        <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY} merchantIdentifier='merchant.com.housibly'>
           <PersistGate persistor={persistor}>
             <SafeAreaProvider>
               <MainNavigation />

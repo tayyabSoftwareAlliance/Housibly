@@ -6,14 +6,9 @@ import { colors } from '../theme/colors';
 const ANDROID = Platform.OS === 'android';
 const IOS = Platform.OS === 'ios';
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const GOOGLE_MAP_KEY = 'AIzaSyBqdKhAkPI_qCHco8_vVsnGrUGYjw7HL3M'
-const web_client_id =
-  '396667718237-b5871eer19sabub7jg8qhneksq75d443.apps.googleusercontent.com';
 export const video_url =
   'https://billionpound.s3.us-west-2.amazonaws.com/Public/walk_through.mp4';
 
-const stripe_publishableKey =
-  'pk_test_51MCNvAIJekvJVXYP7RnwkBmCklU2uUQQMn13UwMEYWh3nn0C7TU1QzBePknDbo3G4Hb3D7vKff4MA7mKgxbXTZHu00knfbcwq8';
 const profile_uri =
   'https://www.shareicon.net/data/512x512/2017/01/06/868320_people_512x512.png';
 const image_options = {
@@ -1297,9 +1292,6 @@ export {
   ANDROID,
   emailRegex,
   profile_uri,
-  GOOGLE_MAP_KEY,
-  web_client_id,
-  stripe_publishableKey,
   slidesData,
   privacyPolicy,
   sublists,

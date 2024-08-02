@@ -6,7 +6,7 @@ import {
   BackHeader,
   FilterInput,
 } from '../../../../components';
-import { GOOGLE_MAP_KEY, WP, colors, family, responseValidator, size, spacing } from '../../../../shared/exporter';
+import { WP, colors, family, responseValidator, size, spacing } from '../../../../shared/exporter';
 import styles from './styles';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { set_user_location_request } from '../../../../redux/actions/auth-actions/auth-action';
 import { app } from '../../../../shared/api';
 import { create_dream_address } from '../../../../redux/actions/app-actions/app-actions';
+import { GOOGLE_MAP_KEY } from '@env'
 
 let page = 1;
 
