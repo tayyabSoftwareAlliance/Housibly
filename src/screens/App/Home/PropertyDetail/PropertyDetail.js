@@ -65,7 +65,6 @@ const PropertyDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [videoModal, setVideoModal] = useState(false)
   const [openedVideoURI, setOpenedVideoURI] = useState('')
-console.log('dataaaa',JSON.stringify(data,null,2))
   const onPost = async () => {
     const onSuccess = () => {
       if (from != 'edit') dispatch(removeCreatePropertyData(null));
