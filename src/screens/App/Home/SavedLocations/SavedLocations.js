@@ -15,7 +15,7 @@ import { filter_property_type_list, months, property_image } from '../../../../s
 import styles from './styles';
 import FilterComponent from '../../../../components/Custom/FilterComponent';
 import { app } from '../../../../shared/api';
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 const renderDate = (date) => {
   date = new Date(date)
@@ -45,11 +45,12 @@ const renderItem = (item, index, navigation, deleteLocation) => {
   );
 };
 
-const SavedLocations = ({ navigation }) => {
+const SavedLocations = () => {
 
   const [data, setData] = useState([])
   const [loader, setLoader] = useState(true)
   const isFocused = useIsFocused()
+  const navigation = useNavigation()
 
   const fetchSavedLocations = async () => {
     try {
