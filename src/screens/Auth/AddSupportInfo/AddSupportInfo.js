@@ -58,7 +58,7 @@ const AddSupportInfo = ({ navigation, route }) => {
     const check = await checkConnected();
     if (check) {
       const filteredProfessionList = professionList.filter(item => item?.title)
-      if (filteredProfessionList[0].title) {
+      if (filteredProfessionList[0]?.title) {
         const body = {
           description: values?.desc,
           avatar: values?.image,
