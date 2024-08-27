@@ -46,9 +46,7 @@ const AddReview = ({ navigation, route }) => {
       formData.append('review[support_closer_id]', id)
       formData.append('review[rating]', rating)
       formData.append('review[description]', review)
-      console.log('formmmm', formData)
       const res = await app.createReview(formData);
-      console.log('resresresres', res?.data)
       if (res?.status == 200) {
         Alert.alert('Success','Review Posted Successfully!')
         setRating(0)
