@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, Keyboard } from 'react-native';
 import React, { useMemo, useRef } from 'react';
 import { Icon } from 'react-native-elements';
 import { colors, family, property_type_list, size, WP } from '../../shared/exporter';
@@ -37,7 +37,12 @@ export const FilterButton = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => ref.current?.open()} style={styles.btnCon}>
+      <TouchableOpacity 
+      onPress={() => {
+        ref.current?.open()
+        Keyboard.isVisible && Keyboard.dismiss()
+        }} 
+        style={styles.btnCon}>
         <View style={styles.leftContainer} >
           {source && (
             <Image

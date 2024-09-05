@@ -216,7 +216,14 @@ const styles = StyleSheet.create({
     color: '#00A66C',
     fontSize: size.tiny,
     fontFamily: family.Gilroy_SemiBold,
-  }
+  },
+  nameTxtStyle: {
+    width: '85%',
+    color: colors.b1,
+    fontSize: size.h5,
+    fontFamily: family.Gilroy_SemiBold,
+    textTransform:'capitalize'
+  },
 });
 
 export default styles;

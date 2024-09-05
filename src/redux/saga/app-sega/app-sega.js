@@ -263,7 +263,7 @@ function* getMatchedProp(action) {
   // console.log('matchedddd start', action.payload.page)
   try {
     const res = yield app.getMatchedProperties(action.payload.page)
-    // console.log('matchedddd ', res.data)
+    console.log('matchedddd ', action.payload.page,res.data)
     if (res?.status == 200 && res?.data?.length > 0) {
       yield put({
         type: types.GET_MATCHED_PROPERTIES_SUCCESS,
