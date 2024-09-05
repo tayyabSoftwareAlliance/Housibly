@@ -56,7 +56,7 @@ const BookmarksList = ({ data = [], scrollEnabled = true, onRemovePress }) => {
                 data={data}
                 scrollEnabled={scrollEnabled}
                 disableRightSwipe={true}
-                renderItem={({ item }) => item.type == 'support_closer' ? <SupportCloserComponent item={item} /> : <PropertyComponent item={item?.property && { ...item.property, images: [{ url: item.property?.image }] }} />}
+                renderItem={({ item }) => item.type == 'support_closer' ? <SupportCloserComponent item={item} /> : <PropertyComponent hidePercentage item={item?.property && { ...item.property, images: [{ url: item.property?.image }] }} />}
                 renderHiddenItem={(data, rowMap) => renderHiddenItem(data, rowMap)}
                 rightOpenValue={-120}
                 previewOpenValue={-40}
