@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
-import { StatusBar, LogBox, Clipboard, Platform } from 'react-native';
+import React from 'react';
+import { StatusBar, LogBox } from 'react-native';
 import MainNavigation from './src/navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -8,11 +8,9 @@ import store, { persistor } from './src/redux/store';
 import { colors } from './src/shared/exporter';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import messaging from '@react-native-firebase/messaging';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import Toast from 'react-native-toast-message';
 import PropertySuggestionInAppNotification from './src/components/Modal/PropertySuggestionInAppNotification';
-import { AppLoader } from './src/components';
 import {WEB_CLIENT_ID,STRIPE_PUBLISHABLE_KEY} from '@env'
 
 // ignore warnings
@@ -25,15 +23,6 @@ GoogleSignin.configure({
 });
 
 const App = () => {
-
-  // useEffect(async () => {
-  //   const token = await messaging().getToken();
-  //   // // Clipboard.setString(token);
-  //   console.log('FCM Token: '+Platform.OS, token)
-  //   // unsubscribe = messaging().onMessage((remoteMessage) => console.log('remoteeee',JSON.stringify(remoteMessage,null,2)))
-  //   // return() => unsubscribe()
-  // }, [])
-
   return (
     <>
       <Provider store={store}>

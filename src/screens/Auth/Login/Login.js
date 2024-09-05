@@ -112,6 +112,7 @@ const Login = ({ navigation }) => {
         setIsLoading(false);
       }
     } catch (error) {
+      console.log('handleGoogleLogin error',error)
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('cancel');
         setIsLoading(false);

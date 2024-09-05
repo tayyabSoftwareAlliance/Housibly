@@ -202,26 +202,26 @@ const Home = ({ navigation }) => {
           />
         </Animated.View> */}
         {
-        // <View style={styles.menuContainer}>
-        //   <Menu
-        //     visible={showMenu}
-        //     style={styles.menuStyle}
-        //     onRequestClose={() => setShowMenu(false)}>
-        //     {/* <MenuItem
-        //         style={styles.menuItemStyle}
-        //         textStyle={styles.menuTxtStyle}
-        //         onPress={() => hideItemClick()}>
-        //         Hide this ad
-        //       </MenuItem> */}
-        //     <MenuItem
-        //       style={styles.menuItemStyle}
-        //       textStyle={styles.menuTxtStyle}
-        //       onPress={() => seeAllItemClick()}>
-        //       See All
-        //     </MenuItem>
-        //   </Menu>
-        // </View>
-}
+          // <View style={styles.menuContainer}>
+          //   <Menu
+          //     visible={showMenu}
+          //     style={styles.menuStyle}
+          //     onRequestClose={() => setShowMenu(false)}>
+          //     {/* <MenuItem
+          //         style={styles.menuItemStyle}
+          //         textStyle={styles.menuTxtStyle}
+          //         onPress={() => hideItemClick()}>
+          //         Hide this ad
+          //       </MenuItem> */}
+          //     <MenuItem
+          //       style={styles.menuItemStyle}
+          //       textStyle={styles.menuTxtStyle}
+          //       onPress={() => seeAllItemClick()}>
+          //       See All
+          //     </MenuItem>
+          //   </Menu>
+          // </View>
+        }
         {/* Home main section start */}
         {['buy', 'matches', 'sell'].includes(selected) &&
           <View style={styles.paddingView}>
@@ -263,10 +263,10 @@ const Home = ({ navigation }) => {
           </View>
         }
         <View style={{ height: WP(2) }} />
-        <View style={{zIndex:-1}} >
-        {['buy', 'preference', 'map', 'dreamAddress'].includes(selected) && <BuyTab navigation={navigation} selected={selected} setSelected={setSelected} />}
-        {selected === 'matches' && <MatchesTab navigation={navigation} />}
-        {selected === 'sell' && <SellTab navigation={navigation} />}
+        <View style={{ zIndex: -1 }} >
+          {['buy', 'preference', 'map', 'dreamAddress'].includes(selected) && <BuyTab navigation={navigation} selected={selected} setSelected={setSelected} />}
+          {selected === 'matches' && <MatchesTab navigation={navigation} />}
+          {selected === 'sell' && <SellTab navigation={navigation} />}
         </View>
         {/* Home main section end */}
         <View style={{ height: PADDING_BOTTOM_FOR_TAB_BAR_SCREENS + HP(5) }} />
@@ -274,16 +274,6 @@ const Home = ({ navigation }) => {
       {
         selected === 'sell' &&
         <View style={styles.bottomView}>
-          <AppButton
-            width="38.5%"
-            height={WP('10.3')}
-            title="Enter Address"
-            borderColor={colors.p2}
-            shadowColor={colors.white}
-            textStyle={styles.btnTxtStyle}
-            onPress={() => navigation?.navigate('AddAddress', { from: 'enter_address' })}
-          />
-          <View style={{ width: WP('3') }} />
           <AppButton
             onPress={() => {
               navigation?.navigate('AddPropertyDetails', { from: 'create' });
@@ -293,6 +283,18 @@ const Home = ({ navigation }) => {
             borderColor={colors.p2}
             title="List A New Property"
             textStyle={styles.btnTxtStyle}
+          />
+          <View style={{ width: WP('3') }} />
+          <AppButton
+            width="38.5%"
+            height={WP('10.3')}
+            title="Dream Match"
+            icon={require('../../../assets/icons/eye.png')}
+            style={{tintColor:colors.white,height:WP(5),width:WP(5),marginRight:WP(1)}}
+            borderColor={colors.p2}
+            shadowColor={colors.white}
+            textStyle={styles.btnTxtStyle}
+            onPress={() => navigation?.navigate('AddAddress', { from: 'enter_address' })}
           />
         </View>
       }

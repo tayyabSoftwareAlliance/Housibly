@@ -66,7 +66,7 @@ const AddpropertyDesc = ({ navigation, route }) => {
           <Textarea
             containerStyle={[styles.textareaContainer, { paddingBottom: 20 }]}
             style={[styles.textarea,{paddingHorizontal:WP(3)}]}
-            placeholder={'Property description'}
+            placeholder={'Describe your Property/Neighbourhood/Area'}
             placeholderTextColor={colors.g19}
             underlineColorAndroid={'transparent'}
             value={data.property_description}

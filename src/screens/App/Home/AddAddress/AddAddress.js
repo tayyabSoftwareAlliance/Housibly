@@ -16,7 +16,7 @@ import { set_user_location_request } from '../../../../redux/actions/auth-action
 import { app } from '../../../../shared/api';
 import { create_dream_address } from '../../../../redux/actions/app-actions/app-actions';
 import { GOOGLE_MAP_KEY } from '@env'
-
+console.log('GOOGLE_MAP_KEY',GOOGLE_MAP_KEY)
 let page = 1;
 
 const AddAddress = ({ navigation, route }) => {

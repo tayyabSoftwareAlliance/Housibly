@@ -563,12 +563,12 @@ export const convertLocationToAddress = async (latitude, longitude) => {
   try {
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAP_KEY}`
-    );
-    const data = await response.json();
+    )
+    const data = await response.json()
     if (data.results.length > 0) {
       return data.results[0].formatted_address
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}

@@ -336,9 +336,9 @@ const AddPropertyDetails = ({ navigation, route }) => {
             <PriceInput
               onChangeText={text => setValue('tax_year', text)}
               value={data.tax_year}
-              simpleInputPlaceHolder={'2006'}
+              simpleInputPlaceHolder={'2024'}
               title={'Tax Year '}
-              subtitle={'(e.g 2006)'}
+              subtitle={'(e.g 2024)'}
             />
             <Divider color={colors.g18} />
             <PriceInput
