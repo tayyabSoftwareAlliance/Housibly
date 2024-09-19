@@ -1,4 +1,4 @@
-package com.housibly
+package com.housibly.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

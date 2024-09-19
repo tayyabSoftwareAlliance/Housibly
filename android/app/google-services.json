@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:859276342696:android:5c10e477ccef3ddb84599d",
         "android_client_info": {
-          "package_name": "com.housibly"
+          "package_name": "com.housibly.app"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "859276342696-dq1sgjr8h4tjcsb36k16j8fh7rhj44hc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.housibly",
+            "package_name": "com.housibly.app",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
@@ -25,7 +25,7 @@
           "client_id": "859276342696-fflegielpc6726bbr1rdsq20pd7dgios.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.housibly",
+            "package_name": "com.housibly.app",
             "certificate_hash": "ccc7ff7901c9e7c5cdb7a856ecccc209cd2863fe"
           }
         },

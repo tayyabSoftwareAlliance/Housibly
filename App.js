@@ -31,7 +31,7 @@ const App = () => {
           backgroundColor={colors.white}
           barStyle={'dark-content'}
         />
-        <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY} merchantIdentifier='merchant.com.housibly'>
+        <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY} merchantIdentifier='merchant.com.housibly.app'>
           <PersistGate persistor={persistor}>
             <SafeAreaProvider>
               <MainNavigation />

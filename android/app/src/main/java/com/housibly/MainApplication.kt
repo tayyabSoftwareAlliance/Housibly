@@ -1,4 +1,4 @@
-package com.housibly
+package com.housibly.app
  
 import android.app.Application
 import com.facebook.react.PackageList
