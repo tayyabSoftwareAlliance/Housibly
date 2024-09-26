@@ -54,13 +54,13 @@
 		<true/> -->
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Housibly wants to access your camera to capture photo</string>
+	<string>Housibly needs access to your camera to allow you to take photos for your profile and property listings.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Housibly wants this permission to access your current location</string>
+	<string>Housibly needs access to your location to provide your current address and show nearby properties for sale.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Housibly wants this permission to access your current location</string>
+	<string>Housibly needs access to your location to provide your current address and show nearby properties for sale.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Housibly wants to access your photo library to pick photos</string>
+	<string>Housibly needs access to your photo library to allow you to pick photos for your profile and property listings.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
