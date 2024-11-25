@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* HousiblyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HousiblyTests.m */; };
+		041450CC2CC0FA49006D2885 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041450CB2CC0FA49006D2885 /* StoreKit.framework */; };
+		04B863F62CBFE478002FB6DC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B863F52CBFE478002FB6DC /* SwiftUI.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -62,6 +64,8 @@
 		00E356EE1AD99517003FC87E /* HousiblyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HousiblyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* HousiblyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HousiblyTests.m; sourceTree = "<group>"; };
+		041450CB2CC0FA49006D2885 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		04B863F52CBFE478002FB6DC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		13B07F961A680F5B00A75B9A /* Housibly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Housibly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Housibly/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Housibly/AppDelegate.mm; sourceTree = "<group>"; };
@@ -123,6 +127,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041450CC2CC0FA49006D2885 /* StoreKit.framework in Frameworks */,
+				04B863F62CBFE478002FB6DC /* SwiftUI.framework in Frameworks */,
 				3BA44F5DB9CFA91034802A23 /* Pods_Housibly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,6 +197,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				041450CB2CC0FA49006D2885 /* StoreKit.framework */,
+				04B863F52CBFE478002FB6DC /* SwiftUI.framework */,
 				18E6102A2C498B2F00AEF45C /* react_native_blob_util.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5B6CAB8EADC9D6151D75DCE7 /* Pods_Housibly.framework */,
@@ -627,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = Housibly/Housibly.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9GB386QP77;
 				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = NO;
@@ -637,7 +645,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.23;
+				MARKETING_VERSION = 1.24;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -661,7 +669,7 @@
 				CODE_SIGN_ENTITLEMENTS = Housibly/Housibly.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9GB386QP77;
 				GCC_NO_COMMON_BLOCKS = NO;
 				INFOPLIST_FILE = Housibly/Info.plist;
@@ -670,7 +678,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.23;
+				MARKETING_VERSION = 1.24;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

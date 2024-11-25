@@ -11,6 +11,7 @@ export function* loginRequest() {
 }
 function* login(params) {
   try {
+    console.log('params?.params',params?.params)
     const res = yield auth.login(params?.params);
     if (res?.status == 200) {
       yield put({

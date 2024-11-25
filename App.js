@@ -12,6 +12,7 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 import Toast from 'react-native-toast-message';
 import PropertySuggestionInAppNotification from './src/components/Modal/PropertySuggestionInAppNotification';
 import {WEB_CLIENT_ID,STRIPE_PUBLISHABLE_KEY} from '@env'
+// import {withIAPContext} from 'react-native-iap';
 
 // ignore warnings
 LogBox.ignoreAllLogs();
@@ -45,4 +46,5 @@ const App = () => {
   );
 };
 
+// export default withIAPContext(App);
 export default App;

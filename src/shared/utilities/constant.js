@@ -925,12 +925,12 @@ const settings = [
     screen: 'Notifications',
     icon: appIcons.notify,
   },
-  {
-    id: 3,
-    title: 'Payment Method',
-    screen: 'PayMethod',
-    icon: appIcons.payMethod,
-  },
+  // {
+  //   id: 3,
+  //   title: 'Payment Method',
+  //   screen: 'PayMethod',
+  //   icon: appIcons.payMethod,
+  // },
   {
     id: 4,
     title: 'Privacy Policy',

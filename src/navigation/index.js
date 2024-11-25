@@ -20,7 +20,7 @@ import SupportChat from '../screens/App/Profile/SupportChat';
 import FAQ from '../screens/App/Profile/FAQ';
 import MapScreen from '../screens/App/Home/MapScreen';
 import AddPropertyDetails from '../screens/App/Home/AddPropertyDetails';
-import PayMethod from '../screens/App/Profile/PayMethod';
+// import PayMethod from '../screens/App/Profile/PayMethod';
 import AllCards from '../screens/App/Profile/AllCards';
 import CardDetails from '../screens/App/Profile/CardDetails';
 import AddCard from '../screens/App/Payment/AddCard';
@@ -34,8 +34,8 @@ import AddRoom from '../screens/App/Home/AddRoom';
 import { useDispatch, useSelector } from 'react-redux'
 import { app, setAuthToken } from '../shared/api';
 import Reviews from '../screens/App/Reviews';
-import BoostProfile from '../screens/App/BoostProfile';
-import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
+// import BoostProfile from '../screens/App/BoostProfile';
+// import BoostProfileDetail from '../screens/App/BoostProfile/BoostProfileDetail';
 import AllProperties from '../screens/App/Home/AllProperties';
 import PersonChat from '../screens/App/PersonChat';
 import SavedLocations from '../screens/App/Home/SavedLocations';
@@ -186,12 +186,12 @@ const MainAppNav = () => {
         <AppStack.Screen name={'PropertyDetail'} component={PropertyDetail} />
         <AppStack.Screen name={'AddAddress'} component={AddAddress} />
         <AppStack.Screen name={'Video'} component={Video} />
-        <AppStack.Screen name={'PayMethod'} component={PayMethod} />
+        {/* <AppStack.Screen name={'PayMethod'} component={PayMethod} /> */}
         <AppStack.Screen name={'AllCards'} component={AllCards} />
         <AppStack.Screen name={'CardDetails'} component={CardDetails} />
         <AppStack.Screen name={'Reviews'} component={Reviews} />
-        <AppStack.Screen name={"BoostProfile"} component={BoostProfile} />
-        <AppStack.Screen name={"BoostProfileDetail"} component={BoostProfileDetail} />
+        {/* <AppStack.Screen name={"BoostProfile"} component={BoostProfile} /> */}
+        {/* <AppStack.Screen name={"BoostProfileDetail"} component={BoostProfileDetail} /> */}
         <AppStack.Screen name={"AllProperties"} component={AllProperties} />
         <AppStack.Screen name={"PersonChat"} component={PersonChat} />
         <AppStack.Screen name={"SavedLocations"} component={SavedLocations} />

@@ -202,11 +202,11 @@ const HomeSupportCloser = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <View style={spacing.pt4}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('BoostProfile')}
+            {/* <TouchableOpacity
+              // onPress={() => navigation.navigate('BoostProfile')}
               style={styles.startIconCon}>
               <Image style={styles.iconStyle} source={appIcons.starWithLinesIcon} resizeMode={'contain'} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View style={styles.imgCon}>
               <Image
                 style={styles.imgStyle}
@@ -291,7 +291,7 @@ const HomeSupportCloser = ({ navigation }) => {
                 <Document
                   key={item?.id}
                   data={data}
-                  onPress={() => {setPdfViewerIndex(index);setPdfViewerVisible(true)}}
+                  onPress={() => { setPdfViewerIndex(index); setPdfViewerVisible(true) }}
                 />
               )
             })}
@@ -307,16 +307,19 @@ const HomeSupportCloser = ({ navigation }) => {
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
                 <Pressable
-                  disabled={!data?.is_subscribed}
                   onPress={() => {
-                    setSelectedVisitor(item)
-                    setVisitorDetailModal(true)
+                    // if (data?.is_subscribed)
+                    //   navigation.navigate('BoostProfile')
+                    // else {
+                      setSelectedVisitor(item)
+                      setVisitorDetailModal(true)
+                    // }
                   }}
                 >
                   <Image
                     style={styles.peoplesImage}
                     source={{ uri: item.avatar }}
-                    blurRadius={!data?.is_subscribed ? 30 : 0}
+                    // blurRadius={!data?.is_subscribed ? 30 : 0}
                   />
                 </Pressable>
               )}
