@@ -19,6 +19,7 @@ function* getAllChats(params) {
       });
     }
   } catch (error) {
+    console.log('error',JSON.stringify(error,null,2))
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     Alert.alert('Error', msg || 'Something went wrong!');
   } finally {

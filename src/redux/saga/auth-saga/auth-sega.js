@@ -1,8 +1,8 @@
-import { takeLatest, put } from 'redux-saga/effects';
-import { responseValidator } from '../../../shared/exporter';
+import {takeLatest, put} from 'redux-saga/effects';
+import {responseValidator} from '../../../shared/exporter';
 import * as types from '../../actions/types';
-import { auth, setAuthToken, setting } from '../../../shared/api';
-import { handleLocationPermission } from '../../../shared/utilities/helper';
+import {auth, setAuthToken, setting} from '../../../shared/api';
+import {handleLocationPermission} from '../../../shared/utilities/helper';
 import Geolocation from '@react-native-community/geolocation';
 
 // *************Login Sega**************
@@ -11,14 +11,14 @@ export function* loginRequest() {
 }
 function* login(params) {
   try {
-    console.log('params?.params',params?.params)
+    console.log('params?.params', params?.params);
     const res = yield auth.login(params?.params);
     if (res?.status == 200) {
       yield put({
         type: types.LOGIN_REQUEST_SUCCESS,
         payload: res.data,
       });
-      setAuthToken(res.data?.user?.auth_token)
+      setAuthToken(res.data?.user?.auth_token);
       params?.cbSuccess(res.data);
     }
   } catch (error) {
@@ -45,7 +45,7 @@ function* socialLoginUser(params) {
         type: types.SOCIAL_LOGIN_REQUEST_SUCCESS,
         payload: res.data,
       });
-      setAuthToken(res.data?.user?.auth_token)
+      setAuthToken(res.data?.user?.auth_token);
       params?.cbSuccess(res.data);
     } else {
       yield put({
@@ -77,7 +77,7 @@ function* signUp(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log('error', error)
+    console.log('error', error);
     let msg = responseValidator(error?.response?.status, error?.response?.data);
     params?.cbFailure(msg);
   }
@@ -121,11 +121,11 @@ function* verifyOTP(params) {
         type: types.OTP_VERIFY_SUCCESS,
         payload: res.data,
       });
-      setAuthToken(res.data?.user?.auth_token)
+      setAuthToken(res.data?.user?.auth_token);
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log(error);
+    console.log('verifyOTP Error', JSON.stringify(error, null, 2));
     yield put({
       type: types.OTP_VERIFY_FAILURE,
       payload: null,
@@ -173,7 +173,7 @@ function* user_type_request(params) {
       payload: params?.params,
     });
     params?.cbSuccess();
-  } catch (error) { }
+  } catch (error) {}
 }
 //************* Logout **************
 export function* logoutRequestSega() {
@@ -225,8 +225,6 @@ export function* addInfoRequestSega() {
 function* add_info(params) {
   try {
     const res = yield auth.addInfo(params?.params);
-    console.log('resssssss status',res.status)
-    console.log('resssssss dataaa',res.data)
     if (res?.status == 200) {
       yield put({
         type: types.ADD_ADDITIONAL_INFO_SUCCESS,
@@ -235,7 +233,7 @@ function* add_info(params) {
       params?.cbSuccess(res.data);
     }
   } catch (error) {
-    console.log('error response ',error?.response);
+    console.log('add_info error ', JSON.stringify(error?.response,null,2));
     yield put({
       type: types.ADD_ADDITIONAL_INFO_FAILURE,
       payload: null,
@@ -245,7 +243,6 @@ function* add_info(params) {
   }
 }
 
-
 // *************Set User Current Location Sega**************
 export function* setUserLocationRequestSega() {
   yield takeLatest(types.SET_USER_LOCATION_REQUEST, set_location);
@@ -253,11 +250,11 @@ export function* setUserLocationRequestSega() {
 
 function* set_location(params) {
   try {
-    const { latitude, longitude, address } = params.params
-    const formData = new FormData()
-    formData.append('user[latitude]', latitude)
-    formData.append('user[longitude]', longitude)
-    formData.append('user[address]', address)
+    const {latitude, longitude, address} = params.params;
+    const formData = new FormData();
+    formData.append('user[latitude]', latitude);
+    formData.append('user[longitude]', longitude);
+    formData.append('user[address]', address);
     const res = yield auth.setUserLocation(formData);
     if (res?.status == 200) {
       yield put({
@@ -268,7 +265,7 @@ function* set_location(params) {
           address,
         },
       });
-      params.onSuccess?.()
+      params.onSuccess?.();
     }
   } catch (error) {
     // console.log('set_location error ', error);
@@ -335,10 +332,10 @@ function* updateUserSetting(params) {
       params?.onFailure(res?.data?.message);
     }
   } catch (error) {
-    console.log('updateUserSetting error ',error);
+    console.log('updateUserSetting error ', error);
     let msg = responseValidator(error?.response?.status);
     params?.onFailure(msg);
-  } finally{
-    params?.onFinally()
+  } finally {
+    params?.onFinally();
   }
 }

@@ -242,13 +242,13 @@ const PersonChat = ({ navigation, route }) => {
       msg.body && formData.append('message[body]', msg.body)
       // console.log('formmmm', formData)
       const res = await app.sendMessage(formData);
-      // console.log('resresresres', res?.data)
       if (res?.status == 200) {
+        console.log('onSend success res', res?.data)
         // setUseEffectRecallFlag(prev => !prev)
         dispatch(read_chat_messages(conversationId))
       }
     } catch (error) {
-      console.log(error);
+      console.log('onSend Error: ',JSON.stringify(error?.response,null,2));
       // let msg = responseValidator(error?.response?.status, error?.response?.data);
     } finally {
       // setSendLoader(false)
